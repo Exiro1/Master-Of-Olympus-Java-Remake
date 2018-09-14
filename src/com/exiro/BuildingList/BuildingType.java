@@ -8,22 +8,24 @@ import java.io.IOException;
 public enum BuildingType {
 
 
-    EMPTY("rien", false, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_land1_00106.png", 1),
-    ROAD("route", false, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_Beautification2_00056.png", 1),
-    BLOCKABLE_ROAD("Stop", true, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_Municipal_00076.png", 1),
-    HOUSE("Maison", true, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_Housing_00015.png", 2),
-    WATERWELL("Puit", true, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_HealthNSan_00001.png", 2),
-    STOCK("Stock", true, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\fullStock.png", 3);
+    EMPTY("rien", false, "Assets/Terrain/DefaultLand.png", 1),
+    ROAD("route", false, "Assets/Construction/Roads/Road.png", 1),
+    BLOCKABLE_ROAD("Stop", true, "Assets/Construction/Roads/BlockingRoad.png", 1),
+    HOUSE("Maison", true, "Assets/Building/House/DefaultHouse.png", 2),
+    WATERWELL("Puit", true, "Assets/Building/Waterfall/DefaultWaterfall.png", 2),
+    STOCK("Stock", true, "Assets/Building/Stock/fullStock.png", 3);
 
     private final String name;
     private final boolean block;
     private final int heigth, width;
     private final int size;
     private BufferedImage img;
+    private final String path;
 
     BuildingType(String name, boolean block, String path, int size) {
         this.size = size;
         this.name = name;
+        this.path = path;
         File f = new File(path);
         try {
             img = ImageIO.read(f);
@@ -34,6 +36,14 @@ public enum BuildingType {
         width = img.getWidth();
 
         this.block = block;
+    }
+
+    public void setImg(BufferedImage img) {
+        this.img = img;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public boolean isBlocking() {

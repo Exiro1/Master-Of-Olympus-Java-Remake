@@ -28,7 +28,7 @@ public class House extends Building {
     private int popInArrival;
 
     public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
-        super(false, BuildingType.HOUSE, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_Housing_00015.png", 118, 128, 2, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
+        super(false, BuildingType.HOUSE, "Assets/Building/House/DefaultHouse.png", 118, 128, 2, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
         this.level = level;
 
         setImg(imgSet.getSubimage(0, 0, 118, 128));
@@ -40,7 +40,7 @@ public class House extends Building {
 
     static public void loadSet() {
         try {
-            File f = new File("C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\house.png");
+            File f = new File("Assets/Building/House/house.png");
             imgSet = ImageIO.read(f);
         } catch (IOException e) {
             e.printStackTrace();

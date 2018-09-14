@@ -18,8 +18,8 @@ public class GameInfo extends JPanel {
 
     public GameInfo(GameManager gm) {
         this.gm = gm;
-        File f = new File("C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus.ttf");
-        File imgdrachme = new File("C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_Stor-bays_00184.png");
+        File f = new File("Assets/Fonts/Zeus.ttf");
+        File imgdrachme = new File("Assets/Interface/Icon/Drachmes.png");
 
         File background1f = new File("Assets/Interface/Zeus_Interface_New_parts_00138.png");
 

@@ -6,6 +6,9 @@ import com.exiro.Sprite.Immigrant;
 
 public class ImageLoader {
 
+    /**
+     * Charge les image pur eviter de les chargé pour chauqe objet , --> diminue de ouf la ram utilisé du genre 2.5go a 200mo
+     */
     public static void loadImage() {
         House.loadSet();
         Stock.loadSet();

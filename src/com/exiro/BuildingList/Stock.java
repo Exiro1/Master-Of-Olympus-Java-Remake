@@ -25,7 +25,7 @@ public class Stock extends Building {
     }
 
     public Stock(int xPos, int yPos, City c) {
-        super(false, BuildingType.STOCK, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_StorNDist_00023.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
+        super(false, BuildingType.STOCK, "Assets/Building/Stock/StorInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
         listImage = new HashMap<>();
 
         int imagesCount = 66;
@@ -115,7 +115,7 @@ public class Stock extends Building {
 
     public static void loadSet() {
         try {
-            File imgFile = new File("C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\stock.png");
+            File imgFile = new File("Assets/Building/Stock/stock.png");
             imgSet = ImageIO.read(imgFile);
         } catch (IOException e) {
             e.printStackTrace();

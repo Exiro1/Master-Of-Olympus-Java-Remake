@@ -19,8 +19,8 @@ public abstract class Construction extends ObjectClass {
     boolean built;
 
 
-    public Construction(boolean isActive, BuildingType type, String path, int width, int height, int size, ArrayList<Case> cases, int cost, int deleteCost, int xPos, int yPos, int xLenght, int yLenght, float cachet, City city, boolean built) {
-        super(isActive, type, path, width, height, size);
+    public Construction(boolean isActive, BuildingType type, int width, int height, int size, ArrayList<Case> cases, int cost, int deleteCost, int xPos, int yPos, int xLenght, int yLenght, float cachet, City city, boolean built) {
+        super(isActive, type, type.getPath(), width, height, size);
         this.cases = cases;
         this.cost = cost;
         this.deleteCost = deleteCost;

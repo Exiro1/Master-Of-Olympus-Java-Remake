@@ -18,11 +18,11 @@ public class Immigrant extends Sprite {
 
     private static Map<Direction, BufferedImage[]> spriteSet;
     private static int frameNumber = 12, size = 15, width = 64, height = 64, marge = 3;
-    private static String filepath = "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\immigrant.png";
+    private static String filepath = "Assets/Sprites/Immigrant/immigrant.png";
 
 
     public Immigrant(City city, Path p, ObjectClass dest) {
-        super("C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\immigrant.png", 15, 12, 64, 64, 3, city, dest);
+        super(filepath, 15, 12, 64, 64, 3, city, dest);
         x = 0;
         y = 0;
         path = p;

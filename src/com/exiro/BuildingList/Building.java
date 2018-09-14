@@ -105,7 +105,11 @@ public abstract class Building extends ObjectClass {
 
     }
 
-
+    /**
+     * Permet de savoir par ou les Sprite sortes/arrive
+     *
+     * @return toute les routes actives adjacent
+     */
     public ArrayList<Case> getAccess() {
         ArrayList<Case> access = new ArrayList<>();
         for (int i = 0; i < xLenght + 2; i++) {
