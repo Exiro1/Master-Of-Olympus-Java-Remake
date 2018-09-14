@@ -14,17 +14,17 @@ public abstract class Sprite extends ObjectClass {
 
     public boolean hasArrived = false;
     Direction dir = Direction.EST;
-    private int frameNumber;
-    private int width, height, size;
-    private int marge;
-    private double x, y;
-    private double x1, y1;
-    private Path path;
-    private int index = 0;
-    private double timeSinceLastFrame = 0;
-    private BufferedImage currentFrame;
-    private City c;
-    private ObjectClass destination;
+    int frameNumber;
+    int width, height, size;
+    int marge;
+    double x, y;
+    double x1, y1;
+    Path path;
+    int index = 0;
+    double timeSinceLastFrame = 0;
+    BufferedImage currentFrame;
+    City c;
+    ObjectClass destination;
 
     public Sprite(String filePath, int size, int frameNumber, int widht, int height, int marge, City c, ObjectClass destination) {
         super(true, null, filePath, widht, height, 1);

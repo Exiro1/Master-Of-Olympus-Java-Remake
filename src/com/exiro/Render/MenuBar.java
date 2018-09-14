@@ -17,7 +17,7 @@ public class MenuBar extends JPanel {
 
     public MenuBar(GameManager gm) {
         this.gm = gm;
-        File f = new File("C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus.ttf");
+        File f = new File("Assets/Fonts/Zeus.ttf");
 
 
         File background1f = new File("Assets/Interface/Zeus_Interface_New_parts_001382.png");

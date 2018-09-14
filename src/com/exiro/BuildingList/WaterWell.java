@@ -10,7 +10,7 @@ public class WaterWell extends Building {
 
 
     public WaterWell(boolean isActive, int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(isActive, BuildingType.WATERWELL, "C:\\Users\\cgene\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\Zeus_HealthNSan_00001.png", 118, 94, 2, BuildingCategory.FOOD, pop, 2, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
+        super(isActive, BuildingType.WATERWELL, "Assets/Building/Waterfall/DefaultWaterfall.png", 118, 94, 2, BuildingCategory.FOOD, pop, 2, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
     }
 
     @Override
