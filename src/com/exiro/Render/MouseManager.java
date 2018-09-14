@@ -24,6 +24,7 @@ public class MouseManager implements MouseListener {
     Case c2;
     private GameWindow win;
     private City actualCity;
+
     public MouseManager(GameWindow win) {
         this.win = win;
     }

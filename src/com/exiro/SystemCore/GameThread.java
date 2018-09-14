@@ -25,6 +25,7 @@ public class GameThread implements Runnable {
     private int currentCity;
     private GameFrame frame;
     private GameManager gm;
+
     public GameThread(GameManager gm) {
         this.p = gm.player;
         this.frame = gm.frame;
