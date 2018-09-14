@@ -1,0 +1,8 @@
+package com.exiro.Object;
+
+public enum Ressource {
+
+    SEA_URCHIN, FISH, MEAT, CHEESE, CARROT, ONION, WOOD, BRONZE, MARBLE, GRAPE, OLIVE, WOOL, ARMEMENT, OLIVE_OIL, WINE, SCULPTURE, CORN, NULL
+
+
+}
