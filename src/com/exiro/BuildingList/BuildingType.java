@@ -19,8 +19,8 @@ public enum BuildingType {
     private final boolean block;
     private final int heigth, width;
     private final int size;
-    private BufferedImage img;
     private final String path;
+    private BufferedImage img;
 
     BuildingType(String name, boolean block, String path, int size) {
         this.size = size;
@@ -38,10 +38,6 @@ public enum BuildingType {
         this.block = block;
     }
 
-    public void setImg(BufferedImage img) {
-        this.img = img;
-    }
-
     public String getPath() {
         return path;
     }
@@ -52,6 +48,10 @@ public enum BuildingType {
 
     public BufferedImage getImg() {
         return img;
+    }
+
+    public void setImg(BufferedImage img) {
+        this.img = img;
     }
 
     public int getHeigth() {
