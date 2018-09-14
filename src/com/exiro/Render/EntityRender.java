@@ -3,6 +3,8 @@ package com.exiro.Render;
 
 import com.exiro.BuildingList.BuildingType;
 import com.exiro.BuildingList.House;
+import com.exiro.BuildingList.Stock;
+import com.exiro.BuildingList.WaterWell;
 import com.exiro.ConstructionList.Road;
 import com.exiro.MoveRelated.Path;
 import com.exiro.MoveRelated.RoadMap;
@@ -28,7 +30,7 @@ public class EntityRender {
 
     public static void setEntityRender(BuildingType type) {
         defaultObject = getDefault(type);
-        img = defaultObject.getImg();
+        img = type.getImg();
         heigth = defaultObject.getHeight();
         width = defaultObject.getWidth();
         size = defaultObject.getSize();
@@ -68,9 +70,9 @@ public class EntityRender {
             case HOUSE:
                 return House.DEFAULT();
             case WATERWELL:
-                break;
+                return WaterWell.DEFAULT();
             case STOCK:
-                break;
+                return Stock.DEFAULT();
         }
         return null;
     }

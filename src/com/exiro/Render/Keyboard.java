@@ -28,6 +28,9 @@ public class Keyboard implements KeyListener {
         if (key == 'r') {
             EntityRender.setEntityRender(BuildingType.ROAD);
         }
+        if (key == 's') {
+            EntityRender.setEntityRender(BuildingType.STOCK);
+        }
         if (key == 'a') {
             GameWindow.index++;
             if (GameWindow.index > win.p.getPlayerCities().get(0).getPathManager().getPaths().size() - 1) {

@@ -3,6 +3,7 @@ package com.exiro.BuildingList;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Object.Ressource;
+import com.exiro.SystemCore.GameManager;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -18,6 +19,9 @@ public class Stock extends Building {
     Map<Ressource, Integer> stock;
     Map<Ressource, BufferedImage> listImage;
 
+    static public Stock DEFAULT() {
+        return new Stock(0, 0, GameManager.currentCity);
+    }
 
     public Stock(boolean isActive, BuildingType type, String path, int width, int height, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Map<Ressource, Integer> stock) {
         super(isActive, type, path, width, height, size, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
@@ -124,19 +128,22 @@ public class Stock extends Building {
 
     @Override
     public boolean build(int xPos, int yPos) {
-        super.build(xPos, yPos);
-        for (Case c2 : cases) {
-            c2.setImg(listImage.get(Ressource.CARROT));
-            c2.setMainCase(true);
-            c2.setWidth(58);
-            c2.setHeight(116);
-            c2.setSize(1);
+        if (super.build(xPos, yPos)) {
+            for (Case c2 : cases) {
+                c2.setImg(listImage.get(Ressource.CARROT));
+                c2.setMainCase(true);
+                c2.setWidth(58);
+                c2.setHeight(116);
+                c2.setSize(1);
+            }
+            cases.get(6).setImg(getImg());
+            cases.get(6).setWidth(58);
+            cases.get(6).setHeight(76);
+            return true;
         }
-        cases.get(6).setImg(getImg());
-        cases.get(6).setWidth(58);
-        cases.get(6).setHeight(76);
-        return true;
+        return false;
     }
+
 
     @Override
     public void process(double deltaTime) {
