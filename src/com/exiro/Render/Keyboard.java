@@ -31,6 +31,9 @@ public class Keyboard implements KeyListener {
         if (key == 's') {
             EntityRender.setEntityRender(BuildingType.STOCK);
         }
+        if (key == 'w') {
+            EntityRender.setEntityRender(BuildingType.WATERWELL);
+        }
         if (key == 'a') {
             GameWindow.index++;
             if (GameWindow.index > win.p.getPlayerCities().get(0).getPathManager().getPaths().size() - 1) {

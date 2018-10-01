@@ -31,8 +31,8 @@ public class Road extends Construction {
 
     @Override
     public boolean build(int xPos, int yPos) {
-        super.build(xPos, yPos);
-        if (!built) {//change en route bloqué
+        boolean isBuilt = super.build(xPos, yPos);
+        if (isBuilt) {//change en route bloqué
             city.getPathManager().addRoad(this);
             if (getAccess().size() == 0) {
                 city.getInActives().add(this);

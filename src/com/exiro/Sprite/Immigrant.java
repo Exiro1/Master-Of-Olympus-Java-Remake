@@ -19,12 +19,14 @@ public class Immigrant extends Sprite {
     private static Map<Direction, BufferedImage[]> spriteSet;
     private static int frameNumber = 12, size = 15, width = 64, height = 64, marge = 3;
     private static String filepath = "Assets/Sprites/Immigrant/immigrant.png";
+    private int nbr;
 
 
-    public Immigrant(City city, Path p, ObjectClass dest) {
+    public Immigrant(City city, Path p, ObjectClass dest, int nbr) {
         super(filepath, 15, 12, 64, 64, 3, city, dest);
         x = 0;
         y = 0;
+        this.nbr = nbr;
         path = p;
     }
 
@@ -123,5 +125,13 @@ public class Immigrant extends Sprite {
     @Override
     public Map<Direction, BufferedImage[]> getSpriteSet() {
         return spriteSet;
+    }
+
+    public int getNbr() {
+        return nbr;
+    }
+
+    public void setNbr(int nbr) {
+        this.nbr = nbr;
     }
 }
