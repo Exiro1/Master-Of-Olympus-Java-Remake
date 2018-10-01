@@ -30,7 +30,8 @@ public class EntityRender {
 
     public static void setEntityRender(BuildingType type) {
         defaultObject = getDefault(type);
-        img = type.getImg();
+        //img = type.getImg();
+        img = defaultObject.getImg();
         heigth = defaultObject.getHeight();
         width = defaultObject.getWidth();
         size = defaultObject.getSize();

@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class House extends Building {
@@ -22,10 +24,10 @@ public class House extends Building {
     private final double deltaWater = 0.002f;
     private final double deltaHdo = 0.0005f;
     private final double deltaWool = 0.0005f;
-    ArrayList<Double> timeBeforeComming = new ArrayList<>();
+    Map<Integer, Double> timeBeforeComming = new HashMap<>();
     private int level;
     private double food, water, wool, hdo;
-    private int popInArrival;
+    private int popInArrival = 0;
 
     public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
         super(false, BuildingType.HOUSE, "Assets/Building/House/DefaultHouse.png", 118, 128, 2, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
@@ -35,7 +37,9 @@ public class House extends Building {
     }
 
     static public House DEFAULT() {
-        return new House(0, 0, 0, null, false, GameManager.currentCity, 0);
+        House h = new House(0, 0, 0, null, false, GameManager.currentCity, 0);
+        // h.setHeight(64);
+        return h;
     }
 
     static public void loadSet() {
@@ -58,7 +62,7 @@ public class House extends Building {
     @Override
     public void delete() {
         super.delete();
-        city.setPopInArrvial(city.getPopInArrvial() - timeBeforeComming.size());
+        city.setPopInArrvial(city.getPopInArrvial() - popInArrival);
         city.setPopulation(city.getPopulation() - pop);
 
     }
@@ -113,7 +117,7 @@ public class House extends Building {
                 }
             }
         }
-        if (popMax > pop + timeBeforeComming.size()) {
+        if (popMax > pop + popInArrival) {
             addPopulation();
         }
 
@@ -121,23 +125,27 @@ public class House extends Building {
 
     @Override
     public void populate(double deltaTime) {
-        ArrayList<Double> toRemove = new ArrayList<>();
+        ArrayList<Integer> toRemove = new ArrayList<>();
         int i = 0;
-        for (Double f : timeBeforeComming) {
+        for (Integer a : timeBeforeComming.keySet()) {
+            double f = timeBeforeComming.get(a);
             f = f - deltaTime;
-            timeBeforeComming.set(i, f);
+            timeBeforeComming.replace(a, timeBeforeComming.get(a), f);
             if (f <= 0) {
-                toRemove.add(f);
-                Immigrant a = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), RoadMap.FreeState.ALL_ROAD), this);
-                city.addSprite(a);
-                sprites.add(a);
+                toRemove.add(a);
+                System.out.println(a);
+                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), RoadMap.FreeState.ALL_ROAD), this, a);
+                city.addSprite(immigrant);
+                sprites.add(immigrant);
             }
             i++;
         }
         SpriteManager();
-        city.setPopInArrvial(city.getPopInArrvial() - toRemove.size());
-        city.setPopulation(city.getPopulation() + toRemove.size());
-        timeBeforeComming.removeAll(toRemove);
+        for (Integer t : toRemove
+        ) {
+            timeBeforeComming.remove(t);
+        }
+
 
     }
 
@@ -147,7 +155,12 @@ public class House extends Building {
             for (Sprite s : sprites) {
                 if (s.hasArrived) {
                     toDestroy.add(s);
-                    pop = pop + 1;
+                    if (s instanceof Immigrant) {
+                        pop = pop + ((Immigrant) s).getNbr();
+                        popInArrival = popInArrival - ((Immigrant) s).getNbr();
+                        city.setPopInArrvial(city.getPopInArrvial() - ((Immigrant) s).getNbr());
+                        city.setPopulation(city.getPopulation() + ((Immigrant) s).getNbr());
+                    }
                 }
             }
         }
@@ -165,8 +178,11 @@ public class House extends Building {
         Random ran = new Random();
         Double d = ran.nextDouble();
         d = d * 30;
-        timeBeforeComming.add(d);
-        city.setPopInArrvial(city.getPopInArrvial() + 1);
+        int nbr = (popMax - (pop + popInArrival)) <= 5 ? (popMax - (pop + popInArrival)) : 5;
+        popInArrival = popInArrival + nbr;
+        city.setPopInArrvial(city.getPopInArrvial() + nbr);
+        timeBeforeComming.put(nbr, d);
+
     }
 
 

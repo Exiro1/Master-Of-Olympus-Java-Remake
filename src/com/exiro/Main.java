@@ -51,8 +51,8 @@ public class Main {
         r3.build(6, 2);
         Road r4 = new Road(c);
         r4.build(6, 3);
-        //  Immigrant immigrant = new Immigrant(c,c.getPathManager().getPathTo(c.getMap().getCase(0,0),c.getMap().getCase(6,3),true));
-        //   c.addSprite(immigrant);
+        /*  Immigrant immigrant = new Immigrant(c,c.getPathManager().getPathTo(c.getMap().getCase(0,0),c.getMap().getCase(6,3), RoadMap.FreeState.NON_BLOCKING),null);
+           c.addSprite(immigrant);*/
         EntityRender.setEntityRender(BuildingType.ROAD);
 
         System.out.println(c.getMap().toString());

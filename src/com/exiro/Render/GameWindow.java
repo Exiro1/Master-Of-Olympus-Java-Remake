@@ -1,5 +1,6 @@
 package com.exiro.Render;
 
+import com.exiro.BuildingList.BuildingType;
 import com.exiro.BuildingList.House;
 import com.exiro.Object.Case;
 import com.exiro.Object.CityMap;
@@ -45,9 +46,9 @@ public class GameWindow extends JPanel {
                     g.setColor(Color.RED);
                 }
 
-           /* if(c.getBuildingType()==BuildingType.EMPTY)
+                if (c.getBuildingType() == BuildingType.ROAD && !c.getObject().isActive())
                 continue;
-*/
+
 
                 if (c.isMainCase()) {
                     Point p = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos(), (c.getyPos())), c.getWidth(), c.getHeight(), c.getSize());
