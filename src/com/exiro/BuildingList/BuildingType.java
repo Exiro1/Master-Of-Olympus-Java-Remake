@@ -8,7 +8,7 @@ import java.io.IOException;
 public enum BuildingType {
 
 
-    EMPTY("rien", false, "Assets/Terrain/DefaultLand.png", 1),
+    EMPTY("rien", false, "Assets/Terrain/Land/defaultLand.png", 1),
     ROAD("route", false, "Assets/Construction/Roads/Road.png", 1),
     BLOCKABLE_ROAD("Stop", true, "Assets/Construction/Roads/BlockingRoad.png", 1),
     HOUSE("Maison", true, "Assets/Building/House/DefaultHouse.png", 2),

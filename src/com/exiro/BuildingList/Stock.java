@@ -26,7 +26,7 @@ public class Stock extends Building {
 
 
     public Stock(int xPos, int yPos, City c) {
-        super(false, BuildingType.STOCK, "Assets/Building/Stock/StorInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
+        super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
 
 
     }
