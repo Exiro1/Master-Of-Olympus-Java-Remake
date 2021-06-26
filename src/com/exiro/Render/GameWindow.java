@@ -68,7 +68,7 @@ public class GameWindow extends JPanel {
         synchronized (p.getPlayerCities().get(0).getSprites()) {
             for (Sprite s : p.getPlayerCities().get(0).getSprites()) {
                 Point p = IsometricRender.TwoDToIsoTexture(new Point(s.getX(), (s.getY())), s.getWidth(), s.getHeight(), 1);
-                g.drawImage(s.getCurrentFrame(), CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
+                g.drawImage(s.getCurrentFrame(), CameraPosx + (int) p.getX() + s.getOffsetX(), CameraPosy + (int) p.getY() + s.getOffsetY(), null);
             }
         }
         Point p2 = null;

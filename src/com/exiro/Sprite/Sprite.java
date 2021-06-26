@@ -19,6 +19,7 @@ public abstract class Sprite extends ObjectClass {
     int marge;
     double x, y;
     double x1, y1;
+    int offsetX,offsetY;
     Path path;
     int index = 0;
     double timeSinceLastFrame = 0;
@@ -105,7 +106,16 @@ public abstract class Sprite extends ObjectClass {
 
     }
 
+
     abstract public Map<Direction, BufferedImage[]> getSpriteSet();
+
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
+    }
 
     public BufferedImage getCurrentFrame() {
         return currentFrame;

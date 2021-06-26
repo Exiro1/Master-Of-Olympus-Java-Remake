@@ -30,7 +30,7 @@ public class House extends Building {
     private int popInArrival = 0;
 
     public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
-        super(false, BuildingType.HOUSE, "Assets/Building/House/DefaultHouse.png", 118, 128, 2, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
+        super(false, BuildingType.HOUSE, "Assets/Building/House/defaultHouse.png", 118, 128, 2, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
         this.level = level;
 
         setImg(imgSet.getSubimage(0, 0, 118, 128));

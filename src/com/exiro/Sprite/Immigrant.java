@@ -28,6 +28,8 @@ public class Immigrant extends Sprite {
         y = 0;
         this.nbr = nbr;
         path = p;
+        offsetX = 0;
+        offsetY = 10;
     }
 
     static public void loadSprite() {
