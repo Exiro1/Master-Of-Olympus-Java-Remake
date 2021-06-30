@@ -25,6 +25,10 @@ public class sgFileReader {
 
     }
 
+    void delete() {
+        data = null;
+    }
+
     long read(int nbr) {
         long r = 0;
         for (int i = 0; i < nbr; i++) {

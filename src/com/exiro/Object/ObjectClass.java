@@ -17,7 +17,7 @@ public abstract class ObjectClass implements Cloneable {
     private int height, width, size;
     private int xB, yB;
     private int bitmapID, localID;
-
+    private String path;
 
     public ObjectClass(boolean isActive, BuildingType type, String filename, int size, int bitmapID, int localID) {
         this.Active = isActive;
@@ -25,9 +25,46 @@ public abstract class ObjectClass implements Cloneable {
         this.size = size;
         this.bitmapID = bitmapID;
         this.localID = localID;
+        this.path = filename;
         TileImage img = ImageLoader.getImage(filename, bitmapID, localID);
         assert img != null;
         setImg(img);
+    }
+
+    public ObjectClass(boolean isActive, BuildingType type) {
+        this.Active = isActive;
+        this.type = type;
+        this.size = type.getSize();
+        this.bitmapID = type.getBitmapID();
+        this.localID = type.getLocalID();
+        this.path = type.getPath();
+        TileImage img = ImageLoader.getImage(getPath(), bitmapID, localID);
+        assert img != null;
+        setImg(img);
+    }
+
+    public int getBitmapID() {
+        return bitmapID;
+    }
+
+    public void setBitmapID(int bitmapID) {
+        this.bitmapID = bitmapID;
+    }
+
+    public int getLocalID() {
+        return localID;
+    }
+
+    public void setLocalID(int localID) {
+        this.localID = localID;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public int getXB() {

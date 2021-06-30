@@ -58,10 +58,10 @@ public class sgImage {
 
     static public sgImageData sg_load_image_data(sgImage img, String filename555) throws IOException {
 
-        System.out.println("Record " + img.imageId + " \n");
-        System.out.println("offset " + img.record.offset + " len " + img.record.length + " len2 " + img.record.uncompressed_length + " \n");
-        System.out.println("invert " + img.record.invert_offset + " w " + img.record.width + " h " + img.record.height + " \n");
-        System.out.println("type " + img.record.type + " flags " + img.record.flags[0] + "  " + img.record.flags[1] + " " + img.record.flags[2] + " " + img.record.flags[3] + " bitmap " + img.record.bitmap_id + " \n");
+        //System.out.println("Record " + img.imageId + " \n");
+        //System.out.println("offset " + img.record.offset + " len " + img.record.length + " len2 " + img.record.uncompressed_length + " \n");
+        //System.out.println("invert " + img.record.invert_offset + " w " + img.record.width + " h " + img.record.height + " \n");
+        //System.out.println("type " + img.record.type + " flags " + img.record.flags[0] + "  " + img.record.flags[1] + " " + img.record.flags[2] + " " + img.record.flags[3] + " bitmap " + img.record.bitmap_id + " \n");
 
 
         sgFileReader file555 = new sgFileReader(filename555);

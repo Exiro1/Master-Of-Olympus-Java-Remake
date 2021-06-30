@@ -5,6 +5,8 @@ import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Object.ObjectClass;
 import com.exiro.Render.IsometricRender;
+import com.exiro.Sprite.BuildingSprite;
+import com.exiro.Sprite.MovingSprite;
 import com.exiro.Sprite.Sprite;
 import com.exiro.Utils.Point;
 
@@ -15,6 +17,8 @@ public abstract class Building extends ObjectClass {
 
     BuildingType type;
     ArrayList<Sprite> sprites = new ArrayList<>();
+    ArrayList<MovingSprite> msprites = new ArrayList<>();
+    ArrayList<BuildingSprite> bsprites = new ArrayList<>();
     BuildingCategory category;
 
     int pop;
@@ -27,8 +31,8 @@ public abstract class Building extends ObjectClass {
     private int ID;
 
 
-    public Building(boolean isActive, BuildingType type, String path, int size, int bitmapID, int localID, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
-        super(isActive, type, path, size, bitmapID, localID);
+    public Building(boolean isActive, BuildingType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
+        super(isActive, type);
         if (!isActive)
             city.getInActives().add(this);
         this.category = category;
@@ -48,6 +52,14 @@ public abstract class Building extends ObjectClass {
     }
 
 
+    /**
+     * Appelé a chaque image
+     */
+    abstract public void processSprite(double delta);
+
+    /**
+     * Appelés toute les secondes
+     */
     abstract public void process(double deltaTime);
 
     /**
@@ -156,6 +168,14 @@ public abstract class Building extends ObjectClass {
     public void Render(Graphics g, int camX, int camY) {
         com.exiro.Utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), getSize());
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
+        g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
+
+        //render only buildingSprite because movingSprite are render separately
+        for (BuildingSprite s : bsprites) {
+            if (isActive() && getPop() > 0)
+                s.Render(g, camX, camY);
+        }
+
     }
 
     @Override
@@ -168,6 +188,45 @@ public abstract class Building extends ObjectClass {
                 ", built=" + built +
                 ", city=" + city.getName() +
                 '}';
+    }
+
+    public ArrayList<Sprite> getSprites() {
+        return sprites;
+    }
+
+    public void setSprites(ArrayList<Sprite> sprites) {
+        this.sprites = sprites;
+    }
+
+    public ArrayList<MovingSprite> getMovingSprites() {
+        return msprites;
+    }
+
+    public ArrayList<BuildingSprite> getBuildingSprites() {
+        return bsprites;
+    }
+
+    public void addSprite(Sprite s) {
+        sprites.add(s);
+        if (s instanceof MovingSprite)
+            msprites.add((MovingSprite) s);
+        if (s instanceof BuildingSprite)
+            bsprites.add((BuildingSprite) s);
+    }
+
+    public void removeSprites(Sprite s) {
+        synchronized (sprites) {
+            sprites.remove(s);
+        }
+
+        if (s instanceof MovingSprite)
+            synchronized (msprites) {
+                msprites.remove((MovingSprite) s);
+            }
+        if (s instanceof BuildingSprite)
+            synchronized (bsprites) {
+                bsprites.remove((BuildingSprite) s);
+            }
     }
 
     public int getxPos() {

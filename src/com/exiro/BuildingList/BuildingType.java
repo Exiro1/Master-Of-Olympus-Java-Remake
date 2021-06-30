@@ -1,20 +1,26 @@
 package com.exiro.BuildingList;
 
+import com.exiro.ConstructionList.Empty;
+import com.exiro.ConstructionList.Road;
 import com.exiro.FileManager.ImageLoader;
+import com.exiro.Object.ObjectClass;
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 
 public enum BuildingType {
 
 
-    EMPTY("rien", false, "Zeus_Terrain", 1, 1, 1),
-    ROAD("route", false, "Zeus_General", 1, 1, 54),
-    BLOCKABLE_ROAD("Stop", true, "Zeus_General", 1, 10, 75),
-    HOUSE("Maison", true, "Zeus_General", 2, 8, 14),
-    WATERWELL("Puit", true, "Zeus_General", 2, 9, 0),
-    STOCK("Stock", true, "Zeus_General", 3, 3, 22),
-    GRANARY("Grenier", true, "Zeus_General", 4, 3, 28);
+    EMPTY("rien", false, "Zeus_Terrain", 1, 1, 1, Empty.class),
+    ROAD("route", false, "Zeus_General", 1, 1, 54, Road.class),
+    BLOCKABLE_ROAD("Stop", true, "Zeus_General", 1, 10, 75, null),
+    HOUSE("Maison", true, "Zeus_General", 2, 8, 14, House.class),
+    WATERWELL("Puit", true, "Zeus_General", 2, 9, 0, WaterWell.class),
+    STOCK("Stock", true, "Zeus_General", 3, 3, 22, Stock.class),
+    GRANARY("Grenier", true, "Zeus_General", 4, 3, 28, Granary.class),
+    FARM("Ferme", true, "Zeus_General", 3, 4, 12, Farm.class);
 
+    private final Class c;
     private final String name;
     private final boolean block;
     private final int heigth, width;
@@ -23,7 +29,8 @@ public enum BuildingType {
     private BufferedImage img;
     private int bitmapID, localID;
 
-    BuildingType(String name, boolean block, String path, int size, int bitmapID, int localID) {
+    BuildingType(String name, boolean block, String path, int size, int bitmapID, int localID, Class c) {
+        this.c = c;
         this.size = size;
         this.name = name;
         this.path = path;
@@ -34,6 +41,21 @@ public enum BuildingType {
         width = img.getWidth();
 
         this.block = block;
+    }
+
+    public ObjectClass getDefault() {
+        try {
+            return (ObjectClass) c.getConstructor().newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public int getBitmapID() {

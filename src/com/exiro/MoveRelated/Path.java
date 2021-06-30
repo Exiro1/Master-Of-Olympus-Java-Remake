@@ -51,6 +51,7 @@ public class Path {
         return Direction.EST;
     }
 
+
     public boolean isOnCase(Point p, Direction direction) {
         if (direction == Direction.SUD_EST && p.getX() > path.get(index).getxPos()) {
             return true;

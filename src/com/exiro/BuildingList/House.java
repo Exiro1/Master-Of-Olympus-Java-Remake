@@ -5,6 +5,7 @@ import com.exiro.MoveRelated.RoadMap;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Sprite.Immigrant;
+import com.exiro.Sprite.MovingSprite;
 import com.exiro.Sprite.Sprite;
 import com.exiro.SystemCore.GameManager;
 import com.exiro.depacking.TileImage;
@@ -29,15 +30,12 @@ public class House extends Building {
 
 
     public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
-        super(false, BuildingType.HOUSE, "Zeus_General", 2, 8, 14, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
+        super(false, BuildingType.HOUSE, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
         this.level = level;
-        //setImg(imgSet.getSubimage(0, 0, 118, 128));
     }
 
-    static public House DEFAULT() {
-        House h = new House(0, 0, 0, null, false, GameManager.currentCity, 0);
-        // h.setHeight(64);
-        return h;
+    public House() {
+        super(false, BuildingType.HOUSE, null, 0, maxPerLvl[0], 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
     }
 
 
@@ -50,6 +48,13 @@ public class House extends Building {
         city.setPopInArrvial(city.getPopInArrvial() - popInArrival);
         city.setPopulation(city.getPopulation() - pop);
 
+    }
+
+    @Override
+    public void processSprite(double delta) {
+        for (Sprite s : sprites) {
+            s.process(delta);
+        }
     }
 
     @Override
@@ -126,14 +131,12 @@ public class House extends Building {
                 toRemove.add(a);
                 System.out.println(a);
                 Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), RoadMap.FreeState.ALL_ROAD), this, a);
-                city.addSprite(immigrant);
-                sprites.add(immigrant);
+                addSprite(immigrant);
             }
             i++;
         }
         SpriteManager();
-        for (Integer t : toRemove
-        ) {
+        for (Integer t : toRemove) {
             timeBeforeComming.remove(t);
         }
 
@@ -142,8 +145,9 @@ public class House extends Building {
 
     public void SpriteManager() {
         ArrayList<Sprite> toDestroy = new ArrayList<>();
-        synchronized (sprites) {
-            for (Sprite s : sprites) {
+
+        synchronized (msprites) {
+            for (MovingSprite s : msprites) {
                 if (s.hasArrived) {
                     toDestroy.add(s);
                     if (s instanceof Immigrant) {
@@ -160,8 +164,8 @@ public class House extends Building {
     }
 
     public void deleteSprites(ArrayList<Sprite> spritesToDestroy) {
-        synchronized (sprites) {
-            sprites.removeAll(spritesToDestroy);
+        for (Sprite s : spritesToDestroy) {
+            removeSprites(s);
         }
     }
 

@@ -20,9 +20,10 @@ public class Road extends Construction {
         super(false, BuildingType.ROAD, 1, 54, 1, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, city, false);
     }
 
-    public static Road DEFAULT() {
-        return new Road(GameManager.currentCity);
+    public Road() {
+        super(false, BuildingType.ROAD, 1, 54, 1, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, GameManager.currentCity, false);
     }
+
 
     public void setStart(boolean start) {
         this.start = start;

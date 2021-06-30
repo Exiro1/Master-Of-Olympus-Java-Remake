@@ -33,7 +33,7 @@ public class sgFile {
         this.header = sg_read_header(file);
 
 
-        System.out.println("Read header, num bitmaps = " + this.header.num_bitmap_records + ", num images = " + this.header.num_image_records);
+        //System.out.println("Read header, num bitmaps = " + this.header.num_bitmap_records + ", num images = " + this.header.num_image_records);
 
         loadBitmaps(this, file);
 
@@ -43,7 +43,7 @@ public class sgFile {
         loadImages(this, file, this.header.version >= 0xd6);
 
         if (this.bitmaps_n > 1 && this.images_n == sgBitmap.sg_get_bitmap_image_count(this.bitmaps[0])) {
-            System.out.println("SG file has " + this.bitmaps_n + " bitmaps but only the first is in use\n");
+            //System.out.println("SG file has " + this.bitmaps_n + " bitmaps but only the first is in use\n");
             // Remove the bitmaps other than the first
             int i;
 
@@ -52,6 +52,7 @@ public class sgFile {
             this.bitmaps[0] = temp;
             this.bitmaps_n = 1;
         }
+        file.delete();
 
     }
 
@@ -123,7 +124,7 @@ public class sgFile {
                 sgBitmap.sg_add_bitmap_image(sgf.bitmaps[bitmapId], image);
                 image.parent = sgf.bitmaps[bitmapId];
             } else {
-                System.out.println("Image " + i + " has no parent: " + bitmapId + "\n");
+                //System.out.println("Image " + i + " has no parent: " + bitmapId + "\n");
             }
 
             sgf.images[i] = image;

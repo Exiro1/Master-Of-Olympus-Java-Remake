@@ -4,7 +4,6 @@ import com.exiro.BuildingList.Building;
 import com.exiro.BuildingList.BuildingType;
 import com.exiro.ConstructionList.Construction;
 import com.exiro.ConstructionList.Road;
-import com.exiro.Sprite.Sprite;
 import com.exiro.SystemCore.BuildingManager;
 import com.exiro.SystemCore.PathManager;
 
@@ -18,7 +17,7 @@ public class City {
     private ArrayList<Construction> constructions;
     private ArrayList<ObjectClass> inActives = new ArrayList<>();
     private ArrayList<ObjectClass> obj = new ArrayList<>();
-    private ArrayList<Sprite> sprites;
+    //private ArrayList<Sprite> sprites;
 
     private ArrayList<Building> buildings;
     private int population, popInArrvial;
@@ -30,7 +29,7 @@ public class City {
         this.owner = owner;
         this.buildings = new ArrayList<>();
         this.population = 0;
-        this.sprites = new ArrayList<>();
+        //this.sprites = new ArrayList<>();
         this.buildingManager = new BuildingManager(this);
         Road start = new Road(this);
         this.constructions = new ArrayList<>();
@@ -84,32 +83,33 @@ public class City {
         }
     }
 
-    public ArrayList<Sprite> getSprites() {
-        return sprites;
-    }
-
-    public void setSprites(ArrayList<Sprite> sprites) {
-        this.sprites = sprites;
-    }
-
-    public void addSprite(Sprite s) {
-        synchronized (sprites) {
-            sprites.add(s);
+    /*
+        public ArrayList<Sprite> getSprites() {
+            return sprites;
         }
-    }
 
-    public void removeSprite(Sprite s) {
-        synchronized (sprites) {
-            sprites.remove(s);
+        public void setSprites(ArrayList<Sprite> sprites) {
+            this.sprites = sprites;
         }
-    }
 
-    public void removeSpriteAll(ArrayList<Sprite> s) {
-        synchronized (sprites) {
-            sprites.removeAll(s);
+        public void addSprite(Sprite s) {
+            synchronized (sprites) {
+                sprites.add(s);
+            }
         }
-    }
 
+        public void removeSprite(Sprite s) {
+            synchronized (sprites) {
+                sprites.remove(s);
+            }
+        }
+
+        public void removeSpriteAll(ArrayList<Sprite> s) {
+            synchronized (sprites) {
+                sprites.removeAll(s);
+            }
+        }
+    */
     public ArrayList<ObjectClass> getInActives() {
         return inActives;
     }
