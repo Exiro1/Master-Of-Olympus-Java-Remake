@@ -1,6 +1,5 @@
 package com.exiro.FileManager;
 
-import com.exiro.Sprite.Immigrant;
 import com.exiro.depacking.*;
 
 import java.awt.*;
@@ -18,11 +17,9 @@ public class ImageLoader {
      * Charge les image pur eviter de les chargé pour chauqe objet , --> diminue de ouf la ram utilisé du genre 2.5go a 200mo
      */
     public static void loadImage() {
-        //House.loadSet();
-        //Stock.loadSet();
-        Immigrant.loadSprite();
+        //Immigrant.loadSprite(1792);
+
     }
-    // static ArrayList<ImageDirectory> imgDir;
 
     public static void initLoader() {
         AssetsMap = new HashMap<>();
@@ -76,7 +73,7 @@ public class ImageLoader {
             Graphics g = imgg.createGraphics();
             g.drawImage(img, 0, 0, null);
             g.dispose();
-
+            sgData.setData(null);
             AssetsMap.put(globalID, new TileImage(imgg, sgData.getWidth(), sgData.getHeight(), bitmapID, imgID));
             AssetsMapUse.put(globalID, 1);
         } else {

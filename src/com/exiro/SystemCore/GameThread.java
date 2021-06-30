@@ -9,9 +9,6 @@ import com.exiro.Object.ObjectClass;
 import com.exiro.Object.Player;
 import com.exiro.Render.GameFrame;
 import com.exiro.Render.MouseManager;
-import com.exiro.Sprite.Sprite;
-
-import java.util.ArrayList;
 
 public class GameThread implements Runnable {
 
@@ -53,16 +50,12 @@ public class GameThread implements Runnable {
                 }
                 timeSinceLastUpdate = 0;
             }
-            ArrayList<Sprite> toDelete = new ArrayList<>();
 
-            synchronized (p.getPlayerCities().get(0).getSprites()) {
-                for (Sprite s : p.getPlayerCities().get(currentCity).getSprites()) {
-                    s.process(deltaTime);
-                    if (s.hasArrived)
-                        toDelete.add(s);
-                }
+            for (City c : p.getPlayerCities()) {
+                manageSprite(c, deltaTime);
             }
-            p.getPlayerCities().get(0).removeSpriteAll(toDelete);
+
+
             try {
                 manageBuild();
             } catch (NullPointerException e) {
@@ -93,6 +86,14 @@ public class GameThread implements Runnable {
 
     }
 
+    public void manageSprite(City c, double deltaTime) {
+        synchronized (c.getBuildings()) {
+
+            for (Building b : c.getBuildings()) {
+                b.processSprite(deltaTime);
+            }
+        }
+    }
 
     public void manageBuilding(City c, double delaTime) {
 

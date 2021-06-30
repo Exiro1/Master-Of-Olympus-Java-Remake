@@ -46,9 +46,8 @@ public class GameWindow extends JPanel {
 
 
                 if (c.isMainCase() && !(c.getObject() instanceof Building)) {
-                    //Point p = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos(), (c.getyPos())), c.getWidth(), c.getHeight(), c.getSize());
-                    //g.drawImage(c.getImg(), CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
-                    c.getObject().Render(g, CameraPosx, CameraPosy);
+                    Point p = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos(), (c.getyPos())), c.getWidth(), c.getHeight(), c.getSize());
+                    g.drawImage(c.getImg(), CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
                 }
 
 
@@ -62,10 +61,14 @@ public class GameWindow extends JPanel {
         ObjectClass[] oc;
 
         synchronized (p.getPlayerCities().get(0).getBuildings()) {
+
             allobj.addAll(p.getPlayerCities().get(0).getBuildings());
-        }
-        synchronized (p.getPlayerCities().get(0).getSprites()) {
-            allobj.addAll(p.getPlayerCities().get(0).getSprites());
+            for (Building b : p.getPlayerCities().get(0).getBuildings()) {
+                synchronized (b.getMovingSprites()) {
+                    allobj.addAll(b.getMovingSprites());
+                }
+            }
+
         }
         oc = allobj.toArray(new ObjectClass[0]);
 

@@ -1,40 +1,35 @@
 package com.exiro.Sprite;
 
-import com.exiro.MoveRelated.Path;
 import com.exiro.Object.City;
 import com.exiro.Object.ObjectClass;
 import com.exiro.Render.IsometricRender;
 import com.exiro.Utils.Point;
-import com.exiro.depacking.TileImage;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.util.Map;
 
 public abstract class Sprite extends ObjectClass {
 
 
-    public boolean hasArrived = false;
-    Direction dir = Direction.EST;
+
     int frameNumber;
     int width, height;
     float x;
     float y;
     float x1, y1;
     int offsetX, offsetY;
-    Path path;
     int index = 0;
     double timeSinceLastFrame = 0;
     BufferedImage currentFrame;
+    double timeBetweenFrame = 0.2f;
     City c;
-    ObjectClass destination;
 
-    public Sprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
+    public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
         super(true, null, filePath, 1, bitID, localId);
         this.c = c;
-        this.destination = destination;
         this.frameNumber = frameNumber;
     }
+
 
     public static BufferedImage makeColorTransparent(BufferedImage im, final Color color) {
         ImageFilter filter = new RGBImageFilter() {
@@ -68,39 +63,8 @@ public abstract class Sprite extends ObjectClass {
         return bimage;
     }
 
-    public void process(double deltaTime) {
-        timeSinceLastFrame = timeSinceLastFrame + deltaTime;
-        // System.out.println(timeSinceLastFrame);
-        if (timeSinceLastFrame > 0.2f) {
-            index++;
-            timeSinceLastFrame = 0;
-            if (index >= frameNumber) {
-                index = 0;
 
-            }
-            currentFrame = getSpriteSet().get(dir)[index].getImg();
-            height = getSpriteSet().get(dir)[index].getH();
-            width = getSpriteSet().get(dir)[index].getW();
-        }
-        if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), dir)) || (dir == Direction.EST && path.getIndex() < path.getPath().size() - 1)) {
-            dir = path.next();
-        } else if (path.getIndex() == path.getPath().size() - 1) {
-            hasArrived = true;
-        }
-        if (dir == Direction.SUD_OUEST) {
-            y = y + (float) (1 * deltaTime);
-        } else if (dir == Direction.NORD_OUEST) {
-            x = x - (float) (1 * deltaTime);
-        } else if (dir == Direction.NORD_EST) {
-            y = y - (float) (1 * deltaTime);
-        } else if (dir == Direction.SUD_EST) {
-            x = x + (float) (1 * deltaTime);
-        }
-
-        setXB((int) Math.round(x));
-        setYB((int) Math.round(y));
-
-    }
+    public abstract void process(double deltaTime);
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
@@ -108,7 +72,53 @@ public abstract class Sprite extends ObjectClass {
         g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
     }
 
-    abstract public Map<Direction, TileImage[]> getSpriteSet();
+    public double getTimeBetweenFrame() {
+        return timeBetweenFrame;
+    }
+
+    public void setTimeBetweenFrame(double timeBetweenFrame) {
+        this.timeBetweenFrame = timeBetweenFrame;
+    }
+
+    public int getFrameNumber() {
+        return frameNumber;
+    }
+
+    public void setFrameNumber(int frameNumber) {
+        this.frameNumber = frameNumber;
+    }
+
+    public void setOffsetX(int offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    public void setOffsetY(int offsetY) {
+        this.offsetY = offsetY;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public double getTimeSinceLastFrame() {
+        return timeSinceLastFrame;
+    }
+
+    public void setTimeSinceLastFrame(double timeSinceLastFrame) {
+        this.timeSinceLastFrame = timeSinceLastFrame;
+    }
+
+    public City getC() {
+        return c;
+    }
+
+    public void setC(City c) {
+        this.c = c;
+    }
 
     public int getOffsetX() {
         return offsetX;

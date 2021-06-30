@@ -25,6 +25,9 @@ public class Keyboard implements KeyListener {
         if (key == 'c') {
             EntityRender.setEntityRender(BuildingType.HOUSE);
         }
+        if (key == 'f') {
+            EntityRender.setEntityRender(BuildingType.FARM);
+        }
         if (key == 'r') {
             EntityRender.setEntityRender(BuildingType.ROAD);
         }

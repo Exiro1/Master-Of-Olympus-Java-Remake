@@ -3,6 +3,7 @@ package com.exiro.ConstructionList;
 import com.exiro.BuildingList.BuildingType;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
+import com.exiro.SystemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,11 @@ public class Empty extends Construction {
 
     public Empty(City city) {
         super(false, BuildingType.EMPTY, 1, 1, 1, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, city, false);
+
+    }
+
+    public Empty() {
+        super(false, BuildingType.EMPTY, 1, 1, 1, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, GameManager.currentCity, false);
 
     }
 

@@ -1,8 +1,7 @@
 package com.exiro.Render;
 
 
-import com.exiro.BuildingList.*;
-import com.exiro.ConstructionList.Road;
+import com.exiro.BuildingList.BuildingType;
 import com.exiro.MoveRelated.Path;
 import com.exiro.MoveRelated.RoadMap;
 import com.exiro.Object.Case;
@@ -60,23 +59,7 @@ public class EntityRender {
     }
 
     public static ObjectClass getDefault(BuildingType type) {
-        switch (type) {
-            case EMPTY:
-                break;
-            case ROAD:
-                return Road.DEFAULT();
-            case BLOCKABLE_ROAD:
-                break;
-            case HOUSE:
-                return House.DEFAULT();
-            case WATERWELL:
-                return WaterWell.DEFAULT();
-            case STOCK:
-                return Stock.DEFAULT();
-            case GRANARY:
-                return Granary.DEFAULT();
-        }
-        return null;
+        return type.getDefault();
     }
 
     public static void addBuilding(Point p) {
