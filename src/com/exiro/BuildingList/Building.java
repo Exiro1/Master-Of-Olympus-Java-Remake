@@ -4,8 +4,11 @@ import com.exiro.ConstructionList.Construction;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Object.ObjectClass;
+import com.exiro.Render.IsometricRender;
 import com.exiro.Sprite.Sprite;
+import com.exiro.Utils.Point;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Building extends ObjectClass {
@@ -13,18 +16,19 @@ public abstract class Building extends ObjectClass {
     BuildingType type;
     ArrayList<Sprite> sprites = new ArrayList<>();
     BuildingCategory category;
+
     int pop;
     int popMax;
     int cost, deleteCost;
-    int xPos, yPos, yLenght, xLenght;
+    int xPos, yPos, yLenght, xLenght, xpos2, ypos2;
     ArrayList<Case> cases;
     boolean built;
     City city;
     private int ID;
 
 
-    public Building(boolean isActive, BuildingType type, String path, int width, int height, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
-        super(isActive, type, path, width, height, size);
+    public Building(boolean isActive, BuildingType type, String path, int size, int bitmapID, int localID, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
+        super(isActive, type, path, size, bitmapID, localID);
         if (!isActive)
             city.getInActives().add(this);
         this.category = category;
@@ -70,8 +74,12 @@ public abstract class Building extends ObjectClass {
         if (place.size() == xLenght * yLenght) {
             this.xPos = xPos;
             this.yPos = yPos;
-            this.built = true;
+            setXB(xPos);
+            setYB(yPos);
 
+            this.built = true;
+            this.xpos2 = xPos + xLenght;
+            this.ypos2 = yPos + yLenght;
 
             city.getOwner().pay(this.cost);
             city.addBuilding(this);
@@ -145,6 +153,12 @@ public abstract class Building extends ObjectClass {
     }
 
     @Override
+    public void Render(Graphics g, int camX, int camY) {
+        com.exiro.Utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), getSize());
+        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
+    }
+
+    @Override
     public String toString() {
         return "Building{" +
                 "type=" + type.name() +
@@ -154,6 +168,14 @@ public abstract class Building extends ObjectClass {
                 ", built=" + built +
                 ", city=" + city.getName() +
                 '}';
+    }
+
+    public int getxPos() {
+        return xPos;
+    }
+
+    public int getyPos() {
+        return yPos;
     }
 
     public int getPopMax() {

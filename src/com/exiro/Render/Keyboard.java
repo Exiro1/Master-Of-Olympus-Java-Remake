@@ -20,7 +20,7 @@ public class Keyboard implements KeyListener {
     public void keyTyped(KeyEvent e) {
         char key = e.getKeyChar();
         if (key == 'd') {
-            win.p.getPlayerCities().get(0).getBuildings().get(0).delete();
+            //win.p.getPlayerCities().get(0).getBuildings().get(0).delete();
         }
         if (key == 'c') {
             EntityRender.setEntityRender(BuildingType.HOUSE);
@@ -33,6 +33,9 @@ public class Keyboard implements KeyListener {
         }
         if (key == 'w') {
             EntityRender.setEntityRender(BuildingType.WATERWELL);
+        }
+        if (key == 'm') {
+            EntityRender.setEntityRender(BuildingType.GRANARY);
         }
         if (key == 'a') {
             GameWindow.index++;

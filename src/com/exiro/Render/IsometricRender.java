@@ -40,14 +40,14 @@ public class IsometricRender {
 
     static public Point getPointTile(Point pt) {
         Point tempPt = new Point(0, 0);
-        tempPt.x = Math.floor(pt.x / TILE_HEIGHT_HALF * 2);
-        tempPt.y = Math.floor(pt.y / TILE_WIDTH_HALF * 2);
+        tempPt.x = (float) Math.floor(pt.x / TILE_HEIGHT_HALF * 2);
+        tempPt.y = (float) Math.floor(pt.y / TILE_WIDTH_HALF * 2);
         return tempPt;
     }
 
     static public Case getCase(Point e, City city) {
-        double x = e.getX() - GameWindow.CameraPosx;
-        double y = e.getY() - GameWindow.CameraPosy - 40d;
+        float x = e.getX() - GameWindow.CameraPosx;
+        float y = e.getY() - GameWindow.CameraPosy - 40f;
 
         double x2 = IsometricRender.getTileCoordinates(new Point(x, y)).x;
         double y2 = IsometricRender.getTileCoordinates(new Point(x, y)).y + 1.5;

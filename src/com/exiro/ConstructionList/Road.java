@@ -5,7 +5,6 @@ import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.SystemCore.GameManager;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Road extends Construction {
@@ -18,7 +17,7 @@ public class Road extends Construction {
     }
 
     public Road(City city) {
-        super(false, BuildingType.ROAD, 58, 30, 1, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, city, false);
+        super(false, BuildingType.ROAD, 1, 54, 1, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, city, false);
     }
 
     public static Road DEFAULT() {
@@ -44,11 +43,6 @@ public class Road extends Construction {
             //setType(BuildingType.BLOCKABLE_ROAD);
         }
         return true;
-    }
-
-    @Override
-    public BufferedImage getRender() {
-        return getImg();
     }
 
     @Override

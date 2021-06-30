@@ -1,32 +1,34 @@
 package com.exiro.BuildingList;
 
+import com.exiro.FileManager.ImageLoader;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Object.Ressource;
+import com.exiro.Render.IsometricRender;
 import com.exiro.SystemCore.GameManager;
+import com.exiro.Utils.Point;
+import com.exiro.depacking.TileImage;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Stock extends Building {
 
-    static BufferedImage imgSet;
-    static Map<Ressource, BufferedImage> listImage;
+
+    static Map<Ressource, TileImage> listImage;
     Map<Ressource, Integer> stock;
 
-    public Stock(boolean isActive, BuildingType type, String path, int width, int height, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Map<Ressource, Integer> stock) {
-        super(isActive, type, path, width, height, size, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
+    public Stock(boolean isActive, BuildingType type, String path, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Map<Ressource, Integer> stock) {
+        super(isActive, type, path, size, 3, 22, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
         this.stock = stock;
     }
 
 
     public Stock(int xPos, int yPos, City c) {
-        super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
+        //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
+        super(false, BuildingType.STOCK, "Zeus_General", 1, 3, 22, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
 
 
     }
@@ -35,6 +37,71 @@ public class Stock extends Building {
         return new Stock(0, 0, GameManager.currentCity);
     }
 
+
+    public TileImage getRessourceTile(Ressource res, int nbr) {
+        int i = 0;
+        switch (res) {
+
+            case SEA_URCHIN:
+                i = 0;
+                break;
+            case FISH:
+                i = 4;
+                break;
+            case MEAT:
+                i = 8;
+                break;
+            case CHEESE:
+                i = 12;
+                break;
+            case CARROT:
+                i = 16;
+                break;
+            case ONION:
+                i = 20;
+                break;
+            case CORN:
+                i = 24;
+                break;
+            case WOOD:
+                i = 28;
+                break;
+            case BRONZE:
+                i = 32;
+                break;
+            case MARBLE:
+                i = 36;
+                break;
+            case GRAPE:
+                i = 40;
+                break;
+            case OLIVE:
+                i = 44;
+                break;
+            case WOOL:
+                i = 48;
+                break;
+            case ARMEMENT:
+                i = 52;
+                break;
+            case SCULPTURE:
+                i = 56;
+                break;
+            case OLIVE_OIL:
+                i = 57;
+                break;
+            case WINE:
+                i = 61;
+            case NULL:
+                i = 0;
+                break;
+        }
+        if (res == Ressource.SCULPTURE)
+            nbr = 1;
+        return ImageLoader.getImage("Zeus_General", 7, i + nbr - 1);
+    }
+
+    /*
     public static void loadSet() {
         try {
             File imgFile = new File("Assets/Building/Stock/stock.png");
@@ -128,33 +195,63 @@ public class Stock extends Building {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
+
+    }
+    */
+    @Override
+    public void Render(Graphics g, int camX, int camY) {
+        renderTile(cases.get(6), g, camX, camY);
+        renderTile(cases.get(7), g, camX, camY);
+        renderTile(cases.get(3), g, camX, camY);
+        renderTile(cases.get(8), g, camX, camY);
+        renderTile(cases.get(4), g, camX, camY);
+        renderTile(cases.get(0), g, camX, camY);
+        renderTile(cases.get(5), g, camX, camY);
+        renderTile(cases.get(1), g, camX, camY);
+        renderTile(cases.get(2), g, camX, camY);
+    }
+
+    public void renderTile(Case c, Graphics g, int camX, int camY) {
+        com.exiro.Utils.Point p2 = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos(), (c.getyPos())), c.getWidth(), c.getHeight(), 1);
+        g.drawImage(c.getImg(), camX + (int) p2.getX(), camY + (int) p2.getY(), null);
     }
 
     public void updateRender() {
 
         for (Case c2 : cases) {
-            c2.setImg(listImage.get(Ressource.CARROT));
+            TileImage t = getRessourceTile(Ressource.CARROT, 4);
+            c2.setImg(t.getImg());
+            c2.setHeight(t.getH());
+            c2.setWidth(t.getW());
         }
+    }
+
+    public Ressource getRan() {
+        Random r = new Random();
+        return Ressource.values()[r.nextInt(Ressource.values().length)];
     }
 
     @Override
     public boolean build(int xPos, int yPos) {
         if (super.build(xPos, yPos)) {
             for (Case c2 : cases) {
-                c2.setImg(listImage.get(Ressource.CARROT));
-                c2.setMainCase(true);
-                c2.setWidth(58);
-                c2.setHeight(116);
+                TileImage t = getRessourceTile(getRan(), 4);
+                c2.setImg(t.getImg());
+                c2.setHeight(t.getH());
+                c2.setWidth(t.getW());
+                c2.setMainCase(false);
                 c2.setSize(1);
             }
             cases.get(6).setImg(getImg());
-            cases.get(6).setWidth(58);
-            cases.get(6).setHeight(76);
+            cases.get(6).setWidth(getWidth());
+            cases.get(6).setHeight(getHeight());
             return true;
         }
         return false;
     }
-
 
     @Override
     public void process(double deltaTime) {
@@ -171,27 +268,6 @@ public class Stock extends Building {
 
     }
 
-    @Override
-    public BufferedImage getRender() {
 
 
-
-
-       /* BufferedImage concatImage = new BufferedImage(174, 176, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = concatImage.createGraphics();
-        for(Case c : cases) {
-            Point p = IsometricRender.TwoDToIsoTexture(new Point(((c.getxPos()-xPos))+getSize()-1,(c.getyPos()-yPos)),58,36,1);
-            g2d.drawImage(listImage.get(Ressource.NULL),p.x-getSize()*29,p.y,null);
-        }
-        g2d.dispose();
-        try {
-            File f = new File("C:\\Users\\corentin\\OneDrive - ESTACA\\Documents\\dev\\JavaGame\\GameJava\\src\\other\\testCase.png");
-           ImageIO.write(concatImage, "png", f); // export concat image
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        // getImg();
-
-        return getImg();
-    }
 }

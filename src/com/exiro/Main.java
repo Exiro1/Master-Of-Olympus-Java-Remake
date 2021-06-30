@@ -13,10 +13,14 @@ import com.exiro.SystemCore.GameManager;
 import com.exiro.SystemCore.GameThread;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        ImageLoader.initLoader();
+
 
         ImageLoader.loadImage();
         System.setProperty("sun.awt.noerasebackground", "true");
@@ -60,4 +64,13 @@ public class Main {
         Thread t = new Thread(new GameThread(gm));
         t.start();
     }
+
+    /*
+    static void test() throws IOException {
+        TileImage img = ImageLoader.getImage("Zeus_Terrain",5,60);
+        img.getID();
+    }
+    */
+
+
 }

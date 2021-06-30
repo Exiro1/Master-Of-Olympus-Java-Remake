@@ -1,38 +1,93 @@
 package com.exiro.Sprite;
 
+import com.exiro.FileManager.ImageLoader;
 import com.exiro.MoveRelated.Path;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Object.ObjectClass;
+import com.exiro.depacking.TileImage;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Immigrant extends Sprite {
 
-    private static Map<Direction, BufferedImage[]> spriteSet;
+    private static Map<Direction, TileImage[]> spriteSet;
     private static int frameNumber = 12, size = 15, width = 64, height = 64, marge = 3;
-    private static String filepath = "Assets/Sprites/Immigrant/immigrant.png";
+    private static String filepath = "SprMain";
     private int nbr;
 
-
     public Immigrant(City city, Path p, ObjectClass dest, int nbr) {
-        super(filepath, 15, 12, 64, 64, 3, city, dest);
+        super(filepath, 0, 1792, 12, city, dest);
         x = 0;
         y = 0;
         this.nbr = nbr;
         path = p;
         offsetX = 0;
-        offsetY = 10;
+        offsetY = 0;
     }
 
     static public void loadSprite() {
+        spriteSet = new HashMap<>();
+        spriteSet.put(Direction.EST, new TileImage[frameNumber]);
+        spriteSet.put(Direction.NORD, new TileImage[frameNumber]);
+        spriteSet.put(Direction.SUD, new TileImage[frameNumber]);
+        spriteSet.put(Direction.OUEST, new TileImage[frameNumber]);
+        spriteSet.put(Direction.NORD_EST, new TileImage[frameNumber]);
+        spriteSet.put(Direction.NORD_OUEST, new TileImage[frameNumber]);
+        spriteSet.put(Direction.SUD_EST, new TileImage[frameNumber]);
+        spriteSet.put(Direction.SUD_OUEST, new TileImage[frameNumber]);
+
+
+        int nbr = 0;
+        int k = 0;
+
+        for (int a = 0; a < 8 * frameNumber; a++) {
+            Direction dir = null;
+            k = a % 8;
+            nbr = (int) (a / 8.0);
+            switch (k) {
+                case 1:
+                    dir = Direction.EST;
+                    break;
+                case 7:
+                    dir = Direction.NORD;
+                    break;
+                case 0:
+                    dir = Direction.NORD_EST;
+                    break;
+                case 6:
+                    dir = Direction.NORD_OUEST;
+                    break;
+                case 5:
+                    dir = Direction.OUEST;
+                    break;
+                case 3:
+                    dir = Direction.SUD;
+                    break;
+                case 2:
+                    dir = Direction.SUD_EST;
+                    break;
+                case 4:
+                    dir = Direction.SUD_OUEST;
+                    break;
+
+            }
+
+            TileImage t = ImageLoader.getImage(filepath, 0, 1792 + a);
+            t.setImg(makeColorTransparent(t.getImg(), Color.RED));
+
+            spriteSet.get(dir)[nbr] = t;
+
+
+        }
+
+
+    }
+/*
+    static public void loadSprite2() {
         spriteSet = new HashMap<>();
         spriteSet.put(Direction.EST, new BufferedImage[frameNumber]);
         spriteSet.put(Direction.NORD, new BufferedImage[frameNumber]);
@@ -46,6 +101,7 @@ public class Immigrant extends Sprite {
         int i = -1;
         int j = 0;
         int k = 0;
+
         File f = new File(filepath);
         BufferedImage img = null;
         try {
@@ -53,6 +109,7 @@ public class Immigrant extends Sprite {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         int nbr = -1;
         int k2 = 0;
         for (int a = 0; a < 8 * frameNumber; a++) {
@@ -103,15 +160,11 @@ public class Immigrant extends Sprite {
 
 
     }
+*/
 
     @Override
     public boolean build(int xPos, int yPos) {
         return false;
-    }
-
-    @Override
-    public BufferedImage getRender() {
-        return this.currentFrame;
     }
 
     @Override
@@ -125,7 +178,7 @@ public class Immigrant extends Sprite {
     }
 
     @Override
-    public Map<Direction, BufferedImage[]> getSpriteSet() {
+    public Map<Direction, TileImage[]> getSpriteSet() {
         return spriteSet;
     }
 

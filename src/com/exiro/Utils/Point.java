@@ -2,26 +2,26 @@ package com.exiro.Utils;
 
 public class Point {
 
-    public double x, y;
+    public float x, y;
 
-    public Point(double x, double y) {
+    public Point(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public double getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public double getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(float y) {
         this.y = y;
     }
 }

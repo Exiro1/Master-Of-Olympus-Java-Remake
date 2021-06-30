@@ -1,16 +1,14 @@
 package com.exiro.BuildingList;
 
+import com.exiro.FileManager.ImageLoader;
 import com.exiro.MoveRelated.RoadMap;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Sprite.Immigrant;
 import com.exiro.Sprite.Sprite;
 import com.exiro.SystemCore.GameManager;
+import com.exiro.depacking.TileImage;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +16,7 @@ import java.util.Random;
 
 public class House extends Building {
 
-    public static BufferedImage imgSet;
+
     static int[] maxPerLvl = {1, 5, 10, 15, 20, 25, 30, 35, 45};
     private final double deltaFood = 0.001f;
     private final double deltaWater = 0.002f;
@@ -29,11 +27,11 @@ public class House extends Building {
     private double food, water, wool, hdo;
     private int popInArrival = 0;
 
-    public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
-        super(false, BuildingType.HOUSE, "Assets/Building/House/defaultHouse.png", 118, 128, 2, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
-        this.level = level;
 
-        setImg(imgSet.getSubimage(0, 0, 118, 128));
+    public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
+        super(false, BuildingType.HOUSE, "Zeus_General", 2, 8, 14, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
+        this.level = level;
+        //setImg(imgSet.getSubimage(0, 0, 118, 128));
     }
 
     static public House DEFAULT() {
@@ -42,19 +40,6 @@ public class House extends Building {
         return h;
     }
 
-    static public void loadSet() {
-        try {
-            File f = new File("Assets/Building/House/house.png");
-            imgSet = ImageIO.read(f);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public BufferedImage getRender() {
-        return getImg();
-    }
 
     /**
      * Detruit le batiment et l objet
@@ -110,9 +95,7 @@ public class House extends Building {
                 }
                 if (evolvabe) {
                     level++;
-                    Random ran = new Random();
-                    setImg(imgSet.getSubimage(level * 118, ran.nextInt(1) * 128, 118, 128));
-                    city.getMap().getCase(xPos, yPos).setImg(getImg());
+                    changeLvlImg(level);
                     popMax = maxPerLvl[level];
                 }
             }
@@ -121,6 +104,14 @@ public class House extends Building {
             addPopulation();
         }
 
+    }
+
+
+    public void changeLvlImg(int lvl) {
+        Random ran = new Random();
+        TileImage t = ImageLoader.getImage(type.getPath(), type.getBitmapID(), -ran.nextInt(2) + lvl * 2 - 1);
+        assert t != null;
+        setImg(t);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.exiro.Render;
 
-import com.exiro.BuildingList.BuildingType;
-import com.exiro.BuildingList.House;
+import com.exiro.BuildingList.Building;
 import com.exiro.Object.Case;
 import com.exiro.Object.CityMap;
 import com.exiro.Object.ObjectClass;
@@ -14,6 +13,8 @@ import com.exiro.Utils.Point;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class GameWindow extends JPanel {
 
@@ -37,26 +38,17 @@ public class GameWindow extends JPanel {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         g.setColor(Color.BLACK);
         int x = 0;
+
+
         synchronized (p.getPlayerCities().get(0).getMap().getCases()) {
 
             for (Case c : p.getPlayerCities().get(0).getMap().getCases()) {
 
-                g.setColor(Color.BLACK);
-                if (c.getObject() != null && !c.getObject().isActive()) {
-                    g.setColor(Color.RED);
-                }
 
-                if (c.getBuildingType() == BuildingType.ROAD && !c.getObject().isActive())
-                continue;
-
-
-                if (c.isMainCase()) {
-                    Point p = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos(), (c.getyPos())), c.getWidth(), c.getHeight(), c.getSize());
-                    g.drawImage(c.getImg(), CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
-                    if (c.getObject() instanceof House) {
-                        x++;
-                        g.drawString(((House) c.getObject()).getPop() + " " + ((House) c.getObject()).getLevel(), 800, x * 25 + 100);
-                    }
+                if (c.isMainCase() && !(c.getObject() instanceof Building)) {
+                    //Point p = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos(), (c.getyPos())), c.getWidth(), c.getHeight(), c.getSize());
+                    //g.drawImage(c.getImg(), CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
+                    c.getObject().Render(g, CameraPosx, CameraPosy);
                 }
 
 
@@ -65,16 +57,39 @@ public class GameWindow extends JPanel {
                 //System.out.println(c.getBuildingType().name());
             }
         }
+
+        ArrayList<ObjectClass> allobj = new ArrayList<>();
+        ObjectClass[] oc;
+
+        synchronized (p.getPlayerCities().get(0).getBuildings()) {
+            allobj.addAll(p.getPlayerCities().get(0).getBuildings());
+        }
+        synchronized (p.getPlayerCities().get(0).getSprites()) {
+            allobj.addAll(p.getPlayerCities().get(0).getSprites());
+        }
+        oc = allobj.toArray(new ObjectClass[0]);
+
+        Arrays.sort(oc, new Comparator<ObjectClass>() {
+            @Override
+            public int compare(ObjectClass o1, ObjectClass o2) {
+                return Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB());
+            }
+        });
+        for (ObjectClass obj : oc) {
+            obj.Render(g, CameraPosx, CameraPosy);
+        }
+        /*
         synchronized (p.getPlayerCities().get(0).getSprites()) {
             for (Sprite s : p.getPlayerCities().get(0).getSprites()) {
                 Point p = IsometricRender.TwoDToIsoTexture(new Point(s.getX(), (s.getY())), s.getWidth(), s.getHeight(), 1);
                 g.drawImage(s.getCurrentFrame(), CameraPosx + (int) p.getX() + s.getOffsetX(), CameraPosy + (int) p.getY() + s.getOffsetY(), null);
             }
         }
+        */
         Point p2 = null;
         if (getMousePosition() != null) {
             try {
-                p2 = new Point(getMousePosition().getX(), getMousePosition().getY());
+                p2 = new Point((float) getMousePosition().getX(), (float) getMousePosition().getY());
                 lastP = p2;
             } catch (NullPointerException r) {
             }

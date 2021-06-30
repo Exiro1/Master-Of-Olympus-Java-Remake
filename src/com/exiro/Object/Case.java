@@ -2,6 +2,7 @@ package com.exiro.Object;
 
 import com.exiro.BuildingList.BuildingType;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Case {
@@ -10,7 +11,7 @@ public class Case {
     private BuildingType buildingType;
     private ObjectClass object;
     private boolean isMainCase; //case ou dessiner l objet
-    private BufferedImage img;
+    private Image img;
     private int width, height;
     private int size;
 
@@ -58,7 +59,7 @@ public class Case {
         return "x : " + xPos + " , y : " + yPos + " occupé : " + Occuped;
     }
 
-    public BufferedImage getImg() {
+    public Image getImg() {
         return img;
     }
 
