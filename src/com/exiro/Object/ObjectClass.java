@@ -1,11 +1,11 @@
 package com.exiro.Object;
 
 import com.exiro.BuildingList.BuildingType;
+import com.exiro.FileManager.ImageLoader;
+import com.exiro.depacking.TileImage;
 
-import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class ObjectClass implements Cloneable {
@@ -13,23 +13,21 @@ public abstract class ObjectClass implements Cloneable {
     private boolean Active = false;
     private BuildingType type;
 
-    private BufferedImage img;
+    private TileImage img;
     private int height, width, size;
     private int xB, yB;
+    private int bitmapID, localID;
 
 
-    public ObjectClass(boolean isActive, BuildingType type, String path, int width, int height, int size) {
+    public ObjectClass(boolean isActive, BuildingType type, String filename, int size, int bitmapID, int localID) {
         this.Active = isActive;
-        this.width = width;
-        this.height = height;
         this.type = type;
         this.size = size;
-        try {
-            File imgFile = new File(path);
-            img = ImageIO.read(imgFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.bitmapID = bitmapID;
+        this.localID = localID;
+        TileImage img = ImageLoader.getImage(filename, bitmapID, localID);
+        assert img != null;
+        setImg(img);
     }
 
     public int getXB() {
@@ -50,7 +48,7 @@ public abstract class ObjectClass implements Cloneable {
 
     public abstract boolean build(int xPos, int yPos);
 
-    public abstract BufferedImage getRender();
+    public abstract void Render(Graphics g, int camX, int camY);
 
     public int getSize() {
         return size;
@@ -76,6 +74,10 @@ public abstract class ObjectClass implements Cloneable {
         this.width = width;
     }
 
+    public BufferedImage getImg() {
+        return img.getImg();
+    }
+
     public BuildingType getType() {
         return type;
     }
@@ -84,12 +86,10 @@ public abstract class ObjectClass implements Cloneable {
         this.type = type;
     }
 
-    public BufferedImage getImg() {
-        return img;
-    }
-
-    public void setImg(BufferedImage img) {
+    public void setImg(TileImage img) {
         this.img = img;
+        this.setWidth(img.getW());
+        this.setHeight(img.getH());
     }
 
     abstract public void delete();

@@ -1,19 +1,19 @@
 package com.exiro.BuildingList;
 
-import javax.imageio.ImageIO;
+import com.exiro.FileManager.ImageLoader;
+
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public enum BuildingType {
 
 
-    EMPTY("rien", false, "Assets/Terrain/Land/defaultLand.png", 1),
-    ROAD("route", false, "Assets/Construction/Roads/Road.png", 1),
-    BLOCKABLE_ROAD("Stop", true, "Assets/Construction/Roads/BlockingRoad.png", 1),
-    HOUSE("Maison", true, "Assets/Building/House/DefaultHouse.png", 2),
-    WATERWELL("Puit", true, "Assets/Building/Waterfall/DefaultWaterfall.png", 2),
-    STOCK("Stock", true, "Assets/Building/Stock/fullStock.png", 3);
+    EMPTY("rien", false, "Zeus_Terrain", 1, 1, 1),
+    ROAD("route", false, "Zeus_General", 1, 1, 54),
+    BLOCKABLE_ROAD("Stop", true, "Zeus_General", 1, 10, 75),
+    HOUSE("Maison", true, "Zeus_General", 2, 8, 14),
+    WATERWELL("Puit", true, "Zeus_General", 2, 9, 0),
+    STOCK("Stock", true, "Zeus_General", 3, 3, 22),
+    GRANARY("Grenier", true, "Zeus_General", 4, 3, 28);
 
     private final String name;
     private final boolean block;
@@ -21,21 +21,35 @@ public enum BuildingType {
     private final int size;
     private final String path;
     private BufferedImage img;
+    private int bitmapID, localID;
 
-    BuildingType(String name, boolean block, String path, int size) {
+    BuildingType(String name, boolean block, String path, int size, int bitmapID, int localID) {
         this.size = size;
         this.name = name;
         this.path = path;
-        File f = new File(path);
-        try {
-            img = ImageIO.read(f);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        img = ImageLoader.getImage(path, bitmapID, localID).getImg();
+        this.bitmapID = bitmapID;
+        this.localID = localID;
         heigth = img.getHeight();
         width = img.getWidth();
 
         this.block = block;
+    }
+
+    public int getBitmapID() {
+        return bitmapID;
+    }
+
+    public void setBitmapID(int bitmapID) {
+        this.bitmapID = bitmapID;
+    }
+
+    public int getLocalID() {
+        return localID;
+    }
+
+    public void setLocalID(int localID) {
+        this.localID = localID;
     }
 
     public String getPath() {

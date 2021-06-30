@@ -3,7 +3,9 @@ package com.exiro.Sprite;
 import com.exiro.MoveRelated.Path;
 import com.exiro.Object.City;
 import com.exiro.Object.ObjectClass;
+import com.exiro.Render.IsometricRender;
 import com.exiro.Utils.Point;
+import com.exiro.depacking.TileImage;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -15,11 +17,11 @@ public abstract class Sprite extends ObjectClass {
     public boolean hasArrived = false;
     Direction dir = Direction.EST;
     int frameNumber;
-    int width, height, size;
-    int marge;
-    double x, y;
-    double x1, y1;
-    int offsetX,offsetY;
+    int width, height;
+    float x;
+    float y;
+    float x1, y1;
+    int offsetX, offsetY;
     Path path;
     int index = 0;
     double timeSinceLastFrame = 0;
@@ -27,15 +29,11 @@ public abstract class Sprite extends ObjectClass {
     City c;
     ObjectClass destination;
 
-    public Sprite(String filePath, int size, int frameNumber, int widht, int height, int marge, City c, ObjectClass destination) {
-        super(true, null, filePath, widht, height, 1);
-        this.marge = marge;
+    public Sprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
+        super(true, null, filePath, 1, bitID, localId);
         this.c = c;
         this.destination = destination;
-        this.size = size;
         this.frameNumber = frameNumber;
-        this.height = height;
-        this.width = widht;
     }
 
     public static BufferedImage makeColorTransparent(BufferedImage im, final Color color) {
@@ -63,13 +61,8 @@ public abstract class Sprite extends ObjectClass {
             return (BufferedImage) img;
         }
 
-        // Create a buffered image with transparency
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-        // Draw the image on to the buffered image
-        Graphics2D bGr = bimage.createGraphics();
-        bGr.drawImage(img, 0, 0, null);
-        bGr.dispose();
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), Transparency.TRANSLUCENT);
+        bimage.getGraphics().drawImage(img, 0, 0, null);
 
         // Return the buffered image
         return bimage;
@@ -85,8 +78,9 @@ public abstract class Sprite extends ObjectClass {
                 index = 0;
 
             }
-            currentFrame = getSpriteSet().get(dir)[index];
-
+            currentFrame = getSpriteSet().get(dir)[index].getImg();
+            height = getSpriteSet().get(dir)[index].getH();
+            width = getSpriteSet().get(dir)[index].getW();
         }
         if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), dir)) || (dir == Direction.EST && path.getIndex() < path.getPath().size() - 1)) {
             dir = path.next();
@@ -94,20 +88,27 @@ public abstract class Sprite extends ObjectClass {
             hasArrived = true;
         }
         if (dir == Direction.SUD_OUEST) {
-            y = y + 1 * deltaTime;
+            y = y + (float) (1 * deltaTime);
         } else if (dir == Direction.NORD_OUEST) {
-            x = x - 1 * deltaTime;
+            x = x - (float) (1 * deltaTime);
         } else if (dir == Direction.NORD_EST) {
-            y = y - 1 * deltaTime;
+            y = y - (float) (1 * deltaTime);
         } else if (dir == Direction.SUD_EST) {
-            x = x + 1 * deltaTime;
+            x = x + (float) (1 * deltaTime);
         }
 
+        setXB((int) Math.round(x));
+        setYB((int) Math.round(y));
 
     }
 
+    @Override
+    public void Render(Graphics g, int camX, int camY) {
+        Point p = IsometricRender.TwoDToIsoTexture(new Point(getX(), (getY())), getWidth(), getHeight(), 1);
+        g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
+    }
 
-    abstract public Map<Direction, BufferedImage[]> getSpriteSet();
+    abstract public Map<Direction, TileImage[]> getSpriteSet();
 
     public int getOffsetX() {
         return offsetX;
@@ -141,14 +142,12 @@ public abstract class Sprite extends ObjectClass {
         this.height = height;
     }
 
-
-    public void setX(int x) {
-        this.x = x;
+    public float getX() {
+        return x;
     }
 
-
-    public void setY(int y) {
-        this.y = y;
+    public void setX(float x) {
+        this.x = x;
     }
 
 
@@ -156,28 +155,17 @@ public abstract class Sprite extends ObjectClass {
         this.x1 = x1;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(float y) {
         this.y = y;
     }
 
+
     public double getX1() {
         return x1;
-    }
-
-    public void setX1(double x1) {
-        this.x1 = x1;
     }
 
     public double getY1() {
@@ -188,7 +176,4 @@ public abstract class Sprite extends ObjectClass {
         this.y1 = y1;
     }
 
-    public void setY1(double y1) {
-        this.y1 = y1;
-    }
 }

@@ -1,10 +1,7 @@
 package com.exiro.Render;
 
 
-import com.exiro.BuildingList.BuildingType;
-import com.exiro.BuildingList.House;
-import com.exiro.BuildingList.Stock;
-import com.exiro.BuildingList.WaterWell;
+import com.exiro.BuildingList.*;
 import com.exiro.ConstructionList.Road;
 import com.exiro.MoveRelated.Path;
 import com.exiro.MoveRelated.RoadMap;
@@ -36,14 +33,16 @@ public class EntityRender {
         width = defaultObject.getWidth();
         size = defaultObject.getSize();
 
-        BufferedImage target = new BufferedImage(img.getWidth(), img.getHeight(), java.awt.Transparency.TRANSLUCENT);
+
+        BufferedImage target = new BufferedImage(img.getWidth(), img.getHeight(), Transparency.TRANSLUCENT);
+
         // Get the images graphics
         Graphics2D g = target.createGraphics();
         // Set the Graphics composite to Alpha
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.6));
 
         // Draw the image into the prepared reciver image
-        g.drawImage(img, null, 0, 0);
+        g.drawImage(img, 0, 0, null);
 
         // let go of all system resources in this Graphics
         g.dispose();
@@ -74,6 +73,8 @@ public class EntityRender {
                 return WaterWell.DEFAULT();
             case STOCK:
                 return Stock.DEFAULT();
+            case GRANARY:
+                return Granary.DEFAULT();
         }
         return null;
     }

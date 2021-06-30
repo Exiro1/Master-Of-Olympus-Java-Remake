@@ -4,7 +4,6 @@ import com.exiro.BuildingList.BuildingType;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Empty extends Construction {
@@ -15,7 +14,7 @@ public class Empty extends Construction {
     }
 
     public Empty(City city) {
-        super(false, BuildingType.EMPTY, 58, 30, 1, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, city, false);
+        super(false, BuildingType.EMPTY, 1, 1, 1, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, city, false);
 
     }
 
@@ -24,8 +23,4 @@ public class Empty extends Construction {
         return true;
     }
 
-    @Override
-    public BufferedImage getRender() {
-        return getImg();
-    }
 }
