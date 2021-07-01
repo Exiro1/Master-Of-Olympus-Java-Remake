@@ -11,7 +11,6 @@ import java.awt.image.*;
 public abstract class Sprite extends ObjectClass {
 
 
-
     int frameNumber;
     int width, height;
     float x;
