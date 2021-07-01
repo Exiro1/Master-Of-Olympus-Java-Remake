@@ -114,6 +114,10 @@ public abstract class MovingSprite extends Sprite {
         return destination;
     }
 
+    public void setRoutePath(Path path) {
+        this.path = path;
+    }
+
     public void setDestination(ObjectClass destination) {
         this.destination = destination;
     }

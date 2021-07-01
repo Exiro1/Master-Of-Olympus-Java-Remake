@@ -11,6 +11,7 @@ import com.exiro.depacking.TileImage;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -23,30 +24,36 @@ public class Stock extends Building {
 
      */
 
+    // le vrai
+    HashMap<Ressource, Integer> stockage;
+    int emptyCase = 8;
+    // en attente
+    HashMap<Ressource, Integer> reserved;
+    int emptyCaseReserved = 8;
 
     static Map<Ressource, TileImage> listImage;
-    Map<Ressource, Integer> stock;
+
 
     public Stock(boolean isActive, BuildingType type, String path, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Map<Ressource, Integer> stock) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
-        this.stock = stock;
+        stockage = new HashMap<>();
+        reserved = new HashMap<>();
     }
 
 
     public Stock(int xPos, int yPos, City c) {
         //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
         super(false, BuildingType.STOCK, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
-
-
+        stockage = new HashMap<>();
+        reserved = new HashMap<>();
     }
 
     public Stock() {
         //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
         super(false, BuildingType.STOCK, BuildingCategory.STOCKAGE, 0, 2, 150, 30, 0, 0, 3, 3, new ArrayList<>(), false, GameManager.currentCity, 0);
-
-
+        stockage = new HashMap<>();
+        reserved = new HashMap<>();
     }
-
 
     public TileImage getRessourceTile(Ressource res, int nbr) {
         int i = 0;
@@ -112,10 +119,71 @@ public class Stock extends Building {
         return ImageLoader.getImage("Zeus_General", 7, i + nbr - 1);
     }
 
-    public boolean canStock(Ressource r, int ammount) {
-        return true;
+
+    /**
+     * get free space for a ressource type
+     *
+     * @param r Ressource
+     * @return free space
+     */
+    public int getFreeSpace(Ressource r) {
+        int space = 0;
+        reserved.putIfAbsent(r, 0);
+        int used = reserved.get(r);
+        space = (emptyCaseReserved * 4) / r.getWeight() + (int) Math.ceil((used * r.getWeight()) / 4.0) * 4 - used * r.getWeight(); //surement simplifiable mais j ai un qi d'huitre aujourd'hui
+        return space;
     }
 
+    /**
+     * reserve space for ressources
+     *
+     * @param r      ressource
+     * @param amount amount of ressource to stock
+     * @return amount of ressource that cannot be stored
+     */
+    public int reserve(Ressource r, int amount) {
+        reserved.putIfAbsent(r, 0);
+        int used = reserved.get(r);
+        int spaceLeftInCase = (int) Math.ceil((used * r.getWeight()) / 4.0) * 4 - used * r.getWeight();
+        if (spaceLeftInCase > 0) {
+            reserved.replace(r, reserved.get(r) + Math.min(amount, spaceLeftInCase));
+            amount -= Math.min(amount, spaceLeftInCase);
+        }
+        if (amount > 0) {
+            int reservePossible = emptyCaseReserved >= (amount * r.getWeight()) / 4.0 ? (int) Math.ceil((amount * r.getWeight()) / 4.0) : emptyCaseReserved;
+            reserved.replace(r, reserved.get(r) + (amount * r.getWeight() <= emptyCaseReserved * 4 ? amount : emptyCaseReserved * (4 / r.getWeight())));
+            amount -= (amount * r.getWeight() <= emptyCaseReserved * 4 ? amount : emptyCaseReserved * (4 / r.getWeight()));
+            emptyCaseReserved -= reservePossible;
+        }
+        return amount;
+    }
+
+    /**
+     * stock ressources in the stockage
+     *
+     * @param amount
+     * @param r
+     * @return success
+     */
+    public boolean stock(int amount, Ressource r) {
+        //check that the amount specified has been reserved
+        stockage.putIfAbsent(r, 0);
+        if (reserved.get(r) >= stockage.get(r) + amount) {
+            int temp = amount;
+            int used = stockage.get(r);
+            int spaceLeftInCase = (int) Math.ceil((used * r.getWeight()) / 4.0) * 4 - used * r.getWeight();
+            if (spaceLeftInCase > 0) {
+                temp -= Math.min(temp, spaceLeftInCase);
+            }
+            if (temp > 0) {
+                int reservePossible = emptyCaseReserved >= (temp * r.getWeight()) / 4.0 ? (int) Math.ceil((temp * r.getWeight()) / 4.0) : emptyCase;
+                emptyCase -= reservePossible;
+            }
+            stockage.replace(r, stockage.get(r) + amount);
+        }
+        updateStock();
+        return true;
+    }
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
@@ -144,13 +212,45 @@ public class Stock extends Building {
         return Ressource.values()[r.nextInt(Ressource.values().length)];
     }
 
+    public void updateStock() {
+        int i = 0;
+        for (Ressource r : stockage.keySet()) {
+            int k = 0;
+            for (int j = 0; j < stockage.get(r); j++) {
+                k++;
+                if (k * r.getWeight() >= 4) {
+                    setCaseRes(k, r, i);
+                    k = 0;
+                    i++;
+                }
+            }
+            if (k > 0) {
+                setCaseRes(k, r, i);
+                i++;
+            }
+        }
+        for (; i < 8; i++) {
+            setCaseRes(1, Ressource.NULL, i);
+        }
+    }
+
+    public void setCaseRes(int amount, Ressource r, int index) {
+        Case c = null;
+        if (index < 6)
+            c = cases.get(index);
+        if (index >= 6)
+            c = cases.get(index + 1);
+        TileImage t = getRessourceTile(r, amount);
+        c.setImg(t.getImg());
+        c.setHeight(t.getH());
+        c.setWidth(t.getW());
+    }
+
     @Override
     public boolean build(int xPos, int yPos) {
         if (super.build(xPos, yPos)) {
             for (Case c2 : cases) {
                 TileImage t = getRessourceTile(Ressource.NULL, 1);
-                if (isActive())
-                    t = getRessourceTile(getRan(), 4);
                 c2.setImg(t.getImg());
                 c2.setHeight(t.getH());
                 c2.setWidth(t.getW());
@@ -161,7 +261,7 @@ public class Stock extends Building {
             cases.get(6).setWidth(getWidth());
             cases.get(6).setHeight(getHeight());
 
-
+            updateStock();
             return true;
         }
         return false;

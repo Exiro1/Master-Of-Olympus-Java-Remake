@@ -62,6 +62,16 @@ public class PathManager {
         return getPath(c1, c2, free) == null ? roadMap.findPath(c1.getxPos(), c1.getyPos(), c2.getxPos(), c2.getyPos(), free) : getPath(c1, c2, free);//verifie si il existe un chemin deja calculé
     }
 
+    public Path getPathTo(int x1, int y1, int x2, int y2, RoadMap.FreeState free) {
+        // if(map.getCase(c1.getxPos(),c1.getyPos())==null || map.getCase(c2.getxPos(),c2.getyPos())==null)
+        //   return null;
+        if (!lastroads.equals(roads)) {
+            roadMap = new RoadMap(map);
+            this.lastroads = new ArrayList<>(roads);
+        }
+        return roadMap.findPath(x1, y1, x2, y2, free);//verifie si il existe un chemin deja calculé
+    }
+
     public boolean isReachable(Case c1, Case c2, RoadMap.FreeState free) {
         if (!lastroads.equals(roads)) {
             roadMap = new RoadMap(map);

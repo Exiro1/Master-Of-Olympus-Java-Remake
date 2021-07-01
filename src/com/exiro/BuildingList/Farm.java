@@ -1,8 +1,6 @@
 package com.exiro.BuildingList;
 
 import com.exiro.FileManager.ImageLoader;
-import com.exiro.MoveRelated.Path;
-import com.exiro.MoveRelated.RoadMap;
 import com.exiro.Object.Case;
 import com.exiro.Object.City;
 import com.exiro.Object.ObjectClass;
@@ -25,7 +23,7 @@ public class Farm extends Building {
     float speedFactor = 1;
     float growth;
     TileImage growthImg;
-    int carterWaiting = 0;
+    int stock = 0;
 
 
     public Farm(boolean isActive, BuildingType type, String path, int size, int bitmapID, int localID, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Ressource ressource, int level) {
@@ -59,6 +57,7 @@ public class Farm extends Building {
 
         if (isActive() && getPop() > 0) {
             float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
+            factor = 10;
             growth += factor * deltaTime * speedFactor;
 
             if (growth > 10) {
@@ -68,7 +67,7 @@ public class Farm extends Building {
             }
             if (Rlevel > 5) {
                 Rlevel = 0;
-                recoltEnded(8);
+                recoltEnded(6);
             }
 
         }
@@ -117,45 +116,52 @@ public class Farm extends Building {
         growthImg = ImageLoader.getImage(getPath(), getBitmapID(), i);
     }
 
+
     public void recoltEnded(int unit) {
         changeLevel(0);
-        for (int j = 0; j < Math.ceil(unit / 4.0); j++) {
-            Carter carter = new Carter(city, null, this, Ressource.CORN, 3);
-            addSprite(carter);
-            carterWaiting++;
-        }
+        stock += unit;
     }
 
     public void manageCarter() {
-        if (carterWaiting > 0) {
-            //optimiser en ayant un hashmap dans city <BuildingType, ArrayList<Building> > ?
-            for (Building b : city.getBuildings()) {
-                if (b instanceof Granary) {
-                    for (MovingSprite c : msprites) {
-                        if (c.getRoutePath() != null)
-                            continue;
-                        Granary g = (Granary) b;
-                        if (g.canStock(ressource, ((Carter) c).getAmmount())) {
-                            Path p = city.getPathManager().getPathTo(getAccess().get(0), g.getAccess().get(0), RoadMap.FreeState.ALL_ROAD);
-                            if (p != null) {
-                                ((Carter) c).setPath(p);
-                                carterWaiting--;
-                                //g.reserve(ressource, ((Carter)c).getAmmount());
-                            }
-                        }
-                    }
-                }
-            }
+        if (stock > 0) {
+            int toDeliver = Math.min(stock, 4);
+            stock -= toDeliver;
+            Carter carter = new Carter(city, null, this, Ressource.CORN, toDeliver);
+            addSprite(carter);
         }
+
         ArrayList<Sprite> toDestroy = new ArrayList<>();
         for (MovingSprite c : msprites) {
             if (c.hasArrived) {
+                Carter carter = (Carter) c;
                 ObjectClass des = c.getDestination();
+                if (des == null || !des.isActive()) { //object supprimée / inactif -> on relance la recherche
+                    c.hasArrived = false;
+                    c.setRoutePath(null);
+                }
                 if (des instanceof Granary) {
                     Granary g = (Granary) des;
-                    g.stock(ressource, ((Carter) c).getAmmount());
+                    g.stock(carter.getCurrentDelivery(), ressource);
+                    carter.setAmmount(carter.getAmmount() - carter.getCurrentDelivery());
+                    if (carter.getAmmount() > 0) {
+                        c.hasArrived = false;
+                        c.setRoutePath(null);
+                    } else {
+                        toDestroy.add(c);
+                    }
                 }
-                toDestroy.add(c);
+                if (des instanceof Stock) {
+                    Stock g = (Stock) des;
+                    g.stock(carter.getCurrentDelivery(), ressource);
+                    carter.setAmmount(carter.getAmmount() - carter.getCurrentDelivery());
+                    if (carter.getAmmount() > 0) {
+                        c.hasArrived = false;
+                        c.setRoutePath(null);
+                    } else {
+                        toDestroy.add(c);
+                    }
+
+                }
             }
         }
         for (Sprite s : toDestroy) {

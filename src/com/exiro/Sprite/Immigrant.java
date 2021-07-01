@@ -27,8 +27,6 @@ public class Immigrant extends MovingSprite {
     }
 
 
-
-
     @Override
     public boolean build(int xPos, int yPos) {
         return false;
