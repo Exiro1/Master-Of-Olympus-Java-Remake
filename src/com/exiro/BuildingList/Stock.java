@@ -31,7 +31,6 @@ public class Stock extends Building {
     HashMap<Ressource, Integer> reserved;
     int emptyCaseReserved = 8;
 
-    static Map<Ressource, TileImage> listImage;
 
 
     public Stock(boolean isActive, BuildingType type, String path, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Map<Ressource, Integer> stock) {
@@ -159,13 +158,46 @@ public class Stock extends Building {
     }
 
     /**
+     * Cancel a space reservation
+     *
+     * @param r      Ressource
+     * @param amount amount
+     */
+    public void unReserved(Ressource r, int amount) {
+        reserved.putIfAbsent(r, 0);
+        int before = reserved.get(r);
+        int after = reserved.get(r) - amount;
+        int stockNeededBefore = ((int) Math.ceil((before * r.getWeight() / 4.0)));
+        int stockNeededAfter = ((int) Math.ceil((after * r.getWeight() / 4.0)));
+        emptyCaseReserved += stockNeededBefore - stockNeededAfter;
+        if (reserved.get(r) >= amount) {
+            reserved.replace(r, reserved.get(r) - amount);
+        } else {
+            reserved.replace(r, 0); //no supposed to happen
+        }
+    }
+
+    /**
+     * reserve + store
+     *
+     * @param amount    amount to store
+     * @param ressource ressource to store
+     * @return amount of ressource that cannot be stored
+     */
+    public int instantStock(int amount, Ressource ressource) {
+        int avail = reserve(ressource, amount);
+        stock(ressource, avail);
+        return amount - avail;
+    }
+
+    /**
      * stock ressources in the stockage
      *
      * @param amount
      * @param r
      * @return success
      */
-    public boolean stock(int amount, Ressource r) {
+    public boolean stock(Ressource r, int amount) {
         //check that the amount specified has been reserved
         stockage.putIfAbsent(r, 0);
         if (reserved.get(r) >= stockage.get(r) + amount) {
@@ -183,6 +215,43 @@ public class Stock extends Building {
         }
         updateStock();
         return true;
+    }
+
+    /**
+     * get ressources from the stock
+     *
+     * @param amount amount of ressources to retrieve
+     * @param r      Ressource
+     * @return amount of ressources retrieved
+     */
+    public int unStock(Ressource r, int amount) {
+        if (!stockage.containsKey(r))
+            return 0;
+
+        int ret = 0;
+        int before = stockage.get(r);
+        int after = stockage.get(r) - amount;
+        int stockNeededBefore = ((int) Math.ceil((before * r.getWeight() / 4.0)));
+        int stockNeededAfter = ((int) Math.ceil((after * r.getWeight() / 4.0)));
+
+        int beforer = reserved.get(r);
+        int afterr = reserved.get(r) - amount;
+        int stockNeededBeforer = ((int) Math.ceil((beforer * r.getWeight() / 4.0)));
+        int stockNeededAfterr = ((int) Math.ceil((afterr * r.getWeight() / 4.0)));
+
+        emptyCase += stockNeededBefore - stockNeededAfter;
+        emptyCaseReserved += stockNeededBeforer - stockNeededAfterr;
+
+        if (stockage.get(r) >= amount) {
+            stockage.replace(r, stockage.get(r) - amount);
+            reserved.replace(r, reserved.get(r) - amount);
+            ret = amount;
+        } else {
+            ret = stockage.get(r);
+            stockage.replace(r, 0); //no supposed to happen
+            reserved.replace(r, 0);
+        }
+        return ret;
     }
 
     @Override

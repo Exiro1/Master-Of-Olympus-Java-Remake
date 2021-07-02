@@ -202,6 +202,7 @@ public class Carter extends MovingSprite {
                         setPath(p);
                         setDestination(g);
                         currentDelivery = getAmmount() - g.reserve(res, getAmmount());
+                        return;
                     }
                 }
             } else if (b instanceof Stock) {
@@ -212,6 +213,7 @@ public class Carter extends MovingSprite {
                         setPath(p);
                         setDestination(g);
                         currentDelivery = getAmmount() - g.reserve(res, getAmmount());
+                        return;
                     }
                 }
 

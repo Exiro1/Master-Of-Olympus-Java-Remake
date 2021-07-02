@@ -17,6 +17,7 @@ public class BuildingSprite extends Sprite {
         this.building = b;
         this.x = b.getXB();
         this.y = b.getYB();
+        setImage(0);
     }
 
     public TileImage getImage(int frame) {
@@ -33,20 +34,20 @@ public class BuildingSprite extends Sprite {
 
     @Override
     public void process(double deltaTime) {
-        timeSinceLastFrame = timeSinceLastFrame + deltaTime;
-        // System.out.println(timeSinceLastFrame);
-        if (timeSinceLastFrame > timeBetweenFrame) {
-            index++;
-            timeSinceLastFrame = 0;
-            if (index >= frameNumber) {
-                index = 0;
 
+        if (frameNumber > 1) {
+            timeSinceLastFrame = timeSinceLastFrame + deltaTime;
+            // System.out.println(timeSinceLastFrame);
+            if (timeSinceLastFrame > timeBetweenFrame) {
+                index++;
+                timeSinceLastFrame = 0;
+                if (index >= frameNumber) {
+                    index = 0;
+
+                }
+                setImage(index);
             }
-            setImage(index);
         }
-
-        //setXB((int) Math.round(x));
-        //setYB((int) Math.round(y));
     }
 
     @Override

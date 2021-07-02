@@ -18,6 +18,7 @@ public class City {
     private ArrayList<ObjectClass> inActives = new ArrayList<>();
     private ArrayList<ObjectClass> obj = new ArrayList<>();
     //private ArrayList<Sprite> sprites;
+    int activeBuilding = 0;
 
     private ArrayList<Building> buildings;
     private int population, popInArrvial;
@@ -77,7 +78,7 @@ public class City {
         }
     }
 
-    public void removeBuildingj(Building o) {
+    public void removeBuilding(Building o) {
         synchronized (buildings) {
             buildings.remove(o);
         }
@@ -191,5 +192,13 @@ public class City {
 
     public void setBuildings(ArrayList<Building> buildings) {
         this.buildings = buildings;
+    }
+
+    public int getActiveBuilding() {
+        return activeBuilding;
+    }
+
+    public void setActiveBuilding(int activeBuilding) {
+        this.activeBuilding = activeBuilding;
     }
 }

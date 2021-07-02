@@ -46,6 +46,25 @@ public class Farm extends Building {
 
 
     @Override
+    public void delete() {
+        super.delete();
+        for (MovingSprite ms : msprites) {
+            if (ms instanceof Carter) {
+                Carter c = (Carter) ms;
+                ObjectClass obj = c.getDestination();
+                if (obj instanceof Granary) {
+                    Granary g = (Granary) obj;
+                    g.unReserved(ressource, c.getCurrentDelivery());
+                }
+                if (obj instanceof Stock) {
+                    Stock s = (Stock) obj;
+                    s.unReserved(ressource, c.getCurrentDelivery());
+                }
+            }
+        }
+    }
+
+    @Override
     public void processSprite(double delta) {
         for (Sprite s : sprites) {
             s.process(delta);
@@ -135,13 +154,13 @@ public class Farm extends Building {
             if (c.hasArrived) {
                 Carter carter = (Carter) c;
                 ObjectClass des = c.getDestination();
-                if (des == null || !des.isActive()) { //object supprimée / inactif -> on relance la recherche
+                if (des == null || !des.isActive() || ((Building) des).isDeleted()) { //object supprimée / inactif -> on relance la recherche
                     c.hasArrived = false;
                     c.setRoutePath(null);
-                }
-                if (des instanceof Granary) {
+                    des = null;
+                } else if (des instanceof Granary) {
                     Granary g = (Granary) des;
-                    g.stock(carter.getCurrentDelivery(), ressource);
+                    g.stock(ressource, carter.getCurrentDelivery());
                     carter.setAmmount(carter.getAmmount() - carter.getCurrentDelivery());
                     if (carter.getAmmount() > 0) {
                         c.hasArrived = false;
@@ -149,10 +168,9 @@ public class Farm extends Building {
                     } else {
                         toDestroy.add(c);
                     }
-                }
-                if (des instanceof Stock) {
+                } else if (des instanceof Stock) {
                     Stock g = (Stock) des;
-                    g.stock(carter.getCurrentDelivery(), ressource);
+                    g.stock(ressource, carter.getCurrentDelivery());
                     carter.setAmmount(carter.getAmmount() - carter.getCurrentDelivery());
                     if (carter.getAmmount() > 0) {
                         c.hasArrived = false;
