@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Wood {
 
-    private int state;   //0 =normal , 1 = coupé
-    private float durability; //pour la coupe
-    private boolean isCutting;
+    private final int state;   //0 =normal , 1 = coupé
+    private final float durability; //pour la coupe
+    private final boolean isCutting;
 
 
     public Wood(City city, ArrayList<Case> cases, int xPos, int ypos, BuildingType type, float cachet, int state, float durability, boolean isCutting) {

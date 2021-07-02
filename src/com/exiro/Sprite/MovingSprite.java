@@ -92,8 +92,8 @@ public abstract class MovingSprite extends Sprite {
                 x = x + (float) (speed * deltaTime);
             }
 
-            setXB((int) Math.round(x));
-            setYB((int) Math.round(y));
+            setXB(Math.round(x));
+            setYB(Math.round(y));
         }
 
     }

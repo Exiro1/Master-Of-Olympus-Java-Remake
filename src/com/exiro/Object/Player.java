@@ -6,7 +6,7 @@ public class Player {
 
     private float money;
     private int populaionTotal;
-    private String name;
+    private final String name;
     private ArrayList<City> playerCities;
     private ArrayList<Player> friendship;
 

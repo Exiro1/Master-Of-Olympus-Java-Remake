@@ -6,17 +6,12 @@ public class PathAlgo {
 
 
     public static <T extends Node<T>> List<T> doAStar(T start, T goal, RoadMap.FreeState free) {
-        Set<T> closed = new HashSet<T>();
-        Map<T, T> fromMap = new HashMap<T, T>();
-        List<T> route = new LinkedList<T>();
-        Map<T, Double> gScore = new HashMap<T, Double>();
-        final Map<T, Double> fScore = new HashMap<T, Double>();
-        PriorityQueue<T> open = new PriorityQueue<T>(11, new Comparator<T>() {
-
-            public int compare(T nodeA, T nodeB) {
-                return Double.compare(fScore.get(nodeA), fScore.get(nodeB));
-            }
-        });
+        Set<T> closed = new HashSet<>();
+        Map<T, T> fromMap = new HashMap<>();
+        List<T> route = new LinkedList<>();
+        Map<T, Double> gScore = new HashMap<>();
+        final Map<T, Double> fScore = new HashMap<>();
+        PriorityQueue<T> open = new PriorityQueue<>(11, (nodeA, nodeB) -> Double.compare(fScore.get(nodeA), fScore.get(nodeB)));
 
         gScore.put(start, 0.0);
         fScore.put(start, start.getHeuristic(goal));

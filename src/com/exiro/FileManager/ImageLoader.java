@@ -13,13 +13,6 @@ public class ImageLoader {
     static HashMap<Integer, TileImage> AssetsMap;
     static HashMap<Integer, Integer> AssetsMapUse;
 
-    /**
-     * Charge les image pur eviter de les chargé pour chauqe objet , --> diminue de ouf la ram utilisé du genre 2.5go a 200mo
-     */
-    public static void loadImage() {
-        //Immigrant.loadSprite(1792);
-
-    }
 
     public static void initLoader() {
         AssetsMap = new HashMap<>();

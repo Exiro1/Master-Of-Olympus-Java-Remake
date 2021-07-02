@@ -18,7 +18,7 @@ public abstract class Construction extends ObjectClass {
     int xPos, yPos;
     int xLenght, yLenght;
     float cachet;
-    City city;
+    final City city;
     boolean built;
 
 

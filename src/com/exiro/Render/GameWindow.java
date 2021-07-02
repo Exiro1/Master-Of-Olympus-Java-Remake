@@ -14,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class GameWindow extends JPanel {
 
@@ -57,12 +56,12 @@ public class GameWindow extends JPanel {
             }
         }
 
-        ArrayList<ObjectClass> allobj = new ArrayList<>();
+        ArrayList<ObjectClass> allobj;
         ObjectClass[] oc;
 
         synchronized (p.getPlayerCities().get(0).getBuildings()) {
 
-            allobj.addAll(p.getPlayerCities().get(0).getBuildings());
+            allobj = new ArrayList<>(p.getPlayerCities().get(0).getBuildings());
             for (Building b : p.getPlayerCities().get(0).getBuildings()) {
                 synchronized (b.getMovingSprites()) {
                     allobj.addAll(b.getMovingSprites());
@@ -72,12 +71,7 @@ public class GameWindow extends JPanel {
         }
         oc = allobj.toArray(new ObjectClass[0]);
 
-        Arrays.sort(oc, new Comparator<ObjectClass>() {
-            @Override
-            public int compare(ObjectClass o1, ObjectClass o2) {
-                return Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB());
-            }
-        });
+        Arrays.sort(oc, (o1, o2) -> Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB()));
         for (ObjectClass obj : oc) {
             obj.Render(g, CameraPosx, CameraPosy);
         }
@@ -95,6 +89,7 @@ public class GameWindow extends JPanel {
                 p2 = new Point((float) getMousePosition().getX(), (float) getMousePosition().getY());
                 lastP = p2;
             } catch (NullPointerException r) {
+                r.printStackTrace();
             }
         }
         if (lastP != null) {
@@ -114,10 +109,11 @@ public class GameWindow extends JPanel {
             Case c = IsometricRender.getCase(p2, p.getPlayerCities().get(0));
             if (MouseManager.pressing) {
                 if (lastCase != c) {
-                    Boolean isNew = true;
+                    boolean isNew = true;
                     for (ObjectClass obj1 : EntityRender.toBuild) {
                         if (obj1.getXB() == c.getxPos() && obj1.getYB() == c.getyPos()) {
                             isNew = false;
+                            break;
                         }
                     }
                     if (isNew) {

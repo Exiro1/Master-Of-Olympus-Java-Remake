@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class GameInfo extends JPanel {
 
-    private GameManager gm;
+    private final GameManager gm;
     private Font font;
     private BufferedImage drachme, background1;
 
