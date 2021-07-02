@@ -29,6 +29,7 @@ public abstract class Building extends ObjectClass {
     boolean built;
     City city;
     private int ID;
+    boolean deleted = false;
 
 
     public Building(boolean isActive, BuildingType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
@@ -116,7 +117,6 @@ public abstract class Building extends ObjectClass {
                 city.getInActives().add(this);
             }
 
-
             return true;
         } else {
             return false;
@@ -152,8 +152,9 @@ public abstract class Building extends ObjectClass {
     public void delete() {
 
         if (this.built) {
+            setActive(false);
             city.getOwner().pay(this.getDeleteCost());
-            city.removeBuildingj(this);
+            city.removeBuilding(this);
             for (Case c : getCases()) {
                 c.setBuildingType(BuildingType.EMPTY);
                 c.setOccuped(false);
@@ -161,6 +162,7 @@ public abstract class Building extends ObjectClass {
                 c.setMainCase(true);
             }
             city.removeObj(this);
+            deleted = true;
         }
     }
 
@@ -227,6 +229,16 @@ public abstract class Building extends ObjectClass {
             synchronized (bsprites) {
                 bsprites.remove((BuildingSprite) s);
             }
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+        city.setActiveBuilding(city.getActiveBuilding() + (active ? 1 : -1));
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public int getxPos() {

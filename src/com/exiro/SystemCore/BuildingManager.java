@@ -15,10 +15,10 @@ public class BuildingManager {
     private int lastPop;
     private Map<BuildingCategory, Priority> priorityMap;
     private Map<BuildingCategory, Priority> lastPriorityMap;
-    private ArrayList<Building> lastBuildings;
     private City city;
     private int WorkforceNeeded;
     private int unemployed;
+    private int lastActiveNbr;
 
 
     public BuildingManager(City city) {
@@ -32,10 +32,11 @@ public class BuildingManager {
         priorityMap.put(BuildingCategory.STOCKAGE, Priority.MEDIUM);
     }
 
+    //peut etre appeler la methode que quand on change qlq chose au lieu de le faire a chaque seconde?
     public void updateWorker() {
         int pop = city.getPopulation();
 
-        if (pop == lastPop && priorityMap.equals(lastPriorityMap) && lastBuildings.equals(city.getBuildings()))
+        if (pop == lastPop && priorityMap.equals(lastPriorityMap) && lastActiveNbr == city.getActiveBuilding())
             return;//evite de tout recalculer sii rien a changer
 
         int popR = pop;
@@ -89,7 +90,7 @@ public class BuildingManager {
         }
         System.out.println("reste " + popR + " gens qui ne travaille pas");
         unemployed = popR;
-        lastBuildings = city.getBuildings();
+        lastActiveNbr = city.getActiveBuilding();
         lastPop = city.getPopulation();
         lastPriorityMap = priorityMap;
 
