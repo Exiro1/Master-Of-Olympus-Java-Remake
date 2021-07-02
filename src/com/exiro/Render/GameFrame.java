@@ -13,7 +13,7 @@ public class GameFrame extends JFrame {
     private MenuBar menuBar;
     private InterfaceRender it;
     private GameInfo gi;
-    private GameManager gm;
+    private final GameManager gm;
 
     public GameFrame(String title, GameManager gm) {
         super(title);

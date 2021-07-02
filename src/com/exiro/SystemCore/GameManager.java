@@ -11,12 +11,12 @@ public class GameManager {
     GameWindow GameView;
     MenuBar menuBar;
     Player player;
-    private InterfaceRender it;
-    private GameInfo gi;
+    private final InterfaceRender it;
+    private final GameInfo gi;
 
     public GameManager(Player player, City currentCity) {
         this.player = player;
-        this.currentCity = currentCity;
+        GameManager.currentCity = currentCity;
         frame = new GameFrame("lol", this);
         this.GameView = frame.getWindow();
         this.menuBar = frame.getMenu();
@@ -62,6 +62,6 @@ public class GameManager {
     }
 
     public void setCurrentCity(City currentCity) {
-        this.currentCity = currentCity;
+        GameManager.currentCity = currentCity;
     }
 }

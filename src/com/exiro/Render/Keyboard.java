@@ -9,7 +9,7 @@ public class Keyboard implements KeyListener {
 
     static boolean aaa = false;
     int x = 0;
-    private GameWindow win;
+    private final GameWindow win;
 
 
     public Keyboard(GameWindow win) {

@@ -37,8 +37,7 @@ public class sgFile {
 
         loadBitmaps(this, file);
 
-        int pos = SG_HEADER_SIZE + maxBitmapRecords(this) * SG_BITMAP_RECORD_SIZE;
-        file.currPosByte = pos;
+        file.currPosByte = SG_HEADER_SIZE + maxBitmapRecords(this) * SG_BITMAP_RECORD_SIZE;
 
         loadImages(this, file, this.header.version >= 0xd6);
 
@@ -135,16 +134,12 @@ public class sgFile {
         if (file.header.version == 0xd3) {
             // SG2 file: filesize = 74480 or 522680 (depending on whether it's
             // a "normal" sg2 or an enemy sg2
-            if (file.header.sg_filesize == 74480 || file.header.sg_filesize == 522680) {
-                return true;
-            }
+            return file.header.sg_filesize == 74480 || file.header.sg_filesize == 522680;
         } else if (file.header.version == 0xd5 || file.header.version == 0xd6) {
             // SG3 file: filesize = the actual size of the sg3 file
             sgFileReader fp = new sgFileReader(file.filename);
             long filesize = fp.f.length();
-            if (file.header.sg_filesize == 74480 || filesize == file.header.sg_filesize) {
-                return true;
-            }
+            return file.header.sg_filesize == 74480 || filesize == file.header.sg_filesize;
         }
 
         // All other cases:

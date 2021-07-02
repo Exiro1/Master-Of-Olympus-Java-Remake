@@ -109,7 +109,7 @@ public class RoadMap {
         }
 
         public Set<MapNode> getNeighbours() {
-            Set<MapNode> neighbours = new HashSet<MapNode>();
+            Set<MapNode> neighbours = new HashSet<>();
 
             for (int i = x - 1; i <= x + 1; i++) {
                 for (int j = y - 1; j <= y + 1; j++) {

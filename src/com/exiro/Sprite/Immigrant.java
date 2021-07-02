@@ -12,12 +12,12 @@ import java.util.Map;
 public class Immigrant extends MovingSprite {
 
     private static Map<Direction, TileImage[]> spriteSet;
-    private static int frameNumber = 12, size = 15, width = 64, height = 64, marge = 3;
-    private static String filepath = "SprMain";
+    //private static int frameNumber = 12, size = 15, width = 64, height = 64, marge = 3;
+    //private static String filepath = "SprMain";
     private int nbr;
 
     public Immigrant(City city, Path p, ObjectClass dest, int nbr) {
-        super(filepath, 0, 1792, 12, city, dest);
+        super("SprMain", 0, 1792, 12, city, dest);
         x = 0;
         y = 0;
         this.nbr = nbr;

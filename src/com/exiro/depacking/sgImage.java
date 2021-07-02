@@ -47,11 +47,7 @@ public class sgImage {
         //image.record = image.workRecord = new sgImageRecord();
         image.record = sg_read_image_record(f, includeAlpha);
         image.workRecord = image.record;
-        if (image.record.invert_offset != 0) {
-            image.invert = true;
-        } else {
-            image.invert = false;
-        }
+        image.invert = image.record.invert_offset != 0;
         return image;
     }
 
@@ -139,8 +135,8 @@ public class sgImage {
         int i = 0;
         int x, y;
         //BufferedImage imgg = new BufferedImage(img.workRecord.width,img.workRecord.height, BufferedImage.TYPE_INT_ARGB);
-        for (y = 0; y < (int) img.workRecord.height; y++) {
-            for (x = 0; x < (int) img.workRecord.width; x++, i += 2) {
+        for (y = 0; y < img.workRecord.height; y++) {
+            for (x = 0; x < img.workRecord.width; x++, i += 2) {
                 set555Pixel(img, pixels, x, y, buffer[i] | (buffer[i + 1] << 8));
                 //int rgb = pxls.get(pxls.size()-1).r<<16 | pxls.get(pxls.size()-1).g<<8 |pxls.get(pxls.size()-1).b;
                 //imgg.setRGB(x,y,pxls.get(pxls.size()-1).argb);
@@ -300,9 +296,9 @@ public class sgImage {
         }
     }
 
-    static Pixel set555Pixel(sgImage img, int[] pixels, int x, int y, int color) {
+    static void set555Pixel(sgImage img, int[] pixels, int x, int y, int color) {
         if (color == 0xf81f) {
-            return null;
+            return;
         }
 
         int rgb = 0xff000000;
@@ -317,7 +313,7 @@ public class sgImage {
         rgb |= ((color & 0x1f) << 3) | ((color & 0x1c) >> 2);
 
         pixels[y * img.workRecord.width + x] = rgb;
-        return new Pixel((color & 0x7c00) >> 10, (color & 0x3e0) >> 5, color & 0x1f, 0xff, (int) rgb);
+        new Pixel((color & 0x7c00) >> 10, (color & 0x3e0) >> 5, color & 0x1f, 0xff, rgb);
     }
 
     static void setAlphaPixel(sgImage img, int[] pixels, int x, int y, int color) {

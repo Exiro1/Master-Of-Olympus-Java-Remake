@@ -13,16 +13,13 @@ import com.exiro.SystemCore.GameManager;
 import com.exiro.SystemCore.GameThread;
 
 import javax.swing.*;
-import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         ImageLoader.initLoader();
 
-
-        ImageLoader.loadImage();
         System.setProperty("sun.awt.noerasebackground", "true");
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         ToolTipManager ttm = ToolTipManager.sharedInstance();

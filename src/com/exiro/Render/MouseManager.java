@@ -22,7 +22,7 @@ public class MouseManager implements MouseListener {
      */
     Case c1;
     Case c2;
-    private GameWindow win;
+    private final GameWindow win;
     private City actualCity;
 
     public MouseManager(GameWindow win) {

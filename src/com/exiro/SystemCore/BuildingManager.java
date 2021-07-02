@@ -13,9 +13,9 @@ public class BuildingManager {
 
 
     private int lastPop;
-    private Map<BuildingCategory, Priority> priorityMap;
+    private final Map<BuildingCategory, Priority> priorityMap;
     private Map<BuildingCategory, Priority> lastPriorityMap;
-    private City city;
+    private final City city;
     private int WorkforceNeeded;
     private int unemployed;
     private int lastActiveNbr;

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class BuildingSprite extends Sprite {
 
-    Building building;
+    final Building building;
 
     public BuildingSprite(String filePath, int bitID, int localId, int frameNumber, City c, Building b) {
         super(filePath, bitID, localId, frameNumber, c);

@@ -27,7 +27,7 @@ public class Path {
         for (int i = path.size() - 1; i >= 0; i--) {
             reverse.add(path.get(i));
         }
-        System.out.println(reverse.toString());
+        System.out.println(reverse);
         System.out.println(path.toString());
         return new Path(reverse);
     }
@@ -59,10 +59,7 @@ public class Path {
             return true;
         } else if (direction == Direction.NORD_EST && p.getY() < path.get(index).getyPos()) {
             return true;
-        } else if (direction == Direction.SUD_OUEST && p.getY() > path.get(index).getyPos()) {
-            return true;
-        }
-        return false;
+        } else return direction == Direction.SUD_OUEST && p.getY() > path.get(index).getyPos();
 
     }
 

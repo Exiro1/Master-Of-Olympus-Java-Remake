@@ -9,9 +9,9 @@ public class GameLayout implements LayoutManager {
     public static final String GAMEVIEW = "GAMEVIEW";
     public static final String INTERFACE = "INTERFACE";
     private final int TOOLBAR_HEIGHT = 30;
-    private ArrayList<Component> toolbarComponents = new ArrayList<>();
-    private ArrayList<Component> GameComponents = new ArrayList<>();
-    private ArrayList<Component> InterfaceComponents = new ArrayList<>();
+    private final ArrayList<Component> toolbarComponents = new ArrayList<>();
+    private final ArrayList<Component> GameComponents = new ArrayList<>();
+    private final ArrayList<Component> InterfaceComponents = new ArrayList<>();
 
     @Override   // Called when JFrame.add() is used  //
     public void addLayoutComponent(String constraints, Component component) {

@@ -14,14 +14,14 @@ public class GameThread implements Runnable {
 
 
     static public float deltaTime;
-    volatile boolean continu = true;
+    final boolean continu = true;
     float fps = 144;
-    long deltaTimeResearched = (long) ((1f / 144f) * 1000f);
+    final long deltaTimeResearched = (long) ((1f / 144f) * 1000f);
     double timeSinceLastUpdate = 0;
-    private Player p;
+    private final Player p;
     private int currentCity;
-    private GameFrame frame;
-    private GameManager gm;
+    private final GameFrame frame;
+    private final GameManager gm;
 
     public GameThread(GameManager gm) {
         this.p = gm.player;
@@ -110,11 +110,7 @@ public class GameThread implements Runnable {
         }
         synchronized (c.getPathManager().getRoads()) {
             for (Road r : c.getPathManager().getRoads()) {
-                if (p.getPlayerCities().get(currentCity).getPathManager().isReachable(p.getPlayerCities().get(currentCity).getMap().getCase(r.getxPos(), r.getYpos()), p.getPlayerCities().get(currentCity).getMap().getStartCase(), RoadMap.FreeState.ALL_ROAD)) {
-                    r.setActive(true);
-                } else {
-                    r.setActive(false);
-                }
+                r.setActive(p.getPlayerCities().get(currentCity).getPathManager().isReachable(p.getPlayerCities().get(currentCity).getMap().getCase(r.getxPos(), r.getYpos()), p.getPlayerCities().get(currentCity).getMap().getStartCase(), RoadMap.FreeState.ALL_ROAD));
             }
         }
 
@@ -127,11 +123,7 @@ public class GameThread implements Runnable {
     public void activate(ObjectClass o) {
         if (o.getBuildingType() == BuildingType.ROAD)
             return;
-        if (o.getAccess().size() == 0) {
-            o.setActive(false);
-        } else {
-            o.setActive(true);
-        }
+        o.setActive(o.getAccess().size() != 0);
     }
 
 

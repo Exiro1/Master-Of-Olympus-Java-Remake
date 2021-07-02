@@ -15,20 +15,26 @@ import java.util.ArrayList;
 
 public abstract class Building extends ObjectClass {
 
-    BuildingType type;
+    final BuildingType type;
     ArrayList<Sprite> sprites = new ArrayList<>();
-    ArrayList<MovingSprite> msprites = new ArrayList<>();
-    ArrayList<BuildingSprite> bsprites = new ArrayList<>();
+    final ArrayList<MovingSprite> msprites = new ArrayList<>();
+    final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
     BuildingCategory category;
 
     int pop;
     int popMax;
-    int cost, deleteCost;
-    int xPos, yPos, yLenght, xLenght, xpos2, ypos2;
+    final int cost;
+    final int deleteCost;
+    final int yLenght;
+    final int xLenght;
+    final City city;
+    private final int ID;
+    int xPos;
+    int yPos;
     ArrayList<Case> cases;
     boolean built;
-    City city;
-    private int ID;
+    int xpos2;
+    int ypos2;
     boolean deleted = false;
 
 

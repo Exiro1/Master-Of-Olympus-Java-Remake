@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class InterfaceRender extends JPanel {
-    private GameManager gm;
+    private final GameManager gm;
 
     public InterfaceRender(GameManager gm) {
         this.gm = gm;

@@ -11,7 +11,7 @@ public class CityMap {
     private int lenght;
     private int height, width;
     private Case startCase;
-    private City city;
+    private final City city;
 
 
     public CityMap(ArrayList<Case> cases, Case startCase, City city) {
@@ -58,14 +58,14 @@ public class CityMap {
 
     @Override
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < lenght; i++) {
             for (int j = 0; j < lenght; j++) {
-                str = str + " " + cases.get(j + i * lenght).getBuildingType().ordinal();
+                str.append(" ").append(cases.get(j + i * lenght).getBuildingType().ordinal());
             }
-            str = str + "\n";
+            str.append("\n");
         }
-        return str;
+        return str.toString();
 
     }
 

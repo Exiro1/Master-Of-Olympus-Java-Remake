@@ -8,8 +8,8 @@ import com.exiro.Utils.Point;
 public class IsometricRender {
 
 
-    private static int TILE_WIDTH_HALF = 29;
-    private static int TILE_HEIGHT_HALF = 15;
+    private static final int TILE_WIDTH_HALF = 29;
+    private static final int TILE_HEIGHT_HALF = 15;
 
     static public Point isoTo2D(Point p) {
         Point tempPt = new Point(0, 0);
@@ -33,8 +33,6 @@ public class IsometricRender {
         Point tempPt = new Point(0, 0);
         tempPt.x = ((pt.y / TILE_HEIGHT_HALF) + (pt.x / TILE_WIDTH_HALF)) / 2;
         tempPt.y = ((pt.y / TILE_HEIGHT_HALF) - (pt.x / TILE_WIDTH_HALF)) / 2;
-        //tempPt.y = tempPt.y;
-        // tempPt.x = tempPt.x;
         return (tempPt);
     }
 

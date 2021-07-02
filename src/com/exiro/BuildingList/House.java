@@ -18,12 +18,12 @@ import java.util.Random;
 public class House extends Building {
 
 
-    static int[] maxPerLvl = {1, 5, 10, 15, 20, 25, 30, 35, 45};
+    static final int[] maxPerLvl = {1, 5, 10, 15, 20, 25, 30, 35, 45};
     private final double deltaFood = 0.001f;
     private final double deltaWater = 0.002f;
     private final double deltaHdo = 0.0005f;
     private final double deltaWool = 0.0005f;
-    Map<Integer, Double> timeBeforeComming = new HashMap<>();
+    final Map<Integer, Double> timeBeforeComming = new HashMap<>();
     private int level;
     private double food, water, wool, hdo;
     private int popInArrival = 0;
@@ -171,9 +171,9 @@ public class House extends Building {
 
     public void addPopulation() {
         Random ran = new Random();
-        Double d = ran.nextDouble();
+        double d = ran.nextDouble();
         d = d * 30;
-        int nbr = (popMax - (pop + popInArrival)) <= 5 ? (popMax - (pop + popInArrival)) : 5;
+        int nbr = Math.min((popMax - (pop + popInArrival)), 5);
         popInArrival = popInArrival + nbr;
         city.setPopInArrvial(city.getPopInArrvial() + nbr);
         timeBeforeComming.put(nbr, d);

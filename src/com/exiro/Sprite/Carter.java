@@ -1,8 +1,7 @@
 package com.exiro.Sprite;
 
 import com.exiro.BuildingList.Building;
-import com.exiro.BuildingList.Granary;
-import com.exiro.BuildingList.Stock;
+import com.exiro.BuildingList.StoreBuilding;
 import com.exiro.FileManager.ImageLoader;
 import com.exiro.MoveRelated.Path;
 import com.exiro.MoveRelated.RoadMap;
@@ -24,7 +23,7 @@ public class Carter extends MovingSprite {
     BufferedImage cart;
     int cartH, cartW;
     int cartOffX, cartOffY;
-    Ressource res;
+    final Ressource res;
     int ammount;
     int prio = 0;
     int currentDelivery = 0;
@@ -38,8 +37,8 @@ public class Carter extends MovingSprite {
         y = ca.getyPos();
         offsetX = 0;
         offsetY = -5;
-        setXB((int) Math.round(x));
-        setYB((int) Math.round(y));
+        setXB(Math.round(x));
+        setYB(Math.round(y));
         res = ressource;
         if ((res == Ressource.WOOL || res == Ressource.BRONZE || res == Ressource.ARMEMENT || res == Ressource.OLIVE_OIL || res == Ressource.WINE) && nbr > 2)
             nbr = 2;
@@ -194,8 +193,8 @@ public class Carter extends MovingSprite {
             return;
 
         for (Building b : getC().getBuildings()) {
-            if (b instanceof Granary) {
-                Granary g = (Granary) b;
+            if (b instanceof StoreBuilding) {
+                StoreBuilding g = (StoreBuilding) b;
                 if (g.getFreeSpace(res) > 0 && g.getAccess().size() > 0) {
                     Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), RoadMap.FreeState.ALL_ROAD);
                     if (p != null) {
@@ -205,18 +204,6 @@ public class Carter extends MovingSprite {
                         return;
                     }
                 }
-            } else if (b instanceof Stock) {
-                Stock g = (Stock) b;
-                if (g.getFreeSpace(res) > 0 && g.getAccess().size() > 0) {
-                    Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), RoadMap.FreeState.ALL_ROAD);
-                    if (p != null) {
-                        setPath(p);
-                        setDestination(g);
-                        currentDelivery = getAmmount() - g.reserve(res, getAmmount());
-                        return;
-                    }
-                }
-
             }
         }
     }
