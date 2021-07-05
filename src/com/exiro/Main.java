@@ -1,16 +1,16 @@
 package com.exiro;
 
-import com.exiro.BuildingList.BuildingType;
-import com.exiro.BuildingList.House;
-import com.exiro.BuildingList.Stock;
-import com.exiro.BuildingList.WaterWell;
-import com.exiro.ConstructionList.Road;
-import com.exiro.FileManager.ImageLoader;
-import com.exiro.Object.City;
-import com.exiro.Object.Player;
-import com.exiro.Render.EntityRender;
-import com.exiro.SystemCore.GameManager;
-import com.exiro.SystemCore.GameThread;
+import com.exiro.buildingList.House;
+import com.exiro.buildingList.Stock;
+import com.exiro.buildingList.WaterWell;
+import com.exiro.constructionList.Road;
+import com.exiro.fileManager.ImageLoader;
+import com.exiro.object.City;
+import com.exiro.object.ObjectType;
+import com.exiro.object.Player;
+import com.exiro.render.EntityRender;
+import com.exiro.systemCore.GameManager;
+import com.exiro.systemCore.GameThread;
 
 import javax.swing.*;
 
@@ -54,7 +54,7 @@ public class Main {
         r4.build(6, 3);
         /*  Immigrant immigrant = new Immigrant(c,c.getPathManager().getPathTo(c.getMap().getCase(0,0),c.getMap().getCase(6,3), RoadMap.FreeState.NON_BLOCKING),null);
            c.addSprite(immigrant);*/
-        EntityRender.setEntityRender(BuildingType.ROAD);
+        EntityRender.setEntityRender(ObjectType.ROAD);
 
         System.out.println(c.getMap().toString());
 
