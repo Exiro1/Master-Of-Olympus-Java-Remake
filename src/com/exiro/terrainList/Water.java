@@ -14,7 +14,7 @@ public class Water extends Terrain {
     double timeBetweenFrame = 0.1f;
 
     public Water(int xpos, int ypos, City city) {
-        super(true, ObjectType.WATERTERRAIN, false, xpos, ypos, city);
+        super(true, ObjectType.WATERTERRAIN, false, xpos, ypos, city, true, false, true);
         city.addTerrain(this);
     }
 

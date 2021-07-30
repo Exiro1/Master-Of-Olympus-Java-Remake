@@ -19,7 +19,7 @@ public interface Node<T> {
     double getHeuristic(T goal);
 
 
-    int getType();
+    FreeState getType();
 
     /**
      * The cost of moving from the current node to the neighbour. In most cases

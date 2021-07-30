@@ -4,8 +4,8 @@ import com.exiro.buildingList.Building;
 import com.exiro.buildingList.StoreBuilding;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
-import com.exiro.moveRelated.RoadMap;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
@@ -196,7 +196,7 @@ public class Carter extends MovingSprite {
             if (b instanceof StoreBuilding) {
                 StoreBuilding g = (StoreBuilding) b;
                 if (g.getFreeSpace(res) > 0 && g.getAccess().size() > 0) {
-                    Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), RoadMap.FreeState.ALL_ROAD);
+                    Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
                     if (p != null) {
                         setPath(p);
                         setDestination(g);

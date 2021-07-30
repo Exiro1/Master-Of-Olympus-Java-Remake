@@ -30,6 +30,7 @@ public abstract class Construction extends ObjectClass {
         this.deleteCost = deleteCost;
         this.xPos = xPos;
         this.yPos = yPos;
+
         this.xLenght = xLenght;
         this.yLenght = yLenght;
         this.cachet = cachet;
@@ -44,7 +45,7 @@ public abstract class Construction extends ObjectClass {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
-                    if (!c.isOccuped() && !c.getBuildingType().isBlocking()) {
+                    if (!c.isOccuped() && c.getTerrain().isConstructible()) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }
                 }
@@ -52,6 +53,7 @@ public abstract class Construction extends ObjectClass {
         }
         return place;
     }
+
 
     public abstract void process(double deltatime);
 
@@ -71,10 +73,10 @@ public abstract class Construction extends ObjectClass {
             city.addObj(this);
             for (Case c : place) {
                 c.setOccuped(true);
-                c.setBuildingType(getBuildingType());
                 c.setObject(this);
                 c.setMainCase(false);
             }
+            this.setMainCase(city.getMap().getCase(xPos, yPos));
             city.getMap().getCase(xPos, yPos).setMainCase(true);
             city.getMap().getCase(xPos, yPos).setImg(getImg());
             city.getMap().getCase(xPos, yPos).setHeight(getHeight());
@@ -103,7 +105,6 @@ public abstract class Construction extends ObjectClass {
             city.getConstructions().remove(this);
             city.removeObj(this);
             for (Case c : getCases()) {
-                c.setBuildingType(ObjectType.EMPTY);
                 c.setOccuped(false);
                 c.setObject(null);
             }
@@ -116,9 +117,10 @@ public abstract class Construction extends ObjectClass {
             for (int j = 0; j < yLenght + 2; j++) {
                 if (!((i == 0 && j == 0) || (i == 0 && j == yLenght + 1) || (i == xLenght + 1 && j == 0) || (i == xLenght + 1 && j == yLenght + 1))) {
                     Case c = city.getMap().getCase(xPos + i - 1, yPos - j + 1);
-
-                    if (c != null && !cases.contains(c) && c.getBuildingType() == ObjectType.ROAD && c.getObject().isActive()) {
-                        access.add(c);
+                    if (c != null && c.getObject() != null) {
+                        if (c != null && !cases.contains(c) && c.getObject().getBuildingType() == ObjectType.ROAD && c.getObject().isActive()) {
+                            access.add(c);
+                        }
                     }
                 }
             }

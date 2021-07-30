@@ -3,7 +3,7 @@ package com.exiro.systemCore;
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
-import com.exiro.moveRelated.RoadMap;
+import com.exiro.moveRelated.FreeState;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
@@ -137,7 +137,7 @@ public class GameThread implements Runnable {
         }
         synchronized (c.getPathManager().getRoads()) {
             for (Road r : c.getPathManager().getRoads()) {
-                r.setActive(p.getPlayerCities().get(currentCity).getPathManager().isReachable(p.getPlayerCities().get(currentCity).getMap().getCase(r.getxPos(), r.getYpos()), p.getPlayerCities().get(currentCity).getMap().getStartCase(), RoadMap.FreeState.ALL_ROAD));
+                r.setActive(p.getPlayerCities().get(currentCity).getPathManager().isReachable(p.getPlayerCities().get(currentCity).getMap().getCase(r.getxPos(), r.getYpos()), p.getPlayerCities().get(currentCity).getMap().getStartCase(), FreeState.ALL_ROAD.i));
             }
         }
 

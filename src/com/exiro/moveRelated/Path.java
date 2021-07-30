@@ -11,7 +11,7 @@ public class Path {
     Point limit;
     private ArrayList<Case> path;
     private Case start, end;
-    private RoadMap.FreeState Free;
+    private int Free;
     private int index = 0;
 
     public Path(ArrayList<Case> path) {
@@ -64,11 +64,11 @@ public class Path {
     }
 
 
-    public RoadMap.FreeState getFree() {
+    public int getFree() {
         return Free;
     }
 
-    public void setFree(RoadMap.FreeState free) {
+    public void setFree(int free) {
         Free = free;
     }
 

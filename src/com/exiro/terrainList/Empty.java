@@ -12,14 +12,14 @@ public class Empty extends Terrain {
     int number;
 
     public Empty(int number, City c) {
-        super(false, ObjectType.EMPTY, true, 0, 0, c);
+        super(false, ObjectType.EMPTY, true, 0, 0, c, true, true, false);
         this.number = number;
         this.setLocalID(number);
         updateImg();
     }
 
     public Empty() {
-        super(false, ObjectType.EMPTY, true, 0, 0, GameManager.currentCity);
+        super(false, ObjectType.EMPTY, true, 0, 0, GameManager.currentCity, true, true, false);
         this.number = 1;
         this.setLocalID(number);
         updateImg();

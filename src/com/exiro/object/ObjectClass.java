@@ -17,6 +17,7 @@ public abstract class ObjectClass implements Cloneable {
     private int xB, yB;
     private int bitmapID, localID;
     private String path;
+    private Case mainCase;
 
     public ObjectClass(boolean isActive, ObjectType type, String filename, int size, int bitmapID, int localID) {
         this.Active = isActive;
@@ -48,6 +49,13 @@ public abstract class ObjectClass implements Cloneable {
         setImg(img);
     }
 
+    public Case getMainCase() {
+        return mainCase;
+    }
+
+    public void setMainCase(Case mainCase) {
+        this.mainCase = mainCase;
+    }
 
     public int getBitmapID() {
         return bitmapID;

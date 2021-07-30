@@ -14,13 +14,21 @@ public abstract class Terrain extends ObjectClass {
     int xPos;
     int yPos;
     City city;
+    boolean isFloor;
+    boolean constructible;
+    boolean blocking;
 
-    public Terrain(boolean isActive, ObjectType type, boolean isWalkable, int xpos, int ypos, City c) {
+    public Terrain(boolean isActive, ObjectType type, boolean isWalkable, int xpos, int ypos, City c, boolean isFloor, boolean isConstructable, boolean blocking) {
         super(isActive, type);
         this.isWalkable = isWalkable;
         this.xPos = xpos;
         this.yPos = ypos;
         this.city = c;
+        this.isFloor = isFloor;
+        this.constructible = isConstructable;
+        this.setXB(xpos);
+        this.setYB(ypos);
+        this.blocking = blocking;
     }
 
     /**
@@ -34,6 +42,26 @@ public abstract class Terrain extends ObjectClass {
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
 
 
+    }
+
+    public boolean isBlocking() {
+        return blocking;
+    }
+
+    public void setBlocking(boolean blocking) {
+        this.blocking = blocking;
+    }
+
+    public boolean isConstructible() {
+        return constructible;
+    }
+
+    public void setConstructible(boolean constructible) {
+        this.constructible = constructible;
+    }
+
+    public boolean isFloor() {
+        return isFloor;
     }
 
     public City getCity() {

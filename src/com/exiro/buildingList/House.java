@@ -2,7 +2,7 @@ package com.exiro.buildingList;
 
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.moveRelated.RoadMap;
+import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
@@ -131,7 +131,7 @@ public class House extends Building {
             if (f <= 0) {
                 toRemove.add(a);
                 System.out.println(a);
-                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), RoadMap.FreeState.ALL_ROAD), this, a);
+                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), FreeState.ALL_ROAD.i), this, a);
                 addSprite(immigrant);
             }
             i++;

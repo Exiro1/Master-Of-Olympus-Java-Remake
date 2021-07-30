@@ -1,23 +1,34 @@
 package com.exiro.object;
 
+import com.exiro.terrainList.Terrain;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Case {
     private int xPos, yPos;
     private boolean Occuped = false;
-    private ObjectType objectType;
+    //private ObjectType objectType;
     private ObjectClass object;
     private boolean isMainCase; //case ou dessiner l objet
     private Image img;
     private int width, height;
     private int size;
+    private Terrain terrain;
 
-    public Case(int x, int y, ObjectType objectType, ObjectClass obj) {
+    public Case(int x, int y, ObjectClass obj, Terrain terrain) {
         this.xPos = x;
         this.yPos = y;
-        this.objectType = objectType;
         this.object = obj;
+        this.terrain = terrain;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
     }
 
     public int getHeight() {
@@ -72,7 +83,7 @@ public class Case {
 
     public void setObject(ObjectClass object) {
         this.object = object;
-        this.setBuildingType(object.getBuildingType());
+        //this.setBuildingType(object.getBuildingType());
     }
 
     public boolean isOccuped() {
@@ -83,7 +94,7 @@ public class Case {
         Occuped = occuped;
     }
 
-    public ObjectType getBuildingType() {
+    /*public ObjectType getBuildingType() {
         return objectType;
     }
 
@@ -94,6 +105,7 @@ public class Case {
         this.setWidth(objectType.getWidth());
         this.setHeight(objectType.getHeigth());
     }
+    */
 
     public int getxPos() {
         return xPos;

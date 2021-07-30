@@ -2,6 +2,7 @@ package com.exiro.render;
 
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
+import com.exiro.environment.Environment;
 import com.exiro.object.Case;
 import com.exiro.object.CityMap;
 import com.exiro.object.ObjectClass;
@@ -9,7 +10,7 @@ import com.exiro.object.Player;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.systemCore.GameThread;
-import com.exiro.terrainList.Terrain;
+import com.exiro.terrainList.Elevation;
 import com.exiro.utils.Point;
 
 import javax.swing.*;
@@ -40,30 +41,51 @@ public class GameWindow extends JPanel {
         g.setColor(Color.BLACK);
         int x = 0;
 
+        ArrayList<ObjectClass> allobj;
+        ObjectClass[] oc;
+
+        ArrayList<ObjectClass> terrainObj = new ArrayList<>();
 
         //rendering Terrain
         synchronized (p.getPlayerCities().get(0).getMap().getCases()) {
             for (Case c : p.getPlayerCities().get(0).getMap().getCases()) {
-                if (c.getObject() instanceof Terrain && c.isMainCase()) {
-                    c.getObject().Render(g, CameraPosx, CameraPosy);
+                if (c.getObject() == null) {
+                    if (c.getTerrain().isFloor()) {
+                        c.getTerrain().Render(g, CameraPosx, CameraPosy);
+                    } else {
+                        terrainObj.add(c.getTerrain());
+                    }
+                } else if (c.getObject() instanceof Environment && c.isMainCase()) {
+                    if (((Environment) c.getObject()).isFloor()) {
+                        c.getTerrain().Render(g, CameraPosx, CameraPosy);
+                        c.getObject().Render(g, CameraPosx, CameraPosy);
+                    } else {
+                        terrainObj.add(c.getObject());
+                    }
+                } else if (c.getObject() instanceof Construction) {
+                    if (((Construction) c.getObject()).isFloor() && !(c.getTerrain() instanceof Elevation)) {
+                        c.getObject().Render(g, CameraPosx, CameraPosy);
+                    } else {
+                        terrainObj.add(c.getObject());
+                    }
                 }
             }
         }
 
-        ArrayList<ObjectClass> allobj;
-        ObjectClass[] oc;
+
 
         synchronized (p.getPlayerCities().get(0).getBuildings()) {
 
             allobj = new ArrayList<>(p.getPlayerCities().get(0).getBuildings());
+
+            allobj.addAll(terrainObj);
+
             synchronized (p.getPlayerCities().get(0).getConstructions()) {
-                for (Construction construction : p.getPlayerCities().get(0).getConstructions()) {
-                    if (construction.isFloor()) {
-                        construction.Render(g, CameraPosx, CameraPosy);
-                    } else {
-                        allobj.add(construction);
-                    }
+                for (Construction c : p.getPlayerCities().get(0).getConstructions()) {
+                    if (!c.isFloor())
+                        allobj.add(c);
                 }
+
             }
 
 
@@ -78,7 +100,14 @@ public class GameWindow extends JPanel {
 
         Arrays.sort(oc, (o1, o2) -> Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB()));
         for (ObjectClass obj : oc) {
-            obj.Render(g, CameraPosx, CameraPosy);
+            if (obj instanceof Building || obj instanceof Environment || obj instanceof Construction) {
+                if (obj.getMainCase().getTerrain() instanceof Elevation)
+                    obj.getMainCase().getTerrain().Render(g, CameraPosx, CameraPosy);
+
+                obj.Render(g, CameraPosx, CameraPosy);
+            } else {
+                obj.Render(g, CameraPosx, CameraPosy);
+            }
         }
         /*
         synchronized (p.getPlayerCities().get(0).getSprites()) {
@@ -158,7 +187,7 @@ public class GameWindow extends JPanel {
             for (Case case1 : MouseManager.pato.getPath()) {
 
                 g.drawRect(case1.getxPos() * 50, case1.getyPos() * 50, 50, 50);
-                g.drawString(case1.getBuildingType().name(), case1.getxPos() * 50, case1.getyPos() * 50 + 25);
+                g.drawString(case1.getObject().getBuildingType().name(), case1.getxPos() * 50, case1.getyPos() * 50 + 25);
 
             }
         }
