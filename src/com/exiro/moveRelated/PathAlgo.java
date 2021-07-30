@@ -5,7 +5,7 @@ import java.util.*;
 public class PathAlgo {
 
 
-    public static <T extends Node<T>> List<T> doAStar(T start, T goal, RoadMap.FreeState free) {
+    public static <T extends Node<T>> List<T> doAStar(T start, T goal, int free) {
         Set<T> closed = new HashSet<>();
         Map<T, T> fromMap = new HashMap<>();
         List<T> route = new LinkedList<>();
@@ -39,7 +39,7 @@ public class PathAlgo {
                         + current.getTraversalCost(neighbour);
 
                 boolean contains = open.contains(neighbour);
-                if ((!contains || tentG < gScore.get(neighbour)) && ((neighbour.getType() <= free.i))) {
+                if ((!contains || tentG < gScore.get(neighbour)) && (((neighbour.getType().getI() & free) != 0))) {
                     gScore.put(neighbour, tentG);
                     fScore.put(neighbour, tentG + neighbour.getHeuristic(goal));
 

@@ -1,16 +1,15 @@
 package com.exiro.object;
 
-import com.exiro.buildingList.Granary;
 import com.exiro.buildingList.House;
-import com.exiro.buildingList.Stock;
 import com.exiro.buildingList.WaterWell;
 import com.exiro.buildingList.agriculture.*;
+import com.exiro.buildingList.stockage.Granary;
+import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.OliveTree;
 import com.exiro.constructionList.Road;
+import com.exiro.environment.Tree;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.terrainList.Empty;
-import com.exiro.terrainList.Water;
-import com.exiro.terrainList.WaterCoast;
+import com.exiro.terrainList.*;
 
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
@@ -18,9 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 public enum ObjectType {
 
 
-    EMPTY("Rien", false, "Zeus_Terrain", 1, 1, 1, Empty.class),
-    ROAD("Route", false, "Zeus_General", 1, 1, 54, Road.class),
-    BLOCKABLE_ROAD("Stop", true, "Zeus_General", 1, 10, 75, null),
+    //Buildings
     HOUSE("Maison", true, "Zeus_General", 2, 8, 14, House.class),
     WATERWELL("Puit", true, "Zeus_General", 2, 9, 0, WaterWell.class),
     STOCK("Stock", true, "Zeus_General", 3, 3, 22, Stock.class),
@@ -30,10 +27,26 @@ public enum ObjectType {
     SHEEPFOLD("Bergerie", true, "Zeus_General", 2, 4, 55, Sheepfold.class),
     DAIRY("Laiterie", true, "Zeus_General", 2, 4, 68, Dairy.class),
     HUNTINGHOUSE("Maison de chasse", true, "Zeus_General", 2, 4, 31, HuntingHouse.class),
-    OLIVETREE("Olivier", true, "Zeus_General", 1, 4, 0, OliveTree.class),
+    FISHERY("Pecherie", true, "Zeus_General", 2, 4, 47, Fishery.class),
+
+    //Terrain
     WATERTERRAIN("Eau", true, "Zeus_Terrain", 1, 1, 163, Water.class),
     WATERTCOAST("Cote maritime", true, "Zeus_Terrain", 1, 1, 171, WaterCoast.class),
-    FISHERY("Pecherie", true, "Zeus_General", 2, 4, 47, Fishery.class);
+    EMPTY("Rien", false, "Zeus_Terrain", 1, 1, 1, Empty.class),
+    EARTHQUAKE("Tremblement de terre", true, "Zeus_Terrain", 1, 1, 243, Earthquake.class),
+    ROCK("Pierre", true, "Zeus_Terrain", 1, 1, 333, Rock.class),
+    ELEVATION("Elevation", true, "Zeus_Terrain", 1, 7, 14, Elevation.class),
+
+    //Construction
+    ROAD("Route", false, "Zeus_General", 1, 1, 54, Road.class),
+    BLOCKABLE_ROAD("Stop", true, "Zeus_General", 1, 10, 75, null),
+
+    //Environment
+    TREE("Arbre", true, "Zeus_Terrain", 1, 4, 0, Tree.class),
+
+    //Other
+    OLIVETREE("Olivier", true, "Zeus_General", 1, 4, 0, OliveTree.class);
+
 
     private final Class c;
     private final String name;

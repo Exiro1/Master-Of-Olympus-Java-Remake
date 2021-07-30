@@ -1,5 +1,7 @@
-package com.exiro.buildingList;
+package com.exiro.buildingList.stockage;
 
+import com.exiro.buildingList.BuildingCategory;
+import com.exiro.buildingList.StoreBuilding;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.Case;

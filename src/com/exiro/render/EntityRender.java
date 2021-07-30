@@ -1,8 +1,8 @@
 package com.exiro.render;
 
 
+import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
-import com.exiro.moveRelated.RoadMap;
 import com.exiro.object.Case;
 import com.exiro.object.CityMap;
 import com.exiro.object.ObjectClass;
@@ -67,7 +67,7 @@ public class EntityRender {
     public static void addBuilding(Point p) {
         CityMap map = GameManager.currentCity.getMap();
 
-        Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(toBuild.get(0).getXB(), toBuild.get(0).getYB()), map.getCase((int) p.x, (int) p.y), RoadMap.FreeState.NON_BLOCKING);
+        Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(toBuild.get(0).getXB(), toBuild.get(0).getYB()), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI()));
         if (path != null) {
             toBuild.clear();
             for (Case c : path.getPath()) {

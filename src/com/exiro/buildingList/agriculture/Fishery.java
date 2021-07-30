@@ -8,6 +8,7 @@ import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.Direction;
 import com.exiro.systemCore.GameManager;
+import com.exiro.terrainList.WaterCoast;
 
 import java.util.ArrayList;
 
@@ -77,46 +78,54 @@ public class Fishery extends ResourceGenerator {
         Case c3 = city.getMap().getCase(xPos, yPos - 1);
         Case c4 = city.getMap().getCase(xPos + 1, yPos - 1);
 
-        if (!c1.isOccuped() && !c1.getBuildingType().isBlocking()
-                && !c2.isOccuped() && !c2.getBuildingType().isBlocking()
-                && !c3.isOccuped() && (c3.getBuildingType() == ObjectType.WATERTCOAST)
-                && !c4.isOccuped() && (c4.getBuildingType() == ObjectType.WATERTCOAST)
+        if (!c1.isOccuped() && !c1.getTerrain().getBuildingType().isBlocking()
+                && !c2.isOccuped() && !c2.getTerrain().getBuildingType().isBlocking()
+                && !c3.isOccuped() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c4.isOccuped() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            direction = Direction.NORD_EST;
-            place.add(c1);
-            place.add(c2);
-            place.add(c3);
-            place.add(c4);
-        } else if (!c3.isOccuped() && !c3.getBuildingType().isBlocking()
-                && !c4.isOccuped() && !c4.getBuildingType().isBlocking()
-                && !c1.isOccuped() && (c1.getBuildingType() == ObjectType.WATERTCOAST)
-                && !c2.isOccuped() && (c2.getBuildingType() == ObjectType.WATERTCOAST)
+            if (((WaterCoast) c3.getObject()).getDirection() == Direction.NORD_EST && ((WaterCoast) c4.getObject()).getDirection() == Direction.NORD_EST) {
+                direction = Direction.NORD_EST;
+                place.add(c1);
+                place.add(c2);
+                place.add(c3);
+                place.add(c4);
+            }
+        } else if (!c3.isOccuped() && !c3.getTerrain().getBuildingType().isBlocking()
+                && !c4.isOccuped() && !c4.getTerrain().getBuildingType().isBlocking()
+                && !c1.isOccuped() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c2.isOccuped() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            direction = Direction.SUD_OUEST;
-            place.add(c3);
-            place.add(c4);
-            place.add(c1);
-            place.add(c2);
-        } else if (!c2.isOccuped() && !c2.getBuildingType().isBlocking()
-                && !c4.isOccuped() && !c4.getBuildingType().isBlocking()
-                && !c3.isOccuped() && (c3.getBuildingType() == ObjectType.WATERTCOAST)
-                && !c1.isOccuped() && (c1.getBuildingType() == ObjectType.WATERTCOAST)
+            if (((WaterCoast) c1.getObject()).getDirection() == Direction.SUD_OUEST && ((WaterCoast) c2.getObject()).getDirection() == Direction.SUD_OUEST) {
+                direction = Direction.SUD_OUEST;
+                place.add(c3);
+                place.add(c4);
+                place.add(c1);
+                place.add(c2);
+            }
+        } else if (!c2.isOccuped() && !c2.getTerrain().getBuildingType().isBlocking()
+                && !c4.isOccuped() && !c4.getTerrain().getBuildingType().isBlocking()
+                && !c3.isOccuped() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c1.isOccuped() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            direction = Direction.NORD_OUEST;
-            place.add(c2);
-            place.add(c4);
-            place.add(c1);
-            place.add(c3);
-        } else if (!c1.isOccuped() && !c1.getBuildingType().isBlocking()
-                && !c3.isOccuped() && !c3.getBuildingType().isBlocking()
-                && !c2.isOccuped() && (c2.getBuildingType() == ObjectType.WATERTCOAST)
-                && !c4.isOccuped() && (c4.getBuildingType() == ObjectType.WATERTCOAST)
+            if (((WaterCoast) c1.getObject()).getDirection() == Direction.NORD_OUEST && ((WaterCoast) c3.getObject()).getDirection() == Direction.NORD_OUEST) {
+                direction = Direction.NORD_OUEST;
+                place.add(c2);
+                place.add(c4);
+                place.add(c1);
+                place.add(c3);
+            }
+        } else if (!c1.isOccuped() && !c1.getTerrain().getBuildingType().isBlocking()
+                && !c3.isOccuped() && !c3.getTerrain().getBuildingType().isBlocking()
+                && !c2.isOccuped() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c4.isOccuped() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            direction = Direction.SUD_EST;
-            place.add(c1);
-            place.add(c3);
-            place.add(c2);
-            place.add(c4);
+            if (((WaterCoast) c2.getObject()).getDirection() == Direction.SUD_EST && ((WaterCoast) c4.getObject()).getDirection() == Direction.SUD_EST) {
+                direction = Direction.SUD_EST;
+                place.add(c1);
+                place.add(c3);
+                place.add(c2);
+                place.add(c4);
+            }
         }
 
         return place;

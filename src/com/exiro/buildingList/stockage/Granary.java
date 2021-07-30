@@ -1,5 +1,7 @@
-package com.exiro.buildingList;
+package com.exiro.buildingList.stockage;
 
+import com.exiro.buildingList.BuildingCategory;
+import com.exiro.buildingList.StoreBuilding;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;

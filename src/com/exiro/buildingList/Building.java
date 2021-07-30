@@ -16,9 +16,9 @@ import java.util.ArrayList;
 public abstract class Building extends ObjectClass {
 
     final ObjectType type;
-    ArrayList<Sprite> sprites = new ArrayList<>();
+    protected final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
     final ArrayList<MovingSprite> msprites = new ArrayList<>();
-    final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
+    protected final City city;
     BuildingCategory category;
 
     int pop;
@@ -27,11 +27,11 @@ public abstract class Building extends ObjectClass {
     final int deleteCost;
     final int yLenght;
     final int xLenght;
-    final City city;
+    protected ArrayList<Sprite> sprites = new ArrayList<>();
     private final int ID;
     int xPos;
     int yPos;
-    ArrayList<Case> cases;
+    protected ArrayList<Case> cases;
     boolean built;
     int xpos2;
     int ypos2;
@@ -105,12 +105,12 @@ public abstract class Building extends ObjectClass {
             city.addObj(this);
             for (Case c : place) {
                 c.setOccuped(true);
-                c.setBuildingType(type);
                 c.setObject(this);
                 c.setMainCase(false);
             }
             cases = place;
             city.getMap().getCase(xPos, yPos).setMainCase(true);
+            this.setMainCase(city.getMap().getCase(xPos, yPos));
             /*
             city.getMap().getCase(xPos, yPos).setImg(getImg());
             city.getMap().getCase(xPos, yPos).setHeight(getHeight());
@@ -139,7 +139,7 @@ public abstract class Building extends ObjectClass {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
-                    if (!c.isOccuped() && !c.getBuildingType().isBlocking()) {
+                    if (!c.isOccuped() && c.getTerrain().isConstructible()) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }
                 }
@@ -160,7 +160,7 @@ public abstract class Building extends ObjectClass {
                 if (!((i == 0 && j == 0) || (i == 0 && j == yLenght + 1) || (i == xLenght + 1 && j == 0) || (i == xLenght + 1 && j == yLenght + 1))) {
                     Case c = city.getMap().getCase(xPos + i - 1, yPos - j + 1);
 
-                    if (c != null && c.getBuildingType() == ObjectType.ROAD && c.getObject().isActive()) {
+                    if (c != null && c.getObject() != null && c.getObject().getBuildingType() == ObjectType.ROAD && c.getObject().isActive()) {
                         access.add(c);
                     }
                 }
@@ -179,7 +179,6 @@ public abstract class Building extends ObjectClass {
             city.getOwner().pay(this.getDeleteCost());
             city.removeBuilding(this);
             for (Case c : getCases()) {
-                c.setBuildingType(ObjectType.EMPTY);
                 c.setOccuped(false);
                 c.setObject(null);
                 c.setMainCase(true);

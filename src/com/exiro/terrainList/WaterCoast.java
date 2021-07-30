@@ -15,7 +15,7 @@ public class WaterCoast extends Terrain {
     int number;
 
     public WaterCoast(int xpos, int ypos, boolean angle, Direction direction, int number, City city) {
-        super(true, ObjectType.WATERTCOAST, false, xpos, ypos, city);
+        super(true, ObjectType.WATERTCOAST, false, xpos, ypos, city, true, false, true);
         this.angle = angle;
         this.direction = direction;
         this.number = number;
@@ -74,5 +74,9 @@ public class WaterCoast extends Terrain {
     @Override
     public void process(double deltaTime) {
 
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 }

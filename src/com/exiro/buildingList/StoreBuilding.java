@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public abstract class StoreBuilding extends Building {
 
-    HashMap<Resource, Integer> stockage;
+    protected HashMap<Resource, Integer> stockage;
     int emptyCase = 8;
 
     HashMap<Resource, Integer> reserved;
