@@ -28,26 +28,7 @@ public class City {
     private PathManager pathManager;
     private BuildingManager buildingManager;
 
-    public City(String name, Player owner) {
-        this.name = name;
-        this.owner = owner;
-        this.buildings = new ArrayList<>();
-        this.terrain = new ArrayList<>();
-        this.population = 0;
-        //this.sprites = new ArrayList<>();
-        this.buildingManager = new BuildingManager(this);
-        Road start = new Road(this);
-        this.constructions = new ArrayList<>();
-        Empty e = new Empty(1, this);
-        this.map = new CityMap(60, 60, new Case(0, 0, start, e), this);
-        this.map.populateMap();
-        this.pathManager = new PathManager(owner, this.map);
-        start.build(0, 0);
-        start.setActive(true);
-        start.setStart(true);
-
-
-    }
+    ArrayList<Building> toDestroyB;
 
     public City(String name, Player owner, CityMap map, ArrayList<Construction> constructions, ArrayList<Building> buildings, int population) {
         this.name = name;
@@ -72,11 +53,7 @@ public class City {
         }
     }
 
-    public void removeObj(ObjectClass o) {
-        synchronized (obj) {
-            obj.remove(o);
-        }
-    }
+    ArrayList<ObjectClass> toDestroyO;
 
     public void addBuilding(Building o) {
         synchronized (buildings) {
@@ -84,9 +61,51 @@ public class City {
         }
     }
 
+    ArrayList<ObjectClass> toDestroyC;
+
+    public City(String name, Player owner) {
+        this.name = name;
+        this.owner = owner;
+        this.buildings = new ArrayList<>();
+        this.terrain = new ArrayList<>();
+        this.population = 0;
+        //this.sprites = new ArrayList<>();
+        this.buildingManager = new BuildingManager(this);
+        Road start = new Road(this);
+        this.constructions = new ArrayList<>();
+        Empty e = new Empty(1, this);
+        this.map = new CityMap(60, 60, new Case(0, 0, start, e), this);
+        this.map.populateMap();
+        this.pathManager = new PathManager(owner, this.map);
+        start.build(0, 0);
+        start.setActive(true);
+        start.setStart(true);
+
+        toDestroyB = new ArrayList<>();
+        toDestroyC = new ArrayList<>();
+        toDestroyO = new ArrayList<>();
+    }
+
+    public void removeObj(ObjectClass o) {
+        toDestroyO.add(o);
+    }
+
     public void removeBuilding(Building o) {
+        toDestroyB.add(o);
+    }
+
+    public void deleteQueue() {
         synchronized (buildings) {
-            buildings.remove(o);
+            buildings.removeAll(toDestroyB);
+            toDestroyB.clear();
+        }
+        synchronized (obj) {
+            obj.removeAll(toDestroyO);
+            toDestroyO.clear();
+        }
+        synchronized (constructions) {
+            constructions.removeAll(toDestroyC);
+            toDestroyC.clear();
         }
     }
 
@@ -97,9 +116,7 @@ public class City {
     }
 
     public void removeConstruction(Construction o) {
-        synchronized (buildings) {
-            constructions.remove(o);
-        }
+        toDestroyC.add(o);
     }
 
     /*

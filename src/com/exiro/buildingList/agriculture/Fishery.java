@@ -83,7 +83,7 @@ public class Fishery extends ResourceGenerator {
                 && !c3.isOccuped() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
                 && !c4.isOccuped() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            if (((WaterCoast) c3.getObject()).getDirection() == Direction.NORD_EST && ((WaterCoast) c4.getObject()).getDirection() == Direction.NORD_EST) {
+            if (((WaterCoast) c3.getTerrain()).getDirection() == Direction.NORD_EST && ((WaterCoast) c4.getTerrain()).getDirection() == Direction.NORD_EST) {
                 direction = Direction.NORD_EST;
                 place.add(c1);
                 place.add(c2);
@@ -95,7 +95,7 @@ public class Fishery extends ResourceGenerator {
                 && !c1.isOccuped() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
                 && !c2.isOccuped() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            if (((WaterCoast) c1.getObject()).getDirection() == Direction.SUD_OUEST && ((WaterCoast) c2.getObject()).getDirection() == Direction.SUD_OUEST) {
+            if (((WaterCoast) c1.getTerrain()).getDirection() == Direction.SUD_OUEST && ((WaterCoast) c2.getTerrain()).getDirection() == Direction.SUD_OUEST) {
                 direction = Direction.SUD_OUEST;
                 place.add(c3);
                 place.add(c4);
@@ -107,7 +107,7 @@ public class Fishery extends ResourceGenerator {
                 && !c3.isOccuped() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
                 && !c1.isOccuped() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            if (((WaterCoast) c1.getObject()).getDirection() == Direction.NORD_OUEST && ((WaterCoast) c3.getObject()).getDirection() == Direction.NORD_OUEST) {
+            if (((WaterCoast) c1.getTerrain()).getDirection() == Direction.NORD_OUEST && ((WaterCoast) c3.getTerrain()).getDirection() == Direction.NORD_OUEST) {
                 direction = Direction.NORD_OUEST;
                 place.add(c2);
                 place.add(c4);
@@ -119,7 +119,7 @@ public class Fishery extends ResourceGenerator {
                 && !c2.isOccuped() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
                 && !c4.isOccuped() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
-            if (((WaterCoast) c2.getObject()).getDirection() == Direction.SUD_EST && ((WaterCoast) c4.getObject()).getDirection() == Direction.SUD_EST) {
+            if (((WaterCoast) c2.getTerrain()).getDirection() == Direction.SUD_EST && ((WaterCoast) c4.getTerrain()).getDirection() == Direction.SUD_EST) {
                 direction = Direction.SUD_EST;
                 place.add(c1);
                 place.add(c3);
@@ -134,7 +134,7 @@ public class Fishery extends ResourceGenerator {
 
     @Override
     public void process(double deltaTime) {
-
+        super.process(deltaTime);
     }
 
     @Override

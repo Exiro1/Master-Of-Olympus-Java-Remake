@@ -1,7 +1,7 @@
 package com.exiro;
 
 import com.exiro.buildingList.House;
-import com.exiro.buildingList.WaterWell;
+import com.exiro.buildingList.delivery.WaterWell;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.Road;
 import com.exiro.fileManager.ImageLoader;

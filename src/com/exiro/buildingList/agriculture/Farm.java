@@ -43,7 +43,7 @@ public class Farm extends ResourceGenerator {
 
     @Override
     public void process(double deltaTime) {
-
+        super.process(deltaTime);
         if (isActive() && getPop() > 0) {
             float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
             factor = 10;

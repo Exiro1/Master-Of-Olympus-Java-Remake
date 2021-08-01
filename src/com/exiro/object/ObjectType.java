@@ -1,12 +1,15 @@
 package com.exiro.object;
 
 import com.exiro.buildingList.House;
-import com.exiro.buildingList.WaterWell;
 import com.exiro.buildingList.agriculture.*;
+import com.exiro.buildingList.delivery.Safety;
+import com.exiro.buildingList.delivery.WaterWell;
 import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
+import com.exiro.constructionList.BlockingRoad;
 import com.exiro.constructionList.OliveTree;
 import com.exiro.constructionList.Road;
+import com.exiro.constructionList.Rubble;
 import com.exiro.environment.Tree;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.terrainList.*;
@@ -28,6 +31,7 @@ public enum ObjectType {
     DAIRY("Laiterie", true, "Zeus_General", 2, 4, 68, Dairy.class),
     HUNTINGHOUSE("Maison de chasse", true, "Zeus_General", 2, 4, 31, HuntingHouse.class),
     FISHERY("Pecherie", true, "Zeus_General", 2, 4, 47, Fishery.class),
+    SAFETY("Sécurité", true, "Zeus_General", 2, 10, 0, Safety.class),
 
     //Terrain
     WATERTERRAIN("Eau", true, "Zeus_Terrain", 1, 1, 163, Water.class),
@@ -39,7 +43,8 @@ public enum ObjectType {
 
     //Construction
     ROAD("Route", false, "Zeus_General", 1, 1, 54, Road.class),
-    BLOCKABLE_ROAD("Stop", true, "Zeus_General", 1, 10, 75, null),
+    BLOCKABLE_ROAD("Stop", true, "Zeus_General", 1, 10, 75, BlockingRoad.class),
+    RUBBLE("Décombre", true, "Zeus_Terrain", 1, 2, 20, Rubble.class),
 
     //Environment
     TREE("Arbre", true, "Zeus_Terrain", 1, 4, 0, Tree.class),

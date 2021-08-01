@@ -46,7 +46,8 @@ public class MouseManager implements MouseListener {
         }
         if (e.getButton() == MouseEvent.BUTTON3) {
             if (build) {
-                win.p.getPlayerCities().get(0).getMap().getCase(c.getxPos(), c.getyPos()).getObject().delete();
+                if (win.p.getPlayerCities().get(0).getMap().getCase(c.getxPos(), c.getyPos()).getObject() != null)
+                    win.p.getPlayerCities().get(0).getMap().getCase(c.getxPos(), c.getyPos()).getObject().delete();
             }
         }
 

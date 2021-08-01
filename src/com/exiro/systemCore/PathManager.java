@@ -59,6 +59,8 @@ public class PathManager {
             roadMap = new RoadMap(map);
             this.lastroads = new ArrayList<>(roads);
         }
+        if (c1 == null || c2 == null)
+            return null;
         return getPath(c1, c2, free) == null ? roadMap.findPath(c1.getxPos(), c1.getyPos(), c2.getxPos(), c2.getyPos(), free) : getPath(c1, c2, free);//verifie si il existe un chemin deja calculé
     }
 
@@ -79,6 +81,7 @@ public class PathManager {
         }
         return getPathTo(c1, c2, free) != null;
     }
+
 
     public Path getPath(Case c1, Case c2, int free) {
         /*for(Path p : roadMap.getPathsCalculated()){

@@ -1,5 +1,6 @@
 package com.exiro.buildingList;
 
+import com.exiro.constructionList.Rubble;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
@@ -20,6 +21,8 @@ public abstract class Building extends ObjectClass {
     final ArrayList<MovingSprite> msprites = new ArrayList<>();
     protected final City city;
     BuildingCategory category;
+
+    float safetyLvl = 200;
 
     int pop;
     int popMax;
@@ -67,7 +70,12 @@ public abstract class Building extends ObjectClass {
     /**
      * Appelés toute les secondes
      */
-    abstract public void process(double deltaTime);
+    public void process(double deltaTime) {
+        addSafetyLvl((float) -deltaTime);
+        if (getSafetyLvl() < 0) {
+            destroy();
+        }
+    }
 
     /**
      * Remplis si possible le batiment
@@ -129,8 +137,22 @@ public abstract class Building extends ObjectClass {
         } else {
             return false;
         }
+    }
 
-
+    public void destroy() {
+        if (this.built) {
+            setActive(false);
+            city.removeBuilding(this);
+            for (Case c : getCases()) {
+                c.setOccuped(false);
+                c.setObject(null);
+                c.setObject(new Rubble());
+                c.getObject().build(c.getxPos(), c.getyPos());
+                c.setMainCase(true);
+            }
+            city.removeObj(this);
+            deleted = true;
+        }
     }
 
     public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
@@ -212,6 +234,18 @@ public abstract class Building extends ObjectClass {
                 ", built=" + built +
                 ", city=" + city.getName() +
                 '}';
+    }
+
+    public float getSafetyLvl() {
+        return safetyLvl;
+    }
+
+    public void setSafetyLvl(float safetyLvl) {
+        this.safetyLvl = safetyLvl;
+    }
+
+    public void addSafetyLvl(float safetyLvl) {
+        this.safetyLvl += safetyLvl;
     }
 
     public void setxPos(int xPos) {

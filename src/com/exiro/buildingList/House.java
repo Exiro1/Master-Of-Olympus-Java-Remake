@@ -60,56 +60,57 @@ public class House extends Building {
 
     @Override
     public void process(double deltaTime) {
+        super.process(deltaTime);
+        if (isActive()) {
+            addFood(-deltaFood * deltaTime);
+            addWater(-deltaWater * deltaTime);
+            addHdo(-deltaHdo * deltaTime);
+            addWool(-deltaWool * deltaTime);
 
-        addFood(-deltaFood * deltaTime);
-        addWater(-deltaWater * deltaTime);
-        addHdo(-deltaHdo * deltaTime);
-        addWool(-deltaWool * deltaTime);
 
-
-        if (level < 7) {
-            if (popMax <= pop) {
-                boolean evolvabe = true;
-                switch (level) {
-                    case 0:
-                        evolvabe = true;//true
-                        break;
-                    case 1:
-                        if (getFood() < 50 || getWater() < 50)
-                            evolvabe = true;
-                        break;
-                    case 2:
-                        if (getFood() < 50 || getWool() < 50 || getWater() < 50)
-                            evolvabe = true;
-                        break;
-                    case 3:
-                        if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                            evolvabe = true;
-                        break;
-                    case 4:
-                        if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                            evolvabe = true;
-                        break;
-                    case 5:
-                        if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                            evolvabe = true;
-                        break;
-                    case 6:
-                        if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                            evolvabe = true;
-                        break;
-                }
-                if (evolvabe) {
-                    level++;
-                    changeLvlImg(level);
-                    popMax = maxPerLvl[level];
+            if (level < 7) {
+                if (popMax <= pop) {
+                    boolean evolvabe = true;
+                    switch (level) {
+                        case 0:
+                            evolvabe = true;//true
+                            break;
+                        case 1:
+                            if (getFood() < 50 || getWater() < 50)
+                                evolvabe = true;
+                            break;
+                        case 2:
+                            if (getFood() < 50 || getWool() < 50 || getWater() < 50)
+                                evolvabe = true;
+                            break;
+                        case 3:
+                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
+                                evolvabe = true;
+                            break;
+                        case 4:
+                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
+                                evolvabe = true;
+                            break;
+                        case 5:
+                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
+                                evolvabe = true;
+                            break;
+                        case 6:
+                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
+                                evolvabe = true;
+                            break;
+                    }
+                    if (evolvabe) {
+                        level++;
+                        changeLvlImg(level);
+                        popMax = maxPerLvl[level];
+                    }
                 }
             }
+            if (popMax > pop + popInArrival) {
+                addPopulation();
+            }
         }
-        if (popMax > pop + popInArrival) {
-            addPopulation();
-        }
-
     }
 
 
