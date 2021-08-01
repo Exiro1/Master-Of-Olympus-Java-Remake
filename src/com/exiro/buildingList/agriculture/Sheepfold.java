@@ -43,7 +43,7 @@ public class Sheepfold extends ResourceGenerator {
 
     @Override
     public void process(double deltaTime) {
-
+        super.process(deltaTime);
     }
 
     @Override

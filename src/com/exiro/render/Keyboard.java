@@ -22,6 +22,12 @@ public class Keyboard implements KeyListener {
         if (key == 'd') {
             //win.p.getPlayerCities().get(0).getBuildings().get(0).delete();
         }
+        if (key == ';') {
+            EntityRender.setEntityRender(ObjectType.SAFETY);
+        }
+        if (key == ',') {
+            EntityRender.setEntityRender(ObjectType.BLOCKABLE_ROAD);
+        }
         if (key == 'q') {
             EntityRender.setEntityRender(ObjectType.FISHERY);
         }

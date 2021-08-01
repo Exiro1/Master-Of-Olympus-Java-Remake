@@ -39,7 +39,7 @@ public abstract class Construction extends ObjectClass {
         this.isFloor = isFloor;
     }
 
-    public static ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
+    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
         ArrayList<Case> place = new ArrayList<>();
         for (int i = 0; i < yLenght; i++) {
             for (int j = 0; j < xLenght; j++) {

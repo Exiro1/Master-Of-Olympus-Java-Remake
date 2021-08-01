@@ -1,5 +1,6 @@
 package com.exiro.object;
 
+import com.exiro.moveRelated.RoadMap;
 import com.exiro.terrainList.Terrain;
 
 import java.awt.*;
@@ -16,11 +17,48 @@ public class Case {
     private int size;
     private Terrain terrain;
 
+    //NORD EST SUD OUEST
+    Case[] neighbour;
+
     public Case(int x, int y, ObjectClass obj, Terrain terrain) {
         this.xPos = x;
         this.yPos = y;
         this.object = obj;
         this.terrain = terrain;
+    }
+
+    public void initNeighbour(CityMap map) {
+        this.neighbour = new Case[4];
+        this.neighbour[0] = map.getCase(getxPos(), getyPos() - 1);
+        this.neighbour[1] = map.getCase(getxPos() + 1, getyPos());
+        this.neighbour[2] = map.getCase(getxPos(), getyPos() + 1);
+        this.neighbour[3] = map.getCase(getxPos() - 1, getyPos());
+    }
+
+    public Case getNeighbourIndex(int freeState, int index, CityMap map) {
+        int i = 0;
+        for (Case c : neighbour) {
+            if (c != null && (RoadMap.getFreeState(c.xPos, c.yPos, map).getI() & freeState) != 0) {
+                if (i == index)
+                    return c;
+                i++;
+            }
+        }
+        return null;
+    }
+
+    public int getNeighbourCount(int freeState, CityMap map) {
+        int count = 0;
+        for (Case c : neighbour) {
+            if (c != null && (RoadMap.getFreeState(c.xPos, c.yPos, map).getI() & freeState) != 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Case[] getNeighbour() {
+        return neighbour;
     }
 
     public Terrain getTerrain() {

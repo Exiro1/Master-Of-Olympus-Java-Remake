@@ -58,7 +58,7 @@ public class HuntingHouse extends ResourceGenerator {
 
     @Override
     public void process(double deltaTime) {
-
+        super.process(deltaTime);
     }
 
     @Override

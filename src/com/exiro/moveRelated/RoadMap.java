@@ -68,6 +68,26 @@ public class RoadMap {
         return p;
     }
 
+    public static FreeState getFreeState(int xStart, int yStart, CityMap cityMap) {
+        FreeState access = FreeState.BLOCKED;
+        if (!cityMap.getCase(xStart, yStart).getTerrain().isBlocking()) {
+            if (cityMap.getCase(xStart, yStart).getObject() == null) {
+                if (cityMap.getCase(xStart, yStart).getTerrain().isConstructible()) {
+                    access = FreeState.BUILDABLE;
+                } else {
+                    access = FreeState.NON_BLOCKING;
+                }
+            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD && cityMap.getCase(xStart, yStart).getObject().isActive()) {
+                access = FreeState.ONLY_ACTIVE_ROAD;
+            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.BLOCKABLE_ROAD || (!cityMap.getCase(xStart, yStart).getObject().isActive() && cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD)) {
+                access = FreeState.BLOCKING_ROAD;
+            } else {
+                access = FreeState.BLOCKED;
+            }
+        }
+        return access;
+    }
+
     public FreeState getFreeState(int xStart, int yStart) {
         FreeState access = FreeState.BLOCKED;
         if (!cityMap.getCase(xStart, yStart).getTerrain().isBlocking()) {
@@ -80,7 +100,7 @@ public class RoadMap {
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD && cityMap.getCase(xStart, yStart).getObject().isActive()) {
                 access = FreeState.ONLY_ACTIVE_ROAD;
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.BLOCKABLE_ROAD || (!cityMap.getCase(xStart, yStart).getObject().isActive() && cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD)) {
-                access = FreeState.ALL_ROAD;
+                access = FreeState.BLOCKING_ROAD;
             } else {
                 access = FreeState.BLOCKED;
             }

@@ -81,7 +81,7 @@ public class GameThread implements Runnable {
             Thread.sleep(deltaTimeResearched);
 
             float a = System.currentTimeMillis() - startTime;
-            deltaTime = a / 1000.0f;
+            deltaTime = Math.max(a / 1000.0f, deltaTimeResearched / 1000.0f);
 
         }
     }
@@ -127,13 +127,14 @@ public class GameThread implements Runnable {
         synchronized (c.getBuildings()) {
 
             for (Building b : c.getBuildings()) {
+                b.process(delaTime);
                 if (b.isActive()) {
-                    b.process(delaTime);
                     b.populate(delaTime);
                 } else {
 
                 }
             }
+            c.deleteQueue();
         }
         synchronized (c.getPathManager().getRoads()) {
             for (Road r : c.getPathManager().getRoads()) {

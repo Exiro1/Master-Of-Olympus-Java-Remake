@@ -47,6 +47,10 @@ public class CityMap {
 
             }
         }
+
+        for (Case c : this.cases) {
+            c.initNeighbour(this);
+        }
         //getCase(startCase.getxPos(),startCase.getyPos()).setOccuped(true);
         //getCase(startCase.getxPos(),startCase.getyPos()).setBuildingType(BuildingType.ROAD);
         //getCase(startCase.getxPos(),startCase.getyPos()).setObject(new Road(city));

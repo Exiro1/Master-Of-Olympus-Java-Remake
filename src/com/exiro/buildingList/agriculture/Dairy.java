@@ -44,7 +44,7 @@ public class Dairy extends ResourceGenerator {
 
     @Override
     public void process(double deltaTime) {
-
+        super.process(deltaTime);
     }
 
     @Override
