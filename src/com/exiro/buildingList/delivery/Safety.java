@@ -9,8 +9,8 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
-import com.exiro.sprite.SafetyGuard;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.delivery.SafetyGuard;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;

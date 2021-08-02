@@ -1,5 +1,6 @@
 package com.exiro.constructionList;
 
+import com.exiro.buildingList.delivery.Agora;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 
 public class Road extends Construction {
 
+
+    Agora agora;
 
     boolean start = false;
 
@@ -23,6 +26,7 @@ public class Road extends Construction {
     public Road() {
         super(false, ObjectType.ROAD, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, GameManager.currentCity, false, true);
     }
+
 
     @Override
     public void process(double deltatime) {
@@ -53,7 +57,7 @@ public class Road extends Construction {
 
     @Override
     public void delete() {
-        if (!this.start) {
+        if (!this.start && agora == null) {
             super.delete();
             city.getPathManager().deleteRoad(this);
         }
@@ -63,7 +67,13 @@ public class Road extends Construction {
         setType(ObjectType.ROAD);
     }
 
+    public Agora getAgora() {
+        return agora;
+    }
 
+    public void setAgora(Agora agora) {
+        this.agora = agora;
+    }
 }
 
 

@@ -1,6 +1,7 @@
 package com.exiro.sprite;
 
 import com.exiro.ai.DeliveryAI;
+import com.exiro.buildingList.Building;
 import com.exiro.depacking.TileImage;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
@@ -16,6 +17,13 @@ public abstract class DeliverySprite extends MovingSprite {
     DeliveryAI ai;
     int lastY, lastX;
 
+    ArrayList<Building> buildings;
+
+    public abstract void deliverBuildings();
+
+    ArrayList<Building> deliveredBuildings;
+    ArrayList<Building> deliveredBuildingsTemp;
+
     public DeliverySprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination, Case start, int len) {
         super(filePath, bitID, localId, frameNumber, c, destination);
         ai = new DeliveryAI();
@@ -24,9 +32,10 @@ public abstract class DeliverySprite extends MovingSprite {
         y = start.getyPos();
         setXB(Math.round(x));
         setYB(Math.round(y));
+        buildings = new ArrayList<>();
+        deliveredBuildings = new ArrayList<>();
+        deliveredBuildingsTemp = new ArrayList<>();
     }
-
-    public abstract void deliverBuildings();
 
     @Override
     public void process(double deltaTime) {
@@ -34,6 +43,20 @@ public abstract class DeliverySprite extends MovingSprite {
         if (lastX != getXB() || lastY != getYB()) {
             lastY = getYB();
             lastX = getXB();
+
+            Case c = getC().getMap().getCase(lastX, lastY);
+            for (Case n : c.getNeighbour()) {
+                if (n != null && n.getObject() != null && n.getObject() instanceof Building) {
+                    if (!deliveredBuildings.contains((Building) n.getObject())) {
+                        buildings.add((Building) n.getObject());
+                        deliveredBuildings.add((Building) n.getObject());
+                    }
+                    deliveredBuildingsTemp.add((Building) n.getObject());
+                }
+            }
+
+            deliveredBuildings.removeIf(b -> !deliveredBuildingsTemp.contains(b));
+            deliveredBuildingsTemp.clear();
             deliverBuildings();
         }
     }
@@ -60,5 +83,9 @@ public abstract class DeliverySprite extends MovingSprite {
     @Override
     public Map<Direction, TileImage[]> getSpriteSet() {
         return null;
+    }
+
+    public ArrayList<Building> getBuildingsToDeliver() {
+        return buildings;
     }
 }
