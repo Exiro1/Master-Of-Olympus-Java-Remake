@@ -25,6 +25,19 @@ public class Keyboard implements KeyListener {
         if (key == ';') {
             EntityRender.setEntityRender(ObjectType.SAFETY);
         }
+        if (key == '1') {
+            EntityRender.setEntityRender(ObjectType.AGORAFOOD);
+        }
+        if (key == '2') {
+            EntityRender.setEntityRender(ObjectType.AGORAWOOL);
+        }
+        if (key == '3') {
+            EntityRender.setEntityRender(ObjectType.AGORAOIL);
+        }
+
+        if (key == ':') {
+            EntityRender.setEntityRender(ObjectType.AGORA);
+        }
         if (key == ',') {
             EntityRender.setEntityRender(ObjectType.BLOCKABLE_ROAD);
         }

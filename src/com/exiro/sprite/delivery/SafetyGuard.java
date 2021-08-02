@@ -1,4 +1,4 @@
-package com.exiro.sprite;
+package com.exiro.sprite.delivery;
 
 import com.exiro.ai.DeliveryAI;
 import com.exiro.buildingList.Building;
@@ -6,6 +6,8 @@ import com.exiro.depacking.TileImage;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
+import com.exiro.sprite.DeliverySprite;
+import com.exiro.sprite.Direction;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -22,11 +24,9 @@ public class SafetyGuard extends DeliverySprite {
 
     @Override
     public void deliverBuildings() {
-        Case c = getC().getMap().getCase(lastX, lastY);
-        for (Case n : c.getNeighbour()) {
-            if (n != null && n.getObject() != null && n.getObject() instanceof Building) {
-                ((Building) n.getObject()).setSafetyLvl(200);
-            }
+
+        for (Building b : getBuildingsToDeliver()) {
+            b.setSafetyLvl(200);
         }
     }
 

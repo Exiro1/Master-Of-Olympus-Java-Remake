@@ -1,12 +1,14 @@
-package com.exiro.sprite;
+package com.exiro.sprite.delivery;
 
 import com.exiro.ai.DeliveryAI;
+import com.exiro.buildingList.Building;
 import com.exiro.buildingList.House;
 import com.exiro.depacking.TileImage;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
-import com.exiro.object.ObjectType;
+import com.exiro.sprite.DeliverySprite;
+import com.exiro.sprite.Direction;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -25,11 +27,9 @@ public class WaterDelivery extends DeliverySprite {
 
     @Override
     public void deliverBuildings() {
-        Case c = getC().getMap().getCase(lastX, lastY);
-        for (Case n : c.getNeighbour()) {
-            if (n != null && n.getObject() != null && n.getObject().getBuildingType() == ObjectType.HOUSE) {
-                ((House) n.getObject()).addWater(waterAdd);
-            }
+        for (Building b : getBuildingsToDeliver()) {
+            if (b instanceof House)
+                ((House) b).addWater(waterAdd);
         }
     }
 

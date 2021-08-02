@@ -2,8 +2,12 @@ package com.exiro.object;
 
 import com.exiro.buildingList.House;
 import com.exiro.buildingList.agriculture.*;
+import com.exiro.buildingList.delivery.Agora;
 import com.exiro.buildingList.delivery.Safety;
 import com.exiro.buildingList.delivery.WaterWell;
+import com.exiro.buildingList.delivery.agorashop.FoodShop;
+import com.exiro.buildingList.delivery.agorashop.OilShop;
+import com.exiro.buildingList.delivery.agorashop.WoolShop;
 import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.BlockingRoad;
@@ -20,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 public enum ObjectType {
 
 
+
     //Buildings
     HOUSE("Maison", true, "Zeus_General", 2, 8, 14, House.class),
     WATERWELL("Puit", true, "Zeus_General", 2, 9, 0, WaterWell.class),
@@ -32,6 +37,12 @@ public enum ObjectType {
     HUNTINGHOUSE("Maison de chasse", true, "Zeus_General", 2, 4, 31, HuntingHouse.class),
     FISHERY("Pecherie", true, "Zeus_General", 2, 4, 47, Fishery.class),
     SAFETY("Sécurité", true, "Zeus_General", 2, 10, 0, Safety.class),
+    AGORA("Agora", true, "Zeus_General", 2, 3, 15, Agora.class),
+
+    //agora shop
+    AGORAFOOD("Epicerie", true, "Zeus_General", 2, 3, 0, FoodShop.class),
+    AGORAWOOL("Marchand de laine", true, "Zeus_General", 2, 3, 2, WoolShop.class),
+    AGORAOIL("Marchand d'huile d'olive", true, "Zeus_General", 2, 3, 4, OilShop.class),
 
     //Terrain
     WATERTERRAIN("Eau", true, "Zeus_Terrain", 1, 1, 163, Water.class),

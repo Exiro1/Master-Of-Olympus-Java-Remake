@@ -103,7 +103,7 @@ public class Case {
 
     @Override
     public String toString() {
-        return "x : " + xPos + " , y : " + yPos + " occupé : " + Occuped;
+        return "x : " + xPos + " , y : " + yPos + " objet : " + (object == null ? "vide" : object.getBuildingType()) + " terrain : " + terrain.getBuildingType();
     }
 
     public Image getImg() {
