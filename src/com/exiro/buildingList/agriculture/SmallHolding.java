@@ -22,11 +22,11 @@ public class SmallHolding extends ResourceGenerator {
     }
 
     public SmallHolding(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, Resource resource) {
-        super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, pop, 15, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0, resource);
+        super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, pop, 12, 40, 10, xPos, yPos, 2, 2, cases, built, city, 0, resource);
     }
 
     public SmallHolding() {
-        super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, 0, 15, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.OLIVE);
+        super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, 0, 12, 40, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.OLIVE);
     }
 
     @Override

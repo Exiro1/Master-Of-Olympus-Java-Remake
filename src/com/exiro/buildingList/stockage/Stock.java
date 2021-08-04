@@ -27,12 +27,12 @@ public class Stock extends StoreBuilding {
 
     public Stock(int xPos, int yPos, City c) {
         //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
-        super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
+        super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 12, 40, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
     }
 
     public Stock() {
         //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
-        super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 2, 150, 30, 0, 0, 3, 3, new ArrayList<>(), false, GameManager.currentCity, 0);
+        super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 12, 40, 30, 0, 0, 3, 3, new ArrayList<>(), false, GameManager.currentCity, 0);
     }
 
     public TileImage getRessourceTile(Resource res, int nbr) {

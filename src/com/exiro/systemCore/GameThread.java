@@ -81,7 +81,7 @@ public class GameThread implements Runnable {
             Thread.sleep(deltaTimeResearched);
 
             float a = System.currentTimeMillis() - startTime;
-            deltaTime = Math.max(a / 1000.0f, deltaTimeResearched / 1000.0f);
+            deltaTime = Math.min(a / 1000.0f, deltaTimeResearched / 1000.0f);
 
         }
     }

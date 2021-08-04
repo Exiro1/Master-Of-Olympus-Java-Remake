@@ -3,6 +3,7 @@ package com.exiro.render;
 
 import com.exiro.object.Case;
 import com.exiro.object.City;
+import com.exiro.render.layout.GameWindow;
 import com.exiro.utils.Point;
 
 public class IsometricRender {
@@ -44,8 +45,8 @@ public class IsometricRender {
     }
 
     static public Case getCase(Point e, City city) {
-        float x = e.getX() - GameWindow.CameraPosx;
-        float y = e.getY() - GameWindow.CameraPosy - 40f;
+        float x = e.getX() - GameWindow.getCameraPosx();
+        float y = e.getY() - GameWindow.getCameraPosy() - 40f;
 
         double x2 = IsometricRender.getTileCoordinates(new Point(x, y)).x;
         double y2 = IsometricRender.getTileCoordinates(new Point(x, y)).y + 1.5;

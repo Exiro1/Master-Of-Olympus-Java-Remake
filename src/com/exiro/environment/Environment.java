@@ -23,6 +23,8 @@ public class Environment extends ObjectClass {
         this.isWalkable = isWalkable;
         this.xPos = xpos;
         this.yPos = ypos;
+        setXB(xpos);
+        setYB(ypos);
         this.setMainCase(c.getMap().getCase(xPos, yPos));
         c.getMap().getCase(xPos, yPos).setObject(this);
         c.getMap().getCase(xPos, yPos).setOccuped(true);

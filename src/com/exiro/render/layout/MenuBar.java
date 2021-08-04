@@ -1,10 +1,11 @@
-package com.exiro.render;
+package com.exiro.render.layout;
 
+import com.exiro.fileManager.ImageLoader;
 import com.exiro.systemCore.GameManager;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,16 +20,20 @@ public class MenuBar extends JPanel {
         this.gm = gm;
         File f = new File("Assets/Fonts/Zeus.ttf");
 
-
-        File background1f = new File("Assets/Interface/Zeus_Interface_New_parts_001382.png");
-
+        background1 = ImageLoader.getImage("Zeus_Interface", 7, 0).getImg();
 
         try {
             font = Font.createFont(Font.PLAIN, f);
-            background1 = ImageIO.read(background1f);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isClicked(int xc, int yc) {
+        if (xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height) {
+            return true;
+        }
+        return false;
     }
 
     protected void paintComponent(Graphics g) {
@@ -48,4 +53,6 @@ public class MenuBar extends JPanel {
     }
 
 
+    public void clickManager(MouseEvent e) {
+    }
 }

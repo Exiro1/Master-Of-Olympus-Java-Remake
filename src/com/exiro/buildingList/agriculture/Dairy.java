@@ -19,11 +19,11 @@ public class Dairy extends ResourceGenerator {
     }
 
     public Dairy(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, pop, 15, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.CHEESE);
+        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, pop, 8, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.CHEESE);
     }
 
     public Dairy() {
-        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, 0, 15, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.CHEESE);
+        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.CHEESE);
     }
 
 

@@ -2,7 +2,11 @@ package com.exiro.systemCore;
 
 import com.exiro.object.City;
 import com.exiro.object.Player;
-import com.exiro.render.*;
+import com.exiro.render.GameFrame;
+import com.exiro.render.layout.GameInfo;
+import com.exiro.render.layout.GameWindow;
+import com.exiro.render.layout.InterfaceRender;
+import com.exiro.render.layout.MenuBar;
 
 public class GameManager {
 

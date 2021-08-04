@@ -23,7 +23,14 @@ public class EntityRender {
     public static int x, y, width, heigth, size;
     public static ObjectType Btype;
     static public ObjectClass defaultObject;
+    static int startX, startY;
 
+    public static void setStart(Point p) {
+        startX = (int) p.x;
+        startY = (int) p.y;
+        toBuild.get(0).setXB(startX);
+        toBuild.get(0).setYB(startY);
+    }
 
     public static void setEntityRender(ObjectType type) {
         defaultObject = getDefault(type);
@@ -59,15 +66,10 @@ public class EntityRender {
         toBuild.add(obj);
     }
 
-
-    public static ObjectClass getDefault(ObjectType type) {
-        return type.getDefault();
-    }
-
     public static void addBuilding(Point p) {
         CityMap map = GameManager.currentCity.getMap();
 
-        Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(toBuild.get(0).getXB(), toBuild.get(0).getYB()), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI()));
+        Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI()));
         if (path != null) {
             toBuild.clear();
             for (Case c : path.getPath()) {
@@ -78,6 +80,16 @@ public class EntityRender {
                 toBuild.add(obj);
             }
         }
+    }
+
+
+    public static ObjectClass getDefault(ObjectType type) {
+        return type.getDefault();
+    }
+
+    public void setStart(int x, int y) {
+        startX = x;
+        startY = y;
     }
 
     public static Point getStartPoint() {

@@ -1,12 +1,15 @@
 package com.exiro.constructionList;
 
 import com.exiro.buildingList.delivery.Agora;
+import com.exiro.depacking.TileImage;
+import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Road extends Construction {
 
@@ -73,6 +76,10 @@ public class Road extends Construction {
 
     public void setAgora(Agora agora) {
         this.agora = agora;
+        Random random = new Random();
+        TileImage img = ImageLoader.getImage("Zeus_General", 3, 12 + random.nextInt(3));
+        assert img != null;
+        setImg(img);
     }
 }
 
