@@ -18,12 +18,10 @@ public class Sheepfold extends ResourceGenerator {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
     }
 
-    public Sheepfold(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, pop, 15, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.WOOL);
-    }
+    double growth = 0.0;
 
-    public Sheepfold() {
-        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, 0, 15, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOL);
+    public Sheepfold(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
+        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, pop, 8, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.WOOL);
     }
 
     @Override
@@ -40,10 +38,23 @@ public class Sheepfold extends ResourceGenerator {
         return false;
     }
 
+    public Sheepfold() {
+        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOL);
+    }
 
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
+        if (isActive() && getPop() > 0) {
+            float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
+            growth += factor * deltaTime;
+
+            if (growth > 30) {
+                growth = 0;
+                resourceCreated(1);
+            }
+
+        }
     }
 
     @Override

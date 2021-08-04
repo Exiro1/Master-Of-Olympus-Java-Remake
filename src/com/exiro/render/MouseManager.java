@@ -1,19 +1,16 @@
 package com.exiro.render;
 
-import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.utils.Point;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MouseManager implements MouseListener {
 
-    public static boolean build = true;
     static public Boolean pressing = false;
-    public static Path pato;
-    static Boolean click = false;
+    static public Boolean click = false;
+
     /**
      * Invoked when the mouse button has been clicked (pressed
      * and released) on a component.
@@ -22,36 +19,26 @@ public class MouseManager implements MouseListener {
      */
     Case c1;
     Case c2;
-    private final GameWindow win;
+    private final GameFrame frame;
     private City actualCity;
 
-    public MouseManager(GameWindow win) {
-        this.win = win;
+    public MouseManager(GameFrame frame) {
+        this.frame = frame;
     }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
 
-
-        Case c = IsometricRender.getCase(new Point(e.getX(), e.getY()), win.p.getPlayerCities().get(0));
-
-
-        if (e.getButton() == MouseEvent.BUTTON1) {
-            click = true;
-            if (build) {
-
-            } else {
-                c1 = c;
-            }
+        if (frame.getIt().isClicked(e.getX(), e.getY())) {
+            frame.getIt().clickManager(e);
+        } else if (frame.getWindow().isClicked(e.getX(), e.getY())) {
+            frame.getWindow().clickManager(e);
+        } else if (frame.getGi().isClicked(e.getX(), e.getY())) {
+            frame.getGi().clickManager(e);
+        } else if (frame.getMenu().isClicked(e.getX(), e.getY())) {
+            frame.getMenu().clickManager(e);
         }
-        if (e.getButton() == MouseEvent.BUTTON3) {
-            if (build) {
-                if (win.p.getPlayerCities().get(0).getMap().getCase(c.getxPos(), c.getyPos()).getObject() != null)
-                    win.p.getPlayerCities().get(0).getMap().getCase(c.getxPos(), c.getyPos()).getObject().delete();
-            }
-        }
-
-
     }
 
     /**
@@ -61,6 +48,9 @@ public class MouseManager implements MouseListener {
      */
     @Override
     public void mousePressed(MouseEvent e) {
+        if (frame.getWindow().isClicked(e.getX(), e.getY())) {
+            frame.getWindow().pressing = true;
+        }
         pressing = true;
     }
 
@@ -71,9 +61,13 @@ public class MouseManager implements MouseListener {
      */
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (frame.getWindow().isClicked(e.getX(), e.getY())) {
+            frame.getWindow().pressing = false;
+        }
         pressing = false;
         click = false;
     }
+
 
     /**
      * Invoked when the mouse enters a component.

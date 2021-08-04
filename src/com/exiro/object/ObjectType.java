@@ -5,6 +5,7 @@ import com.exiro.buildingList.agriculture.*;
 import com.exiro.buildingList.delivery.Agora;
 import com.exiro.buildingList.delivery.Safety;
 import com.exiro.buildingList.delivery.WaterWell;
+import com.exiro.buildingList.delivery.agorashop.EmptyShop;
 import com.exiro.buildingList.delivery.agorashop.FoodShop;
 import com.exiro.buildingList.delivery.agorashop.OilShop;
 import com.exiro.buildingList.delivery.agorashop.WoolShop;
@@ -40,9 +41,11 @@ public enum ObjectType {
     AGORA("Agora", true, "Zeus_General", 2, 3, 15, Agora.class),
 
     //agora shop
+    AGORAEMPTY("Emplacement libre", true, "Zeus_General", 2, 3, 15, EmptyShop.class),
     AGORAFOOD("Epicerie", true, "Zeus_General", 2, 3, 0, FoodShop.class),
     AGORAWOOL("Marchand de laine", true, "Zeus_General", 2, 3, 2, WoolShop.class),
     AGORAOIL("Marchand d'huile d'olive", true, "Zeus_General", 2, 3, 4, OilShop.class),
+
 
     //Terrain
     WATERTERRAIN("Eau", true, "Zeus_Terrain", 1, 1, 163, Water.class),

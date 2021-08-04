@@ -1,5 +1,6 @@
 package com.exiro.render;
 
+import com.exiro.render.layout.*;
 import com.exiro.systemCore.GameManager;
 
 import javax.swing.*;
@@ -15,10 +16,13 @@ public class GameFrame extends JFrame {
     private GameInfo gi;
     private final GameManager gm;
 
+    public static int FHEIGHT = 1080;
+    public static int FWIDTH = 1920;
+
     public GameFrame(String title, GameManager gm) {
         super(title);
         this.gm = gm;
-        setSize(1920, 1080);
+        setSize(FWIDTH, FHEIGHT);
 
 
         window = new GameWindow(gm);
@@ -43,6 +47,8 @@ public class GameFrame extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        it.initGraphics();
+
         addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -56,8 +62,8 @@ public class GameFrame extends JFrame {
             }
         });
         requestFocusInWindow();
-        addKeyListener(new Keyboard(window));
-        addMouseListener(new MouseManager(window));
+        addKeyListener(new Keyboard(this));
+        addMouseListener(new MouseManager(this));
     }
 
 

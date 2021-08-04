@@ -65,7 +65,7 @@ public abstract class MovingSprite extends Sprite {
 
     @Override
     public void process(double deltaTime) {
-        if (path != null) {
+        if (path != null && !hasArrived) {
             timeSinceLastFrame = timeSinceLastFrame + deltaTime;
             // System.out.println(timeSinceLastFrame);
             if (timeSinceLastFrame > timeBetweenFrame) {

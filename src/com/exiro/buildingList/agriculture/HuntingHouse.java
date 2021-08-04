@@ -20,11 +20,11 @@ public class HuntingHouse extends ResourceGenerator {
     }
 
     public HuntingHouse(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, pop, 15, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.MEAT);
+        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, pop, 8, 32, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.MEAT);
     }
 
     public HuntingHouse() {
-        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, 0, 15, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.MEAT);
+        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, 0, 8, 32, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.MEAT);
     }
 
     @Override

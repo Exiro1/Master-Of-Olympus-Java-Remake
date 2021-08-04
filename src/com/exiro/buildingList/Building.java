@@ -236,6 +236,10 @@ public abstract class Building extends ObjectClass {
                 '}';
     }
 
+    public void setPopMax(int popMax) {
+        this.popMax = popMax;
+    }
+
     public float getSafetyLvl() {
         return safetyLvl;
     }
@@ -282,6 +286,16 @@ public abstract class Building extends ObjectClass {
             msprites.add((MovingSprite) s);
         if (s instanceof BuildingSprite)
             bsprites.add((BuildingSprite) s);
+    }
+
+    public void clearBuildingSprite() {
+        ArrayList<Sprite> toRemove = new ArrayList<>();
+        for (Sprite s : bsprites) {
+            toRemove.add(s);
+        }
+        for (Sprite s : toRemove) {
+            removeSprites(s);
+        }
     }
 
     public void removeSprites(Sprite s) {

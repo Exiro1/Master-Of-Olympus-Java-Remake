@@ -45,6 +45,7 @@ public abstract class DeliverySprite extends MovingSprite {
             lastX = getXB();
 
             Case c = getC().getMap().getCase(lastX, lastY);
+            buildings.clear();
             for (Case n : c.getNeighbour()) {
                 if (n != null && n.getObject() != null && n.getObject() instanceof Building) {
                     if (!deliveredBuildings.contains((Building) n.getObject())) {

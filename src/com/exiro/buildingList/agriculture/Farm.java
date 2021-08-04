@@ -29,12 +29,12 @@ public class Farm extends ResourceGenerator {
     }
 
     public Farm(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, Resource resource, int level) {
-        super(false, ObjectType.FARM, BuildingCategory.FOOD, pop, 15, 50, 10, xPos, yPos, 3, 3, cases, built, city, 0, resource);
+        super(false, ObjectType.FARM, BuildingCategory.FOOD, pop, 10, 36, 10, xPos, yPos, 3, 3, cases, built, city, 0, resource);
         this.Rlevel = level;
     }
 
     public Farm() {
-        super(false, ObjectType.FARM, BuildingCategory.FOOD, 0, 15, 50, 10, 0, 0, 3, 3, null, false, GameManager.currentCity, 0, Resource.CORN);
+        super(false, ObjectType.FARM, BuildingCategory.FOOD, 0, 10, 36, 10, 0, 0, 3, 3, null, false, GameManager.currentCity, 0, Resource.CORN);
         this.Rlevel = 0;
     }
 
@@ -46,10 +46,9 @@ public class Farm extends ResourceGenerator {
         super.process(deltaTime);
         if (isActive() && getPop() > 0) {
             float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
-            factor = 10;
             growth += factor * deltaTime * speedFactor;
 
-            if (growth > 10) {
+            if (growth > 40) {
                 growth = 0;
                 Rlevel++;
                 changeLevel(Rlevel);

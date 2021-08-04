@@ -17,7 +17,6 @@ public class WaterDelivery extends DeliverySprite {
 
 
     DeliveryAI ai;
-    double waterAdd = 10.0;
     int lastY, lastX;
 
     public WaterDelivery(City c, ObjectClass destination, Case start) {
@@ -29,7 +28,7 @@ public class WaterDelivery extends DeliverySprite {
     public void deliverBuildings() {
         for (Building b : getBuildingsToDeliver()) {
             if (b instanceof House)
-                ((House) b).addWater(waterAdd);
+                ((House) b).setWater(100);
         }
     }
 

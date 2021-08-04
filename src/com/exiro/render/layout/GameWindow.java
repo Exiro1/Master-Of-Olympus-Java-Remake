@@ -1,4 +1,4 @@
-package com.exiro.render;
+package com.exiro.render.layout;
 
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
@@ -7,6 +7,9 @@ import com.exiro.object.Case;
 import com.exiro.object.CityMap;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.Player;
+import com.exiro.render.EntityRender;
+import com.exiro.render.GameFrame;
+import com.exiro.render.IsometricRender;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.systemCore.GameThread;
@@ -15,6 +18,7 @@ import com.exiro.utils.Point;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,6 +36,30 @@ public class GameWindow extends JPanel {
     public GameWindow(GameManager gm) {
         this.gm = gm;
         this.p = gm.getPlayer();
+    }
+
+    public boolean pressing;
+
+    public void draw(CityMap map, ArrayList<Sprite> sprites) {
+
+        for (int x = map.getWidth(); x > 0; x--) {
+
+        }
+    }
+
+    Case c1;
+
+
+    Case startCaseBuild;
+    Case lastCaseBuild;
+    boolean build;
+
+    public static int getCameraPosx() {
+        return CameraPosx;
+    }
+
+    public static int getCameraPosy() {
+        return CameraPosy;
     }
 
     public void paintComponent(Graphics g) {
@@ -118,52 +146,30 @@ public class GameWindow extends JPanel {
         }
         */
         Point p2 = null;
-        if (getMousePosition() != null) {
+        lastP = null;
+        if (MouseInfo.getPointerInfo() != null) {
             try {
-                p2 = new Point((float) getMousePosition().getX(), (float) getMousePosition().getY());
+                p2 = new Point((float) MouseInfo.getPointerInfo().getLocation().x, (float) MouseInfo.getPointerInfo().getLocation().y);
                 lastP = p2;
             } catch (NullPointerException r) {
                 r.printStackTrace();
             }
         }
         if (lastP != null) {
-            if (lastP.y > this.getHeight() - 30) {
+            if (lastP.y > GameFrame.FHEIGHT - 2) {
                 CameraPosy = CameraPosy - 5;
-            } else if (lastP.y < 30) {
+            } else if (lastP.y < 1) {
                 CameraPosy = CameraPosy + 5;
-            } else if (lastP.x > this.getWidth() - 30) {
+            } else if (lastP.x > GameFrame.FWIDTH - 2) {
                 CameraPosx = CameraPosx - 5;
-            } else if (lastP.x < 30) {
+            } else if (lastP.x < 1) {
                 CameraPosx = CameraPosx + 5;
             }
         }
 
+
         //Voir si deplacable
-        if (p2 != null) {
-            Case c = IsometricRender.getCase(p2, p.getPlayerCities().get(0));
-            if (MouseManager.pressing) {
-                if (lastCase != c) {
-                    boolean isNew = true;
-                    for (ObjectClass obj1 : EntityRender.toBuild) {
-                        if (obj1.getXB() == c.getxPos() && obj1.getYB() == c.getyPos()) {
-                            isNew = false;
-                            break;
-                        }
-                    }
-                    if (isNew) {
-                        EntityRender.addBuilding(new Point(c.getxPos(), c.getyPos()));
-                    }
-                }
-            } else if (lastClickState) {//a relaché donc veut construire
-                EntityRender.buildAll();
-            } else {
-                EntityRender.toBuild.get(0).setXB(c.getxPos());
-                EntityRender.toBuild.get(0).setYB(c.getyPos());
-                EntityRender.x = c.getxPos();
-                EntityRender.y = c.getyPos();
-            }
-            lastCase = c;
-        }
+        buildManager((int) lastP.x, (int) lastP.y);
         //Voir si deplacable
 
         if (EntityRender.img != null) {
@@ -182,33 +188,50 @@ public class GameWindow extends JPanel {
         g.drawString("FPS " + 1 / GameThread.deltaTime, 1200, 10);
         int i = 0;
 
-        if (!MouseManager.build && MouseManager.pato != null) {
-            g.setColor(Color.RED);
-            for (Case case1 : MouseManager.pato.getPath()) {
-
-                g.drawRect(case1.getxPos() * 50, case1.getyPos() * 50, 50, 50);
-                g.drawString(case1.getObject().getBuildingType().name(), case1.getxPos() * 50, case1.getyPos() * 50 + 25);
-
-            }
-        }
-
-
         i = 0;
-      /*  for(Building b : p.getPlayerCities().get(0).getBuildings()) {
-            i++;
-           // g.drawString(b.toString(), 1200, 140+i*30);
-        }*/
-
-        // g.drawRect(10,10,20,20);
-        lastClickState = MouseManager.pressing;
     }
 
-    public void draw(CityMap map, ArrayList<Sprite> sprites) {
+    public void clickManager(MouseEvent e) {
 
-        for (int x = map.getWidth(); x > 0; x--) {
+        if (e.getButton() == MouseEvent.BUTTON1) {
+
+        }
+        if (e.getButton() == MouseEvent.BUTTON3) {
 
         }
     }
 
+    public void buildManager(int x, int y) {
 
+
+        if (pressing) {
+            Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
+            if (startCaseBuild == null) {
+                startCaseBuild = currCase;
+                EntityRender.setStart(new Point(startCaseBuild.getxPos(), startCaseBuild.getyPos()));
+                build = true;
+            } else if (lastCaseBuild != currCase) {
+                lastCaseBuild = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
+                EntityRender.addBuilding(new Point(lastCaseBuild.getxPos(), lastCaseBuild.getyPos()));
+            }
+        } else if (build) {
+            EntityRender.buildAll();
+            startCaseBuild = null;
+            build = false;
+        } else {
+            Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
+            EntityRender.setStart(new Point(currCase.getxPos(), currCase.getyPos()));
+        }
+    }
+
+    public boolean isClicked(int xc, int yc) {
+        if (xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height) {
+            return true;
+        }
+        return false;
+    }
+
+    public Player getP() {
+        return p;
+    }
 }

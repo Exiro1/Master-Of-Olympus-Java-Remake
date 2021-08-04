@@ -1,6 +1,7 @@
 package com.exiro.render;
 
 import com.exiro.object.ObjectType;
+import com.exiro.render.layout.GameWindow;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,11 +10,11 @@ public class Keyboard implements KeyListener {
 
     static boolean aaa = false;
     int x = 0;
-    private final GameWindow win;
+    private final GameFrame frame;
 
 
-    public Keyboard(GameWindow win) {
-        this.win = win;
+    public Keyboard(GameFrame frame) {
+        this.frame = frame;
     }
 
     @Override
@@ -79,12 +80,9 @@ public class Keyboard implements KeyListener {
         }
         if (key == 'a') {
             GameWindow.index++;
-            if (GameWindow.index > win.p.getPlayerCities().get(0).getPathManager().getPaths().size() - 1) {
+            if (GameWindow.index > frame.getWindow().getP().getPlayerCities().get(0).getPathManager().getPaths().size() - 1) {
                 GameWindow.index = 0;
             }
-        }
-        if (key == 'g') {
-            MouseManager.build = !MouseManager.build;
         }
         if (key == 'z')
             System.exit(0);

@@ -125,6 +125,22 @@ public abstract class StoreBuilding extends Building {
         return true;
     }
 
+    public boolean hasStockAvailable(Resource resource) {
+        if (stockage.containsKey(resource) && stockage.get(resource) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getStockAvailable(Resource resource) {
+        if (stockage.containsKey(resource) && stockage.get(resource) > 0) {
+            return stockage.get(resource);
+        } else {
+            return 0;
+        }
+    }
+
     /**
      * get ressources from the stock
      *
@@ -156,9 +172,10 @@ public abstract class StoreBuilding extends Building {
             ret = amount;
         } else {
             ret = stockage.get(r);
-            stockage.replace(r, 0); //no supposed to happen
+            stockage.replace(r, 0); //not supposed to happen
             reserved.replace(r, 0);
         }
+        updateStock();
         return ret;
     }
 

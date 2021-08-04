@@ -6,37 +6,95 @@ import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
+import com.exiro.render.IsometricRender;
+import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Immigrant;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
+import com.exiro.utils.Point;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class House extends Building {
 
-
-    static final int[] maxPerLvl = {1, 5, 10, 15, 20, 25, 30, 35, 45};
-    private final double deltaFood = 0.001f;
-    private final double deltaWater = 0.002f;
-    private final double deltaHdo = 0.0005f;
-    private final double deltaWool = 0.0005f;
-    final Map<Integer, Double> timeBeforeComming = new HashMap<>();
+    static final int[] maxPerLvl = {4, 8, 16, 24, 32, 40, 48, 54, 60};
+    final ArrayList<Arrival> arrivals = new ArrayList<>();
+    private final double deltaFood = 0.016f;
+    private final double deltaWater = 0.016f;
+    private final double deltaHdo = 0.001f;
+    private final double deltaWool = 0.0008f;
+    int maxfood, maxWater = 60, maxWool = 8, maxHDO = 5;
     private int level;
     private double food, water, wool, hdo;
-    private int popInArrival = 0;
-
 
     public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
-        super(false, ObjectType.HOUSE, null, pop, maxPerLvl[level], 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
+        super(false, ObjectType.HOUSE, null, pop, maxPerLvl[level], 15, 10, xPos, yPos, 2, 2, cases, built, city, 0);
         this.level = level;
     }
 
+    private int popInArrival = 0;
+
+
     public House() {
-        super(false, ObjectType.HOUSE, null, 0, maxPerLvl[0], 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+        super(false, ObjectType.HOUSE, null, 0, maxPerLvl[0], 15, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    }
+
+    @Override
+    public void process(double deltaTime) {
+        super.process(deltaTime);
+        if (isActive()) {
+            addFood(-deltaFood * deltaTime * getPop());
+            addWater(-deltaWater * deltaTime * getPop());
+            addHdo(-deltaHdo * deltaTime * getPop());
+            addWool(-deltaWool * deltaTime * getPop());
+
+
+            if (level < 7) {
+                if (popMax <= pop) {
+                    boolean evolvabe = false;
+                    switch (level) {
+                        case 0:
+                            evolvabe = true;//true
+                            break;
+                        case 1:
+                            if (getFood() > pop && getWater() > 10)
+                                evolvabe = true;
+                            break;
+                        case 2:
+                            if (getFood() > pop && getWool() > 5 && getWater() > 10)
+                                evolvabe = true;
+                            break;
+                        case 3:
+                            if (getFood() > pop && getWool() > 5 && getWater() > 10 && getHdo() > 3)
+                                evolvabe = true;
+                            break;
+                        case 4:
+                            if (getFood() > pop && getWool() > 5 && getWater() > 15 && getHdo() > 3)
+                                evolvabe = true;
+                            break;
+                        case 5:
+                            if (getFood() > pop && getWool() > 7 && getWater() > 15 && getHdo() > 5)
+                                evolvabe = true;
+                            break;
+                        case 6:
+                            if (getFood() > pop && getWool() > 8 && getWater() > 15 && getHdo() > 5)
+                                evolvabe = true;
+                            break;
+                    }
+                    if (evolvabe) {
+                        level++;
+                        changeLvlImg(level);
+                        popMax = maxPerLvl[level];
+                    }
+                }
+            }
+            if (popMax > pop + popInArrival) {
+                addPopulation();
+            }
+        }
     }
 
 
@@ -59,60 +117,40 @@ public class House extends Building {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
-        if (isActive()) {
-            addFood(-deltaFood * deltaTime);
-            addWater(-deltaWater * deltaTime);
-            addHdo(-deltaHdo * deltaTime);
-            addWool(-deltaWool * deltaTime);
+    public void Render(Graphics g, int camX, int camY) {
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), getSize());
+        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
+        g.drawString(getPop() + "/" + getPopMax() + " " + (int) getFood() + " " + (int) getWater(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
 
-
-            if (level < 7) {
-                if (popMax <= pop) {
-                    boolean evolvabe = true;
-                    switch (level) {
-                        case 0:
-                            evolvabe = true;//true
-                            break;
-                        case 1:
-                            if (getFood() < 50 || getWater() < 50)
-                                evolvabe = true;
-                            break;
-                        case 2:
-                            if (getFood() < 50 || getWool() < 50 || getWater() < 50)
-                                evolvabe = true;
-                            break;
-                        case 3:
-                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                                evolvabe = true;
-                            break;
-                        case 4:
-                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                                evolvabe = true;
-                            break;
-                        case 5:
-                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                                evolvabe = true;
-                            break;
-                        case 6:
-                            if (getFood() < 50 || getWool() < 50 || getWater() < 50 || getHdo() < 50)
-                                evolvabe = true;
-                            break;
-                    }
-                    if (evolvabe) {
-                        level++;
-                        changeLvlImg(level);
-                        popMax = maxPerLvl[level];
-                    }
-                }
-            }
-            if (popMax > pop + popInArrival) {
-                addPopulation();
-            }
+        //render only buildingSprite because movingSprite are render separately
+        for (BuildingSprite s : bsprites) {
+            if (isActive() && getPop() > 0)
+                s.Render(g, camX, camY);
         }
+
     }
 
+    @Override
+    public void populate(double deltaTime) {
+        ArrayList<Arrival> toRemove = new ArrayList<>();
+        int i = 0;
+        for (Arrival a : arrivals) {
+            a.time -= (float) deltaTime;
+            if (a.time <= 0) {
+                toRemove.add(a);
+                System.out.println(a);
+                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), FreeState.ALL_ROAD.i), this, a.getNbr());
+                addSprite(immigrant);
+            }
+            i++;
+        }
+        SpriteManager();
+        for (Arrival t : toRemove) {
+            arrivals.remove(t);
+        }
+
+
+    }
 
     public void changeLvlImg(int lvl) {
         Random ran = new Random();
@@ -121,27 +159,14 @@ public class House extends Building {
         setImg(t);
     }
 
-    @Override
-    public void populate(double deltaTime) {
-        ArrayList<Integer> toRemove = new ArrayList<>();
-        int i = 0;
-        for (Integer a : timeBeforeComming.keySet()) {
-            double f = timeBeforeComming.get(a);
-            f = f - deltaTime;
-            timeBeforeComming.replace(a, timeBeforeComming.get(a), f);
-            if (f <= 0) {
-                toRemove.add(a);
-                System.out.println(a);
-                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), FreeState.ALL_ROAD.i), this, a);
-                addSprite(immigrant);
-            }
-            i++;
-        }
-        SpriteManager();
-        for (Integer t : toRemove) {
-            timeBeforeComming.remove(t);
-        }
-
+    public void addPopulation() {
+        Random ran = new Random();
+        float d = ran.nextFloat();
+        d = d * 30;
+        int nbr = Math.min((popMax - (pop + popInArrival)), 4);
+        popInArrival = popInArrival + nbr;
+        city.setPopInArrvial(city.getPopInArrvial() + nbr);
+        arrivals.add(new Arrival(nbr, d));
 
     }
 
@@ -171,17 +196,13 @@ public class House extends Building {
         }
     }
 
-    public void addPopulation() {
-        Random ran = new Random();
-        double d = ran.nextDouble();
-        d = d * 30;
-        int nbr = Math.min((popMax - (pop + popInArrival)), 5);
-        popInArrival = popInArrival + nbr;
-        city.setPopInArrvial(city.getPopInArrvial() + nbr);
-        timeBeforeComming.put(nbr, d);
-
+    public void setWater(double water) {
+        this.water = water;
     }
 
+    public int getMaxfood() {
+        return getPop() * 2;
+    }
 
     public int getLevel() {
         return level;
@@ -238,5 +259,51 @@ public class House extends Building {
                 ", city=" + city.getName() +
                 ", level=" + level +
                 '}';
+    }
+
+    public void setMaxfood(int maxfood) {
+        this.maxfood = maxfood;
+    }
+
+    public int getMaxWater() {
+        return maxWater;
+    }
+
+    public void setMaxWater(int maxWater) {
+        this.maxWater = maxWater;
+    }
+
+    public int getMaxWool() {
+        return maxWool;
+    }
+
+    public void setMaxWool(int maxWool) {
+        this.maxWool = maxWool;
+    }
+
+    public int getMaxHDO() {
+        return maxHDO;
+    }
+
+    public void setMaxHDO(int maxHDO) {
+        this.maxHDO = maxHDO;
+    }
+
+    class Arrival {
+        int nbr;
+        float time;
+
+        Arrival(int nbr, float time) {
+            this.nbr = nbr;
+            this.time = time;
+        }
+
+        int getNbr() {
+            return nbr;
+        }
+
+        float getTime() {
+            return time;
+        }
     }
 }

@@ -23,11 +23,11 @@ public class Fishery extends ResourceGenerator {
     }
 
     public Fishery(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, pop, 15, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.FISH);
+        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, pop, 10, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.FISH);
     }
 
     public Fishery() {
-        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, 0, 15, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.FISH);
+        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, 0, 10, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.FISH);
     }
 
 

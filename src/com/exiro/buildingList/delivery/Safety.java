@@ -26,7 +26,7 @@ public class Safety extends Building {
     }
 
     public Safety() {
-        super(false, ObjectType.SAFETY, BuildingCategory.SECURITY, 0, 2, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+        super(false, ObjectType.SAFETY, BuildingCategory.SECURITY, 0, 5, 16, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
 
     }
 

@@ -21,12 +21,12 @@ public class WaterWell extends Building {
     float timeBeforeDelivery = 0.0f;
 
     public WaterWell(boolean isActive, int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(isActive, ObjectType.WATERWELL, BuildingCategory.FOOD, pop, 2, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0);
+        super(isActive, ObjectType.WATERWELL, BuildingCategory.FOOD, pop, 4, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0);
         waterDelivery = null;
     }
 
     public WaterWell() {
-        super(false, ObjectType.WATERWELL, BuildingCategory.FOOD, 0, 2, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+        super(false, ObjectType.WATERWELL, BuildingCategory.FOOD, 0, 4, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
 
     }
 
