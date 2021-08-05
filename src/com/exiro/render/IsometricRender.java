@@ -51,6 +51,9 @@ public class IsometricRender {
         double x2 = IsometricRender.getTileCoordinates(new Point(x, y)).x;
         double y2 = IsometricRender.getTileCoordinates(new Point(x, y)).y + 1.5;
 
+        Case t = city.getMap().getCase((int) x2, (int) y2);
+        if (t != null)
+            return t;
         return new Case((int) x2, (int) y2, null, null);
     }
 

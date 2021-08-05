@@ -4,6 +4,7 @@ import com.exiro.buildingList.House;
 import com.exiro.buildingList.delivery.WaterWell;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.Road;
+import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
@@ -19,6 +20,7 @@ public class Main {
     public static void main(String[] args) {
 
         ImageLoader.initLoader();
+        FontLoader.initLoader();
 
         System.setProperty("sun.awt.noerasebackground", "true");
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);

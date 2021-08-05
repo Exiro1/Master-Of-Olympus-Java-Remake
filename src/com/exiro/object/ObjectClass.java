@@ -2,6 +2,7 @@ package com.exiro.object;
 
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.render.interfaceList.Interface;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,6 +19,7 @@ public abstract class ObjectClass implements Cloneable {
     private int bitmapID, localID;
     private String path;
     private Case mainCase;
+
 
     public ObjectClass(boolean isActive, ObjectType type, String filename, int size, int bitmapID, int localID) {
         this.Active = isActive;
@@ -48,6 +50,8 @@ public abstract class ObjectClass implements Cloneable {
         assert img != null;
         setImg(img);
     }
+
+    public abstract Interface getInterface();
 
     public Case getMainCase() {
         return mainCase;

@@ -1,8 +1,14 @@
 package com.exiro.render.layout;
 
+import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.object.ObjectType;
 import com.exiro.render.Button;
 import com.exiro.render.ButtonType;
+import com.exiro.render.ComplexButton;
+import com.exiro.render.EntityRender;
+import com.exiro.render.interfaceList.Interface;
+import com.exiro.render.interfaceList.TextInterface;
 import com.exiro.systemCore.GameManager;
 
 import javax.swing.*;
@@ -25,11 +31,17 @@ public class InterfaceRender extends JPanel {
 
     ArrayList<Button> buttons;
     ArrayList<Button> buildButtons;
+    ArrayList<Button> quickButtons;
+
+    ArrayList<Button> onscreenButton;
 
     public InterfaceRender(GameManager gm) {
         this.gm = gm;
         buttons = new ArrayList<>();
         buildButtons = new ArrayList<>();
+        quickButtons = new ArrayList<>();
+        onscreenButton = new ArrayList<>();
+
     }
 
     public void initGraphics() {
@@ -62,6 +74,18 @@ public class InterfaceRender extends JPanel {
         yoff += 41;
         buttons.add(new Button((int) (6 * fw), (int) (yoff * fh), (int) (44 * fw), (int) (41 * fh), 7, 88, ButtonType.MAPVIEW));
 
+        quickButtons.add(new Button((int) (49 * fw), (int) (435 * fh), (int) (31 * fw), (int) (38 * fh), 7, 44, ButtonType.QUICK_ROUTE));
+        quickButtons.add(new Button((int) (81 * fw), (int) (435 * fh), (int) (31 * fw), (int) (38 * fh), 7, 48, ButtonType.QUICK_STOP));
+        quickButtons.add(new Button((int) (112 * fw), (int) (435 * fh), (int) (31 * fw), (int) (38 * fh), 7, 52, ButtonType.QUICK_ERASE));
+        quickButtons.add(new Button((int) (144 * fw), (int) (435 * fh), (int) (31 * fw), (int) (38 * fh), 7, 56, ButtonType.QUICK_CANCEL));
+
+        quickButtons.add(new Button((int) (139 * fw), (int) (481 * fh), (int) (33 * fw), (int) (31 * fh), 7, 60, ButtonType.QUICK_HISTORY));
+
+        quickButtons.add(new Button((int) (11 * fw), (int) (566 * fh), (int) (32 * fw), (int) (33 * fh), 7, 36, ButtonType.QUICK_MISSION));
+
+        quickButtons.add(new Button((int) (43 * fw), (int) (566 * fh), (int) (66 * fw), (int) (33 * fh), 7, 32, ButtonType.QUICK_VIEW));
+
+        quickButtons.add(new Button((int) (109 * fw), (int) (566 * fh), (int) (66 * fw), (int) (33 * fh), 7, 40, ButtonType.QUICK_MAP));
 
     }
 
@@ -73,6 +97,9 @@ public class InterfaceRender extends JPanel {
         return false;
     }
 
+    public ArrayList<Button> getOnScreenButton() {
+        return onscreenButton;
+    }
 
     public void paintComponent(Graphics g) {
         //  super.paintComponent(g);
@@ -83,10 +110,13 @@ public class InterfaceRender extends JPanel {
         g.drawImage(test, (int) (50 * fw), (int) (300 * fh), (int) (128 * fw), (int) (18 * fh), null);
 
         for (Button b : buttons) {
-            b.Render(g);
+            b.Render(g, 0, 0);
         }
         for (Button b : buildButtons) {
-            b.Render(g);
+            b.Render(g, 0, 0);
+        }
+        for (Button b : quickButtons) {
+            b.Render(g, 0, 0);
         }
 
     }
@@ -103,10 +133,21 @@ public class InterfaceRender extends JPanel {
                 buttonClicked(b);
             }
         }
+        for (Button b : quickButtons) {
+            if (b.clicked(e.getX() - this.getBounds().x, e.getY() - this.getBounds().y)) {
+                buttonClicked(b);
+            }
+        }
     }
 
     public void buttonClicked(Button b) {
         for (Button ob : buttons) {
+            ob.setClicked(false);
+        }
+        for (Button ob : buildButtons) {
+            ob.setClicked(false);
+        }
+        for (Button ob : quickButtons) {
             ob.setClicked(false);
         }
         b.setClicked(true);
@@ -175,6 +216,129 @@ public class InterfaceRender extends JPanel {
                 break;
             case MAPVIEW:
                 buildButtons.clear();
+                break;
+            case HOUSE_LITTLE:
+                EntityRender.setEntityRender(ObjectType.HOUSE);
+                gm.getGameView().showEntity = true;
+                break;
+            case HOUSE_BIG:
+                break;
+            case AGRICULTURE_FARM: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.FARM_WHEAT, new TextInterface("Ferme à blé", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.FARM_CARROT, new TextInterface("Ferme à carotte", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.FARM_ONION, new TextInterface("Ferme à ognion", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
+                break;
+            }
+            case AGRICULTURE_FISH: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.FISHING_FISHERY, new TextInterface("Pecherie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.FISHING_HUNTING, new TextInterface("Maison de chasse", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
+                break;
+            }
+            case AGRICULTURE_VITICULTURE: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_SMALLHOLDING, new TextInterface("Metairie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_OLIVETREE, new TextInterface("Olivier", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_GRAPE, new TextInterface("Vigne", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
+                break;
+            }
+            case AGRICULTURE_BREEDING: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_SHEEPHOLD, new TextInterface("Atelier de laine", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_SHEEP, new TextInterface("Mouton", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_DAIRY, new TextInterface("Fromagerie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_GOAT, new TextInterface("Chevre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
+                break;
+            }
+            case INDUSTRY_1:
+                break;
+            case INDUSTRY_2:
+                break;
+            case MARKET_GRANARY:
+                EntityRender.setEntityRender(ObjectType.GRANARY);
+                gm.getGameView().showEntity = true;
+                break;
+            case MARKET_STOCK:
+                EntityRender.setEntityRender(ObjectType.STOCK);
+                gm.getGameView().showEntity = true;
+                break;
+            case MARKET_AGORA: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_AGORA, new TextInterface("Agora", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_FOOD, new TextInterface("Epicerie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_WOOL, new TextInterface("Vendeur de laine", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_OIL, new TextInterface("Vendeur d'huile d'olive", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
+                break;
+            }
+            case MARKET_TRANS:
+                break;
+            case HEALTH_WATER:
+                EntityRender.setEntityRender(ObjectType.WATERWELL);
+                gm.getGameView().showEntity = true;
+                break;
+            case HEALTH_HOSPITAL:
+                break;
+            case HEALTH_SAFETY:
+                EntityRender.setEntityRender(ObjectType.SAFETY);
+                gm.getGameView().showEntity = true;
+                break;
+            case HEALTH_GUARD:
+                break;
+            case PALACE_PALACE:
+                break;
+            case PALACE_TAX:
+                break;
+            case PALACE_BRIDGE:
+                break;
+            case CULTURE_PHILOSOPHIA:
+                break;
+            case CULTURE_GYMNASIUM:
+                break;
+            case CULTURE_DRAMA:
+                break;
+            case CULTURE_STADIUM:
+                break;
+            case TEMPLE_TEMPLE:
+                break;
+            case TEMPLE_HEROE:
+                break;
+            case TEMPLE_CONSTRUCT:
+                break;
+            case ARMY_FORT:
+                break;
+            case ARMY_BUILDING:
+                break;
+            case CACHET_SIMPLE:
+                break;
+            case CACHET_ADVANCED:
+                break;
+            case CAHCHET_MONUMENT:
+                break;
+            case QUICK_ROUTE:
+                EntityRender.setEntityRender(ObjectType.ROAD);
+                gm.getGameView().showEntity = true;
+                break;
+            case QUICK_STOP:
+                EntityRender.setEntityRender(ObjectType.BLOCKABLE_ROAD);
+                gm.getGameView().showEntity = true;
+                break;
+            case QUICK_ERASE:
+                break;
+            case QUICK_CANCEL:
+                break;
+            case QUICK_HISTORY:
+                break;
+            case QUICK_MISSION:
+                break;
+            case QUICK_VIEW:
+                break;
+            case QUICK_MAP:
                 break;
         }
     }

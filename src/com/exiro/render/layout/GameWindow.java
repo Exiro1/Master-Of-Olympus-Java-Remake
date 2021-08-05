@@ -3,16 +3,14 @@ package com.exiro.render.layout;
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
 import com.exiro.environment.Environment;
-import com.exiro.object.Case;
-import com.exiro.object.CityMap;
-import com.exiro.object.ObjectClass;
-import com.exiro.object.Player;
+import com.exiro.object.*;
+import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
 import com.exiro.render.GameFrame;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
-import com.exiro.systemCore.GameThread;
 import com.exiro.terrainList.Elevation;
 import com.exiro.utils.Point;
 
@@ -61,6 +59,9 @@ public class GameWindow extends JPanel {
     public static int getCameraPosy() {
         return CameraPosy;
     }
+
+    public boolean showEntity = true;
+    Interface gameInterface;
 
     public void paintComponent(Graphics g) {
 
@@ -160,7 +161,8 @@ public class GameWindow extends JPanel {
                 CameraPosy = CameraPosy - 5;
             } else if (lastP.y < 1) {
                 CameraPosy = CameraPosy + 5;
-            } else if (lastP.x > GameFrame.FWIDTH - 2) {
+            }
+            if (lastP.x > GameFrame.FWIDTH - 2) {
                 CameraPosx = CameraPosx - 5;
             } else if (lastP.x < 1) {
                 CameraPosx = CameraPosx + 5;
@@ -169,58 +171,138 @@ public class GameWindow extends JPanel {
 
 
         //Voir si deplacable
-        buildManager((int) lastP.x, (int) lastP.y);
-        //Voir si deplacable
-
-        if (EntityRender.img != null) {
-            for (ObjectClass obj : EntityRender.toBuild) {
-                Point p = IsometricRender.TwoDToIsoTexture(new Point(obj.getXB(), obj.getYB()), obj.getWidth(), obj.getHeight(), obj.getSize());
-                g.drawImage(EntityRender.img, CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
+        if (showEntity) {
+            buildManager((int) lastP.x, (int) lastP.y);
+            if (EntityRender.img != null) {
+                for (ObjectClass obj : EntityRender.toBuild) {
+                    Point p = IsometricRender.TwoDToIsoTexture(new Point(obj.getXB(), obj.getYB()), obj.getWidth(), obj.getHeight(), obj.getSize());
+                    g.drawImage(EntityRender.img, CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
+                }
             }
         }
+        //Voir si deplacable
 
 
+        if (gameInterface != null)
+            gameInterface.Render(g);
+
+        /*
         g.setColor(Color.BLACK);
         g.drawString("argent : " + p.getMoney(), 1200, 20);
         g.drawString("chomeurs :" + p.getPlayerCities().get(0).getBuildingManager().getUnemployed(), 1200, 50);
         g.drawString("Habitant :" + p.getPlayerCities().get(0).getPopulation(), 1200, 80);
         g.drawString("Arrivant :" + p.getPlayerCities().get(0).getPopInArrvial(), 1200, 110);
         g.drawString("FPS " + 1 / GameThread.deltaTime, 1200, 10);
-        int i = 0;
-
-        i = 0;
+         */
     }
 
     public void clickManager(MouseEvent e) {
 
         if (e.getButton() == MouseEvent.BUTTON1) {
+            if (gameInterface != null && gameInterface.isOpen()) {
+                ButtonType type = gameInterface.clicked(e.getX(), e.getY() - GameLayout.TOOLBAR_HEIGHT);
+                if (type != ButtonType.NONE) {
+                    buttonManager(type);
+                }
+            } else {
 
+            }
         }
         if (e.getButton() == MouseEvent.BUTTON3) {
-
+            if (gameInterface != null) {
+                gameInterface.close();
+                gameInterface = null;
+            } else if (!showEntity) {
+                Case c = IsometricRender.getCase(new Point(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y), gm.getCurrentCity());
+                if (c.getObject() != null) {
+                    gameInterface = c.getObject().getInterface();
+                } else {
+                    gameInterface = c.getTerrain().getInterface();
+                }
+            } else {
+                showEntity = false;
+            }
         }
     }
 
+    public void buttonManager(ButtonType type) {
+        switch (type) {
+            case FARM_WHEAT:
+                EntityRender.setEntityRender(ObjectType.FARM, Resource.CORN);
+                break;
+            case FARM_CARROT:
+                EntityRender.setEntityRender(ObjectType.FARM, Resource.CARROT);
+                break;
+            case FARM_ONION:
+                EntityRender.setEntityRender(ObjectType.FARM, Resource.ONION);
+                break;
+            case BREEDING_SHEEPHOLD:
+                EntityRender.setEntityRender(ObjectType.SHEEPFOLD);
+                break;
+            case BREEDING_SHEEP:
+                //EntityRender.setEntityRender(ObjectType.FARM);
+                break;
+            case BREEDING_DAIRY:
+                EntityRender.setEntityRender(ObjectType.DAIRY);
+                break;
+            case BREEDING_GOAT:
+                //EntityRender.setEntityRender(ObjectType.FARM);
+                break;
+            case FISHING_FISHERY:
+                EntityRender.setEntityRender(ObjectType.FISHERY);
+                break;
+            case FISHING_HUNTING:
+                EntityRender.setEntityRender(ObjectType.HUNTINGHOUSE);
+                break;
+            case VITICULTURE_SMALLHOLDING:
+                EntityRender.setEntityRender(ObjectType.SMALLHOLDING);
+                break;
+            case VITICULTURE_OLIVETREE:
+                EntityRender.setEntityRender(ObjectType.OLIVETREE);
+                break;
+            case VITICULTURE_GRAPE:
+                //EntityRender.setEntityRender(ObjectType.FARM);
+                break;
+            case AGORA_AGORA:
+                EntityRender.setEntityRender(ObjectType.AGORA);
+                break;
+            case AGORA_FOOD:
+                EntityRender.setEntityRender(ObjectType.AGORAFOOD);
+                break;
+            case AGORA_WOOL:
+                EntityRender.setEntityRender(ObjectType.AGORAWOOL);
+                break;
+            case AGORA_OIL:
+                EntityRender.setEntityRender(ObjectType.AGORAOIL);
+                break;
+        }
+        showEntity = true;
+        gameInterface.close();
+        gameInterface = null;
+    }
+
     public void buildManager(int x, int y) {
-
-
-        if (pressing) {
-            Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
-            if (startCaseBuild == null) {
-                startCaseBuild = currCase;
-                EntityRender.setStart(new Point(startCaseBuild.getxPos(), startCaseBuild.getyPos()));
-                build = true;
-            } else if (lastCaseBuild != currCase) {
-                lastCaseBuild = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
-                EntityRender.addBuilding(new Point(lastCaseBuild.getxPos(), lastCaseBuild.getyPos()));
+        if (isClicked(x, y)) {
+            if (gameInterface == null || !gameInterface.isOpen()) {
+                if (pressing) {
+                    Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
+                    if (startCaseBuild == null) {
+                        startCaseBuild = currCase;
+                        EntityRender.setStart(new Point(startCaseBuild.getxPos(), startCaseBuild.getyPos()));
+                        build = true;
+                    } else if (lastCaseBuild != currCase) {
+                        lastCaseBuild = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
+                        EntityRender.addBuilding(new Point(lastCaseBuild.getxPos(), lastCaseBuild.getyPos()));
+                    }
+                } else if (build) {
+                    EntityRender.buildAll();
+                    startCaseBuild = null;
+                    build = false;
+                } else {
+                    Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
+                    EntityRender.setStart(new Point(currCase.getxPos(), currCase.getyPos()));
+                }
             }
-        } else if (build) {
-            EntityRender.buildAll();
-            startCaseBuild = null;
-            build = false;
-        } else {
-            Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
-            EntityRender.setStart(new Point(currCase.getxPos(), currCase.getyPos()));
         }
     }
 

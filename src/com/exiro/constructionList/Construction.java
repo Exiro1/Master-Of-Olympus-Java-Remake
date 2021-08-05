@@ -5,6 +5,7 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -54,6 +55,10 @@ public abstract class Construction extends ObjectClass {
         return place;
     }
 
+    @Override
+    public Interface getInterface() {
+        return null;
+    }
 
     public abstract void process(double deltatime);
 

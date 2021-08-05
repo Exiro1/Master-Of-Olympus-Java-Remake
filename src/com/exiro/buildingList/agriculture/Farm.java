@@ -38,8 +38,9 @@ public class Farm extends ResourceGenerator {
         this.Rlevel = 0;
     }
 
-
-
+    public void setFarmType(Resource r) {
+        this.setResource(r);
+    }
 
     @Override
     public void process(double deltaTime) {
@@ -81,7 +82,19 @@ public class Farm extends ResourceGenerator {
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
-            growthImg = ImageLoader.getImage(getPath(), getBitmapID(), 13);
+            int i = 0;
+            switch (getResource()) {
+                case CORN:
+                    i += 13;
+                    break;
+                case CARROT:
+                    i += 19;
+                    break;
+                case ONION:
+                    i += 25;
+                    break;
+            }
+            growthImg = ImageLoader.getImage(getPath(), getBitmapID(), i);
 
         }
         return succ;

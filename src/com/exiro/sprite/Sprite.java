@@ -3,6 +3,7 @@ package com.exiro.sprite;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -23,12 +24,17 @@ public abstract class Sprite extends ObjectClass {
     double timeBetweenFrame = 0.2f;
     City c;
 
+
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
         super(true, null, filePath, 1, bitID, localId);
         this.c = c;
         this.frameNumber = frameNumber;
     }
 
+    @Override
+    public Interface getInterface() {
+        return null;
+    }
 
     public static BufferedImage makeColorTransparent(BufferedImage im, final Color color) {
         ImageFilter filter = new RGBImageFilter() {

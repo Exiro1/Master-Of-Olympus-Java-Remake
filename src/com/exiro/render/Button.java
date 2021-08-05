@@ -26,9 +26,9 @@ public class Button {
 
     public void setClicked(boolean clicked) {
         if (clicked) {
-            this.image = ImageLoader.getImage("Zeus_Interface", 7, id + 1);
+            this.image = ImageLoader.getImage("Zeus_Interface", image.getBitID(), id + 1);
         } else {
-            this.image = ImageLoader.getImage("Zeus_Interface", 7, id);
+            this.image = ImageLoader.getImage("Zeus_Interface", image.getBitID(), id);
         }
     }
 
@@ -44,8 +44,8 @@ public class Button {
         return type;
     }
 
-    public void Render(Graphics g) {
-        g.drawImage(image.getImg(), (x), (y), (w), (h), null);
+    public void Render(Graphics g, int offx, int offy) {
+        g.drawImage(image.getImg(), (x) + offx, (y) + offy, (w), (h), null);
     }
 
 }

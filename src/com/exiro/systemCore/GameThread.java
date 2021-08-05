@@ -74,7 +74,6 @@ public class GameThread implements Runnable {
             }
 
 
-            gm.menuBar.repaint();
             gm.GameView.repaint();
             gm.frame.getGi().repaint();
             gm.frame.getIt().repaint();

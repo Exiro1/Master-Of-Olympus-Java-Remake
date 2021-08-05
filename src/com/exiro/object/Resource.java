@@ -13,12 +13,12 @@ public enum Resource {
     MARBLE("Marbre", 1, true, false, 4, 0),
     GRAPE("Raisin", 1, true, false, 4, 0),
     OLIVE("Olive", 1, true, false, 4, 0),
-    WOOL("Laine", 1, true, false, 4, 10),
+    WOOL("Laine", 1, true, false, 4, 100),
     ARMEMENT("Armement", 1, true, false, 4, 1),
     OLIVE_OIL("Huile d'olive", 1, true, false, 4, 5),
     WINE("Vin", 1, true, false, 4, 5),
     SCULPTURE("Sculpture", 4, true, false, 1, 0),
-    CORN("Blé", 1, true, true, 4, 50),
+    CORN("Blé", 1, true, true, 4, 100),
     NULL("Vide", 1, true, true, 1, 0),
     ;
 

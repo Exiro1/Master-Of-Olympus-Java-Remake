@@ -4,6 +4,8 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -29,6 +31,13 @@ public abstract class Terrain extends ObjectClass {
         this.setXB(xpos);
         this.setYB(ypos);
         this.blocking = blocking;
+    }
+
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null);
+        bi.addText(getType().getName(), "Zeus.ttf", 16f, 100, 50);
+        return bi;
     }
 
     /**
