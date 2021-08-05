@@ -8,7 +8,7 @@ public class GameLayout implements LayoutManager {
     public static final String TOOLBAR = "TOOLBAR";
     public static final String GAMEVIEW = "GAMEVIEW";
     public static final String INTERFACE = "INTERFACE";
-    private final int TOOLBAR_HEIGHT = 30;
+    public static final int TOOLBAR_HEIGHT = 42;
     private final ArrayList<Component> toolbarComponents = new ArrayList<>();
     private final ArrayList<Component> GameComponents = new ArrayList<>();
     private final ArrayList<Component> InterfaceComponents = new ArrayList<>();
@@ -35,7 +35,7 @@ public class GameLayout implements LayoutManager {
         //  Toolbar  //
         int currentWidth = 0;
         for (Component c : toolbarComponents) {
-            int width = 800;
+            int width = 1600;
             c.setBounds(currentWidth, 0, width, TOOLBAR_HEIGHT);
             currentWidth = width + currentWidth;
         }

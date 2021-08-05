@@ -37,6 +37,7 @@ public abstract class DeliverySprite extends MovingSprite {
         deliveredBuildingsTemp = new ArrayList<>();
     }
 
+
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);

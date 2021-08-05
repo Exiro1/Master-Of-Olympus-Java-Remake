@@ -1,12 +1,10 @@
 package com.exiro.render;
 
 
+import com.exiro.buildingList.ResourceGenerator;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
-import com.exiro.object.Case;
-import com.exiro.object.CityMap;
-import com.exiro.object.ObjectClass;
-import com.exiro.object.ObjectType;
+import com.exiro.object.*;
 import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Point;
 
@@ -24,12 +22,18 @@ public class EntityRender {
     public static ObjectType Btype;
     static public ObjectClass defaultObject;
     static int startX, startY;
+    static Resource resource;
 
     public static void setStart(Point p) {
         startX = (int) p.x;
         startY = (int) p.y;
         toBuild.get(0).setXB(startX);
         toBuild.get(0).setYB(startY);
+    }
+
+    public static void setEntityRender(ObjectType type, Resource r) {
+        setEntityRender(type);
+        resource = r;
     }
 
     public static void setEntityRender(ObjectType type) {
@@ -39,6 +43,8 @@ public class EntityRender {
         heigth = defaultObject.getHeight();
         width = defaultObject.getWidth();
         size = defaultObject.getSize();
+
+        resource = Resource.NULL;
 
 
         BufferedImage target = new BufferedImage(img.getWidth(), img.getHeight(), Transparency.TRANSLUCENT);
@@ -61,35 +67,101 @@ public class EntityRender {
 
         ObjectClass obj = null;
         obj = getDefault(defaultObject.getBuildingType());
-        obj.setXB(0);
-        obj.setYB(0);
+        obj.setXB(-100);
+        obj.setYB(-100);
         toBuild.add(obj);
     }
 
+
     public static void addBuilding(Point p) {
         CityMap map = GameManager.currentCity.getMap();
-
-        Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI()));
-        if (path != null) {
+        if (Btype == ObjectType.ROAD) {
+            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI()));
+            if (path != null) {
+                toBuild.clear();
+                for (Case c : path.getPath()) {
+                    ObjectClass obj = null;
+                    obj = getDefault(defaultObject.getBuildingType());
+                    obj.setXB(c.getxPos());
+                    obj.setYB(c.getyPos());
+                    toBuild.add(obj);
+                }
+            }
+        } else {
             toBuild.clear();
-            for (Case c : path.getPath()) {
-                ObjectClass obj = null;
-                obj = getDefault(defaultObject.getBuildingType());
-                obj.setXB(c.getxPos());
-                obj.setYB(c.getyPos());
-                toBuild.add(obj);
+            if (startX < p.getX()) {
+                for (int i = startX; i < p.getX(); i += defaultObject.getSize()) {
+                    if (startY < p.getY()) {
+                        for (int j = startY; j < p.getY(); j += defaultObject.getSize()) {
+                            Case c = map.getCase(i, j);
+                            if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                toBuild.add(obj);
+                            }
+                        }
+                    } else {
+                        for (int j = (int) p.getY(); j < startY; j += defaultObject.getSize()) {
+                            Case c = map.getCase(i, j);
+                            if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                toBuild.add(obj);
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (int i = (int) p.getX(); i < startX; i += defaultObject.getSize()) {
+                    if (startY < p.getY()) {
+                        for (int j = startY; j < p.getY(); j += defaultObject.getSize()) {
+                            Case c = map.getCase(i, j);
+                            if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                toBuild.add(obj);
+                            }
+                        }
+                    } else {
+                        for (int j = (int) p.getY(); j < startY; j += defaultObject.getSize()) {
+                            Case c = map.getCase(i, j);
+                            if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                toBuild.add(obj);
+                            }
+                        }
+                    }
+
+                }
             }
         }
+
     }
 
 
     public static ObjectClass getDefault(ObjectType type) {
         return type.getDefault();
-    }
-
-    public void setStart(int x, int y) {
-        startX = x;
-        startY = y;
     }
 
     public static Point getStartPoint() {
@@ -98,12 +170,29 @@ public class EntityRender {
 
     public static void buildAll() {
 
+        if (toBuild.size() == 0) {
+            Case c = GameManager.currentCity.getMap().getCase(startX, startY);
+            ObjectClass obj = null;
+            obj = getDefault(defaultObject.getBuildingType());
+            if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                ((ResourceGenerator) obj).setResource(resource);
+            }
+            obj.setXB(c.getxPos());
+            obj.setYB(c.getyPos());
+            toBuild.add(obj);
+        }
+
         for (ObjectClass obj : toBuild) {
             obj.build(obj.getXB(), obj.getYB()); // construit tout
         }
         EntityRender.setEntityRender(defaultObject.getBuildingType());
 
 
+    }
+
+    public void setStart(int x, int y) {
+        startX = x;
+        startY = y;
     }
 
 

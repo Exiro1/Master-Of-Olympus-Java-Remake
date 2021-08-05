@@ -6,6 +6,8 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
@@ -61,6 +63,12 @@ public abstract class Building extends ObjectClass {
         this.type = type;
     }
 
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null);
+        bi.addText(type.getName(), "Zeus.ttf", 32f, 250 - 32 * type.getName().length() / 2 + 16, 50);
+        return bi;
+    }
 
     /**
      * Appelé a chaque image

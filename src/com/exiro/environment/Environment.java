@@ -5,6 +5,7 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -34,6 +35,11 @@ public class Environment extends ObjectClass {
 
     public boolean isFloor() {
         return isFloor;
+    }
+
+    @Override
+    public Interface getInterface() {
+        return null;
     }
 
     @Override

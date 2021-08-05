@@ -26,7 +26,6 @@ public class GameFrame extends JFrame {
 
 
         window = new GameWindow(gm);
-        menuBar = new MenuBar(gm);
         it = new InterfaceRender(gm);
         gi = new GameInfo(gm);
 
@@ -34,7 +33,6 @@ public class GameFrame extends JFrame {
 
         this.add(window, GameLayout.GAMEVIEW);
         this.add(it, GameLayout.INTERFACE);
-        this.add(menuBar, GameLayout.TOOLBAR);
         this.add(gi, GameLayout.TOOLBAR);
 
 

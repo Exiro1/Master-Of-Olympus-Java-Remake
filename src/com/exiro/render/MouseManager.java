@@ -48,6 +48,9 @@ public class MouseManager implements MouseListener {
      */
     @Override
     public void mousePressed(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3)
+            return;
+
         if (frame.getWindow().isClicked(e.getX(), e.getY())) {
             frame.getWindow().pressing = true;
         }
