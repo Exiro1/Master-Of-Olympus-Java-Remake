@@ -65,7 +65,7 @@ public abstract class Building extends ObjectClass {
 
     @Override
     public Interface getInterface() {
-        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null);
+        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null, this);
         bi.addText(type.getName(), "Zeus.ttf", 32f, 250 - 32 * type.getName().length() / 2 + 16, 50);
         return bi;
     }

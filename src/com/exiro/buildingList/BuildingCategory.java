@@ -4,7 +4,7 @@ public enum BuildingCategory {
     /**
      * Divise les batiment en categorie
      */
-    FOOD, MARKET, STOCKAGE, SCIENCE, SECURITY, ARMY;
+    FOOD, MARKET, STOCKAGE, SCIENCE, SECURITY, ARMY, INDUSTRY;
 
     BuildingCategory() {
     }

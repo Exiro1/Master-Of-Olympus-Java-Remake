@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class Dairy extends ResourceGenerator {
 
+    double growth = 0;
+    int speedFactor = 1;
 
     public Dairy(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
@@ -45,6 +47,14 @@ public class Dairy extends ResourceGenerator {
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
+        if (isActive() && getPop() > 0) {
+            float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
+            growth += factor * deltaTime * speedFactor;
+            if (growth > 60) {
+                resourceCreated(1);
+            }
+
+        }
     }
 
     @Override

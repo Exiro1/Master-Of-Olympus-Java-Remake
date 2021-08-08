@@ -35,7 +35,7 @@ public abstract class Terrain extends ObjectClass {
 
     @Override
     public Interface getInterface() {
-        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null);
+        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null, this);
         bi.addText(getType().getName(), "Zeus.ttf", 16f, 100, 50);
         return bi;
     }

@@ -150,6 +150,8 @@ public class InterfaceRender extends JPanel {
         for (Button ob : quickButtons) {
             ob.setClicked(false);
         }
+        gm.getFrame().getWindow().gameInterface = null;
+
         b.setClicked(true);
         switch (b.getType()) {
             case HOUSE:
@@ -255,10 +257,23 @@ public class InterfaceRender extends JPanel {
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
-            case INDUSTRY_1:
+            case INDUSTRY_1: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_FOUNDRY, new TextInterface("Fonderie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_MARBLE, new TextInterface("Carrière de marbre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_SAWMILL, new TextInterface("Scierie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_MINT, new TextInterface("Atelier de monnayage", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
-            case INDUSTRY_2:
+            }
+            case INDUSTRY_2: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_OLIVE, new TextInterface("Pressoir à olive", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_WINERY, new TextInterface("Pressoir à vin", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_SCULPTURE, new TextInterface("Atelier de sculpture", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
+            }
             case MARKET_GRANARY:
                 EntityRender.setEntityRender(ObjectType.GRANARY);
                 gm.getGameView().showEntity = true;
@@ -309,6 +324,8 @@ public class InterfaceRender extends JPanel {
             case TEMPLE_HEROE:
                 break;
             case TEMPLE_CONSTRUCT:
+                EntityRender.setEntityRender(ObjectType.GUILD);
+                gm.getGameView().showEntity = true;
                 break;
             case ARMY_FORT:
                 break;

@@ -9,6 +9,7 @@ import com.exiro.buildingList.delivery.agorashop.EmptyShop;
 import com.exiro.buildingList.delivery.agorashop.FoodShop;
 import com.exiro.buildingList.delivery.agorashop.OilShop;
 import com.exiro.buildingList.delivery.agorashop.WoolShop;
+import com.exiro.buildingList.industry.*;
 import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.BlockingRoad;
@@ -39,6 +40,16 @@ public enum ObjectType {
     FISHERY("Pecherie", true, "Zeus_General", 2, 4, 47, Fishery.class),
     SAFETY("Sécurité", true, "Zeus_General", 2, 10, 0, Safety.class),
     AGORA("Agora", true, "Zeus_General", 2, 3, 15, Agora.class),
+
+    //Indusrty
+    SAWMILL("Scierie", true, "Zeus_General", 2, 5, 0, Sawmill.class),
+    MARBLE_QUARRY("Carriere de marbre", true, "Zeus_General", 2, 5, 11, MarbleQuarry.class),
+    MINT("Atelier de monnayage", true, "Zeus_General", 2, 5, 20, Mint.class),
+    FOUNDRY("Fonderie", true, "Zeus_General", 2, 5, 35, Foundry.class),
+    GUILD("Guilde d'artisant", true, "Zeus_General", 2, 5, 48, Guild.class),
+    OLIVE_PRESS("Pressoir à olives", true, "Zeus_General", 2, 5, 59, OlivePress.class),
+    WINERY("Pressoir à vin", true, "Zeus_General", 2, 5, 72, Winery.class),
+    SCULPTURE_STUDIO("Atelier de sculpture", true, "Zeus_General", 2, 5, 85, SculptureStudio.class),
 
     //agora shop
     AGORAEMPTY("Emplacement libre", true, "Zeus_General", 2, 3, 15, EmptyShop.class),

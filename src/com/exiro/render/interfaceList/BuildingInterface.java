@@ -3,6 +3,7 @@ package com.exiro.render.interfaceList;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.object.ObjectClass;
 import com.exiro.render.Button;
 
 import java.awt.*;
@@ -19,11 +20,12 @@ public class BuildingInterface extends Interface {
     ArrayList<TileImage> right;
     ArrayList<TileImage> bot;
     ArrayList<TileImage> fill;
+    ObjectClass b;
 
     ArrayList<TextInterface> texts;
 
 
-    public BuildingInterface(int x, int y, int w, int h, ArrayList<Button> buttons) {
+    public BuildingInterface(int x, int y, int w, int h, ArrayList<Button> buttons, ObjectClass b) {
         super(x, y, w, h, buttons);
         top = new ArrayList<>();
         left = new ArrayList<>();
@@ -54,6 +56,7 @@ public class BuildingInterface extends Interface {
         for (int i = 0; i < 10; i++) {
             fill.add(ImageLoader.getImage("Zeus_Interface", 1, 152 + i));
         }
+        this.b = b;
     }
 
     public void addText(String text, String font, float size, int x, int y) {

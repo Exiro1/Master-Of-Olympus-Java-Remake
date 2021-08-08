@@ -275,6 +275,27 @@ public class GameWindow extends JPanel {
             case AGORA_OIL:
                 EntityRender.setEntityRender(ObjectType.AGORAOIL);
                 break;
+            case INDUSTRY_FOUNDRY:
+                EntityRender.setEntityRender(ObjectType.FOUNDRY);
+                break;
+            case INDUSTRY_MARBLE:
+                EntityRender.setEntityRender(ObjectType.MARBLE_QUARRY);
+                break;
+            case INDUSTRY_MINT:
+                EntityRender.setEntityRender(ObjectType.MINT);
+                break;
+            case INDUSTRY_OLIVE:
+                EntityRender.setEntityRender(ObjectType.OLIVE_PRESS);
+                break;
+            case INDUSTRY_SAWMILL:
+                EntityRender.setEntityRender(ObjectType.SAWMILL);
+                break;
+            case INDUSTRY_SCULPTURE:
+                EntityRender.setEntityRender(ObjectType.SCULPTURE_STUDIO);
+                break;
+            case INDUSTRY_WINERY:
+                EntityRender.setEntityRender(ObjectType.WINERY);
+                break;
         }
         showEntity = true;
         gameInterface.close();

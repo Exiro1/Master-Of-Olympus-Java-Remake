@@ -4,6 +4,8 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +18,20 @@ public abstract class StoreBuilding extends Building {
     HashMap<Resource, Integer> reserved;
     int emptyCaseReserved = 8;
 
+    protected HashMap<Resource, Integer> maxAllowed;
+
     public StoreBuilding(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
         stockage = new HashMap<>();
         reserved = new HashMap<>();
+        maxAllowed = new HashMap<>();
+        for (Resource r : Resource.values()) {
+            if (canStock(r) && r != Resource.NULL) {
+                maxAllowed.put(r, 32 / r.getWeight());
+                stockage.put(r, 0);
+                reserved.put(r, 0);
+            }
+        }
     }
 
     public abstract boolean canStock(Resource r);
@@ -37,7 +49,8 @@ public abstract class StoreBuilding extends Building {
         reserved.putIfAbsent(r, 0);
         int used = reserved.get(r);
         space = (emptyCaseReserved * 4) / r.getWeight() + (int) Math.ceil((used * r.getWeight()) / 4.0) * 4 - used * r.getWeight(); //surement simplifiable mais j ai un qi d'huitre aujourd'hui
-        return space;
+
+        return Math.min(space, maxAllowed.get(r) - used);
     }
 
     /**
@@ -48,6 +61,13 @@ public abstract class StoreBuilding extends Building {
      * @return amount of ressource that cannot be stored
      */
     public int reserve(Resource r, int amount) {
+        if (!canStock(r))
+            return 0;
+        if (getFreeSpace(r) < amount) {
+            int result = amount - getFreeSpace(r);
+            reserve(r, getFreeSpace(r));
+            return result;
+        }
         reserved.putIfAbsent(r, 0);
         int used = reserved.get(r);
         int spaceLeftInCase = (int) Math.ceil((used * r.getWeight()) / 4.0) * 4 - used * r.getWeight();
@@ -181,4 +201,23 @@ public abstract class StoreBuilding extends Building {
 
     public abstract void updateStock();
 
+
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        int i = 90;
+        for (Resource r : stockage.keySet()) {
+            bi.addText(r.getName() + " : " + stockage.get(r) + "/" + maxAllowed.get(r), "Zeus.ttf", 16f, 50, i);
+            i += 30;
+        }
+
+        return bi;
+    }
+
+
+    @Override
+    public void delete() {
+        super.delete();
+
+    }
 }
