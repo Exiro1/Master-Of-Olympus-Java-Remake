@@ -6,11 +6,9 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
-import com.exiro.render.IsometricRender;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
-import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -42,15 +40,9 @@ public class Granary extends StoreBuilding {
     }
 
 
-
-
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), getSize());
-        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
-
-        //render only buildingSprite because movingSprite are render separately
+       super.Render(g, camX, camY);
 
         int i = 0;
         for (BuildingSprite s : bsprites) {

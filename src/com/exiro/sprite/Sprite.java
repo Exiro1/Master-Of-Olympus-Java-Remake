@@ -73,7 +73,8 @@ public abstract class Sprite extends ObjectClass {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        Point p = IsometricRender.TwoDToIsoTexture(new Point(getX(), (getY())), getWidth(), getHeight(), 1);
+        int z = c.getMap().getCase(getXB(), getYB()).getZlvl();
+        Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(), 1);
         g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
     }
 

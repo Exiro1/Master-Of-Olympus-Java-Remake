@@ -56,7 +56,7 @@ public class Safety extends Building {
     public void process(double deltaTime) {
         super.process(deltaTime);
         if (isActive() && getPop() > 0) {
-            if (guard == null) {
+            if (getMovingSprites().size() == 0) {
                 guard = new SafetyGuard(city, null, getAccess().get(0));
                 addSprite(guard);
             } else if (guard.hasArrived && guard.getDestination() == this) {

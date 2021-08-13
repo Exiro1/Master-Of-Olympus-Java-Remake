@@ -112,13 +112,13 @@ public class Stock extends StoreBuilding {
         renderTile(cases.get(1), g, camX, camY);
         renderTile(cases.get(2), g, camX, camY);
 
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), 1);
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - cases.get(6).getZlvl(), (getyPos() - cases.get(6).getZlvl())), getWidth(), getHeight(), 1);
         g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
 
     }
 
     public void renderTile(Case c, Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p2 = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos(), (c.getyPos())), c.getWidth(), c.getHeight(), 1);
+        com.exiro.utils.Point p2 = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos() - c.getZlvl(), (c.getyPos() - c.getZlvl())), c.getWidth(), c.getHeight(), 1);
         g.drawImage(c.getImg(), camX + (int) p2.getX(), camY + (int) p2.getY(), null);
     }
 

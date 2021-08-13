@@ -31,12 +31,15 @@ public abstract class Terrain extends ObjectClass {
         this.setXB(xpos);
         this.setYB(ypos);
         this.blocking = blocking;
+
+        //this.c = city.getMap().getCase(getXB(),getYB());
     }
 
     @Override
     public Interface getInterface() {
         BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null, this);
         bi.addText(getType().getName(), "Zeus.ttf", 16f, 100, 50);
+        bi.addText(getMainCase().getZlvl() + " x:" + getMainCase().getxPos() + " y:" + getMainCase().getyPos(), "Zeus.ttf", 16f, 100, 100);
         return bi;
     }
 
@@ -47,10 +50,9 @@ public abstract class Terrain extends ObjectClass {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), getSize());
+        int lvl = getMainCase().getZlvl();
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-
-
     }
 
     public boolean isBlocking() {
@@ -95,6 +97,7 @@ public abstract class Terrain extends ObjectClass {
 
     public void setxPos(int xPos) {
         this.xPos = xPos;
+        this.setXB(xPos);
     }
 
     public int getyPos() {
@@ -103,5 +106,6 @@ public abstract class Terrain extends ObjectClass {
 
     public void setyPos(int yPos) {
         this.yPos = yPos;
+        this.setYB(yPos);
     }
 }

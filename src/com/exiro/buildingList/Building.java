@@ -148,18 +148,13 @@ public abstract class Building extends ObjectClass {
     }
 
     public void destroy() {
+        this.delete();
         if (this.built) {
-            setActive(false);
-            city.removeBuilding(this);
             for (Case c : getCases()) {
-                c.setOccuped(false);
-                c.setObject(null);
                 c.setObject(new Rubble());
                 c.getObject().build(c.getxPos(), c.getyPos());
                 c.setMainCase(true);
             }
-            city.removeObj(this);
-            deleted = true;
         }
     }
 
@@ -213,6 +208,9 @@ public abstract class Building extends ObjectClass {
                 c.setObject(null);
                 c.setMainCase(true);
             }
+            for (Sprite s : getSprites()) {
+                s.delete();
+            }
             city.removeObj(this);
             deleted = true;
         }
@@ -220,14 +218,18 @@ public abstract class Building extends ObjectClass {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), getSize());
+        int lvl = getMainCase().getZlvl();
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
         g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
 
         //render only buildingSprite because movingSprite are render separately
         for (BuildingSprite s : bsprites) {
-            if (isActive() && getPop() > 0)
+            if (isActive() && getPop() > 0) {
                 s.Render(g, camX, camY);
+            } else if (msprites.size() > 0) {
+                clearMovingSprite();
+            }
         }
 
     }
@@ -297,10 +299,14 @@ public abstract class Building extends ObjectClass {
     }
 
     public void clearBuildingSprite() {
-        ArrayList<Sprite> toRemove = new ArrayList<>();
-        for (Sprite s : bsprites) {
-            toRemove.add(s);
+        ArrayList<Sprite> toRemove = new ArrayList<>(bsprites);
+        for (Sprite s : toRemove) {
+            removeSprites(s);
         }
+    }
+
+    public void clearMovingSprite() {
+        ArrayList<Sprite> toRemove = new ArrayList<>(msprites);
         for (Sprite s : toRemove) {
             removeSprites(s);
         }
