@@ -5,7 +5,6 @@ import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
 import com.exiro.systemCore.BuildingManager;
 import com.exiro.systemCore.PathManager;
-import com.exiro.terrainList.Empty;
 import com.exiro.terrainList.Terrain;
 
 import java.util.ArrayList;
@@ -73,8 +72,7 @@ public class City {
         this.buildingManager = new BuildingManager(this);
         Road start = new Road(this);
         this.constructions = new ArrayList<>();
-        Empty e = new Empty(1, this);
-        this.map = new CityMap(60, 60, new Case(0, 0, start, e), this);
+        this.map = new CityMap(60, 60, 0, 0, this);
         this.map.populateMap();
         this.pathManager = new PathManager(owner, this.map);
         start.build(0, 0);

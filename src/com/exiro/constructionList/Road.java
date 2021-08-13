@@ -7,6 +7,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.systemCore.GameManager;
+import com.exiro.terrainList.Elevation;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,6 +46,9 @@ public class Road extends Construction {
     public boolean build(int xPos, int yPos) {
         boolean isBuilt = super.build(xPos, yPos);
         if (isBuilt) {//change en route bloqué
+            if (getMainCase().getTerrain() instanceof Elevation) {
+                ((Elevation) getMainCase().getTerrain()).setHasRoad(true);
+            }
             city.getPathManager().addRoad(this);
             if (getAccess().size() == 0) {
                 city.getInActives().add(this);
@@ -57,6 +61,58 @@ public class Road extends Construction {
         }
         return true;
     }
+
+    public void updateRoadImg() {
+        // d : WEST SOUTH EAST NORTH
+        short d = 0b0000;
+        int i = 0;
+        for (Case c : getMainCase().getNeighbour()) {
+
+            if (c != null && c.getObject() != null && (c.getObject() instanceof Road || c.getObject() instanceof BlockingRoad)) {
+                d |= 1 << i;
+            }
+            i++;
+        }
+        int index = 0;
+        if (d == 0b0000) {
+            index = 246;
+        } else if (d == 0b0001) {
+            index = 242;
+        } else if (d == 0b0010) {
+            index = 243;
+        } else if (d == 0b0011) {
+            index = 238;
+        } else if (d == 0b0100) {
+            index = 244;
+        } else if (d == 0b0101) {
+            index = 234;
+        } else if (d == 0b0110) {
+            index = 239;
+        } else if (d == 0b0111) {
+            index = 247;
+        } else if (d == 0b1000) {
+            index = 245;
+        } else if (d == 0b1001) {
+            index = 241;
+        } else if (d == 0b1010) {
+            index = 235;
+        } else if (d == 0b1011) {
+            index = 250;
+        } else if (d == 0b1100) {
+            index = 240;
+        } else if (d == 0b1101) {
+            index = 249;
+        } else if (d == 0b1110) {
+            index = 248;
+        } else if (d == 0b1111) {
+            index = 251;
+        }
+        setPath("Zeus_Terrain");
+        setBitmapID(3);
+        setLocalID(index);
+        this.updateImg();
+    }
+
 
     @Override
     public void delete() {

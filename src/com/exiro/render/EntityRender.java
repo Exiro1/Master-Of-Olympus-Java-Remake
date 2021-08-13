@@ -76,7 +76,7 @@ public class EntityRender {
     public static void addBuilding(Point p) {
         CityMap map = GameManager.currentCity.getMap();
         if (Btype == ObjectType.ROAD) {
-            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI()));
+            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI() | FreeState.BUILDABLE_ROAD.getI()));
             if (path != null) {
                 toBuild.clear();
                 for (Case c : path.getPath()) {
@@ -166,6 +166,25 @@ public class EntityRender {
 
     public static Point getStartPoint() {
         return new Point(x, y);
+    }
+
+
+    public static void EraseAll(Case currCase) {
+
+
+        Case cs = GameManager.currentCity.getMap().getCase(startX, startY);
+        if (cs.getObject() != null) {
+            cs.getObject().delete();
+        }
+        for (int i = (int) Math.min(startX, currCase.getxPos()); i < Math.max(startX, currCase.getxPos()); i += defaultObject.getSize()) {
+            for (int j = Math.min(startY, currCase.getyPos()); j < Math.max(startY, currCase.getyPos()); j += defaultObject.getSize()) {
+                Case c = GameManager.currentCity.getMap().getCase(i, j);
+                if (c.getObject() != null) {
+                    c.getObject().delete();
+                }
+            }
+        }
+        EntityRender.setEntityRender(defaultObject.getBuildingType());
     }
 
     public static void buildAll() {

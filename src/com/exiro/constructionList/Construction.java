@@ -5,6 +5,7 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
@@ -57,7 +58,9 @@ public abstract class Construction extends ObjectClass {
 
     @Override
     public Interface getInterface() {
-        return null;
+        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null, this);
+        bi.addText(getType().getName(), "Zeus.ttf", 32f, 250 - 32 * getType().getName().length() / 2 + 16, 50);
+        return bi;
     }
 
     public abstract void process(double deltatime);
@@ -99,7 +102,8 @@ public abstract class Construction extends ObjectClass {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getYpos())), getWidth(), getHeight(), getSize());
+        int lvl = getMainCase().getZlvl();
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getYpos() - lvl), getWidth(), getHeight(), getSize());
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
     }
 

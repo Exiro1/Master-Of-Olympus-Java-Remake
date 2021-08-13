@@ -12,10 +12,7 @@ import com.exiro.buildingList.delivery.agorashop.WoolShop;
 import com.exiro.buildingList.industry.*;
 import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
-import com.exiro.constructionList.BlockingRoad;
-import com.exiro.constructionList.OliveTree;
-import com.exiro.constructionList.Road;
-import com.exiro.constructionList.Rubble;
+import com.exiro.constructionList.*;
 import com.exiro.environment.Tree;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.terrainList.*;
@@ -24,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 
 public enum ObjectType {
-
 
 
     //Buildings
@@ -75,8 +71,11 @@ public enum ObjectType {
     TREE("Arbre", true, "Zeus_Terrain", 1, 4, 0, Tree.class),
 
     //Other
-    OLIVETREE("Olivier", true, "Zeus_General", 1, 4, 0, OliveTree.class);
+    OLIVETREE("Olivier", true, "Zeus_General", 1, 4, 0, OliveTree.class),
 
+
+    //SPECIAL
+    ERASE("Destruction", true, "Zeus_Terrain", 1, 2, 36, Destruction.class);
 
     private final Class c;
     private final String name;
