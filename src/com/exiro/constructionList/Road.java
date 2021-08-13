@@ -68,7 +68,7 @@ public class Road extends Construction {
         int i = 0;
         for (Case c : getMainCase().getNeighbour()) {
 
-            if (c != null && c.getObject() != null && c.getObject() instanceof Road) {
+            if (c != null && c.getObject() != null && (c.getObject() instanceof Road || c.getObject() instanceof BlockingRoad)) {
                 d |= 1 << i;
             }
             i++;
