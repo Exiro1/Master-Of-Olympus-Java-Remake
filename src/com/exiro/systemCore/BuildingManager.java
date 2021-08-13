@@ -30,6 +30,8 @@ public class BuildingManager {
         priorityMap.put(BuildingCategory.SCIENCE, Priority.MEDIUM);
         priorityMap.put(BuildingCategory.SECURITY, Priority.MEDIUM);
         priorityMap.put(BuildingCategory.STOCKAGE, Priority.MEDIUM);
+        priorityMap.put(BuildingCategory.INDUSTRY, Priority.MEDIUM);
+        priorityMap.put(BuildingCategory.CULTURE, Priority.MEDIUM);
     }
 
     //peut etre appeler la methode que quand on change qlq chose au lieu de le faire a chaque seconde?

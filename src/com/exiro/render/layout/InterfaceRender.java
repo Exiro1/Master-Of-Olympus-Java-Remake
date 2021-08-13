@@ -316,12 +316,25 @@ public class InterfaceRender extends JPanel {
                 break;
             case PALACE_BRIDGE:
                 break;
-            case CULTURE_PHILOSOPHIA:
+            case CULTURE_PHILOSOPHIA: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_PODIUM, new TextInterface("Podium", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_COLLEGE, new TextInterface("Collège", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
+            }
             case CULTURE_GYMNASIUM:
+                EntityRender.setEntityRender(ObjectType.GYMNASIUM);
+                gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
-            case CULTURE_DRAMA:
+            case CULTURE_DRAMA: {
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_THEATER, new TextInterface("Théatre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_SCHOOLTHEATER, new TextInterface("Ecole de théatre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
+            }
             case CULTURE_STADIUM:
                 break;
             case TEMPLE_TEMPLE:

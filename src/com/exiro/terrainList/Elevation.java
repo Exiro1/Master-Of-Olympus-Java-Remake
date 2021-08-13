@@ -33,6 +33,8 @@ public class Elevation extends Terrain {
         this.direction = dir;
         this.over = over;
         this.size = size;
+        if (size > 1)
+            roadPossible = false;
         this.roadPossible = roadPossible;
         this.setConstructible(roadPossible);
         this.setBlocking(!roadPossible);

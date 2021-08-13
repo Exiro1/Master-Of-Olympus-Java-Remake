@@ -2,6 +2,7 @@ package com.exiro.object;
 
 import com.exiro.buildingList.House;
 import com.exiro.buildingList.agriculture.*;
+import com.exiro.buildingList.culture.*;
 import com.exiro.buildingList.delivery.Agora;
 import com.exiro.buildingList.delivery.Safety;
 import com.exiro.buildingList.delivery.WaterWell;
@@ -36,6 +37,12 @@ public enum ObjectType {
     FISHERY("Pecherie", true, "Zeus_General", 2, 4, 47, Fishery.class),
     SAFETY("Sécurité", true, "Zeus_General", 2, 10, 0, Safety.class),
     AGORA("Agora", true, "Zeus_General", 2, 3, 15, Agora.class),
+    COLLEGE("Collège", true, "Zeus_General", 3, 2, 0, College.class),
+    GYMNASIUM("Gymnase", true, "Zeus_General", 3, 2, 25, Gymnasium.class),
+    THEATERSCHOOL("Ecole de théatre", true, "Zeus_General", 3, 2, 58, TheaterSchool.class),
+    PODIUM("Podium", true, "Zeus_General", 2, 2, 83, Podium.class),
+    THEATER("Théatre", true, "Zeus_General", 5, 2, 108, Theater.class),
+
 
     //Indusrty
     SAWMILL("Scierie", true, "Zeus_General", 2, 5, 0, Sawmill.class),
