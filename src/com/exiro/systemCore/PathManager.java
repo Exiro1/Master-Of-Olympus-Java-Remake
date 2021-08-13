@@ -39,12 +39,18 @@ public class PathManager {
     public void addRoad(Road r) {
         synchronized (roads) {
             roads.add(r);
+            for (Road road : roads) {
+                road.updateRoadImg();
+            }
         }
     }
 
     public void deleteRoad(Road r) {
         synchronized (roads) {
             roads.remove(r);
+            for (Road road : roads) {
+                road.updateRoadImg();
+            }
         }
     }
 
