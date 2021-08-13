@@ -16,6 +16,7 @@ public class Case {
     private int width, height;
     private int size;
     private Terrain terrain;
+    private int zlvl;
 
     //NORD EST SUD OUEST
     Case[] neighbour;
@@ -25,6 +26,15 @@ public class Case {
         this.yPos = y;
         this.object = obj;
         this.terrain = terrain;
+        zlvl = 0;
+    }
+
+    public Case(int x, int y, int zlvl, ObjectClass obj, Terrain terrain) {
+        this.xPos = x;
+        this.yPos = y;
+        this.object = obj;
+        this.terrain = terrain;
+        this.zlvl = zlvl;
     }
 
     public void initNeighbour(CityMap map) {
@@ -161,6 +171,13 @@ public class Case {
         this.yPos = yPos;
     }
 
+    public int getZlvl() {
+        return zlvl;
+    }
+
+    public void setZlvl(int zlvl) {
+        this.zlvl = zlvl;
+    }
 
     //TODO ajouter un parametre qui definiera la texture de fond (le vrai sol)
 

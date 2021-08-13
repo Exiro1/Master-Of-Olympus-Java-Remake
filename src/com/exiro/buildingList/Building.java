@@ -220,7 +220,8 @@ public abstract class Building extends ObjectClass {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), getSize());
+        int lvl = getMainCase().getZlvl();
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
         g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
 

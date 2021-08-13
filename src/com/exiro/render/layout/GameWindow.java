@@ -2,6 +2,7 @@ package com.exiro.render.layout;
 
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
+import com.exiro.constructionList.Road;
 import com.exiro.environment.Environment;
 import com.exiro.object.*;
 import com.exiro.render.ButtonType;
@@ -9,9 +10,11 @@ import com.exiro.render.EntityRender;
 import com.exiro.render.GameFrame;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.Interface;
+import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Elevation;
+import com.exiro.terrainList.Terrain;
 import com.exiro.utils.Point;
 
 import javax.swing.*;
@@ -79,11 +82,11 @@ public class GameWindow extends JPanel {
         synchronized (p.getPlayerCities().get(0).getMap().getCases()) {
             for (Case c : p.getPlayerCities().get(0).getMap().getCases()) {
                 if (c.getObject() == null) {
-                    if (c.getTerrain().isFloor()) {
-                        c.getTerrain().Render(g, CameraPosx, CameraPosy);
-                    } else {
-                        terrainObj.add(c.getTerrain());
-                    }
+                    //if (c.getTerrain().isFloor()) {
+                    //     c.getTerrain().Render(g, CameraPosx, CameraPosy);
+                    // } else {
+                    terrainObj.add(c.getTerrain());
+                    // }
                 } else if (c.getObject() instanceof Environment && c.isMainCase()) {
                     if (((Environment) c.getObject()).isFloor()) {
                         c.getTerrain().Render(g, CameraPosx, CameraPosy);
@@ -102,7 +105,6 @@ public class GameWindow extends JPanel {
         }
 
 
-
         synchronized (p.getPlayerCities().get(0).getBuildings()) {
 
             allobj = new ArrayList<>(p.getPlayerCities().get(0).getBuildings());
@@ -111,7 +113,7 @@ public class GameWindow extends JPanel {
 
             synchronized (p.getPlayerCities().get(0).getConstructions()) {
                 for (Construction c : p.getPlayerCities().get(0).getConstructions()) {
-                    if (!c.isFloor())
+                    //if (!c.isFloor())
                         allobj.add(c);
                 }
 
@@ -126,13 +128,15 @@ public class GameWindow extends JPanel {
 
         }
         oc = allobj.toArray(new ObjectClass[0]);
+        sortRender(oc);
 
-        Arrays.sort(oc, (o1, o2) -> Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB()));
         for (ObjectClass obj : oc) {
             if (obj instanceof Building || obj instanceof Environment || obj instanceof Construction) {
-                if (obj.getMainCase().getTerrain() instanceof Elevation)
+                if (obj.getMainCase().getTerrain() instanceof Elevation) {
                     obj.getMainCase().getTerrain().Render(g, CameraPosx, CameraPosy);
-
+                    if (obj instanceof Road)
+                        continue;
+                }
                 obj.Render(g, CameraPosx, CameraPosy);
             } else {
                 obj.Render(g, CameraPosx, CameraPosy);
@@ -175,7 +179,10 @@ public class GameWindow extends JPanel {
             buildManager((int) lastP.x, (int) lastP.y);
             if (EntityRender.img != null) {
                 for (ObjectClass obj : EntityRender.toBuild) {
-                    Point p = IsometricRender.TwoDToIsoTexture(new Point(obj.getXB(), obj.getYB()), obj.getWidth(), obj.getHeight(), obj.getSize());
+                    int lvl = 0;
+                    if (gm.getCurrentCity().getMap().getCase(obj.getXB(), obj.getYB()) != null)
+                        lvl = gm.getCurrentCity().getMap().getCase(obj.getXB(), obj.getYB()).getZlvl();
+                    Point p = IsometricRender.TwoDToIsoTexture(new Point(obj.getXB() - lvl, obj.getYB() - lvl), obj.getWidth(), obj.getHeight(), obj.getSize());
                     g.drawImage(EntityRender.img, CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
                 }
             }
@@ -223,6 +230,17 @@ public class GameWindow extends JPanel {
                 showEntity = false;
             }
         }
+    }
+
+    public void sortRender(ObjectClass[] a) {
+        Arrays.sort(a,
+                (o1, o2) -> {
+                    if (o1 instanceof MovingSprite && ((o2 instanceof Construction && ((Construction) o2).isFloor()) || (o2 instanceof Terrain && ((Terrain) o2).isFloor()))) {
+                        if (Math.pow(o1.getXB() - o2.getXB(), 2) + Math.pow(o1.getYB() - o2.getYB(), 2) <= 2)
+                            return 1;
+                    }
+                    return Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB());
+                });
     }
 
     public void buttonManager(ButtonType type) {

@@ -26,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 public enum ObjectType {
 
 
-
     //Buildings
     HOUSE("Maison", true, "Zeus_General", 2, 8, 14, House.class),
     WATERWELL("Puit", true, "Zeus_General", 2, 9, 0, WaterWell.class),

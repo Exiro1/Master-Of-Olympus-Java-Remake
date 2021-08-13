@@ -15,6 +15,8 @@ public class Elevation extends Terrain {
     Direction direction;
     ObjectClass over;
     int size;
+    boolean roadPossible = false;
+    boolean hasRoad = false;
 
     public Elevation(int xpos, int ypos, Direction dir, int id, City c, ObjectClass over, int size) {
         super(true, ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true);
@@ -25,8 +27,31 @@ public class Elevation extends Terrain {
         setRockImg(id, size);
     }
 
-    public void setRockImg(int number, int size) {
+    public Elevation(int xpos, int ypos, Direction dir, int id, City c, ObjectClass over, int size, boolean roadPossible) {
+        super(true, ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true);
+        this.id = id;
+        this.direction = dir;
+        this.over = over;
+        this.size = size;
+        this.roadPossible = roadPossible;
+        this.setConstructible(roadPossible);
+        this.setBlocking(!roadPossible);
+        setRockImg(id, size);
 
+    }
+
+    public void setHasRoad(boolean hasRoad) {
+        this.hasRoad = hasRoad;
+        setRockImg(this.id, this.size);
+    }
+
+    public int getSizeZ() {
+        return size;
+    }
+
+    public void setRockImg(int number, int size) {
+        if (roadPossible && size == 1)
+            this.setBitmapID(5);
         int i = 0;
         if (size == 1) {
             switch (direction) {
@@ -34,16 +59,20 @@ public class Elevation extends Terrain {
                     i = 28;
                     break;
                 case SUD_EST:
-                    city.getMap().getCase(this.xPos - 1, this.yPos).getTerrain().setConstructible(false);
+                    if (roadPossible) {
+                        i = 33;
+                        break;
+                    }
                     i = 14;
                     break;
                 case EST:
-                    //city.getMap().getCase(this.xPos,this.yPos-1).getTerrain().setConstructible(false);
                     i = 27;
                     break;
                 case NORD_EST:
-                    city.getMap().getCase(this.xPos - 1, this.yPos).getTerrain().setConstructible(true);
-                    city.getMap().getCase(this.xPos - 1, this.yPos).getTerrain().setBlocking(false);
+                    if (roadPossible) {
+                        i = 32;
+                        break;
+                    }
                     i = 25;
                     break;
                 case NORD:
@@ -51,15 +80,20 @@ public class Elevation extends Terrain {
                     i = 26;
                     break;
                 case NORD_OUEST:
-                    city.getMap().getCase(this.xPos, this.yPos - 1).getTerrain().setConstructible(true);
-                    city.getMap().getCase(this.xPos, this.yPos - 1).getTerrain().setBlocking(false);
+                    if (roadPossible) {
+                        i = 35;
+                        break;
+                    }
                     i = 24;
                     break;
                 case OUEST:
                     i = 29;
                     break;
                 case SUD_OUEST:
-                    city.getMap().getCase(this.xPos, this.yPos - 1).getTerrain().setConstructible(false);
+                    if (roadPossible) {
+                        i = 34;
+                        break;
+                    }
                     i = 17;
                     break;
             }
@@ -75,15 +109,12 @@ public class Elevation extends Terrain {
                     i = 11;
                     break;
                 case NORD_EST:
-                    //setConstructible(true);
                     i = 35;
                     break;
                 case NORD:
-                    setConstructible(true);
                     i = 10;
                     break;
                 case NORD_OUEST:
-                    //setConstructible(true);
                     i = 34;
                     break;
                 case OUEST:
@@ -94,7 +125,7 @@ public class Elevation extends Terrain {
                     break;
             }
         }
-        this.setLocalID(number + i);
+        this.setLocalID(number + i + (hasRoad ? 4 : 0));
         updateImg();
     }
 
