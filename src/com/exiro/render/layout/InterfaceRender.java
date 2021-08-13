@@ -222,6 +222,7 @@ public class InterfaceRender extends JPanel {
             case HOUSE_LITTLE:
                 EntityRender.setEntityRender(ObjectType.HOUSE);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case HOUSE_BIG:
                 break;
@@ -277,10 +278,12 @@ public class InterfaceRender extends JPanel {
             case MARKET_GRANARY:
                 EntityRender.setEntityRender(ObjectType.GRANARY);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case MARKET_STOCK:
                 EntityRender.setEntityRender(ObjectType.STOCK);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case MARKET_AGORA: {
                 ArrayList<Button> buttons = new ArrayList<>();
@@ -296,12 +299,14 @@ public class InterfaceRender extends JPanel {
             case HEALTH_WATER:
                 EntityRender.setEntityRender(ObjectType.WATERWELL);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case HEALTH_HOSPITAL:
                 break;
             case HEALTH_SAFETY:
                 EntityRender.setEntityRender(ObjectType.SAFETY);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case HEALTH_GUARD:
                 break;
@@ -326,6 +331,7 @@ public class InterfaceRender extends JPanel {
             case TEMPLE_CONSTRUCT:
                 EntityRender.setEntityRender(ObjectType.GUILD);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case ARMY_FORT:
                 break;
@@ -340,12 +346,18 @@ public class InterfaceRender extends JPanel {
             case QUICK_ROUTE:
                 EntityRender.setEntityRender(ObjectType.ROAD);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case QUICK_STOP:
                 EntityRender.setEntityRender(ObjectType.BLOCKABLE_ROAD);
                 gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case QUICK_ERASE:
+                EntityRender.setEntityRender(ObjectType.ERASE);
+                gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = true;
+
                 break;
             case QUICK_CANCEL:
                 break;

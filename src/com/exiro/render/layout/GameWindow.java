@@ -232,12 +232,17 @@ public class GameWindow extends JPanel {
         }
     }
 
+    public boolean deleting = false;
+
     public void sortRender(ObjectClass[] a) {
         Arrays.sort(a,
                 (o1, o2) -> {
                     if (o1 instanceof MovingSprite && ((o2 instanceof Construction && ((Construction) o2).isFloor()) || (o2 instanceof Terrain && ((Terrain) o2).isFloor()))) {
                         if (Math.pow(o1.getXB() - o2.getXB(), 2) + Math.pow(o1.getYB() - o2.getYB(), 2) <= 2)
                             return 1;
+                    } else if (o2 instanceof MovingSprite && ((o1 instanceof Construction && ((Construction) o1).isFloor()) || (o1 instanceof Terrain && ((Terrain) o1).isFloor()))) {
+                        if (Math.pow(o1.getXB() - o2.getXB(), 2) + Math.pow(o1.getYB() - o2.getYB(), 2) <= 2)
+                            return -1;
                     }
                     return Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB());
                 });
@@ -316,6 +321,7 @@ public class GameWindow extends JPanel {
                 break;
         }
         showEntity = true;
+        gm.getGameView().deleting = false;
         gameInterface.close();
         gameInterface = null;
     }
@@ -334,7 +340,12 @@ public class GameWindow extends JPanel {
                         EntityRender.addBuilding(new Point(lastCaseBuild.getxPos(), lastCaseBuild.getyPos()));
                     }
                 } else if (build) {
-                    EntityRender.buildAll();
+                    if (deleting) {
+                        Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
+                        EntityRender.EraseAll(currCase);
+                    }
+                    if (!deleting)
+                        EntityRender.buildAll();
                     startCaseBuild = null;
                     build = false;
                 } else {

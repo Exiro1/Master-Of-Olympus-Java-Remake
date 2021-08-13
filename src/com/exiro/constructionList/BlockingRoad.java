@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class BlockingRoad extends Construction {
 
 
+    Road r;
+
     public BlockingRoad(City city) {
         super(true, ObjectType.BLOCKABLE_ROAD, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, city, false, true);
     }
@@ -32,6 +34,53 @@ public class BlockingRoad extends Construction {
             }
         }
         return place;
+    }
+
+    @Override
+    public boolean build(int xPos, int yPos) {
+        ArrayList<Case> place;
+        place = getPlace(xPos, yPos, yLenght, xLenght, city);
+
+        if (place.size() == xLenght * yLenght) {
+            this.xPos = xPos;
+            this.yPos = yPos;
+            setXB(xPos);
+            setYB(yPos);
+            r = (Road) place.get(0).getObject();
+            city.getConstructions().remove(r);
+            city.removeObj(r);
+            this.built = true;
+            city.getOwner().pay(this.cost);
+            city.addConstruction(this);
+            city.addObj(this);
+            for (Case c : place) {
+                c.setOccuped(true);
+                c.setObject(this);
+                c.setMainCase(false);
+            }
+            this.setMainCase(city.getMap().getCase(xPos, yPos));
+            city.getMap().getCase(xPos, yPos).setMainCase(true);
+            city.getMap().getCase(xPos, yPos).setImg(getImg());
+            city.getMap().getCase(xPos, yPos).setHeight(getHeight());
+            city.getMap().getCase(xPos, yPos).setWidth(getWidth());
+            city.getMap().getCase(xPos, yPos).setSize(getSize());
+            cases = place;
+
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
+
+    @Override
+    public void delete() {
+        super.delete();
+        r.getMainCase().setObject(r);
+        r.getMainCase().setOccuped(true);
+        city.getConstructions().add(r);
+        city.addObj(r);
     }
 
     @Override

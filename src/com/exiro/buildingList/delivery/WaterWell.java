@@ -58,7 +58,7 @@ public class WaterWell extends Building {
     public void process(double deltaTime) {
         super.process(deltaTime);
         if (isActive() && getPop() > 0) {
-            if (waterDelivery == null) {
+            if (getMovingSprites().size() == 0) {
                 waterDelivery = new WaterDelivery(city, null, getAccess().get(0));
                 addSprite(waterDelivery);
             } else if (waterDelivery.hasArrived && waterDelivery.getDestination() == this) {
