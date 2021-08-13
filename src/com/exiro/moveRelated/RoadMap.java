@@ -2,6 +2,7 @@ package com.exiro.moveRelated;
 
 import com.exiro.object.CityMap;
 import com.exiro.object.ObjectType;
+import com.exiro.terrainList.Elevation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -74,6 +75,8 @@ public class RoadMap {
             if (cityMap.getCase(xStart, yStart).getObject() == null) {
                 if (cityMap.getCase(xStart, yStart).getTerrain().isConstructible()) {
                     access = FreeState.BUILDABLE;
+                    if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Elevation)
+                        access = FreeState.BUILDABLE_ROAD;
                 } else {
                     access = FreeState.NON_BLOCKING;
                 }
@@ -89,23 +92,7 @@ public class RoadMap {
     }
 
     public FreeState getFreeState(int xStart, int yStart) {
-        FreeState access = FreeState.BLOCKED;
-        if (!cityMap.getCase(xStart, yStart).getTerrain().isBlocking()) {
-            if (cityMap.getCase(xStart, yStart).getObject() == null) {
-                if (cityMap.getCase(xStart, yStart).getTerrain().isConstructible()) {
-                    access = FreeState.BUILDABLE;
-                } else {
-                    access = FreeState.NON_BLOCKING;
-                }
-            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD && cityMap.getCase(xStart, yStart).getObject().isActive()) {
-                access = FreeState.ONLY_ACTIVE_ROAD;
-            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.BLOCKABLE_ROAD || (!cityMap.getCase(xStart, yStart).getObject().isActive() && cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD)) {
-                access = FreeState.BLOCKING_ROAD;
-            } else {
-                access = FreeState.BLOCKED;
-            }
-        }
-        return access;
+        return getFreeState(xStart, yStart, cityMap);
     }
 
 

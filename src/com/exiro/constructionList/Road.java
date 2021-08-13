@@ -7,6 +7,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.systemCore.GameManager;
+import com.exiro.terrainList.Elevation;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,6 +46,9 @@ public class Road extends Construction {
     public boolean build(int xPos, int yPos) {
         boolean isBuilt = super.build(xPos, yPos);
         if (isBuilt) {//change en route bloqué
+            if (getMainCase().getTerrain() instanceof Elevation) {
+                ((Elevation) getMainCase().getTerrain()).setHasRoad(true);
+            }
             city.getPathManager().addRoad(this);
             if (getAccess().size() == 0) {
                 city.getInActives().add(this);

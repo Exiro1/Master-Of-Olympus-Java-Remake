@@ -25,18 +25,20 @@ public class CityMap {
         this.city = city;
     }
 
-    public CityMap(int height, int width, Case startCase, City city) {
+    public CityMap(int height, int width, int xs, int ys, City city) {
         this.height = height;
         this.width = width;
         this.cases = new ArrayList<>();
         this.city = city;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
+
                 Empty e = new Empty(1, city);
                 e.setxPos(j);
                 e.setyPos(i);
                 cases.add(new Case(j, i, null, e));
                 cases.get(cases.size() - 1).setMainCase(true);
+                e.setMainCase(cases.get(cases.size() - 1));
                 //TODO to remove
                 /*
                 cases.get(cases.size() - 1).setImg(e.getImg());
@@ -56,7 +58,7 @@ public class CityMap {
         //getCase(startCase.getxPos(),startCase.getyPos()).setObject(new Road(city));
         // getCase(startCase.getxPos(),startCase.getyPos()).getObject().setActive(true);
 
-        this.startCase = getCase(startCase.getxPos(), startCase.getyPos());
+        this.startCase = getCase(xs, ys);
     }
 
     public void populateMap() {
@@ -64,6 +66,9 @@ public class CityMap {
         createForest(30, 30, 4, 6);
         createElevation(5, 30, 5, 5, 1);
         createElevation(13, 30, 5, 5, 2);
+
+        createElevation(35, 10, 10, 10, 2);
+        createElevation(37, 12, 4, 4, 1);
     }
 
 
@@ -96,6 +101,7 @@ public class CityMap {
                     else
                         w = new Elevation(i, j, Direction.NORD_OUEST, nbr, city, null, size);
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else if (i == xs + xlen - 1) {
                     Elevation w;
 
@@ -104,8 +110,9 @@ public class CityMap {
                     else if (j == ys + ylen - 1)
                         w = new Elevation(i, j, Direction.SUD, nbr, city, null, size);
                     else
-                        w = new Elevation(i, j, Direction.SUD_EST, nbr, city, null, size);
+                        w = new Elevation(i, j, Direction.SUD_EST, nbr, city, null, size, r.nextBoolean());
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else if (j == ys) {
                     Elevation w;
                     if (i == xs + xlen - 1)
@@ -113,19 +120,24 @@ public class CityMap {
                     else
                         w = new Elevation(i, j, Direction.NORD_EST, nbr, city, null, size);
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else if (j == ys + ylen - 1) {
-                    Elevation w = new Elevation(i, j, Direction.SUD_OUEST, nbr, city, null, size);
+                    Elevation w = new Elevation(i, j, Direction.SUD_OUEST, nbr, city, null, size, r.nextBoolean());
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else {
                     Empty e = new Empty(1, city);
                     e.setxPos(i);
                     e.setyPos(j);
                     c.setTerrain(e);
+                    e.setMainCase(c);
+                    c.setZlvl(c.getZlvl() + size);
                 }
 
 
             }
         }
+
     }
 
 
@@ -147,6 +159,7 @@ public class CityMap {
                     else
                         w = new WaterCoast(i, j, false, Direction.SUD_EST, nbr, city);
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else if (i == xs + xlen - 1) {
                     WaterCoast w;
 
@@ -157,6 +170,7 @@ public class CityMap {
                     else
                         w = new WaterCoast(i, j, false, Direction.NORD_OUEST, nbr, city);
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else if (j == ys) {
                     WaterCoast w;
                     if (i == xs + xlen - 1)
@@ -164,12 +178,15 @@ public class CityMap {
                     else
                         w = new WaterCoast(i, j, false, Direction.SUD_OUEST, nbr, city);
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else if (j == ys + ylen - 1) {
                     WaterCoast w = new WaterCoast(i, j, false, Direction.NORD_EST, nbr, city);
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 } else {
                     Water w = new Water(i, j, city);
                     c.setTerrain(w);
+                    w.setMainCase(c);
                 }
 
 
