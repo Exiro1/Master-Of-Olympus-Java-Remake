@@ -34,6 +34,15 @@ public abstract class StoreBuilding extends Building {
         }
     }
 
+    @Override
+    public boolean build(int xPos, int yPos) {
+        if (super.build(xPos, yPos)) {
+            city.addStorage(this);
+            return true;
+        }
+        return false;
+    }
+
     public abstract boolean canStock(Resource r);
 
     /**
@@ -218,6 +227,6 @@ public abstract class StoreBuilding extends Building {
     @Override
     public void delete() {
         super.delete();
-
+        city.removeStorage(this);
     }
 }

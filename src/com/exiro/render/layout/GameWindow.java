@@ -250,6 +250,9 @@ public class GameWindow extends JPanel {
 
     public void buttonManager(ButtonType type) {
         switch (type) {
+            case CULTURE_GYMNASIUM:
+                EntityRender.setEntityRender(ObjectType.GYMNASIUM);
+                break;
             case FARM_WHEAT:
                 EntityRender.setEntityRender(ObjectType.FARM, Resource.CORN);
                 break;
@@ -301,6 +304,8 @@ public class GameWindow extends JPanel {
             case INDUSTRY_FOUNDRY:
                 EntityRender.setEntityRender(ObjectType.FOUNDRY);
                 break;
+            case INDUSTRY_GUILD:
+                break;
             case INDUSTRY_MARBLE:
                 EntityRender.setEntityRender(ObjectType.MARBLE_QUARRY);
                 break;
@@ -318,6 +323,18 @@ public class GameWindow extends JPanel {
                 break;
             case INDUSTRY_WINERY:
                 EntityRender.setEntityRender(ObjectType.WINERY);
+                break;
+            case CULTURE_PODIUM:
+                EntityRender.setEntityRender(ObjectType.PODIUM);
+                break;
+            case CULTURE_COLLEGE:
+                EntityRender.setEntityRender(ObjectType.COLLEGE);
+                break;
+            case CULTURE_THEATER:
+                EntityRender.setEntityRender(ObjectType.THEATER);
+                break;
+            case CULTURE_SCHOOLTHEATER:
+                EntityRender.setEntityRender(ObjectType.THEATERSCHOOL);
                 break;
         }
         showEntity = true;

@@ -1,6 +1,9 @@
 package com.exiro.object;
 
 import com.exiro.buildingList.Building;
+import com.exiro.buildingList.StoreBuilding;
+import com.exiro.buildingList.culture.Podium;
+import com.exiro.buildingList.culture.Theater;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
 import com.exiro.systemCore.BuildingManager;
@@ -17,6 +20,12 @@ public class City {
     private ArrayList<Construction> constructions;
     private ArrayList<ObjectClass> inActives = new ArrayList<>();
     private ArrayList<ObjectClass> obj = new ArrayList<>();
+
+
+    private ArrayList<StoreBuilding> storage;
+    private ArrayList<Theater> theaters;
+    private ArrayList<Podium> podiums;
+
     //private ArrayList<Sprite> sprites;
     int activeBuilding = 0;
 
@@ -27,6 +36,7 @@ public class City {
     private PathManager pathManager;
     private BuildingManager buildingManager;
 
+
     ArrayList<Building> toDestroyB;
 
     public City(String name, Player owner, CityMap map, ArrayList<Construction> constructions, ArrayList<Building> buildings, int population) {
@@ -36,6 +46,9 @@ public class City {
         this.constructions = constructions;
         this.buildings = buildings;
         this.population = population;
+        storage = new ArrayList<>();
+        theaters = new ArrayList<>();
+        podiums = new ArrayList<>();
     }
 
     public ArrayList<ObjectClass> getObj() {
@@ -82,6 +95,10 @@ public class City {
         toDestroyB = new ArrayList<>();
         toDestroyC = new ArrayList<>();
         toDestroyO = new ArrayList<>();
+
+        storage = new ArrayList<>();
+        theaters = new ArrayList<>();
+        podiums = new ArrayList<>();
     }
 
     public void removeObj(ObjectClass o) {
@@ -110,6 +127,42 @@ public class City {
     public void addConstruction(Construction o) {
         synchronized (buildings) {
             constructions.add(o);
+        }
+    }
+
+    public void addStorage(StoreBuilding o) {
+        synchronized (storage) {
+            storage.add(o);
+        }
+    }
+
+    public void addTheater(Theater o) {
+        synchronized (theaters) {
+            theaters.add(o);
+        }
+    }
+
+    public void addPodium(Podium o) {
+        synchronized (podiums) {
+            podiums.add(o);
+        }
+    }
+
+    public void removeStorage(StoreBuilding o) {
+        synchronized (storage) {
+            storage.remove(o);
+        }
+    }
+
+    public void removeTheater(Theater o) {
+        synchronized (theaters) {
+            theaters.remove(o);
+        }
+    }
+
+    public void removePodium(Podium o) {
+        synchronized (podiums) {
+            podiums.remove(o);
         }
     }
 
