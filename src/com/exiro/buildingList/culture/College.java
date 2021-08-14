@@ -7,12 +7,15 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.culture.Philosopher;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class College extends Building {
 
+    double timBeforePhilo = 0;
 
     public College(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
@@ -39,6 +42,16 @@ public class College extends Building {
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
+
+        if (isWorking()) {
+            timBeforePhilo += deltaTime;
+            if (timBeforePhilo > 20) {
+                timBeforePhilo = 0;
+                createPhilosopher();
+            }
+        }
+
+        getMovingSprites().removeIf(o -> o.hasArrived);
     }
 
     @Override
@@ -57,6 +70,15 @@ public class College extends Building {
     @Override
     protected void addPopulation() {
 
+    }
+
+    public void createPhilosopher() {
+        Random r = new Random();
+        Podium destination = city.getPodiums().get(r.nextInt(city.getPodiums().size()));
+        if (destination != null && destination.isWorking()) {
+            Philosopher p = new Philosopher(city, destination, this.getAccess().get(0), destination.getAccess().get(0));
+            addSprite(p);
+        }
     }
 
 }

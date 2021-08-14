@@ -2,17 +2,23 @@ package com.exiro.buildingList.culture;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
+import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
+import com.exiro.sprite.DeliverySprite;
+import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.culture.Athlete;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
 public class Gymnasium extends Building {
 
+
+    double timeBeforeAthlete = 0;
 
     public Gymnasium(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
@@ -47,6 +53,23 @@ public class Gymnasium extends Building {
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
+        for (MovingSprite a : getMovingSprites()) {
+            if (a.hasArrived && a instanceof DeliverySprite) {
+                if (a.getDestination() != this) {
+                    a.setRoutePath(city.getPathManager().getPathTo(city.getMap().getCase(a.getXB(), a.getYB()), this.getAccess().get(0), FreeState.ALL_ROAD.i));
+                    a.setDestination(this);
+                    a.hasArrived = false;
+                }
+            }
+        }
+        getMovingSprites().removeIf(a -> a.hasArrived && a instanceof DeliverySprite && a.getDestination() == this);
+        timeBeforeAthlete += deltaTime;
+        if (timeBeforeAthlete > 20) {
+            timeBeforeAthlete = 0;
+            createAthlete();
+        }
+
+
     }
 
     @Override
@@ -58,4 +81,10 @@ public class Gymnasium extends Building {
     protected void addPopulation() {
 
     }
+
+    public void createAthlete() {
+        Athlete p = new Athlete(city, null, this.getAccess().get(0), 40);
+        addSprite(p);
+    }
+
 }

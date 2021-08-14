@@ -234,6 +234,10 @@ public abstract class Building extends ObjectClass {
 
     }
 
+    public boolean isWorking() {
+        return isActive() && getPop() > 0;
+    }
+
     @Override
     public String toString() {
         return "Building{" +

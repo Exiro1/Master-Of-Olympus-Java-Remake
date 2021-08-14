@@ -166,6 +166,18 @@ public class City {
         }
     }
 
+    public ArrayList<StoreBuilding> getStorage() {
+        return storage;
+    }
+
+    public ArrayList<Theater> getTheaters() {
+        return theaters;
+    }
+
+    public ArrayList<Podium> getPodiums() {
+        return podiums;
+    }
+
     public void removeConstruction(Construction o) {
         toDestroyC.add(o);
     }

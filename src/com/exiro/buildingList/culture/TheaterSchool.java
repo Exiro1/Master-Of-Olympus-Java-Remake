@@ -7,12 +7,16 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.culture.Actor;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TheaterSchool extends Building {
 
+
+    double timBeforeActor = 0;
 
     public TheaterSchool(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
@@ -39,14 +43,25 @@ public class TheaterSchool extends Building {
     @Override
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
-            if (isActive() && getPop() > 0)
+            if (isWorking())
                 s.process(delta);
         }
     }
 
+
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
+
+        if (isWorking()) {
+            timBeforeActor += deltaTime;
+            if (timBeforeActor > 20) {
+                timBeforeActor = 0;
+                createActor();
+            }
+        }
+
+        getMovingSprites().removeIf(o -> o.hasArrived);
     }
 
     @Override
@@ -58,4 +73,16 @@ public class TheaterSchool extends Building {
     protected void addPopulation() {
 
     }
+
+
+    public void createActor() {
+        Random r = new Random();
+        Theater destination = city.getTheaters().get(r.nextInt(city.getTheaters().size()));
+        if (destination != null && destination.isWorking()) {
+            Actor a = new Actor(city, destination, this.getAccess().get(0), destination.getAccess().get(0));
+            addSprite(a);
+        }
+    }
+
+
 }

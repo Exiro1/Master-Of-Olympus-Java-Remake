@@ -78,7 +78,7 @@ public class Safety extends Building {
                 if (c.getDestination() == this) {
                     toDestroy.add(c);
                 } else {
-                    Path p = city.getPathManager().getPathTo(c.getXB(), c.getYB(), this.getAccess().get(0).getxPos(), this.getAccess().get(0).getyPos(), FreeState.ONLY_ACTIVE_ROAD.getI());
+                    Path p = city.getPathManager().getPathTo(c.getXB(), c.getYB(), this.getAccess().get(0).getxPos(), this.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.getI());
                     if (p != null) {
                         c.setRoutePath(p);
                         c.setDestination(this);

@@ -24,11 +24,12 @@ public class House extends Building {
     final ArrayList<Arrival> arrivals = new ArrayList<>();
     private final double deltaFood = 0.016f;
     private final double deltaWater = 0.016f;
+    private final double deltaCulture = 0.5f;
     private final double deltaHdo = 0.001f;
     private final double deltaWool = 0.0008f;
     int maxfood, maxWater = 60, maxWool = 8, maxHDO = 5;
     private int level;
-    private double food, water, wool, hdo;
+    private double food, water, wool, hdo, drama, gymnasium, philosophia;
 
     public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
         super(false, ObjectType.HOUSE, null, pop, maxPerLvl[level], 15, 10, xPos, yPos, 2, 2, cases, built, city, 0);
@@ -50,6 +51,10 @@ public class House extends Building {
             addWater(-deltaWater * deltaTime * getPop());
             addHdo(-deltaHdo * deltaTime * getPop());
             addWool(-deltaWool * deltaTime * getPop());
+
+            addPhi(-deltaCulture * deltaTime);
+            addGym(-deltaCulture * deltaTime);
+            addDrama(-deltaCulture * deltaTime);
 
 
             if (level < 7) {
@@ -218,6 +223,24 @@ public class House extends Building {
             this.food = 0;
     }
 
+    public void addGym(double gymnasium) {
+        this.gymnasium = this.gymnasium + gymnasium;
+        if (this.gymnasium < 0)
+            this.gymnasium = 0;
+    }
+
+    public void addDrama(double drama) {
+        this.drama = this.drama + drama;
+        if (this.drama < 0)
+            this.drama = 0;
+    }
+
+    public void addPhi(double philosophia) {
+        this.philosophia = this.philosophia + philosophia;
+        if (this.philosophia < 0)
+            this.philosophia = 0;
+    }
+
     public double getWater() {
         return water;
     }
@@ -259,6 +282,18 @@ public class House extends Building {
                 ", city=" + city.getName() +
                 ", level=" + level +
                 '}';
+    }
+
+    public void setDrama(double drama) {
+        this.drama = drama;
+    }
+
+    public void setGymnasium(double gymnasium) {
+        this.gymnasium = gymnasium;
+    }
+
+    public void setPhilosophia(double philosophia) {
+        this.philosophia = philosophia;
     }
 
     public void setMaxfood(int maxfood) {

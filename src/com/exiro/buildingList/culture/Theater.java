@@ -53,6 +53,11 @@ public class Theater extends Building {
 
     }
 
+    public void actorArrived() {
+
+    }
+
+
     @Override
     public void delete() {
         super.delete();
