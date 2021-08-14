@@ -19,6 +19,7 @@ public abstract class DeliverySprite extends MovingSprite {
 
     ArrayList<Building> buildings;
 
+
     public abstract void deliverBuildings();
 
     ArrayList<Building> deliveredBuildings;
@@ -77,6 +78,7 @@ public abstract class DeliverySprite extends MovingSprite {
 
     }
 
+
     @Override
     public ArrayList<Case> getAccess() {
         return null;
@@ -89,5 +91,9 @@ public abstract class DeliverySprite extends MovingSprite {
 
     public ArrayList<Building> getBuildingsToDeliver() {
         return buildings;
+    }
+
+    public DeliveryAI getAi() {
+        return ai;
     }
 }
