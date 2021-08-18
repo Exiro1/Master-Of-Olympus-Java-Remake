@@ -30,7 +30,7 @@ public interface Node<T> {
      * @param neighbour Neighbour of current node
      * @return Traversal cost
      */
-    double getTraversalCost(T neighbour);
+    double getTraversalCost(T neighbour, T last);
 
     /**
      * Gets the set of neighbouring nodes.

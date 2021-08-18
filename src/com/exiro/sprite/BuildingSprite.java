@@ -6,6 +6,7 @@ import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class BuildingSprite extends Sprite {
@@ -26,9 +27,11 @@ public class BuildingSprite extends Sprite {
 
     public void setImage(int frame) {
         TileImage t = getImage(frame);
-        currentFrame = t.getImg();
+        currentFrame = makeColorTransparent(t.getImg(), Color.RED);
+        ;
         height = t.getH();
         width = t.getW();
+        setImg(t);
     }
 
 

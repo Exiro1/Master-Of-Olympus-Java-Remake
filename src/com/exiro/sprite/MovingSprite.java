@@ -7,23 +7,23 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.utils.Point;
 
-import java.awt.*;
 import java.util.Map;
 
 public abstract class MovingSprite extends Sprite {
 
     public boolean hasArrived = false;
-    float speed = 1.5f;
-    Direction dir = Direction.EST;
-    Path path;
-    City c;
-    ObjectClass destination;
+    protected float speed = 2.5f;
+    protected Direction dir = Direction.EST;
+    protected Path path;
+    protected ObjectClass destination;
 
 
     public MovingSprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
         super(filePath, bitID, localId, frameNumber, c);
         this.destination = destination;
         setImage(dir, 0);
+        timeBetweenFrame = 0.05f;
+        complex = true;
     }
 
     public void setImage(Direction direction, int frame) {
@@ -58,9 +58,10 @@ public abstract class MovingSprite extends Sprite {
         }
         TileImage t = ImageLoader.getImage(getPath(), getBitmapID(), getLocalID() + i + frame * 8);
 
-        currentFrame = makeColorTransparent(t.getImg(), Color.RED);
+        currentFrame = t.getImg();
         height = t.getH();
         width = t.getW();
+        setImg(t);
     }
 
     @Override

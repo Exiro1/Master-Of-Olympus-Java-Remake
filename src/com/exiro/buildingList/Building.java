@@ -211,6 +211,8 @@ public abstract class Building extends ObjectClass {
             for (Sprite s : getSprites()) {
                 s.delete();
             }
+            clearMovingSprite();
+            clearBuildingSprite();
             city.removeObj(this);
             deleted = true;
         }

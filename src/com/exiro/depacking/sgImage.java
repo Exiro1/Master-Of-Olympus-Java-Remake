@@ -26,7 +26,15 @@ public class sgImage {
         sgIr.invert_offset = utils.readInt32le(f);
         sgIr.width = utils.readInt16le(f);
         sgIr.height = utils.readInt16le(f);
-        f.currPosByte += 26;
+
+        f.currPosByte += 6;
+        sgIr.spriteSize = utils.readInt16le(f);
+        sgIr.jcp = utils.readInt16le(f);
+        sgIr.offx = utils.readInt16le(f);
+        sgIr.offy = utils.readInt16le(f);
+        f.currPosByte += 12;
+
+
         sgIr.type = utils.readUInt16le(f);
         sgIr.flags = f.readByte(4);
         sgIr.bitmap_id = utils.readUInt8le(f);
@@ -338,5 +346,7 @@ public class sgImage {
         }
     }
 
-
+    public sgImageRecord getRecord() {
+        return record;
+    }
 }

@@ -121,13 +121,15 @@ public abstract class Construction extends ObjectClass {
     }
 
     public ArrayList<Case> getAccess() {
+        if (cases == null)
+            return null;
         ArrayList<Case> access = new ArrayList<>();
         for (int i = 0; i < xLenght + 2; i++) {
             for (int j = 0; j < yLenght + 2; j++) {
                 if (!((i == 0 && j == 0) || (i == 0 && j == yLenght + 1) || (i == xLenght + 1 && j == 0) || (i == xLenght + 1 && j == yLenght + 1))) {
                     Case c = city.getMap().getCase(xPos + i - 1, yPos - j + 1);
                     if (c != null && c.getObject() != null) {
-                        if (c != null && !cases.contains(c) && c.getObject().getBuildingType() == ObjectType.ROAD && c.getObject().isActive()) {
+                        if (!cases.contains(c) && c.getObject().getBuildingType() == ObjectType.ROAD && c.getObject().isActive()) {
                             access.add(c);
                         }
                     }

@@ -34,9 +34,10 @@ public class Dairy extends ResourceGenerator {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
             BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 69, 21, getCity(), this);
-            s.setOffsetX(44);
-            s.setOffsetY(6);
+            s.setOffsetX(20);
+            s.setOffsetY(-50);
             s.setTimeBetweenFrame(0.1f);
+            s.setComplex(true);
             addSprite(s);
             return true;
         }

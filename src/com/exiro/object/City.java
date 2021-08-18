@@ -288,6 +288,8 @@ public class City {
     }
 
     public CityMap getMap() {
+        if (map == null)
+            return null;
         synchronized (map) {
             return map;
         }

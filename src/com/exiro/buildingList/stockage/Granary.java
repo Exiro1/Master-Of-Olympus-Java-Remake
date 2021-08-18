@@ -42,7 +42,7 @@ public class Granary extends StoreBuilding {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-       super.Render(g, camX, camY);
+        super.Render(g, camX, camY);
 
         int i = 0;
         for (BuildingSprite s : bsprites) {

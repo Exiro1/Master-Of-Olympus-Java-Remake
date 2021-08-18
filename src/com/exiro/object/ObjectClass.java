@@ -14,7 +14,7 @@ public abstract class ObjectClass implements Cloneable {
     private ObjectType type;
 
     private TileImage img;
-    private int height, width, size;
+    private int height, width, size, offx, offy;
     private int xB, yB;
     private int bitmapID, localID;
     private String path;
@@ -145,6 +145,24 @@ public abstract class ObjectClass implements Cloneable {
         this.img = img;
         this.setWidth(img.getW());
         this.setHeight(img.getH());
+        this.setOffx(img.getOffx());
+        this.setOffy(img.getOffy());
+    }
+
+    public int getOffx() {
+        return offx;
+    }
+
+    public void setOffx(int offx) {
+        this.offx = offx;
+    }
+
+    public int getOffy() {
+        return offy;
+    }
+
+    public void setOffy(int offy) {
+        this.offy = offy;
     }
 
     abstract public void delete();

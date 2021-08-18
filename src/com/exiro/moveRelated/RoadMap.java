@@ -84,8 +84,8 @@ public class RoadMap {
                 access = FreeState.ONLY_ACTIVE_ROAD;
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.BLOCKABLE_ROAD || (!cityMap.getCase(xStart, yStart).getObject().isActive() && cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD)) {
                 access = FreeState.BLOCKING_ROAD;
-            } else {
-                access = FreeState.BLOCKED;
+            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.TREE) {
+                access = FreeState.WALKABLE;
             }
         }
         return access;
@@ -119,12 +119,22 @@ public class RoadMap {
             return Math.abs(x - goal.x) + Math.abs(y - goal.y);
         }
 
-        public double getTraversalCost(MapNode neighbour) {
+        public double getTraversalCost(MapNode neighbour, MapNode last) {
             //FreeState access = 0;
             int i = neighbour.x;
             int j = neighbour.y;
+
+            if (last == null || last == neighbour)
+                return 1;
+
+            int k = last.x;
+            int l = last.y;
+
+            if (i == k || j == l)
+                return 1;
+
             //access = getFreeState(i,j);
-            return 1;
+            return 5;
         }
 
         public Set<MapNode> getNeighbours() {

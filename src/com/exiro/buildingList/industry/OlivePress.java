@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class OlivePress extends ResourceGenerator {
 
 
+    //2436
+
     public OlivePress(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
     }
@@ -35,6 +37,14 @@ public class OlivePress extends ResourceGenerator {
         }
         return false;
     }
+
+    @Override
+    public void process(double deltatime) {
+        super.process(deltatime);
+
+
+    }
+
 
     @Override
     protected void addPopulation() {

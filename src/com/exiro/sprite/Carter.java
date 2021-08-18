@@ -31,7 +31,7 @@ public class Carter extends MovingSprite {
     public Carter(City c, ObjectClass destination, Building origin, Resource resource, int nbr) {
         super("SprMain", 0, 4728, 12, c, destination);
         dir = Direction.NORD;
-        timeBetweenFrame = 0.1f;
+        timeBetweenFrame = 0.05f;
         Case ca = origin.getAccess().get(0);
         x = ca.getxPos();
         y = ca.getyPos();
@@ -134,7 +134,7 @@ public class Carter extends MovingSprite {
         int id = resid + i + 8 * (idnbr - 1);
 
         TileImage t = ImageLoader.getImage(getPath(), getBitmapID(), id);
-        cart = makeColorTransparent(t.getImg(), Color.RED);
+        cart = t.getImg();
         cartH = t.getH();
         cartW = t.getW();
         switch (direction) {

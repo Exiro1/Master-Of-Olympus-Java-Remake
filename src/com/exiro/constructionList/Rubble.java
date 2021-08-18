@@ -15,7 +15,7 @@ public class Rubble extends Construction {
     }
 
     public Rubble() {
-        super(false, ObjectType.RUBBLE, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, GameManager.currentCity, false, true);
+        super(false, ObjectType.RUBBLE, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, GameManager.currentCity, true, true);
     }
 
     @Override

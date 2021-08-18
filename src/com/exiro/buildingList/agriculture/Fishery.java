@@ -6,10 +6,15 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.render.IsometricRender;
+import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Direction;
+import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.WaterCoast;
+import com.exiro.utils.Point;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Fishery extends ResourceGenerator {
@@ -38,37 +43,68 @@ public class Fishery extends ResourceGenerator {
         if (super.build(xPos, yPos)) {
             int i = 0;
             int idSprite = 0;
+            int offx = 0, offy = 0;
+
             switch (direction) {
                 case SUD_EST:
                     i = 1;
                     idSprite = 949;
+                    offx = 41;
+                    offy = -17;
                     break;
                 case NORD_EST:
                     i = 0;
                     idSprite = 909;
+                    offx = 48;
+                    offy = -33;
                     break;
                 case NORD_OUEST:
                     i = 3;
                     idSprite = 889;
+                    offx = 14;
+                    offy = -30;
                     break;
                 case SUD_OUEST:
                     i = 2;
                     idSprite = 929;
+                    offx = 10;
+                    offy = -16;
                     break;
             }
             setLocalID(getBuildingType().getLocalID() + i);
             updateImg();
-/*
+
             BuildingSprite s = new BuildingSprite("SprAmbient", 0, idSprite, 20, getCity(), this);
-            s.setOffsetX(44);
-            s.setOffsetY(6);
+            s.setOffsetX(offx);
+            s.setOffsetY(offy);
             s.setTimeBetweenFrame(0.1f);
+            s.setComplex(true);
             addSprite(s);
-*/
 
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void processSprite(double delta) {
+        for (Sprite s : getSprites()) {
+            s.process(delta);
+        }
+    }
+
+    @Override
+    public void Render(Graphics g, int camX, int camY) {
+        int lvl = getMainCase().getZlvl();
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
+        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
+        g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
+
+        //render only buildingSprite because movingSprite are render separately
+        for (BuildingSprite s : bsprites) {
+            s.Render(g, camX, camY);
+        }
+
     }
 
     @Override

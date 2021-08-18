@@ -24,6 +24,7 @@ public class Immigrant extends MovingSprite {
         path = p;
         offsetX = 0;
         offsetY = 0;
+        timeBetweenFrame = 0.05f;
     }
 
 

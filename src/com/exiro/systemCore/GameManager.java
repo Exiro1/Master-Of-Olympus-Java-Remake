@@ -11,12 +11,15 @@ import com.exiro.render.layout.MenuBar;
 public class GameManager {
 
     public static City currentCity;
+    private static GameManager gm;
     GameFrame frame;
     GameWindow GameView;
     MenuBar menuBar;
     Player player;
     private final InterfaceRender it;
     private final GameInfo gi;
+    TimeManager timeManager;
+
 
     public GameManager(Player player, City currentCity) {
         this.player = player;
@@ -26,8 +29,18 @@ public class GameManager {
         this.menuBar = frame.getMenu();
         this.gi = frame.getGi();
         this.it = frame.getIt();
+        this.timeManager = new TimeManager(0, 0, 0);
+        gm = this;
     }
 
+    public static GameManager getInstance() {
+        return gm;
+    }
+
+
+    public TimeManager getTimeManager() {
+        return timeManager;
+    }
 
     public GameFrame getFrame() {
         return frame;

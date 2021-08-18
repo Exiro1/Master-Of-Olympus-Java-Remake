@@ -1,11 +1,8 @@
 package com.exiro.object;
 
-import com.exiro.environment.Tree;
+import com.exiro.constructionList.Tree;
 import com.exiro.sprite.Direction;
-import com.exiro.terrainList.Elevation;
-import com.exiro.terrainList.Empty;
-import com.exiro.terrainList.Water;
-import com.exiro.terrainList.WaterCoast;
+import com.exiro.terrainList.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,6 +15,11 @@ public class CityMap {
     private Case startCase;
     private final City city;
 
+    private ArrayList<Case> coppers;
+    private ArrayList<Case> silvers;
+    private ArrayList<Case> trees;
+    private ArrayList<Case> meadows;
+
 
     public CityMap(ArrayList<Case> cases, Case startCase, City city) {
         this.cases = cases;
@@ -29,6 +31,12 @@ public class CityMap {
         this.height = height;
         this.width = width;
         this.cases = new ArrayList<>();
+
+        this.coppers = new ArrayList<>();
+        this.silvers = new ArrayList<>();
+        this.trees = new ArrayList<>();
+        this.meadows = new ArrayList<>();
+
         this.city = city;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -59,6 +67,7 @@ public class CityMap {
         // getCase(startCase.getxPos(),startCase.getyPos()).getObject().setActive(true);
 
         this.startCase = getCase(xs, ys);
+
     }
 
     public void populateMap() {
@@ -69,6 +78,8 @@ public class CityMap {
 
         createElevation(35, 10, 10, 10, 2);
         createElevation(37, 12, 4, 4, 1);
+
+        createMinerals(30, 25, 3, 3);
     }
 
 
@@ -78,8 +89,22 @@ public class CityMap {
                 Case c = getCase(i, j);
                 Random r = new Random();
                 int nbr = r.nextInt(96);
-                Tree tree = new Tree(i, j, nbr, city);
+                Tree tree = new Tree(i, j, nbr, city, 0);
                 c.setObject(tree);
+                trees.add(c);
+            }
+        }
+    }
+
+    public void createMinerals(int xs, int ys, int xlen, int ylen) {
+        for (int i = xs; i < xs + xlen; i++) {
+            for (int j = ys; j < ys + ylen; j++) {
+                Case c = getCase(i, j);
+                Random r = new Random();
+                int nbr = r.nextInt(8);
+                Rock rock = new Rock(i, j, city, 1, Rock.RockType.SILVER, nbr);
+                c.setTerrain(rock);
+                silvers.add(c);
             }
         }
     }
@@ -197,6 +222,22 @@ public class CityMap {
     }
 
 
+    public ArrayList<Case> getCoppers() {
+        return coppers;
+    }
+
+    public ArrayList<Case> getSilvers() {
+        return silvers;
+    }
+
+    public ArrayList<Case> getTrees() {
+        return trees;
+    }
+
+    public ArrayList<Case> getMeadows() {
+        return meadows;
+    }
+
     public Case getCase(int x, int y) {
         if (x >= 0 && y >= 0 && x < width && y < height)
             return cases.get(width * y + x);
@@ -258,6 +299,8 @@ public class CityMap {
     public void setWidth(int width) {
         this.width = width;
     }
+
+
 }
 
 

@@ -16,7 +16,6 @@ public class PathAlgo {
         gScore.put(start, 0.0);
         fScore.put(start, start.getHeuristic(goal));
         open.offer(start);
-
         while (!open.isEmpty()) {
             T current = open.poll();
             if (current.equals(goal)) {
@@ -36,7 +35,7 @@ public class PathAlgo {
                 }
 
                 double tentG = gScore.get(current)
-                        + current.getTraversalCost(neighbour);
+                        + current.getTraversalCost(neighbour, fromMap.get(current));
 
                 boolean contains = open.contains(neighbour);
                 if ((!contains || tentG < gScore.get(neighbour)) && (((neighbour.getType().getI() & free) != 0))) {

@@ -4,6 +4,9 @@ import com.exiro.object.*;
 import com.exiro.sprite.Carter;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.complexCarter.ComplexCarter;
+import com.exiro.sprite.complexCarter.Trolley;
+import com.exiro.sprite.complexCarter.TrolleyDriver;
 
 import java.util.ArrayList;
 
@@ -33,17 +36,29 @@ public abstract class ResourceGenerator extends Building {
         stock += unit;
     }
 
+    public void addCarter(Resource r, int amount) {
+        if (r == Resource.WOOD || r == Resource.MARBLE || r == Resource.SCULPTURE) {
+            ComplexCarter cc = new ComplexCarter(city, null, this.getAccess().get(0), resource, amount);
+            addSprite(cc.getDriver());
+            addSprite(cc.getPuller());
+            addSprite(cc.getTrolley());
+        } else {
+            Carter carter = new Carter(city, null, this, resource, amount);
+            addSprite(carter);
+        }
+    }
+
+
     public void manageCarter() {
         if (stock > 0) {
             int toDeliver = Math.min(stock, maxPerCarter);
             stock -= toDeliver;
-            Carter carter = new Carter(city, null, this, resource, toDeliver);
-            addSprite(carter);
+            addCarter(resource, toDeliver);
         }
 
         ArrayList<Sprite> toDestroy = new ArrayList<>();
         for (MovingSprite c : msprites) {
-            if (c.hasArrived) {
+            if (c.hasArrived && c instanceof Carter) {
                 Carter carter = (Carter) c;
                 ObjectClass des = c.getDestination();
                 if (des == null || !des.isActive() || ((Building) des).isDeleted()) { //object supprimée / inactif -> on relance la recherche
@@ -61,7 +76,30 @@ public abstract class ResourceGenerator extends Building {
                         toDestroy.add(c);
                     }
                 }
+            } else if (c.hasArrived && c instanceof TrolleyDriver) {
+                ComplexCarter cc = ((TrolleyDriver) c).getCc();
+                ObjectClass des = cc.getDest();
+                if (des == null || !des.isActive() || ((Building) des).isDeleted()) { //object supprimée / inactif -> on relance la recherche
+                    cc.setArrived(false);
+                    cc.setRoutePath(null);
+                    cc.setDest(null);
+                } else if (des instanceof StoreBuilding) {
+                    StoreBuilding g = (StoreBuilding) des;
+                    g.stock(resource, cc.getTrolley().getCurrentDelivery());
+                    cc.getTrolley().setAmount(cc.getTrolley().getAmount() - cc.getTrolley().getCurrentDelivery());
+                    if (cc.getTrolley().getAmount() > 0) {
+                        cc.setArrived(false);
+                        cc.setRoutePath(null);
+                    } else {
+                        toDestroy.add(cc.getDriver());
+                        toDestroy.add(cc.getPuller());
+                        toDestroy.add(cc.getTrolley());
+                    }
+                }
+
+
             }
+
         }
         for (Sprite s : toDestroy) {
             removeSprites(s);
@@ -80,6 +118,13 @@ public abstract class ResourceGenerator extends Building {
         for (MovingSprite ms : msprites) {
             if (ms instanceof Carter) {
                 Carter c = (Carter) ms;
+                ObjectClass obj = c.getDestination();
+                if (obj instanceof StoreBuilding) {
+                    StoreBuilding g = (StoreBuilding) obj;
+                    g.unReserved(resource, c.getCurrentDelivery());
+                }
+            } else if (ms instanceof Trolley) {
+                Trolley c = (Trolley) ms;
                 ObjectClass obj = c.getDestination();
                 if (obj instanceof StoreBuilding) {
                     StoreBuilding g = (StoreBuilding) obj;
