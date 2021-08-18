@@ -3,7 +3,6 @@ package com.exiro.render.layout;
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
-import com.exiro.environment.Environment;
 import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
@@ -87,13 +86,6 @@ public class GameWindow extends JPanel {
                     // } else {
                     terrainObj.add(c.getTerrain());
                     // }
-                } else if (c.getObject() instanceof Environment && c.isMainCase()) {
-                    if (((Environment) c.getObject()).isFloor()) {
-                        c.getTerrain().Render(g, CameraPosx, CameraPosy);
-                        c.getObject().Render(g, CameraPosx, CameraPosy);
-                    } else {
-                        terrainObj.add(c.getObject());
-                    }
                 } else if (c.getObject() instanceof Construction) {
                     if (((Construction) c.getObject()).isFloor() && !(c.getTerrain() instanceof Elevation)) {
                         c.getObject().Render(g, CameraPosx, CameraPosy);
@@ -114,7 +106,7 @@ public class GameWindow extends JPanel {
             synchronized (p.getPlayerCities().get(0).getConstructions()) {
                 for (Construction c : p.getPlayerCities().get(0).getConstructions()) {
                     //if (!c.isFloor())
-                        allobj.add(c);
+                    allobj.add(c);
                 }
 
             }
@@ -131,7 +123,7 @@ public class GameWindow extends JPanel {
         sortRender(oc);
 
         for (ObjectClass obj : oc) {
-            if (obj instanceof Building || obj instanceof Environment || obj instanceof Construction) {
+            if (obj instanceof Building || obj instanceof Construction) {
                 if (obj.getMainCase().getTerrain() instanceof Elevation) {
                     obj.getMainCase().getTerrain().Render(g, CameraPosx, CameraPosy);
                     if (obj instanceof Road)
@@ -238,10 +230,10 @@ public class GameWindow extends JPanel {
         Arrays.sort(a,
                 (o1, o2) -> {
                     if (o1 instanceof MovingSprite && ((o2 instanceof Construction && ((Construction) o2).isFloor()) || (o2 instanceof Terrain && ((Terrain) o2).isFloor()))) {
-                        if (Math.pow(o1.getXB() - o2.getXB(), 2) + Math.pow(o1.getYB() - o2.getYB(), 2) <= 2)
+                        if (Math.pow(((MovingSprite) o1).getX() - (o2.getXB() - 0.5), 2) + Math.pow(((MovingSprite) o1).getY() - (o2.getYB() - 0.5), 2) <= 3)
                             return 1;
                     } else if (o2 instanceof MovingSprite && ((o1 instanceof Construction && ((Construction) o1).isFloor()) || (o1 instanceof Terrain && ((Terrain) o1).isFloor()))) {
-                        if (Math.pow(o1.getXB() - o2.getXB(), 2) + Math.pow(o1.getYB() - o2.getYB(), 2) <= 2)
+                        if (Math.pow((o1.getXB() - 0.5) - ((MovingSprite) o2).getX(), 2) + Math.pow((o1.getYB() - 0.5) - ((MovingSprite) o2).getY(), 2) <= 3)
                             return -1;
                     }
                     return Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB());

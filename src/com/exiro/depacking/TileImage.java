@@ -9,13 +9,16 @@ public class TileImage {
     int w, h;
     int bitID;
     int localID;
+    int offx, offy;
 
-    public TileImage(BufferedImage img, int w, int h, int bitID, int localID) {
+    public TileImage(BufferedImage img, int w, int h, int bitID, int localID, int offx, int offy) {
         this.img = img;
         this.w = w;
         this.h = h;
         this.bitID = bitID;
         this.localID = localID;
+        this.offx = offx;
+        this.offy = offy;
     }
 
     public BufferedImage getImg() {
@@ -56,5 +59,13 @@ public class TileImage {
 
     public void setLocalID(int localID) {
         this.localID = localID;
+    }
+
+    public int getOffx() {
+        return offx;
+    }
+
+    public int getOffy() {
+        return offy;
     }
 }

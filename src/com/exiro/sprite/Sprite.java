@@ -12,23 +12,35 @@ import java.awt.image.*;
 public abstract class Sprite extends ObjectClass {
 
 
-    int frameNumber;
-    int width, height;
-    float x;
-    float y;
-    float x1, y1;
-    int offsetX, offsetY;
-    int index = 0;
-    double timeSinceLastFrame = 0;
-    BufferedImage currentFrame;
-    double timeBetweenFrame = 0.2f;
-    City c;
-
+    static int speedFactor;
+    protected int frameNumber;
+    protected int width, height;
+    protected float x;
+    protected float y;
+    protected float x1, y1;
+    protected int offsetX, offsetY;
+    protected int baseh, basew;
+    protected int index = 0;
+    protected double timeSinceLastFrame = 0;
+    protected BufferedImage currentFrame;
+    protected double timeBetweenFrame = 0.2f;
+    protected City c;
+    protected boolean complex = false;
+    Sticking sticking = null;
 
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
         super(true, null, filePath, 1, bitID, localId);
         this.c = c;
         this.frameNumber = frameNumber;
+        baseh = getHeight();
+        basew = getWidth();
+    }
+
+    public Sprite(String filePath, int bitID, int localId, int frameNumber, City c, Sticking sticking) {
+        super(true, null, filePath, 1, bitID, localId);
+        this.c = c;
+        this.frameNumber = frameNumber;
+        this.sticking = sticking;
     }
 
     @Override
@@ -74,8 +86,15 @@ public abstract class Sprite extends ObjectClass {
     @Override
     public void Render(Graphics g, int camX, int camY) {
         int z = c.getMap().getCase(getXB(), getYB()).getZlvl();
-        Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(), 1);
-        g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
+
+        //Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(),1);
+        if (complex) {
+            Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(), baseh, basew, Sticking.TOP_LEFT);
+            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy() + 30, null);
+        } else {
+            Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(), 1);
+            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
+        }
     }
 
     public double getTimeBetweenFrame() {
@@ -112,6 +131,14 @@ public abstract class Sprite extends ObjectClass {
 
     public double getTimeSinceLastFrame() {
         return timeSinceLastFrame;
+    }
+
+    public boolean isComplex() {
+        return complex;
+    }
+
+    public void setComplex(boolean complex) {
+        this.complex = complex;
     }
 
     public void setTimeSinceLastFrame(double timeSinceLastFrame) {

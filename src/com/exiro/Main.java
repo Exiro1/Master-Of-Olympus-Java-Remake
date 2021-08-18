@@ -16,6 +16,7 @@ public class Main {
     public static void main(String[] args) {
 
         ImageLoader.initLoader();
+        ImageLoader.getImage("SprMain", 0, 81);
         FontLoader.initLoader();
 
         System.setProperty("sun.awt.noerasebackground", "true");

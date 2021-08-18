@@ -16,7 +16,8 @@ public class AgoraDelivery extends DeliverySprite {
 
     public AgoraDelivery(City c, ObjectClass destination, Case start, int len, Agora agora) {
         super("SprMain", 0, 0, 12, c, destination, start, len);
-        setTimeBetweenFrame(0.1);
+        setTimeBetweenFrame(0.05);
+        setOffsetY(-5);
         this.agora = agora;
     }
 

@@ -1,26 +1,21 @@
 package com.exiro.buildingList.industry;
 
 import com.exiro.buildingList.BuildingCategory;
-import com.exiro.buildingList.ResourceGenerator;
+import com.exiro.buildingList.IndustryHarverster;
+import com.exiro.constructionList.Tree;
+import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
-import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
+import com.exiro.sprite.Harvester;
+import com.exiro.sprite.industry.LumberJack;
 import com.exiro.systemCore.GameManager;
 
-import java.util.ArrayList;
-
-public class Sawmill extends ResourceGenerator {
+public class Sawmill extends IndustryHarverster {
 
 
-    public Sawmill(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-    }
-
-    public Sawmill() {
-        super(false, ObjectType.SAWMILL, BuildingCategory.INDUSTRY, 0, 12, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOD);
-    }
+    int harvester = 0;
 
     @Override
     public boolean build(int xPos, int yPos) {
@@ -34,6 +29,51 @@ public class Sawmill extends ResourceGenerator {
             return true;
         }
         return false;
+    }
+
+    public Sawmill() {
+        super(false, ObjectType.SAWMILL, BuildingCategory.INDUSTRY, 0, 12, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOD, 22, 3, 25, 100);
+    }
+
+    @Override
+    public void processSprite(double delta) {
+        super.processSprite(delta);
+    }
+
+    @Override
+    public void process(double deltaTime) {
+        super.process(deltaTime);
+        if (isWorking()) {
+            if (harvester < harvesterNbr) {
+                Case dir = null;
+                Tree t = null;
+                for (Case c : city.getMap().getTrees()) {
+                    if (!((Tree) c.getObject()).isBeingcut() && !((Tree) c.getObject()).isCut() && ((Tree) c.getObject()).getAccessible()) {
+                        for (Case n : c.getNeighbour()) {
+                            if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.WALKABLE.getI()) != null) {
+                                dir = n;
+                                t = (Tree) c.getObject();
+                                t.setBeingcut(true);
+                                break;
+                            }
+                        }
+                        if (dir != null)
+                            break;
+                    }
+                }
+                if (dir != null) {
+                    LumberJack bh = new LumberJack(city, dir, timeToHarvest, this, t);
+                    addSprite(bh);
+                    harvester++;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void harvestFinished(Harvester har) {
+        super.harvestFinished(har);
+        harvester--;
     }
 
     @Override

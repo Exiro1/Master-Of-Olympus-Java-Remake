@@ -5,6 +5,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.render.layout.GameLayout;
 import com.exiro.render.layout.GameWindow;
+import com.exiro.sprite.Sticking;
 import com.exiro.terrainList.Elevation;
 import com.exiro.utils.Point;
 
@@ -31,6 +32,57 @@ public class IsometricRender {
         return tempPt;
     }
 
+    static public Point TwoDToIsoSprite(Point p, int tile_width, int tile_height, int baseh, int basew, Sticking sticking) {
+        Point tempPt = new Point(0, 0);
+        tempPt.x = p.x * 58 / 2 - (p.y - 1) * 58 / 2;
+        tempPt.y = p.x * 30 / 2 + (p.y - 1) * 30 / 2;
+
+
+        tempPt.x = tempPt.x;
+        tempPt.y = tempPt.y;
+        /*
+        switch (sticking){
+
+            case TOP_LEFT:
+                tempPt.x = tempPt.x;
+                tempPt.y = tempPt.y;
+                break;
+            case TOP_MID:
+                tempPt.x = tempPt.x + (basew-tile_width)/2.0f;
+                tempPt.y = tempPt.y;
+                break;
+            case TOP_RIGHT:
+                tempPt.x = tempPt.x - tile_width-basew;
+                tempPt.y = tempPt.y;
+                break;
+            case MID_LEFT:
+                tempPt.x = tempPt.x;
+                tempPt.y = tempPt.y + (baseh-tile_height)/2.0f;
+                break;
+            case MID_MID:
+                tempPt.x = tempPt.x + (basew-tile_width)/2.0f;
+                tempPt.y = tempPt.y + (baseh-tile_height)/2.0f;
+                break;
+            case MID_RIGHT:
+                tempPt.x = tempPt.x - tile_width-basew;
+                tempPt.y = tempPt.y + (baseh-tile_height)/2.0f;
+                break;
+            case BOT_LEFT:
+                tempPt.x = tempPt.x;
+                tempPt.y = tempPt.y - (tile_height-baseh);
+                break;
+            case BOT_MID:
+                tempPt.x = tempPt.x + (basew-tile_width)/2.0f;
+                tempPt.y = tempPt.y - (tile_height-baseh);
+                break;
+            case BOT_RIGHT:
+                tempPt.x = tempPt.x - tile_width-basew;
+                tempPt.y = tempPt.y - (tile_height-baseh);
+                break;
+        }
+        */
+        return tempPt;
+    }
 
     static public Point getTileCoordinates(Point pt) {
         Point tempPt = new Point(0, 0);

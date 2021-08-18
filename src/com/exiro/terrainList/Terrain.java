@@ -31,7 +31,8 @@ public abstract class Terrain extends ObjectClass {
         this.setXB(xpos);
         this.setYB(ypos);
         this.blocking = blocking;
-
+        if (c.getMap() != null)
+            this.setMainCase(c.getMap().getCase(xpos, ypos));
         //this.c = city.getMap().getCase(getXB(),getYB());
     }
 

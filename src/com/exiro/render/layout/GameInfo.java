@@ -54,7 +54,7 @@ public class GameInfo extends JPanel {
 
         g.setFont(font.deriveFont(16f));
 
-        g.drawString("Date 13 Juillet 345 BC", 1400, 20);
+        g.drawString(gm.getTimeManager().toString(), 1400, 20);
         String money = (int) gm.getPlayer().getMoney() + "";
         g.drawString(money, 800 - 12 * money.length(), 20);
         g.drawImage(drachme, 800 - 12 * money.length() - 35, 5, null);

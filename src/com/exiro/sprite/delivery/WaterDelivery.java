@@ -21,7 +21,7 @@ public class WaterDelivery extends DeliverySprite {
 
     public WaterDelivery(City c, ObjectClass destination, Case start) {
         super("SprMain", 0, 6736, 12, c, destination, start, 30);
-        setTimeBetweenFrame(0.1);
+        setTimeBetweenFrame(0.05);
     }
 
     @Override

@@ -9,6 +9,10 @@ public class sgImageRecord {
     long invert_offset;
     int width;
     int height;
+    int jcp;
+    int offx, offy;
+    int spriteSize;
+
     /* 26 unknown bytes, mostly zero, first four are 2 shorts */
     long type;
     /* 4 flag/option-like bytes: */
@@ -130,5 +134,37 @@ public class sgImageRecord {
 
     public void setAlpha_length(long alpha_length) {
         this.alpha_length = alpha_length;
+    }
+
+    public int getJcp() {
+        return jcp;
+    }
+
+    public void setJcp(int jcp) {
+        this.jcp = jcp;
+    }
+
+    public int getOffx() {
+        return offx;
+    }
+
+    public void setOffx(int offx) {
+        this.offx = offx;
+    }
+
+    public int getOffy() {
+        return offy;
+    }
+
+    public void setOffy(int offy) {
+        this.offy = offy;
+    }
+
+    public int getSpriteSize() {
+        return spriteSize;
+    }
+
+    public void setSpriteSize(int spriteSize) {
+        this.spriteSize = spriteSize;
     }
 }

@@ -9,12 +9,14 @@ import java.util.ArrayList;
 public class Rock extends Terrain {
 
     RockType rtype;
+    boolean mined = false;
+    boolean isAccessible;
 
     public Rock(int xpos, int ypos, City c, int size, RockType rtype, int nbr) {
         super(true, ObjectType.ROCK, false, xpos, ypos, c, false, false, true);
         this.setSize(size);
-        setRockImg(nbr);
         this.rtype = rtype;
+        setRockImg(nbr);
     }
 
     public void setRockImg(int number) {
@@ -57,6 +59,14 @@ public class Rock extends Terrain {
 
     }
 
+    public boolean isAccessible() {
+        return isAccessible;
+    }
+
+    public void setAccessible(boolean accessible) {
+        isAccessible = accessible;
+    }
+
     @Override
     public ArrayList<Case> getAccess() {
         return null;
@@ -67,7 +77,15 @@ public class Rock extends Terrain {
 
     }
 
-    enum RockType {
+    public boolean isMined() {
+        return mined;
+    }
+
+    public void setMined(boolean mined) {
+        this.mined = mined;
+    }
+
+    public enum RockType {
         NORMAL, COPPER, SILVER;
     }
 }

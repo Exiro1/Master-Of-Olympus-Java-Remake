@@ -14,7 +14,6 @@ import com.exiro.buildingList.industry.*;
 import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.*;
-import com.exiro.environment.Tree;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.terrainList.*;
 

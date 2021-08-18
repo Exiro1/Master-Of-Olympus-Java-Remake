@@ -14,7 +14,7 @@ public class Actor extends DeliverySprite {
     public Actor(City c, ObjectClass destination, Case start, Case dest) {
         super("SprMain", 0, 104, 12, c, destination, start, 0);
         setOffsetY(-5);
-        setTimeBetweenFrame(0.1f);
+        setTimeBetweenFrame(0.05f);
         setRoutePath(getAi().goTo(c, start, dest, FreeState.ALL_ROAD.getI()));
     }
 

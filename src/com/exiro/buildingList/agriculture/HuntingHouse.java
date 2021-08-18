@@ -35,14 +35,16 @@ public class HuntingHouse extends ResourceGenerator {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
             BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 32, 15, getCity(), this);
-            s.setOffsetX(10);
-            s.setOffsetY(2);
+            s.setOffsetX(-17);
+            s.setOffsetY(-49);
             s.setTimeBetweenFrame(0.1f);
+            s.setComplex(true);
             addSprite(s);
             return true;
         }
         return false;
     }
+
 
     @Override
     public void processSprite(double delta) {
@@ -62,13 +64,12 @@ public class HuntingHouse extends ResourceGenerator {
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
-        if (isActive() && getPop() > 0) {
+        if (isWorking()) {
             float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
             growth += factor * deltaTime * speedFactor;
             if (growth > 60) {
                 resourceCreated(1);
             }
-
         }
     }
 

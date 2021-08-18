@@ -8,6 +8,8 @@ import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static com.exiro.sprite.Sprite.makeColorTransparent;
+
 public class ImageLoader {
 
     static HashMap<Integer, TileImage> AssetsMap;
@@ -43,6 +45,7 @@ public class ImageLoader {
                 e.printStackTrace();
             }
             sgBitmap bitmap = sg.getBitmaps()[bitmapID];
+
             String filename555 = "Assets/DATA/" + filename + ".555";
             sgImageData sgData = null;
             try {
@@ -66,8 +69,9 @@ public class ImageLoader {
             Graphics g = imgg.createGraphics();
             g.drawImage(img, 0, 0, null);
             g.dispose();
+            imgg = makeColorTransparent(imgg, Color.RED);
             sgData.setData(null);
-            AssetsMap.put(globalID, new TileImage(imgg, sgData.getWidth(), sgData.getHeight(), bitmapID, imgID));
+            AssetsMap.put(globalID, new TileImage(imgg, sgData.getWidth(), sgData.getHeight(), bitmapID, imgID, bitmap.getImages().get(imgID).getRecord().getOffx(), bitmap.getImages().get(imgID).getRecord().getOffy()));
             AssetsMapUse.put(globalID, 1);
         } else {
             AssetsMapUse.replace(globalID, AssetsMapUse.get(globalID) + 1);

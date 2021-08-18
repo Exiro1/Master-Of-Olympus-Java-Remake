@@ -3,13 +3,12 @@ package com.exiro.systemCore;
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
+import com.exiro.constructionList.Tree;
 import com.exiro.moveRelated.FreeState;
-import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
-import com.exiro.object.ObjectType;
-import com.exiro.object.Player;
+import com.exiro.object.*;
 import com.exiro.render.GameFrame;
 import com.exiro.render.MouseManager;
+import com.exiro.terrainList.Rock;
 import com.exiro.terrainList.Terrain;
 
 public class GameThread implements Runnable {
@@ -21,6 +20,7 @@ public class GameThread implements Runnable {
     final long deltaTimeResearched = (long) ((1f / 144f) * 1000f);
     double timeSinceLastUpdateBuilding = 0;
     double timeSinceLastUpdateConstruct = 0;
+    double timeSinceLastUpdateResources = 0;
     private final Player p;
     private int currentCity;
     private final GameFrame frame;
@@ -47,6 +47,9 @@ public class GameThread implements Runnable {
             long startTime = System.currentTimeMillis();
             timeSinceLastUpdateBuilding = timeSinceLastUpdateBuilding + deltaTime;
             timeSinceLastUpdateConstruct = timeSinceLastUpdateConstruct + deltaTime;
+            timeSinceLastUpdateResources = timeSinceLastUpdateResources + deltaTime;
+
+            gm.timeManager.updateTime(deltaTime);
 
             if (timeSinceLastUpdateBuilding > 1) {
 
@@ -62,6 +65,13 @@ public class GameThread implements Runnable {
                 }
                 timeSinceLastUpdateConstruct = 0;
             }
+            if (timeSinceLastUpdateResources > 5) {
+
+                for (City c : p.getPlayerCities()) {
+                    manageResources(c);
+                }
+                timeSinceLastUpdateResources = 0;
+            }
             for (City c : p.getPlayerCities()) {
                 manageSprite(c, deltaTime);
                 manageTerrain(c, deltaTime);
@@ -73,15 +83,52 @@ public class GameThread implements Runnable {
                 e.printStackTrace();
             }
 
-
             gm.GameView.repaint();
             gm.frame.getGi().repaint();
             gm.frame.getIt().repaint();
-            Thread.sleep(deltaTimeResearched);
+            float toWait = System.currentTimeMillis() - startTime;
+            Thread.sleep(Math.max(deltaTimeResearched - (int) toWait, 0));
 
             float a = System.currentTimeMillis() - startTime;
             deltaTime = Math.min(a / 1000.0f, deltaTimeResearched / 1000.0f);
 
+        }
+    }
+
+
+    public void manageResources(City c) {
+        for (Case r : c.getMap().getSilvers()) {
+            ((Rock) r.getTerrain()).setAccessible(false);
+            for (Case n : r.getNeighbour()) {
+                if (n.getTerrain().isBlocking())
+                    continue;
+                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.WALKABLE.getI()) != null) {
+                    ((Rock) r.getTerrain()).setAccessible(true);
+                    break;
+                }
+            }
+        }
+        for (Case r : c.getMap().getCoppers()) {
+            ((Rock) r.getTerrain()).setAccessible(false);
+            for (Case n : r.getNeighbour()) {
+                if (n.getTerrain().isBlocking())
+                    continue;
+                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.WALKABLE.getI()) != null) {
+                    ((Rock) r.getTerrain()).setAccessible(true);
+                    break;
+                }
+            }
+        }
+        for (Case r : c.getMap().getTrees()) {
+            ((Tree) r.getObject()).setAccessible(false);
+            for (Case n : r.getNeighbour()) {
+                if (n.getTerrain().isBlocking())
+                    continue;
+                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.WALKABLE.getI()) != null) {
+                    ((Tree) r.getObject()).setAccessible(true);
+                    break;
+                }
+            }
         }
     }
 
@@ -148,7 +195,7 @@ public class GameThread implements Runnable {
     }
 
     public void activate(ObjectClass o) {
-        if (o.getBuildingType() == ObjectType.ROAD)
+        if (o.getBuildingType() == ObjectType.ROAD || o.getAccess() == null)
             return;
         o.setActive(o.getAccess().size() != 0);
     }
