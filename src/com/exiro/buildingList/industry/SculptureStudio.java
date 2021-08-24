@@ -1,25 +1,17 @@
 package com.exiro.buildingList.industry;
 
 import com.exiro.buildingList.BuildingCategory;
-import com.exiro.buildingList.ResourceGenerator;
-import com.exiro.object.Case;
-import com.exiro.object.City;
+import com.exiro.buildingList.IndustryConverter;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.systemCore.GameManager;
 
-import java.util.ArrayList;
+public class SculptureStudio extends IndustryConverter {
 
-public class SculptureStudio extends ResourceGenerator {
-
-
-    public SculptureStudio(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-    }
 
     public SculptureStudio() {
-        super(false, ObjectType.SCULPTURE_STUDIO, BuildingCategory.INDUSTRY, 0, 18, 160, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.SCULPTURE);
+        super(false, ObjectType.SCULPTURE_STUDIO, BuildingCategory.INDUSTRY, 0, 18, 160, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.SCULPTURE, 60, 1, 4, Resource.BRONZE, 4);
     }
 
     @Override

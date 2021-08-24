@@ -49,6 +49,9 @@ public abstract class Terrain extends ObjectClass {
      */
     abstract public void process(double deltaTime);
 
+
+    boolean test = true;
+
     @Override
     public void Render(Graphics g, int camX, int camY) {
         int lvl = getMainCase().getZlvl();
@@ -108,5 +111,13 @@ public abstract class Terrain extends ObjectClass {
     public void setyPos(int yPos) {
         this.yPos = yPos;
         this.setYB(yPos);
+    }
+
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
     }
 }

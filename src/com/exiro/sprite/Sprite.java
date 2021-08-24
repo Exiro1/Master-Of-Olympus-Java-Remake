@@ -1,5 +1,6 @@
 package com.exiro.sprite;
 
+import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.render.IsometricRender;
@@ -8,9 +9,12 @@ import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.util.ArrayList;
 
 public abstract class Sprite extends ObjectClass {
 
+
+    final boolean DEBUG = true;
 
     static int speedFactor;
     protected int frameNumber;
@@ -27,14 +31,7 @@ public abstract class Sprite extends ObjectClass {
     protected City c;
     protected boolean complex = false;
     Sticking sticking = null;
-
-    public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
-        super(true, null, filePath, 1, bitID, localId);
-        this.c = c;
-        this.frameNumber = frameNumber;
-        baseh = getHeight();
-        basew = getWidth();
-    }
+    ArrayList<Case> onWalking = new ArrayList<>();
 
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c, Sticking sticking) {
         super(true, null, filePath, 1, bitID, localId);
@@ -80,6 +77,29 @@ public abstract class Sprite extends ObjectClass {
         return bimage;
     }
 
+    int size = 2;
+
+    public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
+        super(true, null, filePath, 1, bitID, localId);
+        this.c = c;
+        this.frameNumber = frameNumber;
+        baseh = getHeight();
+        basew = getWidth();
+
+    }
+
+    @Override
+    public void setMainCase(Case mainCase) {
+        if (mainCase == this.mainCase)
+            return;
+        if (onWalking.size() >= size) {
+            onWalking.get(0).getSprites().remove(this);
+            onWalking.remove(0);
+        }
+        onWalking.add(mainCase);
+        this.mainCase = mainCase;
+        mainCase.getSprites().add(this);
+    }
 
     public abstract void process(double deltaTime);
 
@@ -87,14 +107,29 @@ public abstract class Sprite extends ObjectClass {
     public void Render(Graphics g, int camX, int camY) {
         int z = c.getMap().getCase(getXB(), getYB()).getZlvl();
 
+
         //Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(),1);
         if (complex) {
-            Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(), baseh, basew, Sticking.TOP_LEFT);
-            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy() + 30, null);
+            Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight());
+            if (DEBUG) {
+                g.setColor(Color.RED);
+                g.drawRect(camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), getWidth(), getHeight());
+                g.drawString(getXB() + " " + getYB() + " " + getX() + " " + getY(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy());
+                g.setColor(Color.BLACK);
+            }
+            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), null);
         } else {
-            Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(), 1);
+            Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight());
+            if (DEBUG) {
+                g.setColor(Color.RED);
+                g.drawRect(camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), getWidth(), getHeight());
+                g.drawString(getXB() + " " + getYB(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY());
+                g.setColor(Color.BLACK);
+            }
             g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
         }
+
+
     }
 
     public double getTimeBetweenFrame() {

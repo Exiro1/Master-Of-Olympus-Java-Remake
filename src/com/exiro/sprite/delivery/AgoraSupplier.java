@@ -33,10 +33,6 @@ public class AgoraSupplier extends MovingSprite {
         return false;
     }
 
-    @Override
-    public void delete() {
-
-    }
 
     @Override
     public ArrayList<Case> getAccess() {

@@ -78,7 +78,6 @@ public class Elevation extends Terrain {
                     i = 25;
                     break;
                 case NORD:
-                    setConstructible(true);
                     i = 26;
                     break;
                 case NORD_OUEST:
@@ -149,6 +148,14 @@ public class Elevation extends Terrain {
     @Override
     public void delete() {
 
+    }
+
+    public boolean isRoadPossible() {
+        return roadPossible;
+    }
+
+    public boolean isHasRoad() {
+        return hasRoad;
     }
 
     @Override

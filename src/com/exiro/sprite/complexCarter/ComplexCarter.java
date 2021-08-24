@@ -1,7 +1,5 @@
 package com.exiro.sprite.complexCarter;
 
-import com.exiro.ai.AI;
-import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
 import com.exiro.object.City;
@@ -51,13 +49,6 @@ public class ComplexCarter {
         puller.setDestination(dest);
     }
 
-    public void setPath(Case start, Case dest) {
-
-        driver.setRoutePath(AI.goTo(driver.getC(), start, dest, FreeState.ALL_ROAD.getI()));
-        puller.setRoutePath(AI.goTo(puller.getC(), start, dest, FreeState.ALL_ROAD.getI()));
-        trolley.setRoutePath(AI.goTo(trolley.getC(), start, dest, FreeState.ALL_ROAD.getI()));
-
-    }
 
     public ArrayList<MovingSprite> getAllSprites() {
         return null;

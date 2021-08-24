@@ -78,17 +78,24 @@ public class Harvester extends MovingSprite {
             } else if (path.getIndex() == path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) {
                 hasArrived = true;
             }
+
             if (getDir() == Direction.SUD_OUEST) {
                 y = y + (float) (speed * deltaTime);
+                x = Math.round(x);
             } else if (getDir() == Direction.NORD_OUEST) {
                 x = x - (float) (speed * deltaTime);
+                y = Math.round(y);
             } else if (getDir() == Direction.NORD_EST) {
                 y = y - (float) (speed * deltaTime);
+                x = Math.round(x);
             } else if (getDir() == Direction.SUD_EST) {
                 x = x + (float) (speed * deltaTime);
+                y = Math.round(y);
             }
-            setXB(Math.round(x));
-            setYB(Math.round(y));
+
+            setXB((int) Math.ceil(x));
+            setYB((int) Math.ceil(y));
+            setMainCase(c.getMap().getCase(getXB(), getYB()));
         }
 
         if (harvesting) {
@@ -138,7 +145,7 @@ public class Harvester extends MovingSprite {
 
     @Override
     public void delete() {
-
+        super.delete();
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.render.layout.GameLayout;
 import com.exiro.render.layout.GameWindow;
-import com.exiro.sprite.Sticking;
 import com.exiro.terrainList.Elevation;
 import com.exiro.utils.Point;
 
@@ -25,62 +24,20 @@ public class IsometricRender {
 
     static public Point TwoDToIsoTexture(Point p, int tile_width, int tile_height, int size) {
         Point tempPt = new Point(0, 0);
-        tempPt.x = p.x * 58 / 2 - (p.y - size) * 58 / 2;
-        tempPt.y = p.x * 30 / 2 + (p.y - size) * 30 / 2;
-        tempPt.x = tempPt.x - tile_width / 2;
-        tempPt.y = tempPt.y + size * 30 - tile_height;
+        tempPt.x = (p.x) * TILE_WIDTH_HALF - p.y * TILE_WIDTH_HALF + (size - 1) * TILE_WIDTH_HALF;
+        tempPt.y = (p.x) * TILE_HEIGHT_HALF + (p.y) * TILE_HEIGHT_HALF;
+        tempPt.x = tempPt.x - tile_width / 2.0f;
+        tempPt.y = tempPt.y - tile_height + TILE_HEIGHT_HALF * size;
         return tempPt;
     }
 
-    static public Point TwoDToIsoSprite(Point p, int tile_width, int tile_height, int baseh, int basew, Sticking sticking) {
+    static public Point TwoDToIsoSprite(Point p, int tile_width, int tile_height) {
         Point tempPt = new Point(0, 0);
-        tempPt.x = p.x * 58 / 2 - (p.y - 1) * 58 / 2;
-        tempPt.y = p.x * 30 / 2 + (p.y - 1) * 30 / 2;
+        tempPt.x = p.x * TILE_WIDTH_HALF - (p.y) * TILE_WIDTH_HALF;
+        tempPt.y = p.x * TILE_HEIGHT_HALF + (p.y) * TILE_HEIGHT_HALF;
 
-
-        tempPt.x = tempPt.x;
-        tempPt.y = tempPt.y;
-        /*
-        switch (sticking){
-
-            case TOP_LEFT:
-                tempPt.x = tempPt.x;
-                tempPt.y = tempPt.y;
-                break;
-            case TOP_MID:
-                tempPt.x = tempPt.x + (basew-tile_width)/2.0f;
-                tempPt.y = tempPt.y;
-                break;
-            case TOP_RIGHT:
-                tempPt.x = tempPt.x - tile_width-basew;
-                tempPt.y = tempPt.y;
-                break;
-            case MID_LEFT:
-                tempPt.x = tempPt.x;
-                tempPt.y = tempPt.y + (baseh-tile_height)/2.0f;
-                break;
-            case MID_MID:
-                tempPt.x = tempPt.x + (basew-tile_width)/2.0f;
-                tempPt.y = tempPt.y + (baseh-tile_height)/2.0f;
-                break;
-            case MID_RIGHT:
-                tempPt.x = tempPt.x - tile_width-basew;
-                tempPt.y = tempPt.y + (baseh-tile_height)/2.0f;
-                break;
-            case BOT_LEFT:
-                tempPt.x = tempPt.x;
-                tempPt.y = tempPt.y - (tile_height-baseh);
-                break;
-            case BOT_MID:
-                tempPt.x = tempPt.x + (basew-tile_width)/2.0f;
-                tempPt.y = tempPt.y - (tile_height-baseh);
-                break;
-            case BOT_RIGHT:
-                tempPt.x = tempPt.x - tile_width-basew;
-                tempPt.y = tempPt.y - (tile_height-baseh);
-                break;
-        }
-        */
+        tempPt.x = tempPt.x /*- tile_width / 2.0f*/;
+        tempPt.y = tempPt.y /*- tile_height*/ + 15;
         return tempPt;
     }
 
@@ -103,7 +60,7 @@ public class IsometricRender {
         float y = e.getY() - GameWindow.getCameraPosy() - GameLayout.TOOLBAR_HEIGHT;//- 40f;
 
         double x2 = IsometricRender.getTileCoordinates(new Point(x, y)).x;
-        double y2 = IsometricRender.getTileCoordinates(new Point(x, y)).y + 1;
+        double y2 = IsometricRender.getTileCoordinates(new Point(x, y)).y;
 
         for (int i = 5; i >= 0; i--) {
             Case t = city.getMap().getCase((int) x2 + i, (int) y2 + i);

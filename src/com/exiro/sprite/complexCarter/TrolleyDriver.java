@@ -47,16 +47,21 @@ public class TrolleyDriver extends MovingSprite {
             }
             if (getDir() == Direction.SUD_OUEST) {
                 y = y + (float) (speed * deltaTime);
+                x = Math.round(x);
             } else if (getDir() == Direction.NORD_OUEST) {
                 x = x - (float) (speed * deltaTime);
+                y = Math.round(y);
             } else if (getDir() == Direction.NORD_EST) {
                 y = y - (float) (speed * deltaTime);
+                x = Math.round(x);
             } else if (getDir() == Direction.SUD_EST) {
                 x = x + (float) (speed * deltaTime);
+                y = Math.round(y);
             }
 
-            setXB(Math.round(x));
-            setYB(Math.round(y));
+            setXB((int) Math.ceil(x));
+            setYB((int) Math.ceil(y));
+            setMainCase(c.getMap().getCase(getXB(), getYB()));
         }
 
 
@@ -80,10 +85,7 @@ public class TrolleyDriver extends MovingSprite {
         return false;
     }
 
-    @Override
-    public void delete() {
 
-    }
 
     @Override
     public ArrayList<Case> getAccess() {

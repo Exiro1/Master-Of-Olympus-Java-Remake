@@ -35,10 +35,6 @@ public class SafetyGuard extends DeliverySprite {
         return false;
     }
 
-    @Override
-    public void delete() {
-
-    }
 
     @Override
     public ArrayList<Case> getAccess() {
