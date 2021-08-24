@@ -177,10 +177,11 @@ public class Stock extends StoreBuilding {
                 c2.setMainCase(false);
                 c2.setSize(1);
             }
+            cases.get(6).setMainCase(false);
             cases.get(6).setImg(getImg());
             cases.get(6).setWidth(getWidth());
             cases.get(6).setHeight(getHeight());
-
+            cases.get(0).setMainCase(true);
             updateStock();
             return true;
         }

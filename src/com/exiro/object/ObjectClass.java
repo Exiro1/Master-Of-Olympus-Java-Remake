@@ -18,7 +18,7 @@ public abstract class ObjectClass implements Cloneable {
     private int xB, yB;
     private int bitmapID, localID;
     private String path;
-    private Case mainCase;
+    protected Case mainCase;
 
 
     public ObjectClass(boolean isActive, ObjectType type, String filename, int size, int bitmapID, int localID) {

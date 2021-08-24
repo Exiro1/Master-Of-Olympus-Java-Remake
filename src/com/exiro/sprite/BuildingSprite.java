@@ -5,6 +5,8 @@ import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
+import com.exiro.render.IsometricRender;
+import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,6 +53,34 @@ public class BuildingSprite extends Sprite {
                 setImage(index);
             }
         }
+    }
+
+    @Override
+    public void Render(Graphics g, int camX, int camY) {
+        int z = c.getMap().getCase(getXB(), getYB()).getZlvl();
+
+        if (complex) {
+            Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight());
+            if (DEBUG) {
+                g.setColor(Color.RED);
+                g.drawRect(camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), getWidth(), getHeight());
+                g.drawString(getXB() + " " + getYB() + " " + getX() + " " + getY(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy());
+                g.setColor(Color.BLACK);
+            }
+            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), null);
+        } else {
+            Point p = IsometricRender.TwoDToIsoTexture(new Point((getX() - z), (getY() - z)), getWidth(), getHeight(), 1); //isoTexture parce que c'est celui que j'utilisait avant l implémentation de isoSprite et j'ai la fleme de refaire les offsets
+            if (DEBUG) {
+                g.setColor(Color.RED);
+                g.drawRect(camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), getWidth(), getHeight());
+                g.drawString(getXB() + " " + getYB(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY());
+                g.setColor(Color.BLACK);
+            }
+
+            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
+        }
+
+
     }
 
     @Override

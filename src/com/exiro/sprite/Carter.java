@@ -30,7 +30,7 @@ public class Carter extends MovingSprite {
 
     public Carter(City c, ObjectClass destination, Building origin, Resource resource, int nbr) {
         super("SprMain", 0, 4728, 12, c, destination);
-        dir = Direction.NORD;
+        dir = Direction.EST;
         timeBetweenFrame = 0.05f;
         Case ca = origin.getAccess().get(0);
         x = ca.getxPos();
@@ -270,7 +270,7 @@ public class Carter extends MovingSprite {
 
     @Override
     public void delete() {
-
+        super.delete();
     }
 
     @Override

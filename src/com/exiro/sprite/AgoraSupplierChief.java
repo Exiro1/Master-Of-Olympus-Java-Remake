@@ -25,6 +25,7 @@ public class AgoraSupplierChief extends MovingSprite {
         setY(origin.getyPos());
         setXB(Math.round(getX()));
         setYB(Math.round(getY()));
+
         path = c.getPathManager().getPathTo(origin, destination.getAccess().get(0), FreeState.ALL_ROAD.i);
         offsetX = 0;
         offsetY = -8;
@@ -36,10 +37,6 @@ public class AgoraSupplierChief extends MovingSprite {
         return false;
     }
 
-    @Override
-    public void delete() {
-
-    }
 
     @Override
     public ArrayList<Case> getAccess() {

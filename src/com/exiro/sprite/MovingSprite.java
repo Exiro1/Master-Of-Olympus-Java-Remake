@@ -3,6 +3,7 @@ package com.exiro.sprite;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.Path;
+import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.utils.Point;
@@ -24,6 +25,7 @@ public abstract class MovingSprite extends Sprite {
         setImage(dir, 0);
         timeBetweenFrame = 0.05f;
         complex = true;
+        setMainCase(c.getMap().getCase(getXB(), getYB()));
     }
 
     public void setImage(Direction direction, int frame) {
@@ -85,23 +87,75 @@ public abstract class MovingSprite extends Sprite {
             }
             if (getDir() == Direction.SUD_OUEST) {
                 y = y + (float) (speed * deltaTime);
+                x = Math.round(x);
             } else if (getDir() == Direction.NORD_OUEST) {
                 x = x - (float) (speed * deltaTime);
+                y = Math.round(y);
             } else if (getDir() == Direction.NORD_EST) {
                 y = y - (float) (speed * deltaTime);
+                x = Math.round(x);
             } else if (getDir() == Direction.SUD_EST) {
                 x = x + (float) (speed * deltaTime);
+                y = Math.round(y);
             }
 
-            setXB(Math.round(x));
-            setYB(Math.round(y));
+            setXB((int) Math.ceil(x));
+            setYB((int) Math.ceil(y));
+            setMainCase(c.getMap().getCase(getXB(), getYB()));
         }
 
+    }
+
+    @Override
+    public void setMainCase(Case mainCase) {
+        if (mainCase == this.mainCase)
+            return;
+
+        onWalking.add(mainCase);
+        this.mainCase = mainCase;
+
+        /*
+        if(getCaseDir() != null) {
+            onWalking.add(getCaseDir());
+            getCaseDir().getSprites().add(this);
+        }*/
+
+        if (onWalking.size() > size) {
+            onWalking.get(0).getSprites().remove(this);
+            onWalking.remove(0);
+        }
+        mainCase.getSprites().add(this);
+    }
+
+    public Case getCaseDir() {
+        int i = 0;
+        switch (dir) {
+            case SUD_EST:
+                i = 1;
+                break;
+            case NORD_EST:
+                i = 0;
+                break;
+            case NORD_OUEST:
+                i = 3;
+                break;
+            case SUD_OUEST:
+                i = 2;
+                break;
+        }
+        return this.mainCase.getNeighbour()[i];
     }
 
 
     abstract public Map<Direction, TileImage[]> getSpriteSet();
 
+
+    @Override
+    public void delete() {
+        for (Case c : onWalking) {
+            c.getSprites().remove(this);
+        }
+    }
 
     public Direction getDir() {
         return dir;

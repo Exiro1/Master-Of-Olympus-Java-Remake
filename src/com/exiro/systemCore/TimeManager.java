@@ -17,6 +17,11 @@ public class TimeManager {
         this.t = 0;
     }
 
+    public int daysSince(Time t) {
+        int tot1 = t.getYear() * 12 * 30 + t.getMonth() * 12 + t.getDay();
+        int tot2 = this.year * 12 * 30 + this.month * 12 + this.day;
+        return tot2 - tot1;
+    }
 
     public boolean timeHasPassed(int year, int month, int day) {
         int tot1 = year * 12 * 30 + month * 12 + day;

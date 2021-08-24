@@ -1,19 +1,14 @@
 package com.exiro.render.layout;
 
-import com.exiro.buildingList.Building;
-import com.exiro.constructionList.Construction;
-import com.exiro.constructionList.Road;
 import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
 import com.exiro.render.GameFrame;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.Interface;
-import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Elevation;
-import com.exiro.terrainList.Terrain;
 import com.exiro.utils.Point;
 
 import javax.swing.*;
@@ -72,66 +67,32 @@ public class GameWindow extends JPanel {
         g.setColor(Color.BLACK);
         int x = 0;
 
-        ArrayList<ObjectClass> allobj;
-        ObjectClass[] oc;
 
-        ArrayList<ObjectClass> terrainObj = new ArrayList<>();
+        Case[] oc;
+        ArrayList<Case> allcase;
 
-        //rendering Terrain
-        synchronized (p.getPlayerCities().get(0).getMap().getCases()) {
-            for (Case c : p.getPlayerCities().get(0).getMap().getCases()) {
-                if (c.getObject() == null) {
-                    //if (c.getTerrain().isFloor()) {
-                    //     c.getTerrain().Render(g, CameraPosx, CameraPosy);
-                    // } else {
-                    terrainObj.add(c.getTerrain());
-                    // }
-                } else if (c.getObject() instanceof Construction) {
-                    if (((Construction) c.getObject()).isFloor() && !(c.getTerrain() instanceof Elevation)) {
-                        c.getObject().Render(g, CameraPosx, CameraPosy);
-                    } else {
-                        terrainObj.add(c.getObject());
-                    }
-                }
+        if (p.getPlayerCities().get(0).getMap().getCaseSorted() == null) {
+            synchronized (p.getPlayerCities().get(0).getMap().getCases()) {
+                allcase = new ArrayList<>(p.getPlayerCities().get(0).getMap().getCases());
             }
+            oc = allcase.toArray(new Case[0]);
+            sortRender(oc);
+            p.getPlayerCities().get(0).getMap().setCaseSorted(oc);
         }
 
+        sortRender(p.getPlayerCities().get(0).getMap().getCaseSorted());
 
-        synchronized (p.getPlayerCities().get(0).getBuildings()) {
-
-            allobj = new ArrayList<>(p.getPlayerCities().get(0).getBuildings());
-
-            allobj.addAll(terrainObj);
-
-            synchronized (p.getPlayerCities().get(0).getConstructions()) {
-                for (Construction c : p.getPlayerCities().get(0).getConstructions()) {
-                    //if (!c.isFloor())
-                    allobj.add(c);
-                }
-
+        for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
+            if (obj.getObject() == null)
+                obj.getTerrain().Render(g, CameraPosx, CameraPosy);
+            if (obj.getObject() != null && (obj.isMainCase())) {
+                obj.getObject().Render(g, CameraPosx, CameraPosy);
             }
+            if (obj.getTerrain() instanceof Elevation && ((Elevation) obj.getTerrain()).isHasRoad())
+                obj.getTerrain().Render(g, CameraPosx, CameraPosy);
 
-
-            for (Building b : p.getPlayerCities().get(0).getBuildings()) {
-                synchronized (b.getMovingSprites()) {
-                    allobj.addAll(b.getMovingSprites());
-                }
-            }
-
-        }
-        oc = allobj.toArray(new ObjectClass[0]);
-        sortRender(oc);
-
-        for (ObjectClass obj : oc) {
-            if (obj instanceof Building || obj instanceof Construction) {
-                if (obj.getMainCase().getTerrain() instanceof Elevation) {
-                    obj.getMainCase().getTerrain().Render(g, CameraPosx, CameraPosy);
-                    if (obj instanceof Road)
-                        continue;
-                }
-                obj.Render(g, CameraPosx, CameraPosy);
-            } else {
-                obj.Render(g, CameraPosx, CameraPosy);
+            for (Sprite s : obj.getSprites()) {
+                s.Render(g, CameraPosx, CameraPosy);
             }
         }
         /*
@@ -226,17 +187,11 @@ public class GameWindow extends JPanel {
 
     public boolean deleting = false;
 
-    public void sortRender(ObjectClass[] a) {
+    public void sortRender(Case[] a) {
         Arrays.sort(a,
                 (o1, o2) -> {
-                    if (o1 instanceof MovingSprite && ((o2 instanceof Construction && ((Construction) o2).isFloor()) || (o2 instanceof Terrain && ((Terrain) o2).isFloor()))) {
-                        if (Math.pow(((MovingSprite) o1).getX() - (o2.getXB() - 0.5), 2) + Math.pow(((MovingSprite) o1).getY() - (o2.getYB() - 0.5), 2) <= 3)
-                            return 1;
-                    } else if (o2 instanceof MovingSprite && ((o1 instanceof Construction && ((Construction) o1).isFloor()) || (o1 instanceof Terrain && ((Terrain) o1).isFloor()))) {
-                        if (Math.pow((o1.getXB() - 0.5) - ((MovingSprite) o2).getX(), 2) + Math.pow((o1.getYB() - 0.5) - ((MovingSprite) o2).getY(), 2) <= 3)
-                            return -1;
-                    }
-                    return Integer.compare(o1.getXB() + o1.getYB(), o2.getXB() + o2.getYB());
+
+                    return Integer.compare(o1.getxPos() + o1.getyPos(), o2.getxPos() + o2.getyPos()) == 0 ? Integer.compare(o1.getxPos(), o2.getxPos()) : Integer.compare(o1.getxPos() + o1.getyPos(), o2.getxPos() + o2.getyPos());
                 });
     }
 
