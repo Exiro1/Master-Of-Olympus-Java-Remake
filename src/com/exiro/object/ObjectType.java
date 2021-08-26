@@ -45,7 +45,7 @@ public enum ObjectType {
 
     //Indusrty
     SAWMILL("Scierie", true, "Zeus_General", 2, 5, 0, Sawmill.class),
-    MARBLE_QUARRY("Carriere de marbre", true, "Zeus_General", 2, 5, 11, MarbleQuarry.class),
+    MARBLE_QUARRY("Carriere de marbre", true, "Zeus_General", 2, 5, 11, MarbleFactory.class),
     MINT("Atelier de monnayage", true, "Zeus_General", 2, 5, 20, Mint.class),
     FOUNDRY("Fonderie", true, "Zeus_General", 2, 5, 35, Foundry.class),
     GUILD("Guilde d'artisant", true, "Zeus_General", 2, 5, 48, Guild.class),

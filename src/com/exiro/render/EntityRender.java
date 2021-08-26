@@ -84,6 +84,7 @@ public class EntityRender {
                     obj = getDefault(defaultObject.getBuildingType());
                     obj.setXB(c.getxPos());
                     obj.setYB(c.getyPos());
+                    obj.canBuild = true;
                     toBuild.add(obj);
                 }
             }
@@ -94,6 +95,31 @@ public class EntityRender {
                     if (startY < p.getY()) {
                         for (int j = startY; j < p.getY(); j += defaultObject.getSize()) {
                             Case c = map.getCase(i, j);
+
+                            ArrayList<Case> place;
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.canBuild = true;
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                toBuild.add(obj);
+                            } else {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                obj.canBuild = false;
+                                toBuild.add(obj);
+                            }
+                            /*
                             if (!c.isOccuped() && c.getTerrain().isConstructible()) {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
@@ -103,11 +129,37 @@ public class EntityRender {
                                 obj.setXB(c.getxPos());
                                 obj.setYB(c.getyPos());
                                 toBuild.add(obj);
-                            }
+                            }*/
+
                         }
                     } else {
                         for (int j = (int) p.getY(); j < startY; j += defaultObject.getSize()) {
                             Case c = map.getCase(i, j);
+
+                            ArrayList<Case> place;
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                obj.canBuild = true;
+                                toBuild.add(obj);
+                            } else {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                obj.canBuild = false;
+                                toBuild.add(obj);
+                            }
+                            /*
                             if (!c.isOccuped() && c.getTerrain().isConstructible()) {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
@@ -117,7 +169,7 @@ public class EntityRender {
                                 obj.setXB(c.getxPos());
                                 obj.setYB(c.getyPos());
                                 toBuild.add(obj);
-                            }
+                            }*/
                         }
                     }
                 }
@@ -126,7 +178,9 @@ public class EntityRender {
                     if (startY < p.getY()) {
                         for (int j = startY; j < p.getY(); j += defaultObject.getSize()) {
                             Case c = map.getCase(i, j);
-                            if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                            ArrayList<Case> place;
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
                                 if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
@@ -134,13 +188,36 @@ public class EntityRender {
                                 }
                                 obj.setXB(c.getxPos());
                                 obj.setYB(c.getyPos());
+                                obj.canBuild = true;
+                                toBuild.add(obj);
+                            } else {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                obj.canBuild = false;
                                 toBuild.add(obj);
                             }
                         }
                     } else {
                         for (int j = (int) p.getY(); j < startY; j += defaultObject.getSize()) {
                             Case c = map.getCase(i, j);
-                            if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                            ArrayList<Case> place;
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
+                                ObjectClass obj = null;
+                                obj = getDefault(defaultObject.getBuildingType());
+                                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                                    ((ResourceGenerator) obj).setResource(resource);
+                                }
+                                obj.canBuild = true;
+                                obj.setXB(c.getxPos());
+                                obj.setYB(c.getyPos());
+                                toBuild.add(obj);
+                            } else {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
                                 if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
@@ -148,6 +225,7 @@ public class EntityRender {
                                 }
                                 obj.setXB(c.getxPos());
                                 obj.setYB(c.getyPos());
+                                obj.canBuild = false;
                                 toBuild.add(obj);
                             }
                         }
@@ -159,6 +237,24 @@ public class EntityRender {
 
     }
 
+    public static BufferedImage tint(BufferedImage image, Color color) {
+
+        BufferedImage bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), Transparency.TRANSLUCENT);
+        bimage.getGraphics().drawImage(image, 0, 0, null);
+
+        for (int x = 0; x < bimage.getWidth(); x++) {
+            for (int y = 0; y < bimage.getHeight(); y++) {
+                Color pixelColor = new Color(bimage.getRGB(x, y), true);
+                int r = (pixelColor.getRed() + color.getRed()) / 2;
+                int g = (pixelColor.getGreen() + color.getGreen()) / 2;
+                int b = (pixelColor.getBlue() + color.getBlue()) / 2;
+                int a = pixelColor.getAlpha();
+                int rgba = (a << 24) | (r << 16) | (g << 8) | b;
+                bimage.setRGB(x, y, rgba);
+            }
+        }
+        return bimage;
+    }
 
     public static ObjectClass getDefault(ObjectType type) {
         return type.getDefault();

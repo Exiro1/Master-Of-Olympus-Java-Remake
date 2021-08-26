@@ -18,14 +18,14 @@ public class TimeManager {
     }
 
     public int daysSince(Time t) {
-        int tot1 = t.getYear() * 12 * 30 + t.getMonth() * 12 + t.getDay();
-        int tot2 = this.year * 12 * 30 + this.month * 12 + this.day;
+        int tot1 = t.getYear() * 12 * 30 + t.getMonth() * 30 + t.getDay();
+        int tot2 = this.year * 12 * 30 + this.month * 30 + this.day;
         return tot2 - tot1;
     }
 
     public boolean timeHasPassed(int year, int month, int day) {
-        int tot1 = year * 12 * 30 + month * 12 + day;
-        int tot2 = this.year * 12 * 30 + this.month * 12 + this.day;
+        int tot1 = year * 12 * 30 + month * 30 + day;
+        int tot2 = this.year * 12 * 30 + this.month * 30 + this.day;
         if (tot1 < tot2) {
             return true;
         }

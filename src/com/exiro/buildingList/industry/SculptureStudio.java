@@ -15,14 +15,27 @@ public class SculptureStudio extends IndustryConverter {
     }
 
     @Override
+    public void createBuildingSpriteWork() {
+        BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 86, 35, getCity(), this);
+        s.setOffsetX(36);
+        s.setOffsetY(-8);
+        s.setTimeBetweenFrame(0.08f);
+        addSprite(s);
+    }
+
+    @Override
+    public BuildingSprite createBuildingSpriteWait() {
+        BuildingSprite s = super.createBuildingSpriteWait();
+        s.setOffsetX(24);
+        s.setOffsetY(10);
+        return s;
+    }
+
+    @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
-            BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 86, 35, getCity(), this);
-            s.setOffsetX(36);
-            s.setOffsetY(-8);
-            s.setTimeBetweenFrame(0.08f);
-            addSprite(s);
+            setState(ConversionState.WAITING_RESOURCES);
             return true;
         }
         return false;

@@ -18,14 +18,27 @@ public class OlivePress extends IndustryConverter {
     }
 
     @Override
+    public void createBuildingSpriteWork() {
+        BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 60, 12, getCity(), this);
+        s.setOffsetX(33);
+        s.setOffsetY(-7);
+        s.setTimeBetweenFrame(0.1f);
+        addSprite(s);
+    }
+
+    @Override
+    public BuildingSprite createBuildingSpriteWait() {
+        BuildingSprite s = super.createBuildingSpriteWait();
+        s.setOffsetX(25);
+        s.setOffsetY(0);
+        return s;
+    }
+
+    @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
-            BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 60, 12, getCity(), this);
-            s.setOffsetX(33);
-            s.setOffsetY(-7);
-            s.setTimeBetweenFrame(0.1f);
-            addSprite(s);
+            setState(ConversionState.WAITING_RESOURCES);
             return true;
         }
         return false;
@@ -34,6 +47,7 @@ public class OlivePress extends IndustryConverter {
     @Override
     public void process(double deltatime) {
         super.process(deltatime);
+
     }
 
 

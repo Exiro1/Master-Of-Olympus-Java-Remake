@@ -65,6 +65,7 @@ public abstract class Sprite extends ObjectClass {
         return toBufferedImage(Toolkit.getDefaultToolkit().createImage(ip));
     }
 
+
     public static BufferedImage toBufferedImage(Image img) {
         if (img instanceof BufferedImage) {
             return (BufferedImage) img;
@@ -130,6 +131,11 @@ public abstract class Sprite extends ObjectClass {
         }
 
 
+    }
+
+    @Override
+    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
+        return null;
     }
 
     public double getTimeBetweenFrame() {

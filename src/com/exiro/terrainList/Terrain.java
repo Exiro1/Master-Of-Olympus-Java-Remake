@@ -1,5 +1,6 @@
 package com.exiro.terrainList;
 
+import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
@@ -9,6 +10,7 @@ import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Terrain extends ObjectClass {
 
@@ -34,6 +36,11 @@ public abstract class Terrain extends ObjectClass {
         if (c.getMap() != null)
             this.setMainCase(c.getMap().getCase(xpos, ypos));
         //this.c = city.getMap().getCase(getXB(),getYB());
+    }
+
+    @Override
+    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
+        return null;
     }
 
     @Override

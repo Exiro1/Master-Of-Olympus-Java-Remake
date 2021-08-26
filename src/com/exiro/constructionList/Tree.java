@@ -66,6 +66,12 @@ public class Tree extends Construction {
         updateImg();
     }
 
+    @Override
+    public void delete() {
+        super.delete();
+        city.getMap().getTrees().remove(this.getMainCase());
+    }
+
     public boolean isBeingcut() {
         return beingcut;
     }
