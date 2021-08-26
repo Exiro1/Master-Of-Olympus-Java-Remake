@@ -1,36 +1,42 @@
 package com.exiro.buildingList.industry;
 
 import com.exiro.buildingList.BuildingCategory;
-import com.exiro.buildingList.ResourceGenerator;
-import com.exiro.object.Case;
-import com.exiro.object.City;
+import com.exiro.buildingList.IndustryConverter;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.systemCore.GameManager;
 
-import java.util.ArrayList;
+public class Winery extends IndustryConverter {
 
-public class Winery extends ResourceGenerator {
-
-
-    public Winery(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-    }
 
     public Winery() {
-        super(false, ObjectType.WINERY, BuildingCategory.INDUSTRY, 0, 12, 72, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WINE);
+        super(false, ObjectType.WINERY, BuildingCategory.INDUSTRY, 0, 12, 72, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WINE, 60, 1, 1, Resource.GRAPE, 2);
+    }
+
+
+    @Override
+    public BuildingSprite createBuildingSpriteWait() {
+        BuildingSprite s = super.createBuildingSpriteWait();
+        s.setOffsetX(50);
+        s.setOffsetY(-20);
+        return s;
+    }
+
+    @Override
+    public void createBuildingSpriteWork() {
+        BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 73, 12, getCity(), this);
+        s.setOffsetX(28);
+        s.setOffsetY(3);
+        s.setTimeBetweenFrame(0.1f);
+        addSprite(s);
     }
 
     @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
-            BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 73, 12, getCity(), this);
-            s.setOffsetX(28);
-            s.setOffsetY(3);
-            s.setTimeBetweenFrame(0.1f);
-            addSprite(s);
+            setState(ConversionState.WAITING_RESOURCES);
             return true;
         }
         return false;

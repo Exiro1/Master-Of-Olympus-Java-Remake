@@ -10,6 +10,8 @@ import java.util.Random;
 public class CityMap {
 
     private ArrayList<Case> cases;
+
+    private Case[] caseSorted;
     private int lenght;
     private int height, width;
     private Case startCase;
@@ -102,9 +104,9 @@ public class CityMap {
                 Case c = getCase(i, j);
                 Random r = new Random();
                 int nbr = r.nextInt(8);
-                Rock rock = new Rock(i, j, city, 1, Rock.RockType.SILVER, nbr);
+                Rock rock = new Rock(i, j, city, 1, Rock.RockType.COPPER, nbr);
                 c.setTerrain(rock);
-                silvers.add(c);
+                coppers.add(c);
             }
         }
     }
@@ -300,7 +302,13 @@ public class CityMap {
         this.width = width;
     }
 
+    public Case[] getCaseSorted() {
+        return caseSorted;
+    }
 
+    public void setCaseSorted(Case[] caseSorted) {
+        this.caseSorted = caseSorted;
+    }
 }
 
 

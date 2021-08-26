@@ -11,6 +11,7 @@ import com.exiro.object.Resource;
 import com.exiro.render.IsometricRender;
 import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Point;
+import com.exiro.utils.Time;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 public class Farm extends ResourceGenerator {
 
     int Rlevel;
-    float speedFactor = 1;
     float growth;
     TileImage growthImg;
 
@@ -42,21 +42,54 @@ public class Farm extends ResourceGenerator {
         this.setResource(r);
     }
 
+
+    int tickSinceStart = 0;
+    int integralStaff = 0;
+    int year = -1;
+    int month = 6;
+    Time nextEvolve = null;
+
+
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
         if (isActive() && getPop() > 0) {
-            float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
-            growth += factor * deltaTime * speedFactor;
 
-            if (growth > 40) {
-                growth = 0;
-                Rlevel++;
-                changeLevel(Rlevel);
-            }
-            if (Rlevel > 5) {
+
+            tickSinceStart++;
+            integralStaff += getPop();
+
+            if (year == -1) {
+                if (GameManager.getInstance().getTimeManager().timeHasPassed(GameManager.getInstance().getTimeManager().getYear(), month, 0)) {
+                    year = GameManager.getInstance().getTimeManager().getYear() + 1;
+                    tickSinceStart = 0;
+                    integralStaff = 0;
+                    Rlevel = 0;
+                    nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
+
+                } else {
+                    year = GameManager.getInstance().getTimeManager().getYear();
+                    tickSinceStart = 0;
+                    integralStaff = 0;
+                    Rlevel = 0;
+                    nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
+                }
+            } else if (GameManager.getInstance().getTimeManager().timeHasPassed(year, month, 0)) {
+                int unit = (int) Math.ceil(((float) integralStaff / ((float) tickSinceStart * getPopMax())) * 8.0f);
+                resourceCreated(unit);
+                tickSinceStart = 0;
+                integralStaff = 0;
                 Rlevel = 0;
-                resourceCreated(6);
+                year = GameManager.getInstance().getTimeManager().getYear() + 1;
+                nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
+            }
+
+            if (GameManager.getInstance().getTimeManager().timeHasPassed(nextEvolve)) {
+                if (Rlevel < 6) {
+                    Rlevel++;
+                    changeLevel(Rlevel);
+                }
+                nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
             }
 
         }

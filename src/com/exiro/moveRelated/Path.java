@@ -33,6 +33,10 @@ public class Path {
     }
 
     public Direction next() {
+        if (path.size() == 1) {
+            return Direction.SUD_OUEST;
+        }
+
         Case last = path.get(index);
         index++;
         Case next = path.get(index);

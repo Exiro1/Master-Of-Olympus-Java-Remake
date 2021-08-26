@@ -1,10 +1,12 @@
 package com.exiro.object;
 
 import com.exiro.moveRelated.RoadMap;
+import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Terrain;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Case {
     private int xPos, yPos;
@@ -21,12 +23,15 @@ public class Case {
     //NORD EST SUD OUEST
     Case[] neighbour;
 
+    ArrayList<Sprite> sprites;
+
     public Case(int x, int y, ObjectClass obj, Terrain terrain) {
         this.xPos = x;
         this.yPos = y;
         this.object = obj;
         this.terrain = terrain;
         zlvl = 0;
+        sprites = new ArrayList<>();
     }
 
     public Case(int x, int y, int zlvl, ObjectClass obj, Terrain terrain) {
@@ -35,6 +40,7 @@ public class Case {
         this.object = obj;
         this.terrain = terrain;
         this.zlvl = zlvl;
+        sprites = new ArrayList<>();
     }
 
     public void initNeighbour(CityMap map) {
@@ -140,6 +146,14 @@ public class Case {
 
     public void setOccuped(boolean occuped) {
         Occuped = occuped;
+    }
+
+    public ArrayList<Sprite> getSprites() {
+        return sprites;
+    }
+
+    public void setSprites(ArrayList<Sprite> sprites) {
+        this.sprites = sprites;
     }
 
     /*public ObjectType getBuildingType() {

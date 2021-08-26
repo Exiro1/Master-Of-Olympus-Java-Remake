@@ -37,10 +37,6 @@ public class WaterDelivery extends DeliverySprite {
         return false;
     }
 
-    @Override
-    public void delete() {
-
-    }
 
     @Override
     public ArrayList<Case> getAccess() {

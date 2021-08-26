@@ -52,10 +52,13 @@ public class Agora extends Building {
             EmptyShop e = new EmptyShop();
             Case c = shops.get(i);
             e.build(c.getxPos(), c.getyPos());
+
+            /*
             TileImage t = ImageLoader.getImage("Zeus_General", 3, 15);
             c.setImg(t.getImg());
             c.setHeight(t.getH());
             c.setWidth(t.getW());
+            */
         }
     }
 

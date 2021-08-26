@@ -27,7 +27,7 @@ public abstract class ResourceGenerator extends Building {
     @Override
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
-            if (isActive() && getPop() > 0)
+            if (isWorking())
                 s.process(delta);
         }
     }

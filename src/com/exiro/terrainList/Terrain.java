@@ -1,5 +1,6 @@
 package com.exiro.terrainList;
 
+import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
@@ -9,6 +10,7 @@ import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Terrain extends ObjectClass {
 
@@ -37,6 +39,11 @@ public abstract class Terrain extends ObjectClass {
     }
 
     @Override
+    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
+        return null;
+    }
+
+    @Override
     public Interface getInterface() {
         BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null, this);
         bi.addText(getType().getName(), "Zeus.ttf", 16f, 100, 50);
@@ -48,6 +55,9 @@ public abstract class Terrain extends ObjectClass {
      * Appelés toute les secondes
      */
     abstract public void process(double deltaTime);
+
+
+    boolean test = true;
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
@@ -108,5 +118,13 @@ public abstract class Terrain extends ObjectClass {
     public void setyPos(int yPos) {
         this.yPos = yPos;
         this.setYB(yPos);
+    }
+
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
     }
 }
