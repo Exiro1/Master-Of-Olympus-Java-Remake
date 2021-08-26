@@ -136,7 +136,11 @@ public class GameWindow extends JPanel {
                     if (gm.getCurrentCity().getMap().getCase(obj.getXB(), obj.getYB()) != null)
                         lvl = gm.getCurrentCity().getMap().getCase(obj.getXB(), obj.getYB()).getZlvl();
                     Point p = IsometricRender.TwoDToIsoTexture(new Point(obj.getXB() - lvl, obj.getYB() - lvl), obj.getWidth(), obj.getHeight(), obj.getSize());
-                    g.drawImage(EntityRender.img, CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
+                    if (obj.canBuild) {
+                        g.drawImage(EntityRender.tint(EntityRender.img, Color.GREEN), CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
+                    } else {
+                        g.drawImage(EntityRender.tint(EntityRender.img, Color.RED), CameraPosx + (int) p.getX(), CameraPosy + (int) p.getY(), null);
+                    }
                 }
             }
         }

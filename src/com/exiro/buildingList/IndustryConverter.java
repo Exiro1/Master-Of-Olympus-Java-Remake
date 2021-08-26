@@ -6,9 +6,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
-import com.exiro.sprite.Carter;
-import com.exiro.sprite.MovingSprite;
-import com.exiro.sprite.Sprite;
+import com.exiro.sprite.*;
 import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Time;
 
@@ -31,7 +29,35 @@ public class IndustryConverter extends ResourceGenerator {
         this.needed = resourceNeeded;
         stockIn = 0;
         this.maxStock = maxStock;
-        state = ConversionState.WAITING_RESOURCES;
+    }
+
+    public BuildingSprite createBuildingSpriteWait() {
+        BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2436, 12, getCity(), this, Direction.SUD_EST);
+        s.setOffsetX(9);
+        s.setOffsetY(16);
+        s.setTimeBetweenFrame(0.1f);
+        s.setComplex(true);
+        addSprite(s);
+        return s;
+    }
+
+    public void createBuildingSpriteWork() {
+
+    }
+
+    public void setState(ConversionState state) {
+        if (this.state == state)
+            return;
+        this.state = state;
+        if (state == ConversionState.WAITING_RESOURCES) {
+            if (getBuildingSprites().size() > 0)
+                removeSprites(getBuildingSprites().get(0));
+            createBuildingSpriteWait();
+        } else {
+            if (getBuildingSprites().size() > 0)
+                removeSprites(getBuildingSprites().get(0));
+            createBuildingSpriteWork();
+        }
     }
 
     @Override
@@ -47,12 +73,13 @@ public class IndustryConverter extends ResourceGenerator {
             if (state == ConversionState.CONVERSION) {
                 if (GameManager.getInstance().getTimeManager().daysSince(startConvertion) > (timeToTransform * (((float) getPopMax() / (float) getPop())))) {
                     resourceCreated(unitProduced);
-                    state = ConversionState.WAITING_RESOURCES;
+                    setState(ConversionState.WAITING_RESOURCES);
+
                 }
             }
             if (state == ConversionState.WAITING_RESOURCES) {
                 if (stockIn >= unitNeeded) {
-                    state = ConversionState.CONVERSION;
+                    setState(ConversionState.CONVERSION);
                     startConvertion = GameManager.getInstance().getTimeManager().getTime();
                     stockIn -= unitNeeded;
                 }
@@ -100,5 +127,5 @@ public class IndustryConverter extends ResourceGenerator {
 
     }
 
-    enum ConversionState {WAITING_RESOURCES, CONVERSION}
+    public enum ConversionState {WAITING_RESOURCES, CONVERSION}
 }

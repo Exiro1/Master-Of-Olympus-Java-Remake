@@ -14,12 +14,25 @@ import java.util.ArrayList;
 public class BuildingSprite extends Sprite {
 
     final Building building;
+    boolean directional;
+    Direction direction;
 
     public BuildingSprite(String filePath, int bitID, int localId, int frameNumber, City c, Building b) {
         super(filePath, bitID, localId, frameNumber, c);
         this.building = b;
         this.x = b.getXB();
         this.y = b.getYB();
+        this.directional = false;
+        setImage(0);
+    }
+
+    public BuildingSprite(String filePath, int bitID, int localId, int frameNumber, City c, Building b, Direction direction) {
+        super(filePath, bitID, localId, frameNumber, c);
+        this.building = b;
+        this.x = b.getXB();
+        this.y = b.getYB();
+        this.directional = true;
+        this.direction = direction;
         setImage(0);
     }
 
@@ -27,10 +40,46 @@ public class BuildingSprite extends Sprite {
         return ImageLoader.getImage(getPath(), getBitmapID(), getLocalID() + frame);
     }
 
+    public void setImage(Direction direction, int frame) {
+        int i = 0;
+        switch (direction) {
+
+            case SUD:
+                i = 3;
+                break;
+            case SUD_EST:
+                i = 2;
+                break;
+            case EST:
+                i = 1;
+                break;
+            case NORD_EST:
+                i = 0;
+                break;
+            case NORD:
+                i = 7;
+                break;
+            case NORD_OUEST:
+                i = 6;
+                break;
+            case OUEST:
+                i = 5;
+                break;
+            case SUD_OUEST:
+                i = 4;
+                break;
+        }
+        TileImage t = ImageLoader.getImage(getPath(), getBitmapID(), getLocalID() + i + frame * 8);
+
+        currentFrame = t.getImg();
+        height = t.getH();
+        width = t.getW();
+        setImg(t);
+    }
+
     public void setImage(int frame) {
         TileImage t = getImage(frame);
         currentFrame = makeColorTransparent(t.getImg(), Color.RED);
-        ;
         height = t.getH();
         width = t.getW();
         setImg(t);
@@ -50,7 +99,11 @@ public class BuildingSprite extends Sprite {
                     index = 0;
 
                 }
-                setImage(index);
+                if (directional) {
+                    setImage(direction, index);
+                } else {
+                    setImage(index);
+                }
             }
         }
     }
@@ -81,6 +134,11 @@ public class BuildingSprite extends Sprite {
         }
 
 
+    }
+
+    @Override
+    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
+        return null;
     }
 
     @Override

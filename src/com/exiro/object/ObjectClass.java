@@ -19,6 +19,7 @@ public abstract class ObjectClass implements Cloneable {
     private int bitmapID, localID;
     private String path;
     protected Case mainCase;
+    public boolean canBuild;
 
 
     public ObjectClass(boolean isActive, ObjectType type, String filename, int size, int bitmapID, int localID) {
@@ -50,6 +51,8 @@ public abstract class ObjectClass implements Cloneable {
         assert img != null;
         setImg(img);
     }
+
+    public abstract ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city);
 
     public abstract Interface getInterface();
 

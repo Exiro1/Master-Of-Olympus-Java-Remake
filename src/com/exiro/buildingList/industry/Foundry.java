@@ -22,17 +22,18 @@ public class Foundry extends IndustryHarverster {
         super(false, ObjectType.FOUNDRY, BuildingCategory.INDUSTRY, 0, 15, 105, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.BRONZE, 8, 3, 25, 100);
     }
 
+    public void createBuildingSpriteWork() {
+        BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 36, 12, getCity(), this);
+        s.setOffsetX(29);
+        s.setOffsetY(-11);
+        s.setTimeBetweenFrame(0.1f);
+        addSprite(s);
+    }
+
     @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
-            BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 36, 12, getCity(), this);
-            s.setOffsetX(29);
-            s.setOffsetY(-11);
-            s.setTimeBetweenFrame(0.1f);
-            addSprite(s);
-
-
             return true;
         }
         return false;
