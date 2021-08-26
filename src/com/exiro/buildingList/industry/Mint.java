@@ -17,15 +17,19 @@ public class Mint extends IndustryHarverster {
 
     int harvester = 0;
 
+
+    public void createBuildingSpriteWork() {
+        BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 21, 10, getCity(), this);
+        s.setOffsetX(9);
+        s.setOffsetY(16);
+        s.setTimeBetweenFrame(0.1f);
+        addSprite(s);
+    }
+
     @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
-            BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 21, 10, getCity(), this);
-            s.setOffsetX(9);
-            s.setOffsetY(16);
-            s.setTimeBetweenFrame(0.1f);
-            addSprite(s);
             return true;
         }
         return false;

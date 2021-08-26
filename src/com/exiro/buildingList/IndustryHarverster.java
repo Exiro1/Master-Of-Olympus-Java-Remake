@@ -50,7 +50,6 @@ public class IndustryHarverster extends ResourceGenerator {
     public void process(double deltaTime) {
         super.process(deltaTime);
 
-
     }
 
 

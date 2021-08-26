@@ -35,6 +35,7 @@ public class Immigrant extends MovingSprite {
 
     @Override
     public void delete() {
+        super.delete();
         this.hasArrived = true;
     }
 

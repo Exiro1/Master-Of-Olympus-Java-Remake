@@ -75,7 +75,7 @@ public abstract class DeliverySprite extends MovingSprite {
 
     @Override
     public void delete() {
-
+        super.delete();
     }
 
 

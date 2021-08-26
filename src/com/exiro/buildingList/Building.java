@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public abstract class Building extends ObjectClass {
 
+    final boolean DEBUG = true;
+
     final ObjectType type;
     protected final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
     final ArrayList<MovingSprite> msprites = new ArrayList<>();
@@ -221,9 +223,16 @@ public abstract class Building extends ObjectClass {
     @Override
     public void Render(Graphics g, int camX, int camY) {
         int lvl = getMainCase().getZlvl();
+
         com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
+
+        if (DEBUG) {
+            g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
+            g.setColor(Color.RED);
+            g.drawRect(camX + (int) p.getX(), camY + (int) p.getY(), getWidth(), getHeight());
+            g.setColor(Color.BLACK);
+        }
 
         //render only buildingSprite because movingSprite are render separately
         for (BuildingSprite s : bsprites) {
@@ -320,6 +329,7 @@ public abstract class Building extends ObjectClass {
 
     public void removeSprites(Sprite s) {
         synchronized (sprites) {
+            s.delete();
             sprites.remove(s);
         }
 

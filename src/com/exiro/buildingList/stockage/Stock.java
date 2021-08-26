@@ -9,6 +9,9 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.render.IsometricRender;
+import com.exiro.sprite.BuildingSprite;
+import com.exiro.sprite.Direction;
+import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Point;
 
@@ -103,6 +106,8 @@ public class Stock extends StoreBuilding {
     @Override
     public void Render(Graphics g, int camX, int camY) {
         renderTile(cases.get(6), g, camX, camY);
+        if (isWorking())
+            getBuildingSprites().get(0).Render(g, camX, camY);
         renderTile(cases.get(7), g, camX, camY);
         renderTile(cases.get(3), g, camX, camY);
         renderTile(cases.get(8), g, camX, camY);
@@ -177,10 +182,20 @@ public class Stock extends StoreBuilding {
                 c2.setMainCase(false);
                 c2.setSize(1);
             }
+
+            BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2276, 16, city, this, Direction.SUD_EST);
+            s.setTimeBetweenFrame(0.1f);
+            s.setOffsetX(58);
+            s.setOffsetY(-44);
+            s.setComplex(true);
+            addSprite(s);
+            updateStock();
+
+            cases.get(6).setMainCase(false);
             cases.get(6).setImg(getImg());
             cases.get(6).setWidth(getWidth());
             cases.get(6).setHeight(getHeight());
-
+            cases.get(0).setMainCase(true);
             updateStock();
             return true;
         }
@@ -189,7 +204,10 @@ public class Stock extends StoreBuilding {
 
     @Override
     public void processSprite(double delta) {
-
+        for (Sprite s : sprites) {
+            if (isActive() && getPop() > 0)
+                s.process(delta);
+        }
     }
 
     @Override
