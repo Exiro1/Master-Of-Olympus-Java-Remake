@@ -119,12 +119,15 @@ public class Farm extends ResourceGenerator {
             switch (getResource()) {
                 case CORN:
                     i += 13;
+                    month = 6;
                     break;
                 case CARROT:
                     i += 19;
+                    month = 3;
                     break;
                 case ONION:
                     i += 25;
+                    month = 3;
                     break;
             }
             growthImg = ImageLoader.getImage(getPath(), getBitmapID(), i);
