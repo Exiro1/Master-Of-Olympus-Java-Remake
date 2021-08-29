@@ -16,6 +16,7 @@ public class Animal extends MovingSprite {
 
     public Animal(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
         super(filePath, bitID, localId, frameNumber, c, destination);
+        setComplex(true);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.exiro.buildingList.culture.Theater;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.animals.Goat;
 import com.exiro.sprite.animals.Sheep;
 import com.exiro.systemCore.BuildingManager;
 import com.exiro.systemCore.PathManager;
@@ -25,6 +26,7 @@ public class City {
 
     private final ArrayList<Sprite> animals = new ArrayList<>();
     private final ArrayList<Sheep> sheeps = new ArrayList<>();
+    private final ArrayList<Goat> goats = new ArrayList<>();
 
     private final ArrayList<StoreBuilding> storage;
     private final ArrayList<Theater> theaters;
@@ -199,6 +201,24 @@ public class City {
 
     public ArrayList<Sheep> getSheeps() {
         return sheeps;
+    }
+
+    public void addGoat(Goat s) {
+        addAnimal(s);
+        synchronized (goats) {
+            goats.add(s);
+        }
+    }
+
+    public void removeGoat(Goat s) {
+        removeAnimal(s);
+        synchronized (goats) {
+            goats.remove(s);
+        }
+    }
+
+    public ArrayList<Goat> getGoats() {
+        return goats;
     }
 
     public ArrayList<Sprite> getAnimals() {

@@ -7,9 +7,13 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
+import com.exiro.sprite.MovingSprite;
+import com.exiro.sprite.agriculture.Goatherd;
+import com.exiro.sprite.animals.Goat;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Dairy extends ResourceGenerator {
 
@@ -44,18 +48,52 @@ public class Dairy extends ResourceGenerator {
         return false;
     }
 
+    int goatherdNbr = 0;
+
+    public void createGoatherd() {
+        Random r = new Random();
+        if (city.getGoats().size() > 0) {
+            Goat destination = city.getGoats().get(r.nextInt(city.getGoats().size()));
+            if (destination != null && destination.isAvailable()) {
+                Goatherd p = new Goatherd(city, this, destination, !destination.isMilked());
+                destination.setAvailable(false);
+                addSprite(p);
+                goatherdNbr++;
+            }
+        }
+    }
+
+    @Override
+    public void processSprite(double delta) {
+        super.processSprite(delta);
+
+        ArrayList<MovingSprite> toR = new ArrayList<>();
+        for (MovingSprite ms : getMovingSprites()) {
+            if (ms instanceof Goatherd) {
+                if (ms.hasArrived && ms.getDestination() == this) {
+                    toR.add(ms);
+                }
+            }
+        }
+        for (MovingSprite ms : toR) {
+            removeSprites(ms);
+        }
+
+    }
+
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
         if (isActive() && getPop() > 0) {
-            float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
-            growth += factor * deltaTime * speedFactor;
-            if (growth > 60) {
-                growth = 0;
-                resourceCreated(1);
+            if (goatherdNbr < 2) {
+                createGoatherd();
             }
-
         }
+    }
+
+    public void goatherdFinished() {
+        goatherdNbr--;
+        resourceCreated(1);
     }
 
     @Override

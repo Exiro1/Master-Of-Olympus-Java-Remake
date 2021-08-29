@@ -15,6 +15,7 @@ import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.*;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.sprite.animals.Goat;
 import com.exiro.sprite.animals.Sheep;
 import com.exiro.terrainList.*;
 
@@ -86,7 +87,8 @@ public enum ObjectType {
     ERASE("Destruction", true, "Zeus_Terrain", 1, 2, 36, Destruction.class),
 
     //SPRITE
-    SHEEP("Mouton", false, "SprMain", 1, 0, 3182, Sheep.class);
+    SHEEP("Mouton", false, "SprMain", 1, 0, 3182, Sheep.class),
+    GOAT("Chevre", false, "SprMain", 1, 0, 11227, Goat.class);
 
     private final Class c;
     private final String name;

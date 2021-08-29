@@ -16,68 +16,56 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-public class Sheep extends Animal {
+public class Goat extends Animal {
 
-    //3182 normal non tondu
-    //3286 normal eating
-    //3350 par terre non tondu
+    //11227 normal non tondu 12
+    //11331 normal eating 16
+    //11459 par terre non tondu 8
 
     //7872 normal tondu
     //7976 eating tondu
     //8040 par terre tondu
 
     AnimalsAI ai;
-    SheepState state;
+    GoatState state;
     boolean available = true;
     int days = 180;
     Time start;
     double timeUntilChange = 10;
-    boolean mowed = true;
+    boolean milked = true;
     double checkTime = 0;
-    SheepState lastState;
+    GoatState lastState;
 
-    public Sheep() {
-        super("SprMain", 0, 3182, 12, GameManager.currentCity, null);
-        setType(ObjectType.SHEEP);
+    public Goat() {
+        super("SprMain", 0, 11227, 12, GameManager.currentCity, null);
+        setType(ObjectType.GOAT);
         ai = new AnimalsAI();
-        setState(SheepState.MOWED_EATING);
+        setState(GoatState.NORMAL_EATING);
         start = GameManager.getInstance().getTimeManager().getTime();
     }
 
-    public Sheep(City c) {
-        super("SprMain", 0, 3182, 12, c, null);
-        setType(ObjectType.SHEEP);
+    public Goat(City c) {
+        super("SprMain", 0, 11227, 12, c, null);
+        setType(ObjectType.GOAT);
         ai = new AnimalsAI();
-        setState(SheepState.MOWED_EATING);
+        setState(GoatState.NORMAL_EATING);
         start = GameManager.getInstance().getTimeManager().getTime();
     }
 
-    public void setState(SheepState state) {
+    public void setState(GoatState state) {
         this.state = state;
         switch (state) {
 
             case NORMAL:
-                setLocalID(3182);
+                setLocalID(11227);
                 setFrameNumber(12);
-                break;
-            case NORMAL_SLEEPING:
-                setLocalID(3350);
-                setFrameNumber(8);
                 break;
             case NORMAL_EATING:
-                setLocalID(3286);
+                setLocalID(11395);
                 setFrameNumber(8);
                 break;
-            case MOWED:
-                setLocalID(7872);
-                setFrameNumber(12);
-                break;
-            case MOWED_EATING:
-                setLocalID(7976);
-                setFrameNumber(8);
-                break;
-            case MOWED_SLEEPING:
-                setLocalID(8040);
+            case NORMAL_SLEEPING:
+                setLocalID(11459);
                 setFrameNumber(8);
                 break;
         }
@@ -85,56 +73,46 @@ public class Sheep extends Animal {
 
     @Override
     public void process(double deltaTime) {
-        if (state == SheepState.BEING_CUT || state == SheepState.STOP)
+        if (state == GoatState.BEING_MILKED || state == GoatState.STOP)
             return;
+
         checkTime += deltaTime;
         super.process(deltaTime);
-        if (mowed && checkTime > 3) {
+
+        if (milked && checkTime > 3) {
             checkTime = 0;
             if (GameManager.getInstance().getTimeManager().daysSince(start) > days) {
-                mowed = false;
-                setState(SheepState.values()[state.ordinal() - 3]);
+                milked = false;
             }
         }
 
         if (timeUntilChange > 0)
             timeUntilChange -= deltaTime;
 
-        if (hasArrived && (state == SheepState.MOWED || state == SheepState.NORMAL)) {
+        if (hasArrived && (state == GoatState.NORMAL)) {
             Random r = new Random();
             timeUntilChange = r.nextInt(30) + 15;
-            if (mowed) {
-                setState(SheepState.MOWED_EATING);
-            } else {
-                setState(SheepState.NORMAL_EATING);
-            }
-
+            setState(GoatState.NORMAL_EATING);
         }
 
 
-        if (timeUntilChange <= 0 && state != SheepState.MOWED && state != SheepState.NORMAL) {
+        if (timeUntilChange <= 0 && state != GoatState.NORMAL) {
             Random r = new Random();
             setRoutePath(ai.roaming(c, 2 + r.nextInt(4), FreeState.MEADOW.getI(), getMainCase()));
             hasArrived = false;
-
-            if (mowed) {
-                setState(SheepState.MOWED);
-            } else {
-                setState(SheepState.NORMAL);
-            }
-
+            setState(GoatState.NORMAL);
         }
     }
 
     @Override
     public void delete() {
         super.delete();
-        c.removeSheep(this);
+        c.removeGoat(this);
     }
 
     public void stop() {
         lastState = state;
-        setState(SheepState.STOP);
+        setState(GoatState.STOP);
     }
 
     public int getDays() {
@@ -162,24 +140,23 @@ public class Sheep extends Animal {
     }
 
     public boolean isStop() {
-        return state == SheepState.STOP;
+        return state == GoatState.STOP;
     }
 
-    public boolean isCut() {
-        return state == SheepState.BEING_CUT;
+    public boolean isBeingMilked() {
+        return state == GoatState.BEING_MILKED;
     }
 
-    public void cut() {
-        setState(SheepState.BEING_CUT);
-        mowed = true;
+    public void milk() {
+        setState(GoatState.BEING_MILKED);
+        milked = true;
         days = 360;
         start = GameManager.getInstance().getTimeManager().getTime();
-        lastState = SheepState.values()[lastState.ordinal() + 3];
     }
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        if (state != SheepState.BEING_CUT)
+        if (state != GoatState.BEING_MILKED)
             super.Render(g, camX, camY);
 
     }
@@ -192,7 +169,7 @@ public class Sheep extends Animal {
             setY(yPos);
             setXB(xPos);
             setYB(yPos);
-            c.addSheep(this);
+            c.addGoat(this);
             setMainCase(c.getMap().getCase(getXB(), getYB()));
             return true;
         }
@@ -217,8 +194,8 @@ public class Sheep extends Animal {
         return null;
     }
 
-    public boolean isMowed() {
-        return mowed;
+    public boolean isMilked() {
+        return milked;
     }
 
     @Override
@@ -226,7 +203,7 @@ public class Sheep extends Animal {
         return null;
     }
 
-    enum SheepState {
-        NORMAL, NORMAL_EATING, NORMAL_SLEEPING, MOWED, MOWED_EATING, MOWED_SLEEPING, STOP, BEING_CUT;
+    enum GoatState {
+        NORMAL, NORMAL_EATING, NORMAL_SLEEPING, STOP, BEING_MILKED;
     }
 }
