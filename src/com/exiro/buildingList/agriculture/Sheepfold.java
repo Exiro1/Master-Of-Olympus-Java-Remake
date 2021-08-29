@@ -48,7 +48,7 @@ public class Sheepfold extends ResourceGenerator {
 
     int sheepherdNbr = 0;
 
-    public void createSheepherd(boolean cut) {
+    public void createSheepherd() {
         Random r = new Random();
         if (city.getSheeps().size() > 0) {
             Sheep destination = city.getSheeps().get(r.nextInt(city.getSheeps().size()));
@@ -84,7 +84,7 @@ public class Sheepfold extends ResourceGenerator {
         super.process(deltaTime);
         if (isActive() && getPop() > 0) {
             if (sheepherdNbr < 2) {
-                createSheepherd(true);
+                createSheepherd();
             }
         }
     }

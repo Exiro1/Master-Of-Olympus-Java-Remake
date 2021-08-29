@@ -223,7 +223,7 @@ public class GameWindow extends JPanel {
                 EntityRender.setEntityRender(ObjectType.DAIRY);
                 break;
             case BREEDING_GOAT:
-                //EntityRender.setEntityRender(ObjectType.FARM);
+                EntityRender.setEntityRender(ObjectType.GOAT);
                 break;
             case FISHING_FISHERY:
                 EntityRender.setEntityRender(ObjectType.FISHERY);
