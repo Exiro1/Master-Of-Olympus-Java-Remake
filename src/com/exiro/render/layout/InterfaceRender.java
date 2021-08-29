@@ -236,42 +236,42 @@ public class InterfaceRender extends JPanel {
             }
             case AGRICULTURE_FISH: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.FISHING_FISHERY, new TextInterface("Pecherie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.FISHING_HUNTING, new TextInterface("Maison de chasse", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.FISHING_FISHERY, new TextInterface(ObjectType.FISHERY.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.FISHING_HUNTING, new TextInterface(ObjectType.HUNTINGHOUSE.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
             case AGRICULTURE_VITICULTURE: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_SMALLHOLDING, new TextInterface("Metairie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_OLIVETREE, new TextInterface("Olivier", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_SMALLHOLDING, new TextInterface(ObjectType.SMALLHOLDING.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_OLIVETREE, new TextInterface(ObjectType.OLIVETREE.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
                 buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.VITICULTURE_GRAPE, new TextInterface("Vigne", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
             case AGRICULTURE_BREEDING: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_SHEEPHOLD, new TextInterface("Atelier de laine", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_SHEEP, new TextInterface("Mouton", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
-                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_DAIRY, new TextInterface("Fromagerie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_SHEEPHOLD, new TextInterface(ObjectType.SHEEPFOLD.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_SHEEP, new TextInterface(ObjectType.SHEEP.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_DAIRY, new TextInterface(ObjectType.DAIRY.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
                 buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.BREEDING_GOAT, new TextInterface("Chevre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
             case INDUSTRY_1: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_FOUNDRY, new TextInterface("Fonderie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_MARBLE, new TextInterface("Carrière de marbre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
-                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_SAWMILL, new TextInterface("Scierie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
-                buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_MINT, new TextInterface("Atelier de monnayage", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_FOUNDRY, new TextInterface(ObjectType.FOUNDRY.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_MARBLE, new TextInterface(ObjectType.MARBLE_QUARRY.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_SAWMILL, new TextInterface(ObjectType.SAWMILL.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_MINT, new TextInterface(ObjectType.MINT.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
             case INDUSTRY_2: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_OLIVE, new TextInterface("Pressoir à olive", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_WINERY, new TextInterface("Pressoir à vin", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
-                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_SCULPTURE, new TextInterface("Atelier de sculpture", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_OLIVE, new TextInterface(ObjectType.OLIVE_PRESS.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_WINERY, new TextInterface(ObjectType.WINERY.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.INDUSTRY_SCULPTURE, new TextInterface(ObjectType.SCULPTURE_STUDIO.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
@@ -287,10 +287,10 @@ public class InterfaceRender extends JPanel {
                 break;
             case MARKET_AGORA: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_AGORA, new TextInterface("Agora", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_FOOD, new TextInterface("Epicerie", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
-                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_WOOL, new TextInterface("Vendeur de laine", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
-                buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_OIL, new TextInterface("Vendeur d'huile d'olive", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_AGORA, new TextInterface(ObjectType.AGORA.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_FOOD, new TextInterface(ObjectType.AGORAFOOD.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 60, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_WOOL, new TextInterface(ObjectType.AGORAWOOL.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 78)));
+                buttons.add(new ComplexButton(0, 90, 460, 25, 1, 4, 5, 6, ButtonType.AGORA_OIL, new TextInterface(ObjectType.AGORAOIL.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 108)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
@@ -318,8 +318,8 @@ public class InterfaceRender extends JPanel {
                 break;
             case CULTURE_PHILOSOPHIA: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_PODIUM, new TextInterface("Podium", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_COLLEGE, new TextInterface("Collège", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_PODIUM, new TextInterface(ObjectType.PODIUM.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_COLLEGE, new TextInterface(ObjectType.COLLEGE.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }
@@ -330,8 +330,8 @@ public class InterfaceRender extends JPanel {
                 break;
             case CULTURE_DRAMA: {
                 ArrayList<Button> buttons = new ArrayList<>();
-                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_THEATER, new TextInterface("Théatre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
-                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_SCHOOLTHEATER, new TextInterface("Ecole de théatre", FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_THEATER, new TextInterface(ObjectType.THEATER.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_SCHOOLTHEATER, new TextInterface(ObjectType.THEATERSCHOOL.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
                 gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             }

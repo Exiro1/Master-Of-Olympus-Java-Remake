@@ -6,6 +6,8 @@ import com.exiro.buildingList.culture.Podium;
 import com.exiro.buildingList.culture.Theater;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
+import com.exiro.sprite.Sprite;
+import com.exiro.sprite.animals.Sheep;
 import com.exiro.systemCore.BuildingManager;
 import com.exiro.systemCore.PathManager;
 import com.exiro.terrainList.Terrain;
@@ -21,10 +23,12 @@ public class City {
     private ArrayList<ObjectClass> inActives = new ArrayList<>();
     private ArrayList<ObjectClass> obj = new ArrayList<>();
 
+    private final ArrayList<Sprite> animals = new ArrayList<>();
+    private final ArrayList<Sheep> sheeps = new ArrayList<>();
 
-    private ArrayList<StoreBuilding> storage;
-    private ArrayList<Theater> theaters;
-    private ArrayList<Podium> podiums;
+    private final ArrayList<StoreBuilding> storage;
+    private final ArrayList<Theater> theaters;
+    private final ArrayList<Podium> podiums;
 
     //private ArrayList<Sprite> sprites;
     int activeBuilding = 0;
@@ -130,6 +134,7 @@ public class City {
         }
     }
 
+
     public void addStorage(StoreBuilding o) {
         synchronized (storage) {
             storage.add(o);
@@ -164,6 +169,40 @@ public class City {
         synchronized (podiums) {
             podiums.remove(o);
         }
+    }
+
+    public void removeAnimal(Sprite o) {
+        synchronized (animals) {
+            animals.remove(o);
+        }
+    }
+
+    public void addAnimal(Sprite s) {
+        synchronized (animals) {
+            animals.add(s);
+        }
+    }
+
+    public void addSheep(Sheep s) {
+        addAnimal(s);
+        synchronized (sheeps) {
+            sheeps.add(s);
+        }
+    }
+
+    public void removeSheep(Sheep s) {
+        removeAnimal(s);
+        synchronized (sheeps) {
+            sheeps.remove(s);
+        }
+    }
+
+    public ArrayList<Sheep> getSheeps() {
+        return sheeps;
+    }
+
+    public ArrayList<Sprite> getAnimals() {
+        return animals;
     }
 
     public ArrayList<StoreBuilding> getStorage() {

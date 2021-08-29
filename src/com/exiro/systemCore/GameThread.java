@@ -8,6 +8,7 @@ import com.exiro.moveRelated.FreeState;
 import com.exiro.object.*;
 import com.exiro.render.GameFrame;
 import com.exiro.render.MouseManager;
+import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Rock;
 import com.exiro.terrainList.Terrain;
 
@@ -156,6 +157,11 @@ public class GameThread implements Runnable {
 
             for (Building b : c.getBuildings()) {
                 b.processSprite(deltaTime);
+            }
+        }
+        synchronized (c.getAnimals()) {
+            for (Sprite s : c.getAnimals()) {
+                s.process(deltaTime);
             }
         }
     }

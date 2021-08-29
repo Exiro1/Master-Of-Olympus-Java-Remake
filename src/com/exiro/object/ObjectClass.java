@@ -16,14 +16,17 @@ public abstract class ObjectClass implements Cloneable {
     private TileImage img;
     private int height, width, size, offx, offy;
     private int xB, yB;
+    private int xlen, ylen;
     private int bitmapID, localID;
     private String path;
     protected Case mainCase;
     public boolean canBuild;
 
 
-    public ObjectClass(boolean isActive, ObjectType type, String filename, int size, int bitmapID, int localID) {
+    public ObjectClass(boolean isActive, ObjectType type, String filename, int size, int bitmapID, int localID, int xlen, int ylen) {
         this.Active = isActive;
+        this.xlen = xlen;
+        this.ylen = ylen;
         this.type = type;
         this.size = size;
         this.bitmapID = bitmapID;
@@ -34,10 +37,12 @@ public abstract class ObjectClass implements Cloneable {
         setImg(img);
     }
 
-    public ObjectClass(boolean isActive, ObjectType type) {
+    public ObjectClass(boolean isActive, ObjectType type, int xlen, int ylen) {
         this.Active = isActive;
         this.type = type;
         this.size = type.getSize();
+        this.xlen = xlen;
+        this.ylen = ylen;
         this.bitmapID = type.getBitmapID();
         this.localID = type.getLocalID();
         this.path = type.getPath();
@@ -51,6 +56,23 @@ public abstract class ObjectClass implements Cloneable {
         assert img != null;
         setImg(img);
     }
+
+    public int getXlen() {
+        return xlen;
+    }
+
+    public void setXlen(int xlen) {
+        this.xlen = xlen;
+    }
+
+    public int getYlen() {
+        return ylen;
+    }
+
+    public void setYlen(int ylen) {
+        this.ylen = ylen;
+    }
+
 
     public abstract ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city);
 

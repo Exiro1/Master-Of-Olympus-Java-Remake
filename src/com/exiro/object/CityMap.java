@@ -82,8 +82,19 @@ public class CityMap {
         createElevation(37, 12, 4, 4, 1);
 
         createMinerals(30, 25, 3, 3);
+
+        createMeadow(20, 5, 10, 7);
     }
 
+    public void createMeadow(int xs, int ys, int xlen, int ylen) {
+        for (int i = xs; i < xs + xlen; i++) {
+            for (int j = ys; j < ys + ylen; j++) {
+                Case c = getCase(i, j);
+                Meadow m = new Meadow(i, j, city, 0);
+                c.setTerrain(m);
+            }
+        }
+    }
 
     public void createForest(int xs, int ys, int xlen, int ylen) {
         for (int i = xs; i < xs + xlen; i++) {

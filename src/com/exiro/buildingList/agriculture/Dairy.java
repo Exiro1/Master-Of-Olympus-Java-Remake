@@ -44,7 +44,6 @@ public class Dairy extends ResourceGenerator {
         return false;
     }
 
-
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
@@ -52,6 +51,7 @@ public class Dairy extends ResourceGenerator {
             float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
             growth += factor * deltaTime * speedFactor;
             if (growth > 60) {
+                growth = 0;
                 resourceCreated(1);
             }
 

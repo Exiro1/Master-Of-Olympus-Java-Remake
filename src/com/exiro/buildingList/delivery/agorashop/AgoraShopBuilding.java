@@ -34,8 +34,20 @@ public class AgoraShopBuilding extends Building {
 
     @Override
     public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
-        if (city.getMap().getCase(xPos, yPos) != null && city.getMap().getCase(xPos, yPos).getObject() != null && city.getMap().getCase(xPos, yPos).getObject() instanceof Agora) {
+
+        if (this instanceof EmptyShop) {
+            if (city.getMap().getCase(xPos, yPos) != null && city.getMap().getCase(xPos, yPos).getObject() != null && city.getMap().getCase(xPos, yPos).getObject() instanceof Agora) {
+                ArrayList<Case> c = new ArrayList<>();
+                c.add(city.getMap().getCase(xPos, yPos));
+                return c;
+            }
+        }
+
+        if (city.getMap().getCase(xPos, yPos) != null && city.getMap().getCase(xPos, yPos).getObject() != null && city.getMap().getCase(xPos, yPos).getObject() instanceof EmptyShop) {
             ArrayList<Case> c = new ArrayList<>();
+            c.add(city.getMap().getCase(xPos, yPos));
+            c.add(city.getMap().getCase(xPos, yPos));
+            c.add(city.getMap().getCase(xPos, yPos));
             c.add(city.getMap().getCase(xPos, yPos));
             return c;
         }
@@ -82,7 +94,11 @@ public class AgoraShopBuilding extends Building {
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
         if (reserve > 0) {
             bsprites.get(0).Render(g, camX, camY);
+            if (isWorking()) {
+                bsprites.get(1).Render(g, camX, camY);
+            }
         }
+
         g.drawString(getPop() + "/" + getPopMax() + " " + reserve, camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
         /*
         if(getPop()>0 && isActive()){
@@ -155,5 +171,13 @@ public class AgoraShopBuilding extends Building {
 
     public void setDistribution(int distribution) {
         this.distribution = distribution;
+    }
+
+    public Agora getAgora() {
+        return agora;
+    }
+
+    public void setAgora(Agora agora) {
+        this.agora = agora;
     }
 }

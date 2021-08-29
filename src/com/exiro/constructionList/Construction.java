@@ -2,7 +2,7 @@ package com.exiro.constructionList;
 
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
+import com.exiro.object.MapObject;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
@@ -12,7 +12,7 @@ import com.exiro.utils.Point;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Construction extends ObjectClass {
+public abstract class Construction extends MapObject {
 
     ArrayList<Case> cases;
     int cost;
@@ -26,7 +26,7 @@ public abstract class Construction extends ObjectClass {
 
 
     public Construction(boolean isActive, ObjectType type, ArrayList<Case> cases, int cost, int deleteCost, int xPos, int yPos, int xLenght, int yLenght, float cachet, City city, boolean built, boolean isFloor) {
-        super(isActive, type);
+        super(isActive, type, xLenght, yLenght);
         this.cases = cases;
         this.cost = cost;
         this.deleteCost = deleteCost;

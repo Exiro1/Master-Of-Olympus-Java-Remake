@@ -217,7 +217,7 @@ public class GameWindow extends JPanel {
                 EntityRender.setEntityRender(ObjectType.SHEEPFOLD);
                 break;
             case BREEDING_SHEEP:
-                //EntityRender.setEntityRender(ObjectType.FARM);
+                EntityRender.setEntityRender(ObjectType.SHEEP);
                 break;
             case BREEDING_DAIRY:
                 EntityRender.setEntityRender(ObjectType.DAIRY);

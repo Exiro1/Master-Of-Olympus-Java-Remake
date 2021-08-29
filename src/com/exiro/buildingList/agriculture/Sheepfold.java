@@ -7,9 +7,13 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
+import com.exiro.sprite.MovingSprite;
+import com.exiro.sprite.agriculture.Sheepherd;
+import com.exiro.sprite.animals.Sheep;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Sheepfold extends ResourceGenerator {
 
@@ -42,19 +46,52 @@ public class Sheepfold extends ResourceGenerator {
         super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOL);
     }
 
+    int sheepherdNbr = 0;
+
+    public void createSheepherd(boolean cut) {
+        Random r = new Random();
+        if (city.getSheeps().size() > 0) {
+            Sheep destination = city.getSheeps().get(r.nextInt(city.getSheeps().size()));
+            if (destination != null && destination.isAvailable()) {
+                Sheepherd p = new Sheepherd(city, this, destination, !destination.isMowed());
+                destination.setAvailable(false);
+                addSprite(p);
+                sheepherdNbr++;
+            }
+        }
+    }
+
+    @Override
+    public void processSprite(double delta) {
+        super.processSprite(delta);
+
+        ArrayList<MovingSprite> toR = new ArrayList<>();
+        for (MovingSprite ms : getMovingSprites()) {
+            if (ms instanceof Sheepherd) {
+                if (ms.hasArrived && ms.getDestination() == this) {
+                    toR.add(ms);
+                }
+            }
+        }
+        for (MovingSprite ms : toR) {
+            removeSprites(ms);
+        }
+
+    }
+
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
         if (isActive() && getPop() > 0) {
-            float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
-            growth += factor * deltaTime;
-
-            if (growth > 30) {
-                growth = 0;
-                resourceCreated(1);
+            if (sheepherdNbr < 2) {
+                createSheepherd(true);
             }
-
         }
+    }
+
+    public void sheepherdFinished() {
+        sheepherdNbr--;
+        resourceCreated(1);
     }
 
     @Override

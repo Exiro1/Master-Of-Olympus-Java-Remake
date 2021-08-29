@@ -15,6 +15,7 @@ import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.*;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.sprite.animals.Sheep;
 import com.exiro.terrainList.*;
 
 import java.awt.image.BufferedImage;
@@ -67,6 +68,7 @@ public enum ObjectType {
     EARTHQUAKE("Tremblement de terre", true, "Zeus_Terrain", 1, 1, 243, Earthquake.class),
     ROCK("Pierre", true, "Zeus_Terrain", 1, 1, 333, Rock.class),
     ELEVATION("Elevation", true, "Zeus_Terrain", 1, 7, 14, Elevation.class),
+    MEADOW("Prairie", false, "Zeus_Terrain", 1, 4, 120, Meadow.class),
 
     //Construction
     ROAD("Route", false, "Zeus_General", 1, 1, 54, Road.class),
@@ -81,7 +83,10 @@ public enum ObjectType {
 
 
     //SPECIAL
-    ERASE("Destruction", true, "Zeus_Terrain", 1, 2, 36, Destruction.class);
+    ERASE("Destruction", true, "Zeus_Terrain", 1, 2, 36, Destruction.class),
+
+    //SPRITE
+    SHEEP("Mouton", false, "SprMain", 1, 0, 3182, Sheep.class);
 
     private final Class c;
     private final String name;

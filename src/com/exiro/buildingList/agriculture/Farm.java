@@ -48,7 +48,7 @@ public class Farm extends ResourceGenerator {
     int year = -1;
     int month = 6;
     Time nextEvolve = null;
-
+    Time timeStart = null;
 
     @Override
     public void process(double deltaTime) {
@@ -62,6 +62,7 @@ public class Farm extends ResourceGenerator {
             if (year == -1) {
                 if (GameManager.getInstance().getTimeManager().timeHasPassed(GameManager.getInstance().getTimeManager().getYear(), month, 0)) {
                     year = GameManager.getInstance().getTimeManager().getYear() + 1;
+                    timeStart = GameManager.getInstance().getTimeManager().getTime();
                     tickSinceStart = 0;
                     integralStaff = 0;
                     Rlevel = 0;
@@ -69,17 +70,19 @@ public class Farm extends ResourceGenerator {
 
                 } else {
                     year = GameManager.getInstance().getTimeManager().getYear();
+                    timeStart = GameManager.getInstance().getTimeManager().getTime();
                     tickSinceStart = 0;
                     integralStaff = 0;
                     Rlevel = 0;
                     nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
                 }
             } else if (GameManager.getInstance().getTimeManager().timeHasPassed(year, month, 0)) {
-                int unit = (int) Math.ceil(((float) integralStaff / ((float) tickSinceStart * getPopMax())) * 8.0f);
+                int unit = (int) Math.ceil((((float) integralStaff / ((float) tickSinceStart * getPopMax())) * 8.0f) * (GameManager.getInstance().getTimeManager().daysSince(timeStart) / 360.0f));
                 resourceCreated(unit);
                 tickSinceStart = 0;
                 integralStaff = 0;
                 Rlevel = 0;
+                timeStart = GameManager.getInstance().getTimeManager().getTime();
                 year = GameManager.getInstance().getTimeManager().getYear() + 1;
                 nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
             }

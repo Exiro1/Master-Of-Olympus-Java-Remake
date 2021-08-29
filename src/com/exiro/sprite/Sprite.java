@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public abstract class Sprite extends ObjectClass {
 
 
-    final boolean DEBUG = true;
+    final boolean DEBUG = false;
 
     static int speedFactor;
     protected int frameNumber;
@@ -34,7 +34,7 @@ public abstract class Sprite extends ObjectClass {
     ArrayList<Case> onWalking = new ArrayList<>();
 
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c, Sticking sticking) {
-        super(true, null, filePath, 1, bitID, localId);
+        super(true, null, filePath, 1, bitID, localId, 1, 1);
         this.c = c;
         this.frameNumber = frameNumber;
         this.sticking = sticking;
@@ -81,7 +81,7 @@ public abstract class Sprite extends ObjectClass {
     int size = 2;
 
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
-        super(true, null, filePath, 1, bitID, localId);
+        super(true, null, filePath, 1, bitID, localId, 1, 1);
         this.c = c;
         this.frameNumber = frameNumber;
         baseh = getHeight();
@@ -106,7 +106,9 @@ public abstract class Sprite extends ObjectClass {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        int z = c.getMap().getCase(getXB(), getYB()).getZlvl();
+        int z = 1;
+        if (c.getMap().getCase(getXB(), getYB()) != null)
+            z = c.getMap().getCase(getXB(), getYB()).getZlvl();
 
 
         //Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(),1);
