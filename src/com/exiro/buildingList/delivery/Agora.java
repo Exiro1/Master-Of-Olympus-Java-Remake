@@ -236,14 +236,15 @@ public class Agora extends Building {
     }
 
     public void updateShop() {
-
+        /*
         for (int i = 0; i < shopsBuildings.size(); i++) {
+
             Case c = shops.get(i);
             TileImage t = ImageLoader.getImage("Zeus_General", 3, shopsBuildings.get(i).getShop().id);
             c.setImg(t.getImg());
             c.setHeight(t.getH());
             c.setWidth(t.getW());
-        }
+        }*/
     }
 
 

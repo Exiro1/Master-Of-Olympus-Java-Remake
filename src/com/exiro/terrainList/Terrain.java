@@ -23,7 +23,7 @@ public abstract class Terrain extends ObjectClass {
     boolean blocking;
 
     public Terrain(boolean isActive, ObjectType type, boolean isWalkable, int xpos, int ypos, City c, boolean isFloor, boolean isConstructable, boolean blocking) {
-        super(isActive, type);
+        super(isActive, type, type.getSize(), type.getSize());
         this.isWalkable = isWalkable;
         this.xPos = xpos;
         this.yPos = ypos;

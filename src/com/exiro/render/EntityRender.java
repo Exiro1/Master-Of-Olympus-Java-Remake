@@ -29,6 +29,13 @@ public class EntityRender {
         startY = (int) p.y;
         toBuild.get(0).setXB(startX);
         toBuild.get(0).setYB(startY);
+        ArrayList<Case> place;
+        place = defaultObject.getPlace(startX, startY, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+        if (place == null) {
+            toBuild.get(0).canBuild = false;
+        } else {
+            toBuild.get(0).canBuild = place.size() == defaultObject.getXlen() * defaultObject.getYlen();
+        }
     }
 
     public static void setEntityRender(ObjectType type, Resource r) {

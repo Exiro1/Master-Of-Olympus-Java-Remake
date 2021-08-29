@@ -52,7 +52,7 @@ public class SmallHolding extends ResourceGenerator {
             factor = 1;
             growth += factor * deltaTime * speedFactor;
 
-            if (growth > 10) {
+            if (growth > 20) {
                 growth = 0;
                 resourceCreated(2);
             }

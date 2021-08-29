@@ -3,7 +3,7 @@ package com.exiro.buildingList;
 import com.exiro.constructionList.Rubble;
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
+import com.exiro.object.MapObject;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
@@ -16,9 +16,9 @@ import com.exiro.utils.Point;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Building extends ObjectClass {
+public abstract class Building extends MapObject {
 
-    final boolean DEBUG = true;
+    final boolean DEBUG = false;
 
     final ObjectType type;
     protected final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
@@ -46,7 +46,7 @@ public abstract class Building extends ObjectClass {
 
 
     public Building(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
-        super(isActive, type);
+        super(isActive, type, xLenght, yLenght);
         if (!isActive)
             city.getInActives().add(this);
         this.category = category;

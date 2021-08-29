@@ -3,6 +3,7 @@ package com.exiro.moveRelated;
 import com.exiro.object.CityMap;
 import com.exiro.object.ObjectType;
 import com.exiro.terrainList.Elevation;
+import com.exiro.terrainList.Meadow;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -77,6 +78,8 @@ public class RoadMap {
                     access = FreeState.BUILDABLE;
                     if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Elevation)
                         access = FreeState.BUILDABLE_ROAD;
+                    if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Meadow)
+                        access = FreeState.MEADOW;
                 } else {
                     access = FreeState.NON_BLOCKING;
                 }

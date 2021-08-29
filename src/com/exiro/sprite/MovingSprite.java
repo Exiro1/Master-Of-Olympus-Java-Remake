@@ -25,7 +25,7 @@ public abstract class MovingSprite extends Sprite {
         setImage(dir, 0);
         timeBetweenFrame = 0.05f;
         complex = true;
-        setMainCase(c.getMap().getCase(getXB(), getYB()));
+        //setMainCase(c.getMap().getCase(getXB(), getYB()));
     }
 
     public void setImage(Direction direction, int frame) {

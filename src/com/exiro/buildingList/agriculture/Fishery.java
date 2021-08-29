@@ -178,6 +178,7 @@ public class Fishery extends ResourceGenerator {
             growth += factor * deltaTime * speedFactor;
             if (growth > 60) {
                 resourceCreated(1);
+                growth = 0;
             }
 
         }
