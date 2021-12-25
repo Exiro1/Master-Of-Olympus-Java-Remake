@@ -6,6 +6,7 @@ import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
+import com.exiro.render.IsometricRender;
 import com.exiro.utils.Point;
 
 import java.util.Map;
@@ -17,7 +18,7 @@ public abstract class MovingSprite extends Sprite {
     protected Direction dir = Direction.EST;
     protected Path path;
     protected ObjectClass destination;
-
+    protected Path originPath;
 
     public MovingSprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
         super(filePath, bitID, localId, frameNumber, c);
@@ -101,14 +102,40 @@ public abstract class MovingSprite extends Sprite {
 
             setXB((int) Math.ceil(x));
             setYB((int) Math.ceil(y));
-            setMainCase(c.getMap().getCase(getXB(), getYB()));
+            //setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+            Point[] ps = IsometricRender.getHitbox(new Point(x,y), getWidth(), getHeight());
+
+            switch(getDir()){
+
+                case SUD:
+                    break;
+                case SUD_EST:
+                    setMainCase(c.getMap().getCase((int) (ps[2].getX()), (int) (getYB())));
+                    break;
+                case EST:
+                    break;
+                case NORD_EST:
+                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+                    break;
+                case NORD:
+                    break;
+                case NORD_OUEST:
+                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+                    break;
+                case OUEST:
+                    break;
+                case SUD_OUEST:
+                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (ps[3].getY())));
+                    break;
+            }
+
         }
 
     }
 
     @Override
     public void setMainCase(Case mainCase) {
-        if (mainCase == this.mainCase)
+        if (mainCase == this.mainCase || mainCase == null)
             return;
 
         onWalking.add(mainCase);
@@ -170,7 +197,12 @@ public abstract class MovingSprite extends Sprite {
     }
 
     public void setRoutePath(Path path) {
+        if(path == null && originPath != null)
+            path = originPath.getReversePath();
         this.path = path;
+        if(originPath == null)
+            originPath = path;
+
     }
 
     public void setDestination(ObjectClass destination) {

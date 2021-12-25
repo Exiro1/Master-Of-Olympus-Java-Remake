@@ -43,6 +43,22 @@ public class Road extends Construction {
     }
 
     @Override
+    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
+        ArrayList<Case> place = new ArrayList<>();
+        for (int i = 0; i < yLenght; i++) {
+            for (int j = 0; j < xLenght; j++) {
+                if (!(xPos + j < 0 || yPos - i < 0)) {
+                    Case c = city.getMap().getCase(xPos + j, yPos - i);
+                    if (!c.isOccupied() && c.getTerrain().isConstructible()) {
+                        place.add(city.getMap().getCase(xPos + j, yPos - i));
+                    }
+                }
+            }
+        }
+        return place;
+    }
+
+    @Override
     public boolean build(int xPos, int yPos) {
         boolean isBuilt = super.build(xPos, yPos);
         if (isBuilt) {//change en route bloqué

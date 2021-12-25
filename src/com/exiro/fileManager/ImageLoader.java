@@ -5,6 +5,7 @@ import com.exiro.depacking.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -15,6 +16,15 @@ public class ImageLoader {
     static HashMap<Integer, TileImage> AssetsMap;
     static HashMap<Integer, Integer> AssetsMapUse;
 
+    public enum FilePath {ZEUS_GENERAL("Zeus_General"), SPR_MAIN("SprMain"), SPR_AMBIENT("SprAmbient"), ZEUS_TERRAIN("Zeus_Terrain");
+        String path;
+        FilePath(String path) {
+            this.path = path;
+        }
+        public String getPath() {
+            return path;
+        }
+    }
 
     public static void initLoader() {
         AssetsMap = new HashMap<>();
@@ -31,7 +41,9 @@ public class ImageLoader {
             AssetsMapUse.remove(globalID);
         }
     }
-
+    public static TileImage getImage(FilePath filePath, int bitmapID, int imgID) {
+        return getImage(filePath.getPath(),bitmapID,imgID);
+    }
 
     public static TileImage getImage(String filename, int bitmapID, int imgID) {
 

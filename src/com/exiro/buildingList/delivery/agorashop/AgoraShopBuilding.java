@@ -72,7 +72,7 @@ public class AgoraShopBuilding extends Building {
 
 
                 for (Case c : cases) {
-                    c.setOccuped(true);
+                    c.setOccupied(true);
                     c.setObject(this);
                     c.setMainCase(false);
                 }
@@ -99,7 +99,7 @@ public class AgoraShopBuilding extends Building {
             }
         }
 
-        g.drawString(getPop() + "/" + getPopMax() + " " + reserve, camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
+        //g.drawString(getPop() + "/" + getPopMax() + " " + reserve, camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
         /*
         if(getPop()>0 && isActive()){
             bsprites.get(1).Render(g,camX,camY);

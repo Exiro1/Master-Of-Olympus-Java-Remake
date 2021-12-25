@@ -6,15 +6,14 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
-import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.WaterCoast;
-import com.exiro.utils.Point;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Fishery extends ResourceGenerator {
@@ -25,18 +24,19 @@ public class Fishery extends ResourceGenerator {
     double growth = 0;
     int speedFactor = 1;
 
-    public Fishery(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-    }
-
-    public Fishery(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, pop, 10, 50, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.FISH);
-    }
 
     public Fishery() {
-        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, 0, 10, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.FISH);
+        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, 0, 10, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.FISH,2);
+        maxPerCarter = 1;
     }
 
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        bi.addText("Reserve de " + getStock() + " chargements de " + getResource().getName(), 16, 20, 80);
+
+        return bi;
+    }
 
     @Override
     public boolean build(int xPos, int yPos) {
@@ -93,19 +93,7 @@ public class Fishery extends ResourceGenerator {
         }
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-        int lvl = getMainCase().getZlvl();
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
-        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
 
-        //render only buildingSprite because movingSprite are render separately
-        for (BuildingSprite s : bsprites) {
-            s.Render(g, camX, camY);
-        }
-
-    }
 
     @Override
     public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
@@ -115,11 +103,12 @@ public class Fishery extends ResourceGenerator {
         Case c2 = city.getMap().getCase(xPos + 1, yPos);
         Case c3 = city.getMap().getCase(xPos, yPos - 1);
         Case c4 = city.getMap().getCase(xPos + 1, yPos - 1);
-
-        if (!c1.isOccuped() && !c1.getTerrain().getBuildingType().isBlocking()
-                && !c2.isOccuped() && !c2.getTerrain().getBuildingType().isBlocking()
-                && !c3.isOccuped() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
-                && !c4.isOccuped() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+        if(c1 == null || c2 == null|| c3 == null|| c4 == null )
+            return place;
+        if (!c1.isOccupied() && !c1.getTerrain().getBuildingType().isBlocking()
+                && !c2.isOccupied() && !c2.getTerrain().getBuildingType().isBlocking()
+                && !c3.isOccupied() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c4.isOccupied() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
             if (((WaterCoast) c3.getTerrain()).getDirection() == Direction.NORD_EST && ((WaterCoast) c4.getTerrain()).getDirection() == Direction.NORD_EST) {
                 direction = Direction.NORD_EST;
@@ -128,10 +117,10 @@ public class Fishery extends ResourceGenerator {
                 place.add(c3);
                 place.add(c4);
             }
-        } else if (!c3.isOccuped() && !c3.getTerrain().getBuildingType().isBlocking()
-                && !c4.isOccuped() && !c4.getTerrain().getBuildingType().isBlocking()
-                && !c1.isOccuped() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
-                && !c2.isOccuped() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+        } else if (!c3.isOccupied() && !c3.getTerrain().getBuildingType().isBlocking()
+                && !c4.isOccupied() && !c4.getTerrain().getBuildingType().isBlocking()
+                && !c1.isOccupied() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c2.isOccupied() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
             if (((WaterCoast) c1.getTerrain()).getDirection() == Direction.SUD_OUEST && ((WaterCoast) c2.getTerrain()).getDirection() == Direction.SUD_OUEST) {
                 direction = Direction.SUD_OUEST;
@@ -140,10 +129,10 @@ public class Fishery extends ResourceGenerator {
                 place.add(c1);
                 place.add(c2);
             }
-        } else if (!c2.isOccuped() && !c2.getTerrain().getBuildingType().isBlocking()
-                && !c4.isOccuped() && !c4.getTerrain().getBuildingType().isBlocking()
-                && !c3.isOccuped() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
-                && !c1.isOccuped() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+        } else if (!c2.isOccupied() && !c2.getTerrain().getBuildingType().isBlocking()
+                && !c4.isOccupied() && !c4.getTerrain().getBuildingType().isBlocking()
+                && !c3.isOccupied() && (c3.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c1.isOccupied() && (c1.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
             if (((WaterCoast) c1.getTerrain()).getDirection() == Direction.NORD_OUEST && ((WaterCoast) c3.getTerrain()).getDirection() == Direction.NORD_OUEST) {
                 direction = Direction.NORD_OUEST;
@@ -152,10 +141,10 @@ public class Fishery extends ResourceGenerator {
                 place.add(c1);
                 place.add(c3);
             }
-        } else if (!c1.isOccuped() && !c1.getTerrain().getBuildingType().isBlocking()
-                && !c3.isOccuped() && !c3.getTerrain().getBuildingType().isBlocking()
-                && !c2.isOccuped() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
-                && !c4.isOccuped() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+        } else if (!c1.isOccupied() && !c1.getTerrain().getBuildingType().isBlocking()
+                && !c3.isOccupied() && !c3.getTerrain().getBuildingType().isBlocking()
+                && !c2.isOccupied() && (c2.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
+                && !c4.isOccupied() && (c4.getTerrain().getBuildingType() == ObjectType.WATERTCOAST)
         ) {
             if (((WaterCoast) c2.getTerrain()).getDirection() == Direction.SUD_EST && ((WaterCoast) c4.getTerrain()).getDirection() == Direction.SUD_EST) {
                 direction = Direction.SUD_EST;
@@ -171,8 +160,8 @@ public class Fishery extends ResourceGenerator {
 
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isActive() && getPop() > 0) {
             float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
             growth += factor * deltaTime * speedFactor;

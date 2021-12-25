@@ -12,6 +12,7 @@ public class Button {
     TileImage image;
     ButtonType type;
     int id = 0;
+    int ID = 0;
 
     public Button(int x, int y, int w, int h, int bitid, int id, ButtonType type) {
         this.x = x;
@@ -22,7 +23,16 @@ public class Button {
         this.type = type;
         this.id = id;
     }
-
+    public Button(int x, int y, int w, int h, int bitid, int id, ButtonType type,int ID) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.image = ImageLoader.getImage("Zeus_Interface", bitid, id);
+        this.type = type;
+        this.id = id;
+        this.ID = ID;
+    }
 
     public void setClicked(boolean clicked) {
         if (clicked) {
@@ -48,4 +58,7 @@ public class Button {
         g.drawImage(image.getImg(), (x) + offx, (y) + offy, (w), (h), null);
     }
 
+    public int getID() {
+        return ID;
+    }
 }

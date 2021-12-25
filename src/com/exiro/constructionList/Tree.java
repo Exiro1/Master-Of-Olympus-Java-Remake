@@ -32,7 +32,7 @@ public class Tree extends Construction {
         cases = new ArrayList<>();
         cases.add(ca);
 
-        ca.setOccuped(true);
+        ca.setOccupied(true);
         ca.setObject(this);
         ca.setMainCase(true);
         this.setMainCase(ca);

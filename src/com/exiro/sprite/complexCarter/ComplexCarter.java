@@ -1,5 +1,6 @@
 package com.exiro.sprite.complexCarter;
 
+import com.exiro.buildingList.Building;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
 import com.exiro.object.City;
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 public class ComplexCarter {
 
 
+    Building origin;
     Trolley trolley;
     TrolleyDriver driver;
     TrolleyPuller puller;
 
     ObjectClass dest;
-
 
     public ComplexCarter(City c, ObjectClass destination, Case start, Resource resource, int amount) {
         trolley = new Trolley(c, destination, start.getxPos(), start.getyPos(), this, resource, amount);

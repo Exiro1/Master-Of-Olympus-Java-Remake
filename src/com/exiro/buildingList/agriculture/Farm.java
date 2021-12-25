@@ -9,7 +9,10 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.systemCore.GameManager;
+import com.exiro.terrainList.Meadow;
 import com.exiro.utils.Point;
 import com.exiro.utils.Time;
 
@@ -23,19 +26,19 @@ public class Farm extends ResourceGenerator {
     TileImage growthImg;
 
 
-    public Farm(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource, int level) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-        this.Rlevel = level;
-    }
-
-    public Farm(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, Resource resource, int level) {
-        super(false, ObjectType.FARM, BuildingCategory.FOOD, pop, 10, 36, 10, xPos, yPos, 3, 3, cases, built, city, 0, resource);
-        this.Rlevel = level;
-    }
-
     public Farm() {
-        super(false, ObjectType.FARM, BuildingCategory.FOOD, 0, 10, 36, 10, 0, 0, 3, 3, null, false, GameManager.currentCity, 0, Resource.CORN);
+        super(false, ObjectType.FARM, BuildingCategory.FOOD, 0, 10, 36, 10, 0, 0, 3, 3, null, false, GameManager.currentCity, 0, Resource.CORN,8);
         this.Rlevel = 0;
+        maxPerCarter = 4;
+    }
+
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        bi.addText("Reserve de " + getStock() + " chargements de " + getResource().getName(), 16, 20, 80);
+        bi.addText("La production est complétée à " + percentCompleted+"%", 16, 20, 110);
+
+        return bi;
     }
 
     public void setFarmType(Resource r) {
@@ -49,15 +52,21 @@ public class Farm extends ResourceGenerator {
     int month = 6;
     Time nextEvolve = null;
     Time timeStart = null;
+    Time startConvertion ;
+    int percentCompleted = 0;
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isActive() && getPop() > 0) {
 
 
             tickSinceStart++;
             integralStaff += getPop();
+            if(startConvertion == null)
+                startConvertion = GameManager.getInstance().getTimeManager().getTime();
+            int timeSinceStart = GameManager.getInstance().getTimeManager().daysSince(startConvertion);
+            percentCompleted = Math.min((int) (((float) timeSinceStart / (float) 365) * 100), 100);
 
             if (year == -1) {
                 if (GameManager.getInstance().getTimeManager().timeHasPassed(GameManager.getInstance().getTimeManager().getYear(), month, 0)) {
@@ -76,12 +85,13 @@ public class Farm extends ResourceGenerator {
                     Rlevel = 0;
                     nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
                 }
-            } else if (GameManager.getInstance().getTimeManager().timeHasPassed(year, month, 0)) {
+            } else if (GameManager.getInstance().getTimeManager().timeHasPassed(year, month, 0) && (getStock()<getMaxStockOut())) {
                 int unit = (int) Math.ceil((((float) integralStaff / ((float) tickSinceStart * getPopMax())) * 8.0f) * (GameManager.getInstance().getTimeManager().daysSince(timeStart) / 360.0f));
                 resourceCreated(unit);
                 tickSinceStart = 0;
                 integralStaff = 0;
                 Rlevel = 0;
+                startConvertion = GameManager.getInstance().getTimeManager().getTime();
                 timeStart = GameManager.getInstance().getTimeManager().getTime();
                 year = GameManager.getInstance().getTimeManager().getYear() + 1;
                 nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
@@ -137,6 +147,18 @@ public class Farm extends ResourceGenerator {
 
         }
         return succ;
+    }
+
+    @Override
+    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
+        ArrayList<Case> cases = super.getPlace(xPos, yPos, yLenght, xLenght, city);
+
+        for(Case c : cases){
+            if(c.getTerrain() instanceof Meadow)
+                return cases;
+        }
+        cases.clear();
+        return cases;
     }
 
     public void changeLevel(int rlevel) {

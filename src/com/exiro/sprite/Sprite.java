@@ -3,6 +3,7 @@ package com.exiro.sprite;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
+import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
@@ -45,6 +46,12 @@ public abstract class Sprite extends ObjectClass {
         return null;
     }
 
+    @Override
+    public void buttonClickedEvent(ButtonType type, int ID) {
+
+    }
+
+
     public static BufferedImage makeColorTransparent(BufferedImage im, final Color color) {
         ImageFilter filter = new RGBImageFilter() {
             // the color we are looking for... Alpha bits are set to opaque
@@ -78,7 +85,7 @@ public abstract class Sprite extends ObjectClass {
         return bimage;
     }
 
-    int size = 2;
+    int size = 1;
 
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
         super(true, null, filePath, 1, bitID, localId, 1, 1);
@@ -111,25 +118,27 @@ public abstract class Sprite extends ObjectClass {
             z = c.getMap().getCase(getXB(), getYB()).getZlvl();
 
 
+
         //Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(),1);
         if (complex) {
             Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight());
+            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), null);
             if (DEBUG) {
                 g.setColor(Color.RED);
                 g.drawRect(camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), getWidth(), getHeight());
-                g.drawString(getXB() + " " + getYB() + " " + getX() + " " + getY(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy());
+                g.drawString(getXB() + " " + getYB(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy());
                 g.setColor(Color.BLACK);
             }
-            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), null);
         } else {
             Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight());
+            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
             if (DEBUG) {
                 g.setColor(Color.RED);
                 g.drawRect(camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), getWidth(), getHeight());
-                g.drawString(getXB() + " " + getYB(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY());
+                g.drawString(getXB() + " " + getYB() , camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy());
                 g.setColor(Color.BLACK);
             }
-            g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
+
         }
 
 

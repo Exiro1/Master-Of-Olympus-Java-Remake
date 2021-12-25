@@ -57,11 +57,13 @@ public class TimeManager {
         return new Time(newyear, newmonth, newday);
     }
 
-    public void updateTime(double delta) {
+    public int updateTime(double delta) {
+        int ds = 0;
         t += delta;
         while (t > 1) {
             t = t - 1;
             day++;
+            ds++;
             if (day >= 30) {
                 day = 0;
                 month++;
@@ -71,6 +73,7 @@ public class TimeManager {
                 }
             }
         }
+        return ds;
     }
 
     public int getYear() {

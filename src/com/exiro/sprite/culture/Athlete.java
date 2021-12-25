@@ -12,7 +12,7 @@ public class Athlete extends DeliverySprite {
 
     public Athlete(City c, ObjectClass destination, Case start, Case dest) {
         super("SprMain", 0, 10587, 12, c, destination, start, 0);
-        setRoutePath(getAi().goTo(c, start, dest, FreeState.ONLY_ACTIVE_ROAD.getI()));
+        setRoutePath(getAi().goTo(c, start, dest, FreeState.ACTIVE_ROAD.getI()));
         setOffsetY(-5);
         setTimeBetweenFrame(0.05f);
     }

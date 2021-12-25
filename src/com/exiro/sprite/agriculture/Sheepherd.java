@@ -19,6 +19,7 @@ public class Sheepherd extends AgricultureSprite {
     Sheepfold sheepfold;
     Sheep sheep;
     boolean finished = false;
+    boolean createRessource = false;
 
 
     public Sheepherd(City c, Sheepfold sheepfold, Sheep sheep, boolean cut) {
@@ -30,8 +31,9 @@ public class Sheepherd extends AgricultureSprite {
         setY(start.getyPos());
         setXB(start.getxPos());
         setYB(start.getyPos());
-        setRoutePath(AI.goTo(c, start, c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.WALKABLE.getI()));
+        setRoutePath(AI.goTo(c, start, c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.NON_BLOCKING.getI()));
         this.cut = cut;
+        this.createRessource = cut;
         this.wait = !cut;
         if (cut) {
             sheep.stop();
@@ -64,7 +66,7 @@ public class Sheepherd extends AgricultureSprite {
 
         if (hasArrived) {
             if (getDestination() == sheepfold && !finished) {
-                sheepfold.sheepherdFinished();
+                sheepfold.sheepherdFinished(createRessource);
                 finished = true;
             }
             if (cut && !cutting) {
@@ -74,7 +76,7 @@ public class Sheepherd extends AgricultureSprite {
                     cut();
                 } else {
                     hasArrived = false;
-                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.WALKABLE.getI()));
+                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.NON_BLOCKING.getI()));
                 }
             }
             if (wait && !waiting) {
@@ -88,7 +90,7 @@ public class Sheepherd extends AgricultureSprite {
                 sheep.start();
                 setLocalID(3530);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.WALKABLE.getI()));
+                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
                 setDestination(sheepfold);
             } else if (waiting && fullAnimCounter > 6) {
                 waiting = false;
@@ -98,7 +100,7 @@ public class Sheepherd extends AgricultureSprite {
                 sheep.addDays(-2);
                 setLocalID(3414);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.WALKABLE.getI()));
+                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
                 setDestination(sheepfold);
             }
 

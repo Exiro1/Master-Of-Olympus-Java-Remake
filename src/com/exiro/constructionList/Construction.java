@@ -4,9 +4,11 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.MapObject;
 import com.exiro.object.ObjectType;
+import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
+import com.exiro.terrainList.Elevation;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -47,7 +49,7 @@ public abstract class Construction extends MapObject {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
-                    if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                    if (!c.isOccupied() && c.getTerrain().isConstructible() && !(c.getTerrain() instanceof Elevation)) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }
                 }
@@ -61,6 +63,11 @@ public abstract class Construction extends MapObject {
         BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null, this);
         bi.addText(getType().getName(), "Zeus.ttf", 32f, 250 - 32 * getType().getName().length() / 2 + 16, 50);
         return bi;
+    }
+
+    @Override
+    public void buttonClickedEvent(ButtonType type, int ID) {
+
     }
 
     public abstract void process(double deltatime);
@@ -80,7 +87,7 @@ public abstract class Construction extends MapObject {
             city.addConstruction(this);
             city.addObj(this);
             for (Case c : place) {
-                c.setOccuped(true);
+                c.setOccupied(true);
                 c.setObject(this);
                 c.setMainCase(false);
             }
@@ -114,7 +121,7 @@ public abstract class Construction extends MapObject {
             city.getConstructions().remove(this);
             city.removeObj(this);
             for (Case c : getCases()) {
-                c.setOccuped(false);
+                c.setOccupied(false);
                 c.setObject(null);
             }
         }

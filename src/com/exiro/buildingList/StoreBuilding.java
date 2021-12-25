@@ -4,6 +4,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.render.ButtonType;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
 
@@ -16,6 +17,8 @@ public abstract class StoreBuilding extends Building {
     int emptyCase = 8;
 
     HashMap<Resource, Integer> reserved;
+    HashMap<Resource, Integer> reservedUnstock;
+
     int emptyCaseReserved = 8;
 
     protected HashMap<Resource, Integer> maxAllowed;
@@ -24,12 +27,16 @@ public abstract class StoreBuilding extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
         stockage = new HashMap<>();
         reserved = new HashMap<>();
+        reservedUnstock = new HashMap<>();
         maxAllowed = new HashMap<>();
+        ressourceIndexed = new ArrayList<>();
         for (Resource r : Resource.values()) {
             if (canStock(r) && r != Resource.NULL) {
                 maxAllowed.put(r, 32 / r.getWeight());
                 stockage.put(r, 0);
                 reserved.put(r, 0);
+                reservedUnstock.put(r,0);
+                ressourceIndexed.add(r);
             }
         }
     }
@@ -46,9 +53,34 @@ public abstract class StoreBuilding extends Building {
     public abstract boolean canStock(Resource r);
 
     /**
-     * get free space for a ressource type
+     * reserve some resource to be retrieved
+     * @param r resource to retrieve
+     * @param amount amount to retrieve
+     */
+    public int reserveUnstockage(Resource r, int amount){
+        int unstockReserveAmount = Math.min(getStockAvailable(r),amount);
+        if(reservedUnstock.containsKey(r)){
+            reservedUnstock.replace(r,reservedUnstock.get(r)+unstockReserveAmount);
+        }else {
+            reservedUnstock.putIfAbsent(r, unstockReserveAmount);
+        }
+        return unstockReserveAmount;
+    }
+
+    /**
+     * unreserve some resource
+     * @param r resource to unreserve
+     * @param amount amount to unreserve
+     */
+    public void unReserveUnstockage(Resource r, int amount){
+        if(reservedUnstock.containsKey(r)){
+            reservedUnstock.replace(r,reservedUnstock.get(r)-amount);
+        }
+    }
+    /**
+     * get free space for a resource type
      *
-     * @param r Ressource
+     * @param r Resource
      * @return free space
      */
     public int getFreeSpace(Resource r) {
@@ -63,11 +95,11 @@ public abstract class StoreBuilding extends Building {
     }
 
     /**
-     * reserve space for ressources
+     * reserve space for resources
      *
-     * @param r      ressource
-     * @param amount amount of ressource to stock
-     * @return amount of ressource that cannot be stored
+     * @param r      resource
+     * @param amount amount of resource to stock
+     * @return amount of resource that cannot be stored
      */
     public int reserve(Resource r, int amount) {
         if (!canStock(r))
@@ -155,7 +187,7 @@ public abstract class StoreBuilding extends Building {
     }
 
     public boolean hasStockAvailable(Resource resource) {
-        if (stockage.containsKey(resource) && stockage.get(resource) > 0) {
+        if (stockage.containsKey(resource) && stockage.get(resource)-reservedUnstock.getOrDefault(resource,0) > 0) {
             return true;
         } else {
             return false;
@@ -163,8 +195,8 @@ public abstract class StoreBuilding extends Building {
     }
 
     public int getStockAvailable(Resource resource) {
-        if (stockage.containsKey(resource) && stockage.get(resource) > 0) {
-            return stockage.get(resource);
+        if (stockage.containsKey(resource) && stockage.get(resource)-reservedUnstock.getOrDefault(resource,0) > 0) {
+            return stockage.get(resource)-reservedUnstock.getOrDefault(resource,0);
         } else {
             return 0;
         }
@@ -195,12 +227,12 @@ public abstract class StoreBuilding extends Building {
         emptyCase += stockNeededBefore - stockNeededAfter;
         emptyCaseReserved += stockNeededBeforer - stockNeededAfterr;
 
-        if (stockage.get(r) >= amount) {
+        if (stockage.get(r)-reservedUnstock.getOrDefault(r,0) >= amount) {
             stockage.replace(r, stockage.get(r) - amount);
             reserved.replace(r, reserved.get(r) - amount);
             ret = amount;
         } else {
-            ret = stockage.get(r);
+            ret = stockage.get(r)-reservedUnstock.getOrDefault(r,0);
             stockage.replace(r, 0); //not supposed to happen
             reserved.replace(r, 0);
         }
@@ -208,21 +240,58 @@ public abstract class StoreBuilding extends Building {
         return ret;
     }
 
+    public int unstockWithReservation(Resource r, int amount){
+        unReserveUnstockage(r,amount);
+        return unStock(r,amount);
+    }
+
+    public int getTotalStocked(){
+        int tot = 0;
+        for(Resource r : stockage.keySet()){
+            tot += r.getWeight()*stockage.get(r);
+        }
+        return tot;
+    }
+
     public abstract void updateStock();
 
-
+    ArrayList<Resource> ressourceIndexed;
+    Interface currInterface;
     @Override
     public Interface getInterface() {
         BuildingInterface bi = (BuildingInterface) super.getInterface();
-        int i = 90;
-        for (Resource r : stockage.keySet()) {
-            bi.addText(r.getName() + " : " + stockage.get(r) + "/" + maxAllowed.get(r), "Zeus.ttf", 16f, 50, i);
-            i += 30;
-        }
+        int i = 122;
+        int ID = 0;
+        bi.addLine(0,70,bi.getW());
 
+        bi.addLine(0,87,bi.getW());
+        bi.addText("STOCK","Zeus.ttf",10f,20,101);
+        bi.addText("ORDRES","Zeus.ttf",10f,310,101);
+        bi.addText("LIMITE DE STOCKAGE","Zeus.ttf",10f,450,101);
+        bi.addLine(0,104,bi.getW());
+        for (Resource r : ressourceIndexed) {
+            bi.addStockItem(stockage.get(r),r.getName(), BuildingInterface.Orders.ACCEPT,maxAllowed.get(r),i,"Zeus.ttf",ID);
+            ID++;
+            i += 20;
+        }
+        currInterface = bi;
         return bi;
     }
 
+
+
+    @Override
+    public void buttonClickedEvent(ButtonType type, int ID) {
+        super.buttonClickedEvent(type, ID);
+        System.out.println(type.name() + " : ID = "+ID);
+        if(type == ButtonType.INTERFACE_UP){
+            maxAllowed.replace(ressourceIndexed.get(ID),Math.min(maxAllowed.get(ressourceIndexed.get(ID)) + 4/ressourceIndexed.get(ID).getWeight(),32/ressourceIndexed.get(ID).getWeight()));
+            currInterface.requestUpdate();
+        }else if(type == ButtonType.INTERFACE_DOWN){
+            maxAllowed.replace(ressourceIndexed.get(ID),Math.max(maxAllowed.get(ressourceIndexed.get(ID)) - 4/ressourceIndexed.get(ID).getWeight(),0));
+            currInterface.requestUpdate();
+        }
+    }
 
     @Override
     public void delete() {

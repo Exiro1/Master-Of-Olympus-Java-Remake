@@ -4,6 +4,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
+import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
@@ -49,6 +50,11 @@ public abstract class Terrain extends ObjectClass {
         bi.addText(getType().getName(), "Zeus.ttf", 16f, 100, 50);
         bi.addText(getMainCase().getZlvl() + " x:" + getMainCase().getxPos() + " y:" + getMainCase().getyPos(), "Zeus.ttf", 16f, 100, 100);
         return bi;
+    }
+
+    @Override
+    public void buttonClickedEvent(ButtonType type, int ID) {
+
     }
 
     /**

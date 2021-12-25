@@ -28,7 +28,9 @@ public abstract class DeliverySprite extends MovingSprite {
     public DeliverySprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination, Case start, int len) {
         super(filePath, bitID, localId, frameNumber, c, destination);
         ai = new DeliveryAI();
-        this.setRoutePath(ai.roaming(c, len, FreeState.ONLY_ACTIVE_ROAD.getI(), start));
+        if(start == null)
+            return;
+        this.setRoutePath(ai.roaming(c, len, FreeState.ACTIVE_ROAD.getI(), start));
         x = start.getxPos();
         y = start.getyPos();
         setXB(Math.round(x));

@@ -100,7 +100,7 @@ public class Trolley extends MovingSprite {
                 break;
         }
         int resid = resID(resource);
-        int idnbr = 0;
+        int idnbr = 1;
         if (amount == 1)
             idnbr = 1;
         if (amount == 2)
@@ -171,9 +171,9 @@ public class Trolley extends MovingSprite {
                 if (g.getFreeSpace(resource) > 0 && g.getAccess().size() > 0) {
                     Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
                     if (p != null) {
-                        setPath(p);
-                        cc.getDriver().setPath(p);
-                        cc.getPuller().setPath(p);
+                        setPath(getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
+                        cc.getDriver().setPath(getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
+                        cc.getPuller().setPath(getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
                         cc.setDest(g);
                         currentDelivery = amount - g.reserve(resource, amount);
                         return;
@@ -196,6 +196,8 @@ public class Trolley extends MovingSprite {
 
     public int resID(Resource r) {
         int i = 0;
+        if(amount == 0)
+            return 2990;
         if (r == null)
             return 2990;
         switch (r) {

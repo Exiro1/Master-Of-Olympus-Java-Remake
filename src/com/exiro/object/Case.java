@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Case {
     private int xPos, yPos;
-    private boolean Occuped = false;
+    private boolean occupied = false;
     //private ObjectType objectType;
     private ObjectClass object;
     private boolean isMainCase; //case ou dessiner l objet
@@ -140,12 +140,12 @@ public class Case {
         //this.setBuildingType(object.getBuildingType());
     }
 
-    public boolean isOccuped() {
-        return Occuped;
+    public boolean isOccupied() {
+        return occupied || sprites.size()!=0;
     }
 
-    public void setOccuped(boolean occuped) {
-        Occuped = occuped;
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
     }
 
     public ArrayList<Sprite> getSprites() {

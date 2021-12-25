@@ -1,5 +1,6 @@
 package com.exiro.buildingList;
 
+import com.exiro.moveRelated.FreeState;
 import com.exiro.object.*;
 import com.exiro.sprite.Carter;
 import com.exiro.sprite.MovingSprite;
@@ -13,16 +14,20 @@ import java.util.ArrayList;
 public abstract class ResourceGenerator extends Building {
 
 
-    final int maxPerCarter;
+    protected int maxPerCarter;
     int stock;
+    int maxStockOut;
     Resource resource;
 
 
-    public ResourceGenerator(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
+    public ResourceGenerator(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource,int maxStockOut ) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID);
         this.resource = resource;
         this.maxPerCarter = resource.getMaxPerCart();
+        this.maxStockOut = maxStockOut ;
     }
+
+
 
     @Override
     public void processSprite(double delta) {
@@ -34,6 +39,7 @@ public abstract class ResourceGenerator extends Building {
 
     public void resourceCreated(int unit) {
         stock += unit;
+        stock = Math.min(stock, maxStockOut);
     }
 
     public void addCarter(Resource r, int amount) {
@@ -42,15 +48,45 @@ public abstract class ResourceGenerator extends Building {
             addSprite(cc.getDriver());
             addSprite(cc.getPuller());
             addSprite(cc.getTrolley());
+            complex = true;
         } else {
             Carter carter = new Carter(city, null, this, resource, amount);
+            addSprite(carter);
+            complex = false;
+        }
+        carterAvailable = false;
+    }
+    public void returnHome(Building from, boolean complex){
+        if (complex) {
+            ComplexCarter cc = new ComplexCarter(city, this, from.getAccess().get(0), Resource.NULL, 0);
+            cc.setRoutePath(city.getPathManager().getPathTo(from.getAccess().get(0).getxPos(), from.getAccess().get(0).getyPos(), getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
+            addSprite(cc.getDriver());
+            addSprite(cc.getPuller());
+            addSprite(cc.getTrolley());
+        } else {
+            Carter carter = new Carter(city, this, from, Resource.NULL, 0);
+            carter.setPath(city.getPathManager().getPathTo(carter.getXB(), carter.getYB(), getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
             addSprite(carter);
         }
     }
 
+    @Override
+    public void stop() {
+        super.stop();
+        carterAvailable = true;
+        returnFromHome = false;
+        refueling = false;
+    }
 
+    boolean carterAvailable = true;
+    boolean complex = false;
+    Building returnFrom;
+    boolean returnFromHome = false;
+    protected boolean refueling = false; //a revoir
     public void manageCarter() {
-        if (stock > 0) {
+        if(refueling)
+            return;
+        if (stock > 0 && carterAvailable) {
             int toDeliver = Math.min(stock, maxPerCarter);
             stock -= toDeliver;
             addCarter(resource, toDeliver);
@@ -58,6 +94,7 @@ public abstract class ResourceGenerator extends Building {
 
         ArrayList<Sprite> toDestroy = new ArrayList<>();
         for (MovingSprite c : msprites) {
+
             if (c.hasArrived && c instanceof Carter) {
                 Carter carter = (Carter) c;
                 ObjectClass des = c.getDestination();
@@ -68,13 +105,18 @@ public abstract class ResourceGenerator extends Building {
                 } else if (des instanceof StoreBuilding) {
                     StoreBuilding g = (StoreBuilding) des;
                     g.stock(resource, carter.getCurrentDelivery());
-                    carter.setAmmount(carter.getAmmount() - carter.getCurrentDelivery());
-                    if (carter.getAmmount() > 0) {
+                    carter.setAmount(carter.getAmount() - carter.getCurrentDelivery());
+                    if (carter.getAmount() > 0) {
                         c.hasArrived = false;
                         c.setRoutePath(null);
                     } else {
                         toDestroy.add(c);
+                        returnFrom = g;
+                        returnFromHome = true;
                     }
+                }else if(des == this){
+                    toDestroy.add(c);
+                    carterAvailable = true;
                 }
             } else if (c.hasArrived && c instanceof TrolleyDriver) {
                 ComplexCarter cc = ((TrolleyDriver) c).getCc();
@@ -94,7 +136,14 @@ public abstract class ResourceGenerator extends Building {
                         toDestroy.add(cc.getDriver());
                         toDestroy.add(cc.getPuller());
                         toDestroy.add(cc.getTrolley());
+                        returnFrom = g;
+                        returnFromHome = true;
                     }
+                }else if(des == this){
+                    toDestroy.add(cc.getDriver());
+                    toDestroy.add(cc.getPuller());
+                    toDestroy.add(cc.getTrolley());
+                    carterAvailable = true;
                 }
 
 
@@ -103,6 +152,10 @@ public abstract class ResourceGenerator extends Building {
         }
         for (Sprite s : toDestroy) {
             removeSprites(s);
+        }
+        if(returnFromHome){
+            returnFromHome = false;
+            returnHome(returnFrom,complex);
         }
     }
 
@@ -136,6 +189,10 @@ public abstract class ResourceGenerator extends Building {
 
     public int getMaxPerCarter() {
         return maxPerCarter;
+    }
+
+    public int getMaxStockOut() {
+        return maxStockOut;
     }
 
     public int getStock() {

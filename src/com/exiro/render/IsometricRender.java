@@ -21,6 +21,10 @@ public class IsometricRender {
         return tempPt;
     }
 
+    static public Point[] getHitbox(Point center,int tile_width, int tile_height){
+        float d = (float) Math.sqrt( (tile_width/((float)2*TILE_WIDTH_HALF))*(tile_width/((float)2*TILE_WIDTH_HALF)) + (tile_height/((float)2*TILE_HEIGHT_HALF))*(tile_height/((float)2*TILE_HEIGHT_HALF)) );
+        return new Point[]{new Point(center.x-d,center.y-d),new Point(center.x+d,center.y-d),new Point(center.x+d,center.y+d),new Point(center.x-d,center.y+d)};
+    }
 
     static public Point TwoDToIsoTexture(Point p, int tile_width, int tile_height, int size) {
         Point tempPt = new Point(0, 0);

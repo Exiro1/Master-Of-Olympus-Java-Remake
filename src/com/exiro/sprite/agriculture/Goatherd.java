@@ -19,7 +19,7 @@ public class Goatherd extends AgricultureSprite {
     Dairy dairy;
     Goat goat;
     boolean finished = false;
-
+    boolean createRessource = false;
 
     //2376
 
@@ -32,8 +32,9 @@ public class Goatherd extends AgricultureSprite {
         setY(start.getyPos());
         setXB(start.getxPos());
         setYB(start.getyPos());
-        setRoutePath(AI.goTo(c, start, c.getMap().getCase(this.goat.getXB(), this.goat.getYB()), FreeState.WALKABLE.getI()));
+        setRoutePath(AI.goTo(c, start, c.getMap().getCase(this.goat.getXB(), this.goat.getYB()), FreeState.NON_BLOCKING.getI()));
         this.milk = cut;
+        this.createRessource = cut;
         this.wait = !cut;
         if (cut) {
             this.goat.stop();
@@ -66,7 +67,7 @@ public class Goatherd extends AgricultureSprite {
 
         if (hasArrived) {
             if (getDestination() == dairy && !finished) {
-                dairy.goatherdFinished();
+                dairy.goatherdFinished(createRessource);
                 finished = true;
             }
             if (milk && !milking) {
@@ -76,7 +77,7 @@ public class Goatherd extends AgricultureSprite {
                     milk();
                 } else {
                     hasArrived = false;
-                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(goat.getXB(), goat.getYB()), FreeState.WALKABLE.getI()));
+                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(goat.getXB(), goat.getYB()), FreeState.NON_BLOCKING.getI()));
                 }
             }
             if (wait && !waiting) {
@@ -90,7 +91,7 @@ public class Goatherd extends AgricultureSprite {
                 goat.start();
                 setLocalID(2488);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), dairy.getAccess().get(0), FreeState.WALKABLE.getI()));
+                setRoutePath(AI.goTo(c, getMainCase(), dairy.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
                 setDestination(dairy);
             } else if (waiting && fullAnimCounter > 6) {
                 waiting = false;
@@ -100,7 +101,7 @@ public class Goatherd extends AgricultureSprite {
                 goat.addDays(-2);
                 setLocalID(2376);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), dairy.getAccess().get(0), FreeState.WALKABLE.getI()));
+                setRoutePath(AI.goTo(c, getMainCase(), dairy.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
                 setDestination(dairy);
             }
 

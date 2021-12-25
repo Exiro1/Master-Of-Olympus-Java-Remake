@@ -24,9 +24,11 @@ public class Carter extends MovingSprite {
     int cartH, cartW;
     int cartOffX, cartOffY;
     final Resource res;
-    int ammount;
+    int amount;
     int prio = 0;
     int currentDelivery = 0;
+    Building origin;
+    int command = 0;
 
     public Carter(City c, ObjectClass destination, Building origin, Resource resource, int nbr) {
         super("SprMain", 0, 4728, 12, c, destination);
@@ -40,14 +42,30 @@ public class Carter extends MovingSprite {
         setXB(Math.round(x));
         setYB(Math.round(y));
         res = resource;
-        if ((res == Resource.WOOL || res == Resource.BRONZE || res == Resource.ARMEMENT || res == Resource.OLIVE_OIL || res == Resource.WINE) && nbr > 2)
-            nbr = 2;
-        if (res == Resource.NULL)
-            nbr = 1;
-        this.ammount = nbr;
+        this.amount = nbr;
         setCart(dir);
         setImage(dir, 0);
+        this.origin = origin;
     }
+    public Carter(City c, ObjectClass destination, Building origin, Resource resource, int nbr, int command) {
+        super("SprMain", 0, 4728, 12, c, destination);
+        dir = Direction.EST;
+        timeBetweenFrame = 0.05f;
+        Case ca = origin.getAccess().get(0);
+        x = ca.getxPos();
+        y = ca.getyPos();
+        offsetX = 0;
+        offsetY = -5;
+        setXB(Math.round(x));
+        setYB(Math.round(y));
+        res = resource;
+        this.amount = nbr;
+        setCart(dir);
+        setImage(dir, 0);
+        this.origin = origin;
+        this.command = command;
+    }
+
 
     public int getCurrentDelivery() {
         return currentDelivery;
@@ -78,10 +96,12 @@ public class Carter extends MovingSprite {
                 cartOffY = 9;
                 break;
             case SUD_EST:
+                offsetX = -5;
+                offsetY = -8;
                 i = 2;
                 prio = 1;
-                cartOffX = 5;
-                cartOffY = 5;
+                cartOffX = 3;
+                cartOffY = -24;
                 break;
             case EST:
                 i = 1;
@@ -90,10 +110,12 @@ public class Carter extends MovingSprite {
                 prio = 0;
                 break;
             case NORD_EST:
+                offsetX = 0;
+                offsetY = -5;
                 i = 0;
                 prio = 0;
                 cartOffX = 0;
-                cartOffY = 0;
+                cartOffY = -38;
                 break;
             case NORD:
                 i = 7;
@@ -102,9 +124,11 @@ public class Carter extends MovingSprite {
                 prio = 0;
                 break;
             case NORD_OUEST:
+                offsetX = 0;
+                offsetY = -5;
                 i = 6;
-                cartOffX = -17;
-                cartOffY = 1;
+                cartOffX = -39;
+                cartOffY = -39;
                 prio = 0;
                 break;
             case OUEST:
@@ -114,22 +138,28 @@ public class Carter extends MovingSprite {
                 prio = 0;
                 break;
             case SUD_OUEST:
+                offsetX = 8;
+                offsetY = -13;
                 i = 4;
-                cartOffX = -26;
-                cartOffY = 10;
+                cartOffX = -38;
+                cartOffY = -19;
                 prio = 1;
                 break;
         }
         int resid = resID(res);
-        int idnbr = 0;
-        if (ammount == 1)
+        int idnbr = 1;
+
+        if (amount == 1)
             idnbr = 1;
-        if (ammount == 2)
+        if (amount == 2)
             idnbr = 2;
-        if (ammount == 3)
+        if (amount == 3)
             idnbr = 2;
-        if (ammount == 4)
+        if (amount == 4)
             idnbr = 3;
+
+        if ((res == Resource.WOOL || res == Resource.BRONZE || res == Resource.ARMEMENT || res == Resource.OLIVE_OIL || res == Resource.WINE) && amount > 2)
+            idnbr = 2;
 
         int id = resid + i + 8 * (idnbr - 1);
 
@@ -177,10 +207,14 @@ public class Carter extends MovingSprite {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getX(), (getY())), getWidth(), getHeight(), 1);
+        int z = 1;
+        if (c.getMap().getCase(getXB(), getYB()) != null)
+            z = c.getMap().getCase(getXB(), getYB()).getZlvl();
+        Point p = IsometricRender.TwoDToIsoSprite(new Point(getX() - z, (getY()) - z), getWidth(), getHeight());
+
         if (prio == 0)
             g.drawImage(cart, camX + (int) p.getX() + getOffsetX() + cartOffX, camY + (int) p.getY() + getOffsetY() + cartOffY, null);
-        g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX(), camY + (int) p.getY() + getOffsetY(), null);
+        g.drawImage(getCurrentFrame(), camX + (int) p.getX() + getOffsetX() - getOffx(), camY + (int) p.getY() + getOffsetY() - getOffy(), null);
         if (prio == 1)
             g.drawImage(cart, camX + (int) p.getX() + getOffsetX() + cartOffX, camY + (int) p.getY() + getOffsetY() + cartOffY, null);
     }
@@ -200,7 +234,7 @@ public class Carter extends MovingSprite {
                     if (p != null) {
                         setPath(p);
                         setDestination(g);
-                        currentDelivery = getAmmount() - g.reserve(res, getAmmount());
+                        currentDelivery = getAmount() - g.reserve(res, getAmount());
                         return;
                     }
                 }
@@ -210,6 +244,8 @@ public class Carter extends MovingSprite {
 
     public int resID(Resource r) {
         int i = 0;
+        if(amount == 0)
+            return 8427;
         switch (r) {
             case SEA_URCHIN:
                 i = 8435;
@@ -283,17 +319,21 @@ public class Carter extends MovingSprite {
         return null;
     }
 
+    public int getCommand() {
+        return command;
+    }
+
     @Override
     public void setDir(Direction dir) {
         super.setDir(dir);
         setCart(dir);
     }
 
-    public int getAmmount() {
-        return ammount;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setAmmount(int ammount) {
-        this.ammount = ammount;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

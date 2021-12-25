@@ -1,5 +1,6 @@
 package com.exiro.buildingList.culture;
 
+import com.exiro.ai.AI;
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.moveRelated.FreeState;
@@ -10,6 +11,7 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.DeliverySprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.agriculture.Sheepherd;
 import com.exiro.sprite.culture.Athlete;
 import com.exiro.systemCore.GameManager;
 
@@ -51,18 +53,26 @@ public class Gymnasium extends Building {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
-        for (MovingSprite a : getMovingSprites()) {
-            if (a.hasArrived && a instanceof DeliverySprite) {
-                if (a.getDestination() != this) {
-                    a.setRoutePath(city.getPathManager().getPathTo(city.getMap().getCase(a.getXB(), a.getYB()), this.getAccess().get(0), FreeState.ALL_ROAD.i));
-                    a.setDestination(this);
-                    a.hasArrived = false;
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
+
+        ArrayList<MovingSprite> toR = new ArrayList<>();
+        for (MovingSprite ms : getMovingSprites()) {
+            if (ms instanceof Athlete) {
+                if (ms.hasArrived && ms.getDestination() != this) {
+                    ms.hasArrived = false;
+                    ms.setRoutePath(AI.goTo(city,ms.getMainCase(),this.getAccess().get(0),FreeState.ALL_ROAD.getI()));
+                    ms.setDestination(this);
+                }else if(ms.hasArrived && ms.getDestination() == this){
+                    toR.add(ms);
                 }
             }
         }
-        getMovingSprites().removeIf(a -> a.hasArrived && a instanceof DeliverySprite && a.getDestination() == this);
+
+        for (MovingSprite ms : toR) {
+            removeSprites(ms);
+        }
+
         timeBeforeAthlete += deltaTime;
         if (timeBeforeAthlete > 20) {
             timeBeforeAthlete = 0;

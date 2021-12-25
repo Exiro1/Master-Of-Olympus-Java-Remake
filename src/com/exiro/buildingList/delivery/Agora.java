@@ -133,7 +133,7 @@ public class Agora extends Building {
                 for (int j = 0; j < 6; j++) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos - i);
-                        if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos - i));
                         }
                     }
@@ -153,7 +153,7 @@ public class Agora extends Building {
                 for (int j = 0; j < 6; j++) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos - i);
-                        if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos - i));
                         }
                     }
@@ -170,7 +170,7 @@ public class Agora extends Building {
                 for (int j = 1; j < 3; j++) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos + i);
-                        if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos + i));
                         }
                     }
@@ -189,7 +189,7 @@ public class Agora extends Building {
                 for (int j = 0; j > -2; j--) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos + i);
-                        if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos + i));
                         }
                     }
@@ -297,7 +297,7 @@ public class Agora extends Building {
                 if (c.getDestination() == this) {
                     toDestroy.add(c);
                 } else {
-                    Path p = city.getPathManager().getPathTo(c.getXB(), c.getYB(), this.getAccess().get(0).getxPos(), this.getAccess().get(0).getyPos(), FreeState.ONLY_ACTIVE_ROAD.getI());
+                    Path p = city.getPathManager().getPathTo(c.getXB(), c.getYB(), this.getAccess().get(0).getxPos(), this.getAccess().get(0).getyPos(), FreeState.ACTIVE_ROAD.getI());
                     if (p != null) {
                         c.setRoutePath(p);
                         c.setDestination(this);
@@ -322,8 +322,8 @@ public class Agora extends Building {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isActive()) {
 
             for (AgoraShopBuilding shopBuilding : shopsBuildings) {

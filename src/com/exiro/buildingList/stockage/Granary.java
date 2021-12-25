@@ -18,10 +18,12 @@ public class Granary extends StoreBuilding {
 
     public Granary(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
         super(false, ObjectType.GRANARY, BuildingCategory.MARKET, pop, 18, 80, 10, xPos, yPos, 4, 4, cases, built, city, 0);
+        interfaceH = 400;
     }
 
     public Granary() {
         super(false, ObjectType.GRANARY, BuildingCategory.MARKET, 0, 18, 80, 10, 0, 0, 4, 4, null, false, GameManager.currentCity, 0);
+        interfaceH = 400;
     }
 
 
@@ -62,7 +64,7 @@ public class Granary extends StoreBuilding {
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         if (isActive() && getPop() > 0) {
 
         }

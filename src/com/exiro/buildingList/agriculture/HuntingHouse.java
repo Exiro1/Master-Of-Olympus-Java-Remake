@@ -2,32 +2,34 @@ package com.exiro.buildingList.agriculture;
 
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
-import com.exiro.object.Case;
-import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class HuntingHouse extends ResourceGenerator {
 
     double growth = 0;
     int speedFactor = 1;
 
-    public HuntingHouse(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-    }
 
-    public HuntingHouse(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, pop, 8, 32, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.MEAT);
-    }
 
     public HuntingHouse() {
-        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, 0, 8, 32, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.MEAT);
+        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, 0, 8, 32, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.MEAT,4);
+        maxPerCarter = 3;
+    }
+
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        bi.addText("Reserve de " + getStock() + " chargements de " + getResource().getName(), 16, 20, 80);
+
+        return bi;
     }
 
     @Override
@@ -56,14 +58,11 @@ public class HuntingHouse extends ResourceGenerator {
     @Override
     public void Render(Graphics g, int camX, int camY) {
         super.Render(g, camX, camY);
-        for (BuildingSprite s : getBuildingSprites()) {
-            s.Render(g, camX, camY);
-        }
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isWorking()) {
             float factor = (getPop() * 1.0f) / (getPopMax() * 1.0f);
             growth += factor * deltaTime * speedFactor;

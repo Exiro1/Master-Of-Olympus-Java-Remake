@@ -8,7 +8,9 @@ import com.exiro.buildingList.delivery.agorashop.AgoraShopBuilding;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
+import com.exiro.object.ObjectType;
 import com.exiro.sprite.DeliverySprite;
+import com.exiro.systemCore.GameManager;
 
 public class AgoraDelivery extends DeliverySprite {
 
@@ -20,7 +22,12 @@ public class AgoraDelivery extends DeliverySprite {
         setOffsetY(-5);
         this.agora = agora;
     }
-
+    public AgoraDelivery() {
+        super("SprMain", 0, 3, 12, GameManager.currentCity, null, null, 0);
+        setTimeBetweenFrame(0.05);
+        setOffsetY(-5);
+        setType(ObjectType.SHEEP);
+    }
     @Override
     public void deliverBuildings() {
         for (Building b : getBuildingsToDeliver()) {
@@ -31,11 +38,11 @@ public class AgoraDelivery extends DeliverySprite {
                         ((House) b).addFood(f);
                         agoraShopBuilding.refuel(-f);
                     } else if (agoraShopBuilding.getShop() == AgoraShop.WOOL) {
-                        int f = Math.min(agoraShopBuilding.getReserve(), Math.min(((House) b).getMaxWool(), 5));
+                        int f = Math.min(agoraShopBuilding.getReserve(), Math.min(((House) b).getMaxWool()- (int) ((House) b).getWool(), 4));
                         ((House) b).addWool(f);
                         agoraShopBuilding.refuel(-f);
                     } else if (agoraShopBuilding.getShop() == AgoraShop.OIL) {
-                        int f = Math.min(agoraShopBuilding.getReserve(), Math.min(((House) b).getMaxWool(), 5));
+                        int f = Math.min(agoraShopBuilding.getReserve(), Math.min(((House) b).getMaxHDO()- (int) ((House) b).getHdo(), 4));
                         ((House) b).addHdo(f);
                         agoraShopBuilding.refuel(-f);
                     }

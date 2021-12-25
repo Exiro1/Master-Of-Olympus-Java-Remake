@@ -9,6 +9,8 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.Sprite;
@@ -211,7 +213,7 @@ public class Stock extends StoreBuilding {
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
 
     }
 
@@ -225,5 +227,12 @@ public class Stock extends StoreBuilding {
 
     }
 
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        bi.addText("Entreposant "+getTotalStocked()+" chargements.","Zeus.ttf",16f,20,84);
+        bi.addText("Espace pour "+(32-getTotalStocked())+" chargements.","Zeus.ttf",16f,250,84);
+        return bi;
+    }
 
 }
