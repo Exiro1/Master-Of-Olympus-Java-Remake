@@ -41,7 +41,7 @@ public class WoolShop extends AgoraShopBuilding {
                 city.addObj(this);
 
                 for (Case c : cases) {
-                    c.setOccuped(true);
+                    c.setOccupied(true);
                     c.setObject(this);
                     c.setMainCase(false);
                 }

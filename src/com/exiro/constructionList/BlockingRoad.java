@@ -54,7 +54,7 @@ public class BlockingRoad extends Construction {
             city.addConstruction(this);
             city.addObj(this);
             for (Case c : place) {
-                c.setOccuped(true);
+                c.setOccupied(true);
                 c.setObject(this);
                 c.setMainCase(false);
             }
@@ -78,7 +78,7 @@ public class BlockingRoad extends Construction {
     public void delete() {
         super.delete();
         r.getMainCase().setObject(r);
-        r.getMainCase().setOccuped(true);
+        r.getMainCase().setOccupied(true);
         city.getConstructions().add(r);
         city.addObj(r);
     }

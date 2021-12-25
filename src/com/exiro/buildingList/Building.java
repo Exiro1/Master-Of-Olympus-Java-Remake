@@ -5,12 +5,15 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.MapObject;
 import com.exiro.object.ObjectType;
+import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.DeepBlueLayout;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.terrainList.Elevation;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -63,13 +66,23 @@ public abstract class Building extends MapObject {
         this.city = city;
         this.ID = ID;
         this.type = type;
+        interfaceH = 500;
+        interfaceW = 600;
     }
 
     @Override
     public Interface getInterface() {
-        BuildingInterface bi = new BuildingInterface(300, 300, 500, 400, null, this);
-        bi.addText(type.getName(), "Zeus.ttf", 32f, 250 - 32 * type.getName().length() / 2 + 16, 50);
+        BuildingInterface bi = new BuildingInterface(300, 300, interfaceW, interfaceH, null, this);
+        bi.addCenteredText(type.getName(), "Zeus.ttf", 32f, 50);
+        DeepBlueLayout dl = new DeepBlueLayout(50,bi.getH()+16-80,bi.getW()-50,80);
+        bi.addChildLayout(dl);
+        dl.addCenteredText("Main d'oeuvre : "+getPop()+" sur "+ getPopMax(),"Zeus.ttf",20f,20);
         return bi;
+    }
+
+    @Override
+    public void buttonClickedEvent(ButtonType type, int ID) {
+
     }
 
     /**
@@ -80,7 +93,7 @@ public abstract class Building extends MapObject {
     /**
      * Appelés toute les secondes
      */
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         addSafetyLvl((float) -deltaTime);
         if (getSafetyLvl() < 0) {
             destroy();
@@ -122,7 +135,7 @@ public abstract class Building extends MapObject {
             city.addBuilding(this);
             city.addObj(this);
             for (Case c : place) {
-                c.setOccuped(true);
+                c.setOccupied(true);
                 c.setObject(this);
                 c.setMainCase(false);
             }
@@ -166,7 +179,7 @@ public abstract class Building extends MapObject {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
-                    if (!c.isOccuped() && c.getTerrain().isConstructible()) {
+                    if (!c.isOccupied() && c.getTerrain().isConstructible() && !(c.getTerrain() instanceof Elevation)) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }
                 }
@@ -206,7 +219,7 @@ public abstract class Building extends MapObject {
             city.getOwner().pay(this.getDeleteCost());
             city.removeBuilding(this);
             for (Case c : getCases()) {
-                c.setOccuped(false);
+                c.setOccupied(false);
                 c.setObject(null);
                 c.setMainCase(true);
             }
@@ -236,13 +249,19 @@ public abstract class Building extends MapObject {
 
         //render only buildingSprite because movingSprite are render separately
         for (BuildingSprite s : bsprites) {
-            if (isActive() && getPop() > 0) {
+            if (isWorking()) {
                 s.Render(g, camX, camY);
-            } else if (msprites.size() > 0) {
-                clearMovingSprite();
+            }else{
+                stop();
             }
         }
 
+    }
+
+    public void stop(){
+         if(msprites.size() > 0) {
+            clearMovingSprite();
+        }
     }
 
     public boolean isWorking() {
@@ -341,6 +360,25 @@ public abstract class Building extends MapObject {
             synchronized (bsprites) {
                 bsprites.remove((BuildingSprite) s);
             }
+    }
+
+    public void setSprite(int index, Sprite s){
+        if (s instanceof MovingSprite){
+            synchronized (sprites) {
+                sprites.remove(msprites.get(index));
+                sprites.add(s);
+            }
+            synchronized (msprites) {
+                msprites.set(index, (MovingSprite) s);
+            }}
+        if (s instanceof BuildingSprite){
+            synchronized (sprites) {
+                sprites.remove(bsprites.get(index));
+                sprites.add(s);
+            }
+            synchronized (bsprites) {
+                bsprites.set(index, (BuildingSprite) s);
+            }}
     }
 
     @Override

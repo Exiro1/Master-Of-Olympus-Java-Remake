@@ -15,11 +15,11 @@ public class Guild extends ResourceGenerator {
 
 
     public Guild(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
+        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource,0);
     }
 
     public Guild() {
-        super(false, ObjectType.GUILD, BuildingCategory.INDUSTRY, 0, 25, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.NULL);
+        super(false, ObjectType.GUILD, BuildingCategory.INDUSTRY, 0, 25, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.NULL,0);
     }
 
     public void createBuildingSpriteWork() {

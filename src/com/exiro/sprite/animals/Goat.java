@@ -164,7 +164,7 @@ public class Goat extends Animal {
     @Override
     public boolean build(int xPos, int yPos) {
 
-        if (c.getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow) {
+        if (c.getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow && c.getMap().getCase(xPos, yPos).getObject() == null) {
             setX(xPos);
             setY(yPos);
             setXB(xPos);
@@ -181,7 +181,7 @@ public class Goat extends Animal {
     public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
         if (c.getMap().getCase(xPos, yPos) == null)
             return null;
-        if (c.getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow) {
+        if (c.getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow&& c.getMap().getCase(xPos, yPos).getObject() == null) {
             ArrayList<Case> cc = new ArrayList<>();
             cc.add(c.getMap().getCase(xPos, yPos));
             return cc;

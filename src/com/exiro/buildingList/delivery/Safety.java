@@ -53,8 +53,8 @@ public class Safety extends Building {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isActive() && getPop() > 0) {
             if (getMovingSprites().size() == 0) {
                 guard = new SafetyGuard(city, null, getAccess().get(0));

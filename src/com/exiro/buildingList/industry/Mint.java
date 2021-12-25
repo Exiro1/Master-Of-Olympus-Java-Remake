@@ -1,6 +1,7 @@
 package com.exiro.buildingList.industry;
 
 import com.exiro.buildingList.BuildingCategory;
+import com.exiro.buildingList.IndustryConverter;
 import com.exiro.buildingList.IndustryHarverster;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
@@ -15,21 +16,20 @@ import com.exiro.terrainList.Rock;
 public class Mint extends IndustryHarverster {
 
 
-    int harvester = 0;
-
 
     public void createBuildingSpriteWork() {
         BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 21, 10, getCity(), this);
         s.setOffsetX(9);
         s.setOffsetY(16);
         s.setTimeBetweenFrame(0.1f);
-        addSprite(s);
+        setSprite(0,s);
     }
 
     @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
+            setState(IndustryConverter.ConversionState.WAITING_RESOURCES);
             return true;
         }
         return false;
@@ -45,8 +45,8 @@ public class Mint extends IndustryHarverster {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isWorking()) {
             if (harvester < harvesterNbr) {
                 Case dir = null;
@@ -54,7 +54,7 @@ public class Mint extends IndustryHarverster {
                 for (Case c : city.getMap().getSilvers()) {
                     if (!((Rock) c.getTerrain()).isMined() && ((Rock) c.getTerrain()).isAccessible()) {
                         for (Case n : c.getNeighbour()) {
-                            if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.WALKABLE.getI()) != null) {
+                            if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
                                 dir = n;
                                 r = ((Rock) c.getTerrain());
                                 ((Rock) c.getTerrain()).setMined(true);
@@ -81,6 +81,12 @@ public class Mint extends IndustryHarverster {
         if (unit >= this.unitNeeded) {
             city.getOwner().pay(-100); //we add 100 drachmas
             unit -= unitNeeded;
+            if(unit==0){
+                setState(IndustryConverter.ConversionState.WAITING_RESOURCES);
+            }
+        }
+        if(getState() == IndustryConverter.ConversionState.WAITING_RESOURCES && unit > 0){
+            setState(IndustryConverter.ConversionState.CONVERSION);
         }
         harvester--;
     }

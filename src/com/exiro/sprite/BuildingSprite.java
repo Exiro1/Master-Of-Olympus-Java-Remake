@@ -16,6 +16,7 @@ public class BuildingSprite extends Sprite {
     final Building building;
     boolean directional;
     Direction direction;
+    boolean visible = true;
 
     public BuildingSprite(String filePath, int bitID, int localId, int frameNumber, City c, Building b) {
         super(filePath, bitID, localId, frameNumber, c);
@@ -88,7 +89,8 @@ public class BuildingSprite extends Sprite {
 
     @Override
     public void process(double deltaTime) {
-
+        if(!visible)
+            return;
         if (frameNumber > 1) {
             timeSinceLastFrame = timeSinceLastFrame + deltaTime;
             // System.out.println(timeSinceLastFrame);
@@ -110,6 +112,10 @@ public class BuildingSprite extends Sprite {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
+
+        if(!visible)
+            return;
+
         int z = c.getMap().getCase(getXB(), getYB()).getZlvl();
 
         if (complex) {
@@ -134,6 +140,14 @@ public class BuildingSprite extends Sprite {
         }
 
 
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     @Override

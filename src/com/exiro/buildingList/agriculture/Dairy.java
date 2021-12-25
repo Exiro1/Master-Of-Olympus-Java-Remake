@@ -1,11 +1,13 @@
 package com.exiro.buildingList.agriculture;
 
+import com.exiro.ai.AI;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
-import com.exiro.object.Case;
-import com.exiro.object.City;
+import com.exiro.moveRelated.FreeState;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.agriculture.Goatherd;
@@ -20,18 +22,19 @@ public class Dairy extends ResourceGenerator {
     double growth = 0;
     int speedFactor = 1;
 
-    public Dairy(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-    }
-
-    public Dairy(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, pop, 8, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.CHEESE);
-    }
 
     public Dairy() {
-        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.CHEESE);
+        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.CHEESE,3);
+        maxPerCarter = 1;
     }
 
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        bi.addText("Reserve de " + getStock() + " chargements de " + getResource().getName(), 16, 20, 80);
+
+        return bi;
+    }
 
     @Override
     public boolean build(int xPos, int yPos) {
@@ -50,12 +53,18 @@ public class Dairy extends ResourceGenerator {
 
     int goatherdNbr = 0;
 
+    @Override
+    public void stop() {
+        super.stop();
+        goatherdNbr = 0;
+    }
+
     public void createGoatherd() {
         Random r = new Random();
         if (city.getGoats().size() > 0) {
             Goat destination = city.getGoats().get(r.nextInt(city.getGoats().size()));
-            if (destination != null && destination.isAvailable()) {
-                Goatherd p = new Goatherd(city, this, destination, !destination.isMilked());
+            if (destination != null && destination.isAvailable()  && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
+                Goatherd p = new Goatherd(city, this, destination, (!destination.isMilked() && getStock() < getMaxStockOut()));
                 destination.setAvailable(false);
                 addSprite(p);
                 goatherdNbr++;
@@ -82,8 +91,8 @@ public class Dairy extends ResourceGenerator {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isActive() && getPop() > 0) {
             if (goatherdNbr < 2) {
                 createGoatherd();
@@ -91,9 +100,10 @@ public class Dairy extends ResourceGenerator {
         }
     }
 
-    public void goatherdFinished() {
+    public void goatherdFinished(boolean createCheese) {
         goatherdNbr--;
-        resourceCreated(1);
+        if(createCheese)
+            resourceCreated(1);
     }
 
     @Override

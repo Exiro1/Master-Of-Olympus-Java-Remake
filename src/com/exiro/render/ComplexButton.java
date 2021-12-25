@@ -11,7 +11,7 @@ public class ComplexButton extends Button {
     TileImage s, m, e;
     int mnbr;
     TextInterface textInterface;
-
+    // long button
     public ComplexButton(int x, int y, int w, int h, int bitid, int id1, int id2, int id3, ButtonType type, TextInterface text) {
         super(x, y, w, h, bitid, id1, type);
         s = ImageLoader.getImage("Zeus_Interface", bitid, id1);

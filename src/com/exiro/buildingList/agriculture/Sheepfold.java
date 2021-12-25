@@ -1,11 +1,15 @@
 package com.exiro.buildingList.agriculture;
 
+import com.exiro.ai.AI;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
+import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.agriculture.Sheepherd;
@@ -18,14 +22,24 @@ import java.util.Random;
 public class Sheepfold extends ResourceGenerator {
 
 
-    public Sheepfold(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resource) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource);
-    }
 
     double growth = 0.0;
 
     public Sheepfold(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, pop, 8, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.WOOL);
+        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, pop, 8, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.WOOL,5);
+
+    }
+    public Sheepfold() {
+        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOL,5);
+        maxPerCarter = 1;
+    }
+
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        bi.addText("Reserve de " + getStock() + " chargements de " + getResource().getName(), 16, 20, 80);
+
+        return bi;
     }
 
     @Override
@@ -42,9 +56,7 @@ public class Sheepfold extends ResourceGenerator {
         return false;
     }
 
-    public Sheepfold() {
-        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOL);
-    }
+
 
     int sheepherdNbr = 0;
 
@@ -52,8 +64,8 @@ public class Sheepfold extends ResourceGenerator {
         Random r = new Random();
         if (city.getSheeps().size() > 0) {
             Sheep destination = city.getSheeps().get(r.nextInt(city.getSheeps().size()));
-            if (destination != null && destination.isAvailable()) {
-                Sheepherd p = new Sheepherd(city, this, destination, !destination.isMowed());
+            if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
+                Sheepherd p = new Sheepherd(city, this, destination, (!destination.isMowed() && getStock() < getMaxStockOut()));
                 destination.setAvailable(false);
                 addSprite(p);
                 sheepherdNbr++;
@@ -61,6 +73,11 @@ public class Sheepfold extends ResourceGenerator {
         }
     }
 
+    @Override
+    public void stop() {
+        super.stop();
+        sheepherdNbr = 0;
+    }
     @Override
     public void processSprite(double delta) {
         super.processSprite(delta);
@@ -80,8 +97,8 @@ public class Sheepfold extends ResourceGenerator {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (isActive() && getPop() > 0) {
             if (sheepherdNbr < 2) {
                 createSheepherd();
@@ -89,9 +106,10 @@ public class Sheepfold extends ResourceGenerator {
         }
     }
 
-    public void sheepherdFinished() {
+    public void sheepherdFinished(boolean createWool) {
         sheepherdNbr--;
-        resourceCreated(1);
+        if(createWool)
+            resourceCreated(1);
     }
 
     @Override

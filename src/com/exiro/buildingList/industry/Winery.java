@@ -29,7 +29,7 @@ public class Winery extends IndustryConverter {
         s.setOffsetX(28);
         s.setOffsetY(3);
         s.setTimeBetweenFrame(0.1f);
-        addSprite(s);
+        setSprite(0,s);
     }
 
     @Override

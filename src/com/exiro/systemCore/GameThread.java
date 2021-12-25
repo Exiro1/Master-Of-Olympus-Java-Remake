@@ -22,6 +22,7 @@ public class GameThread implements Runnable {
     double timeSinceLastUpdateBuilding = 0;
     double timeSinceLastUpdateConstruct = 0;
     double timeSinceLastUpdateResources = 0;
+    int deltaDaysB,deltaDaysC,deltaDaysR;
     private final Player p;
     private int currentCity;
     private final GameFrame frame;
@@ -42,6 +43,7 @@ public class GameThread implements Runnable {
         }
     }
 
+
     public void gameThread() throws InterruptedException {
         System.out.println("d : " + deltaTimeResearched);
         while (continu) {
@@ -50,14 +52,17 @@ public class GameThread implements Runnable {
             timeSinceLastUpdateConstruct = timeSinceLastUpdateConstruct + deltaTime;
             timeSinceLastUpdateResources = timeSinceLastUpdateResources + deltaTime;
 
-            gm.timeManager.updateTime(deltaTime);
-
+            int deltaDays = gm.timeManager.updateTime(deltaTime);
+            deltaDaysB+=deltaDays;
+            deltaDaysC+=deltaDays;
+            deltaDaysR+=deltaDays;
             if (timeSinceLastUpdateBuilding > 1) {
 
                 for (City c : p.getPlayerCities()) {
-                    manageBuilding(c, timeSinceLastUpdateBuilding);
+                    manageBuilding(c, timeSinceLastUpdateBuilding,deltaDaysB);
                 }
                 timeSinceLastUpdateBuilding = 0;
+                deltaDaysB=0;
             }
             if (timeSinceLastUpdateConstruct > 3) {
 
@@ -65,6 +70,7 @@ public class GameThread implements Runnable {
                     manageConstruction(c, timeSinceLastUpdateConstruct);
                 }
                 timeSinceLastUpdateConstruct = 0;
+                deltaDaysC=0;
             }
             if (timeSinceLastUpdateResources > 5) {
 
@@ -72,6 +78,7 @@ public class GameThread implements Runnable {
                     manageResources(c);
                 }
                 timeSinceLastUpdateResources = 0;
+                deltaDaysR=0;
             }
             for (City c : p.getPlayerCities()) {
                 manageSprite(c, deltaTime);
@@ -103,7 +110,7 @@ public class GameThread implements Runnable {
             for (Case n : r.getNeighbour()) {
                 if (n.getTerrain().isBlocking())
                     continue;
-                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.WALKABLE.getI()) != null) {
+                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.NON_BLOCKING.getI()) != null) {
                     ((Rock) r.getTerrain()).setAccessible(true);
                     break;
                 }
@@ -114,7 +121,7 @@ public class GameThread implements Runnable {
             for (Case n : r.getNeighbour()) {
                 if (n.getTerrain().isBlocking())
                     continue;
-                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.WALKABLE.getI()) != null) {
+                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.NON_BLOCKING.getI()) != null) {
                     ((Rock) r.getTerrain()).setAccessible(true);
                     break;
                 }
@@ -125,7 +132,7 @@ public class GameThread implements Runnable {
             for (Case n : r.getNeighbour()) {
                 if (n.getTerrain().isBlocking())
                     continue;
-                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.WALKABLE.getI()) != null) {
+                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.NON_BLOCKING.getI()) != null) {
                     ((Tree) r.getObject()).setAccessible(true);
                     break;
                 }
@@ -174,12 +181,12 @@ public class GameThread implements Runnable {
         }
     }
 
-    public void manageBuilding(City c, double delaTime) {
+    public void manageBuilding(City c, double delaTime, int deltaDays) {
 
         synchronized (c.getBuildings()) {
 
             for (Building b : c.getBuildings()) {
-                b.process(delaTime);
+                b.process(delaTime, deltaDays);
                 if (b.isActive()) {
                     b.populate(delaTime);
                 } else {

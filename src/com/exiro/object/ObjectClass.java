@@ -2,6 +2,7 @@ package com.exiro.object;
 
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.render.ButtonType;
 import com.exiro.render.interfaceList.Interface;
 
 import java.awt.*;
@@ -21,7 +22,7 @@ public abstract class ObjectClass implements Cloneable {
     private String path;
     protected Case mainCase;
     public boolean canBuild;
-
+    public int interfaceW,interfaceH;
 
     public ObjectClass(boolean isActive, ObjectType type, String filename, int size, int bitmapID, int localID, int xlen, int ylen) {
         this.Active = isActive;
@@ -77,6 +78,8 @@ public abstract class ObjectClass implements Cloneable {
     public abstract ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city);
 
     public abstract Interface getInterface();
+
+    public abstract void buttonClickedEvent(ButtonType type, int ID);
 
     public Case getMainCase() {
         return mainCase;

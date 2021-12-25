@@ -75,20 +75,20 @@ public class RoadMap {
         if (!cityMap.getCase(xStart, yStart).getTerrain().isBlocking()) {
             if (cityMap.getCase(xStart, yStart).getObject() == null) {
                 if (cityMap.getCase(xStart, yStart).getTerrain().isConstructible()) {
-                    access = FreeState.BUILDABLE;
+                    access = FreeState.EMPTY_TERRAIN;
                     if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Elevation)
-                        access = FreeState.BUILDABLE_ROAD;
+                        access = FreeState.BUILDABLE_ELEVATION;
                     if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Meadow)
                         access = FreeState.MEADOW;
                 } else {
                     access = FreeState.NON_BLOCKING;
                 }
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD && cityMap.getCase(xStart, yStart).getObject().isActive()) {
-                access = FreeState.ONLY_ACTIVE_ROAD;
+                access = FreeState.ACTIVE_ROAD;
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.BLOCKABLE_ROAD || (!cityMap.getCase(xStart, yStart).getObject().isActive() && cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD)) {
                 access = FreeState.BLOCKING_ROAD;
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.TREE) {
-                access = FreeState.WALKABLE;
+                access = FreeState.WALKABLE_CASE;
             }
         }
         return access;

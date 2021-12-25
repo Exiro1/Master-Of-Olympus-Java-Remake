@@ -15,8 +15,10 @@ import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.Stock;
 import com.exiro.constructionList.*;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.sprite.DeliverySprite;
 import com.exiro.sprite.animals.Goat;
 import com.exiro.sprite.animals.Sheep;
+import com.exiro.sprite.delivery.AgoraDelivery;
 import com.exiro.terrainList.*;
 
 import java.awt.image.BufferedImage;

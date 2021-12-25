@@ -1,5 +1,6 @@
 package com.exiro.render.layout;
 
+import com.exiro.constructionList.Construction;
 import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
@@ -83,6 +84,8 @@ public class GameWindow extends JPanel {
         sortRender(p.getPlayerCities().get(0).getMap().getCaseSorted());
 
         for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
+
+
             if (obj.getObject() == null)
                 obj.getTerrain().Render(g, CameraPosx, CameraPosy);
             if (obj.getObject() != null && (obj.isMainCase())) {
@@ -160,6 +163,8 @@ public class GameWindow extends JPanel {
          */
     }
 
+    ObjectClass interfaceCaller;
+
     public void clickManager(MouseEvent e) {
 
         if (e.getButton() == MouseEvent.BUTTON1) {
@@ -167,6 +172,8 @@ public class GameWindow extends JPanel {
                 ButtonType type = gameInterface.clicked(e.getX(), e.getY() - GameLayout.TOOLBAR_HEIGHT);
                 if (type != ButtonType.NONE) {
                     buttonManager(type);
+                    if(gameInterface != null && gameInterface.updateRequested())
+                        updateInterface();
                 }
             } else {
 
@@ -180,8 +187,10 @@ public class GameWindow extends JPanel {
                 Case c = IsometricRender.getCase(new Point(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y), gm.getCurrentCity());
                 if (c.getObject() != null) {
                     gameInterface = c.getObject().getInterface();
+                    interfaceCaller = c.getObject();
                 } else {
                     gameInterface = c.getTerrain().getInterface();
+                    interfaceCaller = c.getTerrain();
                 }
             } else {
                 showEntity = false;
@@ -200,6 +209,9 @@ public class GameWindow extends JPanel {
     }
 
     public void buttonManager(ButtonType type) {
+
+        showEntity = true;
+        gm.getGameView().deleting = false;
         switch (type) {
             case CULTURE_GYMNASIUM:
                 EntityRender.setEntityRender(ObjectType.GYMNASIUM);
@@ -287,9 +299,14 @@ public class GameWindow extends JPanel {
             case CULTURE_SCHOOLTHEATER:
                 EntityRender.setEntityRender(ObjectType.THEATERSCHOOL);
                 break;
+            case INTERFACE_OK:
+                showEntity = false;
+                break;
+            default:
+                showEntity = false;
+                return;
         }
-        showEntity = true;
-        gm.getGameView().deleting = false;
+
         gameInterface.close();
         gameInterface = null;
     }
@@ -322,6 +339,10 @@ public class GameWindow extends JPanel {
                 }
             }
         }
+    }
+
+    public void updateInterface(){
+        gameInterface = interfaceCaller.getInterface();
     }
 
     public boolean isClicked(int xc, int yc) {

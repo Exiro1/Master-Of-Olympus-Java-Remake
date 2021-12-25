@@ -33,7 +33,7 @@ public class Harvester extends MovingSprite {
         y = start.getyPos();
         setXB(Math.round(x));
         setYB(Math.round(y));
-        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), harvestSite, FreeState.WALKABLE.getI()));
+        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), harvestSite, FreeState.NON_BLOCKING.getI()));
 
     }
 
@@ -134,7 +134,7 @@ public class Harvester extends MovingSprite {
         loaded = true;
         harvesting = false;
         hasArrived = false;
-        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), industry.getAccess().get(0), FreeState.WALKABLE.getI()));
+        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), industry.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
     }
 
 

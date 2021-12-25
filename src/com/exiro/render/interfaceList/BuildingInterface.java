@@ -5,8 +5,11 @@ import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.ObjectClass;
 import com.exiro.render.Button;
+import com.exiro.render.ButtonType;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 public class BuildingInterface extends Interface {
@@ -22,17 +25,18 @@ public class BuildingInterface extends Interface {
     ArrayList<TileImage> fill;
     ObjectClass b;
 
-    ArrayList<TextInterface> texts;
 
+
+    public enum Orders {ACCEPT,EMPTY,OBTAIN,REJECT}
 
     public BuildingInterface(int x, int y, int w, int h, ArrayList<Button> buttons, ObjectClass b) {
-        super(x, y, w, h, buttons);
+        super(x, y, w, h, buttons,b);
         top = new ArrayList<>();
         left = new ArrayList<>();
         right = new ArrayList<>();
         bot = new ArrayList<>();
         fill = new ArrayList<>();
-        texts = new ArrayList<>();
+        obj = new ArrayList<>();
 
         corn1 = ImageLoader.getImage("Zeus_Interface", 1, 139);
         for (int i = 0; i < 10; i++) {
@@ -56,17 +60,50 @@ public class BuildingInterface extends Interface {
         for (int i = 0; i < 10; i++) {
             fill.add(ImageLoader.getImage("Zeus_Interface", 1, 152 + i));
         }
+
+        int nbrw = (w - corn1.getW() - corn2.getW()) / top.get(0).getW();
+        int nbrh = (h - corn1.getH() - corn3.getH()) / left.get(0).getH();
+        this.w = (nbrw)*top.get(0).getW()+corn1.getW()+corn2.getW();
+        this.h = (nbrh)*left.get(0).getH()+corn1.getH()+corn3.getH();
+        this.buttons.add(new Button(w-55,h-55,24,24,1,336,ButtonType.INTERFACE_OK));
+        this.buttons.add(new Button(15,h-55,24,24,1,332,ButtonType.INTERFACE_HELP));
         this.b = b;
     }
 
-    public void addText(String text, String font, float size, int x, int y) {
-        texts.add(new TextInterface(text, FontLoader.getFont(font).deriveFont(size), x, y));
+
+
+    @Override
+    public int getH() {
+        return super.getH()-32;
+    }
+
+    @Override
+    public int getW() {
+        return super.getW()-32;
     }
 
 
+    public void addStockItem(int stocked, String type, Orders order, int stockLimit, int y, String font, int ID){
+        x=30;
+        x+=16;
+        y+=16;
+
+
+        obj.add(new TextInterface(stocked+"   "+type,FontLoader.getFont(font).deriveFont(16f), x, y));
+        obj.add(new TextInterface(order.toString(),FontLoader.getFont(font).deriveFont(16f), x+270, y));
+        obj.add(new TextInterface(stockLimit+"",FontLoader.getFont(font).deriveFont(16f), x+443, y));
+        buttons.add((new Button(x+470,y-14,17,17,1,377, ButtonType.INTERFACE_DOWN,ID)));
+        buttons.add((new Button(x+488,y-14,17,17,1,375, ButtonType.INTERFACE_UP,ID)));
+    }
+
+    public void addLine(int x,int y,int w){
+        obj.add(new LineInterface(x+16,y+16,w));
+    }
+
     public void RenderBg(Graphics g) {
         int nbrw = (w - corn1.getW() - corn2.getW()) / top.get(0).getW();
-        int nbrh = (w - corn1.getH() - corn3.getH()) / left.get(0).getH();
+        int nbrh = (h - corn1.getH() - corn3.getH()) / left.get(0).getH();
+
 
         g.drawImage(corn1.getImg(), x, y, null);
         for (int i = 1; i < nbrw; i++) {
@@ -92,13 +129,16 @@ public class BuildingInterface extends Interface {
     public void Render(Graphics g) {
         if (isOpen) {
             RenderBg(g);
+            for(InterfaceLayout child : childrens){
+                child.Render(g,x,y);
+            }
             if (buttons != null) {
                 for (Button b : buttons) {
                     b.Render(g, x, y);
                 }
             }
-            if (texts != null) {
-                for (TextInterface t : texts) {
+            if (obj != null) {
+                for (InterfaceObject t : obj) {
                     t.Render(g, x, y);
                 }
             }

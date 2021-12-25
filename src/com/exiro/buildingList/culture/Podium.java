@@ -46,8 +46,8 @@ public class Podium extends Building {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
     }
 
     @Override

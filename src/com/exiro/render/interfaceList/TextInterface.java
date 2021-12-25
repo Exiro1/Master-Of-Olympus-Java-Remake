@@ -2,7 +2,7 @@ package com.exiro.render.interfaceList;
 
 import java.awt.*;
 
-public class TextInterface {
+public class TextInterface extends InterfaceObject{
 
     String text;
     Font font;

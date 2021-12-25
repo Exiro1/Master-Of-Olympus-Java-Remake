@@ -6,7 +6,9 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
+import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.agriculture.Sheepherd;
 import com.exiro.sprite.culture.Actor;
 import com.exiro.systemCore.GameManager;
 
@@ -50,8 +52,8 @@ public class TheaterSchool extends Building {
 
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
 
         if (isWorking()) {
             timBeforeActor += deltaTime;
@@ -61,7 +63,17 @@ public class TheaterSchool extends Building {
             }
         }
 
-        getMovingSprites().removeIf(o -> o.hasArrived);
+        ArrayList<MovingSprite> toR = new ArrayList<>();
+        for (MovingSprite ms : getMovingSprites()) {
+            if (ms instanceof Actor) {
+                if (ms.hasArrived) {
+                    toR.add(ms);
+                }
+            }
+        }
+        for (MovingSprite ms : toR) {
+            removeSprites(ms);
+        }
     }
 
     @Override
@@ -77,6 +89,8 @@ public class TheaterSchool extends Building {
 
     public void createActor() {
         Random r = new Random();
+        if(city.getTheaters().size() == 0)
+            return;
         Theater destination = city.getTheaters().get(r.nextInt(city.getTheaters().size()));
         if (destination != null && destination.isWorking()) {
             Actor a = new Actor(city, destination, this.getAccess().get(0), destination.getAccess().get(0));
