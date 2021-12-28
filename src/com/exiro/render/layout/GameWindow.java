@@ -17,6 +17,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GameWindow extends JPanel {
 
@@ -32,18 +34,13 @@ public class GameWindow extends JPanel {
     public GameWindow(GameManager gm) {
         this.gm = gm;
         this.p = gm.getPlayer();
+        CameraPosy = (int) (-(Math.sqrt(2)/2)*gm.getCurrentCity().getMap().getWidth()*30 - getHeight()/2f + 45);
     }
 
     public boolean pressing;
 
-    public void draw(CityMap map, ArrayList<Sprite> sprites) {
-
-        for (int x = map.getWidth(); x > 0; x--) {
-
-        }
-    }
-
     Case c1;
+
 
 
     Case startCaseBuild;
@@ -74,7 +71,8 @@ public class GameWindow extends JPanel {
 
         if (p.getPlayerCities().get(0).getMap().getCaseSorted() == null) {
             synchronized (p.getPlayerCities().get(0).getMap().getCases()) {
-                allcase = new ArrayList<>(p.getPlayerCities().get(0).getMap().getCases());
+
+                allcase = new ArrayList<>(p.getPlayerCities().get(0).getMap().getNotNullCases());
             }
             oc = allcase.toArray(new Case[0]);
             sortRender(oc);
@@ -83,9 +81,14 @@ public class GameWindow extends JPanel {
 
         sortRender(p.getPlayerCities().get(0).getMap().getCaseSorted());
 
+        int xvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getxPos();
+        int xvisibleMax = IsometricRender.getCase(new Point(1400, 0), gm.getCurrentCity()).getxPos()+44;
+        int yvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getyPos()-30;
+        int yvisibleMax = IsometricRender.getCase(new Point(0, 800), gm.getCurrentCity()).getyPos()+15;
+
         for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
-
-
+            if(!(obj.getxPos() <xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() <yvisibleMax && obj.getyPos() >yvisibleMin))
+                continue;
             if (obj.getObject() == null)
                 obj.getTerrain().Render(g, CameraPosx, CameraPosy);
             if (obj.getObject() != null && (obj.isMainCase())) {
@@ -117,14 +120,14 @@ public class GameWindow extends JPanel {
             }
         }
         if (lastP != null) {
-            if (lastP.y > GameFrame.FHEIGHT - 2) {
+            if (lastP.y > GameFrame.FHEIGHT - 2 && CameraPosy > -(Math.sqrt(2)/2)*gm.getCurrentCity().getMap().getWidth()*30 - getHeight()/2f + 45) {
                 CameraPosy = CameraPosy - 5;
-            } else if (lastP.y < 1) {
+            } else if (lastP.y < 1 && CameraPosy < -(Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*30 -45) {
                 CameraPosy = CameraPosy + 5;
             }
-            if (lastP.x > GameFrame.FWIDTH - 2) {
+            if (lastP.x > GameFrame.FWIDTH - 2 && CameraPosx > -(Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*58 + getWidth() +87) {
                 CameraPosx = CameraPosx - 5;
-            } else if (lastP.x < 1) {
+            } else if (lastP.x < 1 && CameraPosx < (Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*58 -87) {
                 CameraPosx = CameraPosx + 5;
             }
         }
@@ -153,14 +156,11 @@ public class GameWindow extends JPanel {
         if (gameInterface != null)
             gameInterface.Render(g);
 
-        /*
         g.setColor(Color.BLACK);
-        g.drawString("argent : " + p.getMoney(), 1200, 20);
-        g.drawString("chomeurs :" + p.getPlayerCities().get(0).getBuildingManager().getUnemployed(), 1200, 50);
-        g.drawString("Habitant :" + p.getPlayerCities().get(0).getPopulation(), 1200, 80);
-        g.drawString("Arrivant :" + p.getPlayerCities().get(0).getPopInArrvial(), 1200, 110);
-        g.drawString("FPS " + 1 / GameThread.deltaTime, 1200, 10);
-         */
+
+        g.drawString("X " + getCameraPosx(), 1200, 10);
+        g.drawString("Y " + getCameraPosy(), 1200, 30);
+
     }
 
     ObjectClass interfaceCaller;

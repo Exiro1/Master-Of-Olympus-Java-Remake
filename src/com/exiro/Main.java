@@ -8,12 +8,24 @@ import com.exiro.object.Player;
 import com.exiro.render.EntityRender;
 import com.exiro.systemCore.GameManager;
 import com.exiro.systemCore.GameThread;
+import com.exiro.terrainGenerator.PointsEx;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
     public static void main(String[] args) {
+
+
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                PointsEx ex = new PointsEx();
+                ex.setVisible(true);
+            }
+        });
+
 
         ImageLoader.initLoader();
         ImageLoader.getImage("SprMain", 0, 81);
@@ -29,22 +41,18 @@ public class Main {
 
         GameManager gm = new GameManager(p, c);
 
-        /*  Immigrant immigrant = new Immigrant(c,c.getPathManager().getPathTo(c.getMap().getCase(0,0),c.getMap().getCase(6,3), RoadMap.FreeState.NON_BLOCKING),null);
-           c.addSprite(immigrant);*/
         EntityRender.setEntityRender(ObjectType.ROAD);
 
         System.out.println(c.getMap().toString());
 
         Thread t = new Thread(new GameThread(gm));
         t.start();
+
+
     }
 
-    /*
-    static void test() throws IOException {
-        TileImage img = ImageLoader.getImage("Zeus_Terrain",5,60);
-        img.getID();
-    }
-    */
+
+
 
 
 }
