@@ -5,6 +5,7 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.Direction;
+import com.exiro.terrainGenerator.ElevationType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -39,7 +40,20 @@ public class Elevation extends Terrain {
         this.setConstructible(roadPossible);
         this.setBlocking(!roadPossible);
         setRockImg(id, size);
+    }
 
+    public Elevation(int xpos, int ypos, ElevationType type, City c, int size, boolean roadPossible, int nbr) {
+        super(true, ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true);
+        this.id = id;
+        this.direction = type.getDir();
+        this.size = size;
+        this.setBitmapID(5);
+        this.setLocalID(type.getId());
+        this.roadPossible = roadPossible;
+        this.setConstructible(roadPossible);
+        this.setBlocking(!roadPossible);
+
+        setRockImg(type,nbr);
     }
 
     public void setHasRoad(boolean hasRoad) {
@@ -49,6 +63,38 @@ public class Elevation extends Terrain {
 
     public int getSizeZ() {
         return size;
+    }
+
+
+    public void setRockImg(ElevationType type, int nbr) {
+        if(type == ElevationType.E4){
+            if(nbr == 0){
+                setBitmapID(5);
+                setLocalID(type.getId());
+            }else{
+                setBitmapID(7);
+                setLocalID(13+nbr);
+            }
+        }else if(type == ElevationType.E6){
+            if(nbr == 0){
+                setBitmapID(5);
+                setLocalID(type.getId());
+            }else{
+                setBitmapID(7);
+                setLocalID(16+nbr);
+            }
+        }/*else if(type == ElevationType.E13 || type == ElevationType.E14 || type == ElevationType.E15 || type == ElevationType.E16){
+            if(nbr == 0){
+                setBitmapID(1);
+                setLocalID(376);
+            }else{
+                setBitmapID(7);
+                setLocalID(16+nbr);
+            }
+        }*/else{
+            setLocalID(type.getId());
+        }
+        updateImg();
     }
 
     public void setRockImg(int number, int size) {

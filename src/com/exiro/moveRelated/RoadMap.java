@@ -145,8 +145,8 @@ public class RoadMap {
 
             for (int i = x - 1; i <= x + 1; i++) {
                 for (int j = y - 1; j <= y + 1; j++) {
-                    if ((i == x && j == y) || i < 0 || j < 0 || j >= cityMap.getWidth()
-                            || i >= cityMap.getHeight()) {
+                    if ((i == x && j == y) || i < 0 || j < 0 || j >= cityMap.getSize()
+                            || i >= cityMap.getSize()) {
                         continue;
                     }
 
@@ -157,7 +157,7 @@ public class RoadMap {
                         continue;
                     }
 
-                    if (cityMap.getCase(i, j).getTerrain().isBlocking()) {
+                    if (cityMap.getCase(i, j) == null || cityMap.getCase(i, j).getTerrain().isBlocking()) {
                         continue;
                     }
 

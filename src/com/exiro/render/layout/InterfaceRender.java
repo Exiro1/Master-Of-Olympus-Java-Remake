@@ -35,6 +35,8 @@ public class InterfaceRender extends JPanel {
 
     ArrayList<Button> onscreenButton;
 
+    BufferedImage img;
+
     public InterfaceRender(GameManager gm) {
         this.gm = gm;
         buttons = new ArrayList<>();
@@ -96,10 +98,88 @@ public class InterfaceRender extends JPanel {
         }
         return false;
     }
-
     public ArrayList<Button> getOnScreenButton() {
         return onscreenButton;
     }
+
+
+    public void drawMiniMap(Graphics g){
+        int twoDSquareSize = 2;
+
+        if(img == null) {
+            int[][] map = gm.getCurrentCity().getMap().getMap();
+            img = new BufferedImage(map.length*twoDSquareSize,map.length*twoDSquareSize,BufferedImage.TYPE_INT_RGB);
+            Graphics g2d = img.getGraphics();
+            int demisize = map.length/2;
+
+            int x=0;
+            int y=0;
+            /*for(int k = 0;k<demisize;k++){
+                for(int l = demisize-k;l<demisize+k;l++){
+
+                }
+            }
+            for(int k = demisize;k<2*demisize;k++){
+                for(int l = -demisize+k;l<3*demisize-k;l++){
+
+                }
+            }*/
+            for(int l=0;l<map.length;l++) {
+                for (int k = 0; k < map.length; k++) {
+
+                    if(k<demisize){
+                        if(demisize+k < l || demisize-k > l){
+                            continue;
+                        }
+                    }else{
+                        if(3*demisize-k < l || -demisize+k > l){
+                            continue;
+                        }
+                    }
+
+                    for (int i = k * twoDSquareSize; i < (k + 1) * twoDSquareSize; i++) {
+                        for (int j = l * twoDSquareSize; j < (l + 1) * twoDSquareSize; j++) {
+                            int v = map[l][k];
+                            if(v == 0){
+                                g2d.setColor(Color.BLUE);
+                            }else if(v == 1){
+                                g2d.setColor(Color.GREEN);
+                            }else if(v == 2){
+                                g2d.setColor(Color.GRAY);
+                            }else if(v == 3){
+                                g2d.setColor(new Color(72, 70, 70));
+                            }else if(v == 4){
+                                g2d.setColor(Color.BLACK);
+                            }else if(v == 5){
+                                g2d.setColor(Color.WHITE);
+                            }
+                            g2d.drawLine(i, j, i, j);
+                        }
+                    }
+                }
+            }
+            g2d.dispose();
+
+            int w = img.getWidth();
+            int h = img.getHeight();
+            BufferedImage rotated = new BufferedImage(w, h, img.getType());
+            Graphics2D graphic = rotated.createGraphics();
+            graphic.rotate(Math.toRadians(45), w/2f, h/2f);
+            graphic.drawImage(img, null, 0, 0);
+            graphic.dispose();
+
+            img = rotated.getSubimage((int) (w-(w/(Math.sqrt(2))))/2+5,(int) (w-w/(Math.sqrt(2)))/2,(int) (w/(Math.sqrt(2))),(int) (w/(Math.sqrt(2))));
+            Image tmp = img.getScaledInstance(getWidth()-20, getWidth()-20, Image.SCALE_SMOOTH);
+            BufferedImage dimg = new BufferedImage(getWidth()-20, getWidth()-20, BufferedImage.TYPE_INT_ARGB);
+            g2d = dimg.createGraphics();
+            g2d.drawImage(tmp, 0, 0, null);
+            g2d.dispose();
+            img = dimg;
+        }
+        g.drawImage(img,12,getHeight()-getWidth()+15,null);
+
+    }
+
 
     public void paintComponent(Graphics g) {
         //  super.paintComponent(g);
@@ -119,6 +199,7 @@ public class InterfaceRender extends JPanel {
             b.Render(g, 0, 0);
         }
 
+        drawMiniMap(g);
     }
 
     public void clickManager(MouseEvent e) {

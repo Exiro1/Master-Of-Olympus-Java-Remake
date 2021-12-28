@@ -294,14 +294,16 @@ public class EntityRender {
 
         if (toBuild.size() == 0) {
             Case c = GameManager.currentCity.getMap().getCase(startX, startY);
-            ObjectClass obj = null;
-            obj = getDefault(defaultObject.getBuildingType());
-            if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
-                ((ResourceGenerator) obj).setResource(resource);
+            if(c != null) {
+                ObjectClass obj = null;
+                obj = getDefault(defaultObject.getBuildingType());
+                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                    ((ResourceGenerator) obj).setResource(resource);
+                }
+                obj.setXB(c.getxPos());
+                obj.setYB(c.getyPos());
+                toBuild.add(obj);
             }
-            obj.setXB(c.getxPos());
-            obj.setYB(c.getyPos());
-            toBuild.add(obj);
         }
 
         for (ObjectClass obj : toBuild) {

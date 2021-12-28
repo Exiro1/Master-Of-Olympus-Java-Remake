@@ -91,7 +91,7 @@ public class City {
         this.buildingManager = new BuildingManager(this);
         Road start = new Road(this);
         this.constructions = new ArrayList<>();
-        this.map = new CityMap(60, 60, 0, 0, this);
+        this.map = new CityMap(150, 150, 0, 0, this);
         this.map.populateMap();
         this.pathManager = new PathManager(owner, this.map);
         start.build(0, 0);
