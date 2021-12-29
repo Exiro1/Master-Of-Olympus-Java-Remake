@@ -1,5 +1,6 @@
 package com.exiro.render.layout;
 
+import com.exiro.fileManager.CaseInfo;
 import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.ObjectType;
@@ -140,20 +141,38 @@ public class InterfaceRender extends JPanel {
                     for (int i = k * twoDSquareSize; i < (k + 1) * twoDSquareSize; i++) {
                         for (int j = l * twoDSquareSize; j < (l + 1) * twoDSquareSize; j++) {
                             int v = map[l][k];
-                            if(v == 0){
+                            if(CaseInfo.compareTerrain(v,CaseInfo.WATER)){
                                 g2d.setColor(Color.BLUE);
-                            }else if(v == 1){
+                            }else if(CaseInfo.compareTerrain(v,CaseInfo.LVL0)){
                                 g2d.setColor(Color.GREEN);
-                            }else if(v == 2){
+                            }else if(CaseInfo.compareTerrain(v,CaseInfo.LVL1)){
                                 g2d.setColor(Color.GRAY);
-                            }else if(v == 3){
-                                g2d.setColor(new Color(72, 70, 70));
-                            }else if(v == 4){
+                            }else if(CaseInfo.compareTerrain(v,CaseInfo.LVL2)){
+                                g2d.setColor(Color.DARK_GRAY);
+                            }else if(CaseInfo.compareTerrain(v,CaseInfo.LVL3)){
                                 g2d.setColor(Color.BLACK);
-                            }else if(v == 5){
+                            }else if(CaseInfo.compareTerrain(v,CaseInfo.LVL4)){
                                 g2d.setColor(Color.WHITE);
                             }
-                            g2d.drawLine(i, j, i, j);
+
+                            g2d.fillRect(k*twoDSquareSize,l*twoDSquareSize,twoDSquareSize,twoDSquareSize);
+                            if(CaseInfo.compareEnv(v,CaseInfo.FOREST)) {
+                                g2d.setColor(Color.BLACK);
+                                g2d.drawLine(k * twoDSquareSize, l * twoDSquareSize, (k + 1) * twoDSquareSize, (l + 1) * twoDSquareSize);
+                                g2d.drawLine((k+1) * twoDSquareSize, l * twoDSquareSize, (k) * twoDSquareSize, (l + 1) * twoDSquareSize);
+                            }
+
+                            if(CaseInfo.compareEnv(v,CaseInfo.MEADOW)) {
+                                g2d.setColor(Color.MAGENTA);
+                                g2d.drawLine(k * twoDSquareSize, l * twoDSquareSize, (k + 1) * twoDSquareSize, (l + 1) * twoDSquareSize);
+                                g2d.drawLine((k + 1) * twoDSquareSize, l * twoDSquareSize, (k) * twoDSquareSize, (l + 1) * twoDSquareSize);
+                            }
+
+                            if(CaseInfo.compareEnv(v,CaseInfo.FISH)) {
+                                g2d.setColor(new Color(10, 114, 239));
+                                g2d.drawLine(k * twoDSquareSize, l * twoDSquareSize, (k + 1) * twoDSquareSize, (l + 1) * twoDSquareSize);
+                                g2d.drawLine((k + 1) * twoDSquareSize, l * twoDSquareSize, (k) * twoDSquareSize, (l + 1) * twoDSquareSize);
+                            }
                         }
                     }
                 }

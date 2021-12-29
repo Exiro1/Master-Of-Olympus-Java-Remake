@@ -37,7 +37,24 @@ public class Tree extends Construction {
         ca.setMainCase(true);
         this.setMainCase(ca);
     }
+    public Tree(int xpos, int ypos, int id, City c, int terraintype,Case ca) {
+        super(false, ObjectType.TREE, null, 0, 2, xpos, ypos, 1, 1, 0, c, true, false);
+        this.setLocalID(id);
+        this.setBitmapID(4);
+        this.terraintype = terraintype;
+        updateImg();
+        setXB(xpos);
+        setYB(ypos);
+        city.addConstruction(this);
+        city.addObj(this);
+        cases = new ArrayList<>();
+        cases.add(ca);
 
+        ca.setOccupied(true);
+        ca.setObject(this);
+        ca.setMainCase(true);
+        this.setMainCase(ca);
+    }
     @Override
     public void process(double deltatime) {
         if (cut) {

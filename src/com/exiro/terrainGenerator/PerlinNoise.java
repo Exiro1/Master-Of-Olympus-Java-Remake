@@ -1,5 +1,7 @@
 package com.exiro.terrainGenerator;
 
+import java.util.Random;
+
 public class PerlinNoise {
 
 
@@ -7,16 +9,22 @@ public class PerlinNoise {
 
     int twoDSpace;
     int twoDSquareSize;
+    Random ran;
 
     public PerlinNoise(int size){
         gradGrid = new Grid(size,size);
-        gradGrid.generateRandomGrid();
     }
 
 
-    public int[][] getMap(int size,int resolution,int gradSize, float factor){
+
+
+
+
+
+    public int[][] getMap(int size,int resolution,int gradSize, float factor,int seed){
+        ran = new Random(seed);
         gradGrid = new Grid(gradSize,gradSize);
-        gradGrid.generateRandomGrid();
+        gradGrid.generateRandomGrid(ran);
         twoDSquareSize = resolution;
         twoDSpace = size*twoDSquareSize;
         factor *= ((float)twoDSpace)/((float) gradSize);
@@ -59,11 +67,12 @@ public class PerlinNoise {
 
         return map;
     }
-
-
-
-    public int[][] applyTreshold(int[][] map,int[] threshold){
-
+    /**
+     * Return a normlized map
+     * @param map perlin noise map
+     * @return map containg values from 0 to 100
+     */
+    public int[][] normalize(int[][] map){
         int max2=-100,min2=100;
         int[][] newmap = new int[map.length][map[0].length];
 
@@ -78,6 +87,25 @@ public class PerlinNoise {
         for(int l=0;l<twoDSpace/twoDSquareSize;l++) {
             for (int k = 0; k < twoDSpace / twoDSquareSize; k++) {
                 int v = (int) (((map[l][k]-min2)*100f)/max2);
+                newmap[l][k] = v;
+            }
+        }
+        return newmap;
+    }
+
+    /**
+     * Return a tresholded map
+     * @param map normalized map (0-100)
+     * @param threshold list of threshold (0-100)
+     * @return map containing value from 0 to threshold.length
+     */
+    public int[][] applyTreshold(int[][] map,int[] threshold){
+
+        int[][] newmap = new int[map.length][map[0].length];
+
+        for(int l=0;l<twoDSpace/twoDSquareSize;l++) {
+            for (int k = 0; k < twoDSpace / twoDSquareSize; k++) {
+                int v = map[l][k];
                 int res=0;//blue (eau)
                 int value = 0;
                 for(int thres : threshold){
@@ -143,5 +171,9 @@ public class PerlinNoise {
 
     float fade(float t) {
         return  (t*t*t*(t*(t*6.0f - 15.0f) + 10.0f));
+    }
+
+    public Random getRan() {
+        return ran;
     }
 }

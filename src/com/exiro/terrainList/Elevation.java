@@ -83,7 +83,17 @@ public class Elevation extends Terrain {
                 setBitmapID(7);
                 setLocalID(16+nbr);
             }
-        }/*else if(type == ElevationType.E13 || type == ElevationType.E14 || type == ElevationType.E15 || type == ElevationType.E16){
+        }else if(type == ElevationType.E5){
+            if(nbr == 0){
+                setBitmapID(5);
+                setLocalID(type.getId());
+            }else{
+                setBitmapID(7);
+                setLocalID(28);
+            }
+        }
+
+        /*else if(type == ElevationType.E13 || type == ElevationType.E14 || type == ElevationType.E15 || type == ElevationType.E16){
             if(nbr == 0){
                 setBitmapID(1);
                 setLocalID(376);
