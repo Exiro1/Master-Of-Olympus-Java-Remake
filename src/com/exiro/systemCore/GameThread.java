@@ -73,12 +73,12 @@ public class GameThread implements Runnable {
                 timeSinceLastUpdateConstruct = 0;
                 deltaDaysC=0;
             }
-            if (timeSinceLastUpdateResources > 500) {
-                /*
+            if (timeSinceLastUpdateResources > 30) {
+
                 for (City c : p.getPlayerCities()) {
                     manageResources(c);
                 }
-                */
+
                 timeSinceLastUpdateResources = 0;
                 deltaDaysR=0;
             }
@@ -133,7 +133,8 @@ public class GameThread implements Runnable {
                 }
             }
         }
-        for (Case r : c.getMap().getTrees()) {
+       /*
+       for (Case r : c.getMap().getTrees()) {
             ((Tree) r.getObject()).setAccessible(false);
             for (Case n : r.getNeighbour()) {
                 if (n == null || n.getTerrain().isBlocking())
@@ -144,6 +145,7 @@ public class GameThread implements Runnable {
                 }
             }
         }
+        */
     }
 
 

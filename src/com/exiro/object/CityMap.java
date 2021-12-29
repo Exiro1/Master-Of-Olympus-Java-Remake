@@ -25,7 +25,7 @@ public class CityMap {
     private int height, width;
     private Case startCase;
     private final City city;
-
+    int[][] map;
     int size;
 
 
@@ -41,9 +41,10 @@ public class CityMap {
         this.city = city;
     }
 
-    public CityMap(int height, int width, int xs, int ys, City city) {
-        this.height = height;
-        this.width = width;
+
+    public CityMap(MapSettings mapSettings, City city) {
+        this.height = mapSettings.getSize();
+        this.width = mapSettings.getSize();
         this.cases = new ArrayList<>();
         this.notNullCases = new ArrayList<>();
 
@@ -51,24 +52,16 @@ public class CityMap {
         this.silvers = new ArrayList<>();
         this.trees = new ArrayList<>();
         this.meadows = new ArrayList<>();
-
         this.city = city;
 
-        createMap(height,32970);
+        createMap(mapSettings,-1);
 
         for (Case c : this.cases) {
             if(c != null)
                 c.initNeighbour(this);
         }
-        //getCase(startCase.getxPos(),startCase.getyPos()).setOccuped(true);
-        //getCase(startCase.getxPos(),startCase.getyPos()).setBuildingType(BuildingType.ROAD);
-        //getCase(startCase.getxPos(),startCase.getyPos()).setObject(new Road(city));
-        // getCase(startCase.getxPos(),startCase.getyPos()).getObject().setActive(true);
-        //this.startCase = getCase(6, 106);
-
 
     }
-
 
     public Terrain getTerrain(int value,int x, int y,City city,Random r){
         Terrain t = null;
@@ -140,7 +133,7 @@ public class CityMap {
     }
 
 
-    int[][] map;
+
 
     public int[][] getMap() {
         return map;
@@ -163,16 +156,15 @@ public class CityMap {
         notNullCases.add(cases.get(cases.size() - 1));
     }
 
-    public void createMap(int psize, int seed){
+    public void createMap(MapSettings settings, int seed){
 
-        size = (int) (2f*psize/Math.sqrt(2));
+        if(seed==-1){
+            seed = settings.getSeed();
+        }
+
+        size = (int) (2f*settings.getSize()/Math.sqrt(2));
         int demisize = (int) (size/2f);
 
-        MapSettings settings = MapSettings.loadSettings("Assets/savedMap.map");
-        if(settings.getSeed() != 0)
-            seed = settings.getSeed();
-
-        settings.setSize(psize);
         map = MapUtils.createMap(seed, settings);
         Random r = new Random();
         for (int i = 0; i < size; i++) {
@@ -239,20 +231,16 @@ public class CityMap {
                 Case c = getCase(j, i);
                 if(c == null)
                     continue;
-                if(!((c.getTerrain() instanceof Elevation && c.getZlvl() == lvl - 1) || (c.getZlvl() == lvl && c.getTerrain() instanceof Empty)))
+                if(!((c.getTerrain() instanceof Elevation && c.getZlvl() == lvl - 1) || (c.getZlvl() == lvl && (c.getTerrain() instanceof Empty || c.getTerrain() instanceof Meadow))))
                     continue;
                 ElevationType type = ElevationType.getElevationType(getElevationNbr(getNeighbourg(c),lvl));
                 if(type == ElevationType.NONE){
-                    Terrain t = new Empty(1,city);
-                    t.setxPos(j);
-                    t.setyPos(i);
+                    Terrain t = getTerrain((map[i][j] & 0b00001111) | 0b00010000,j,i,city,r);//force empty but keep environment
                     c.setTerrain(t);
                     t.setMainCase(c);
                     c.setZlvl(lvl);
                 }else if(type == ElevationType.ERROR) {
-                    Terrain t = new Empty(1,city);
-                    t.setxPos(j);
-                    t.setyPos(i);
+                    Terrain t = getTerrain((map[i][j] & 0b00001111) | 0b00010000,j,i,city,r);//force empty but keep environment
                     c.setTerrain(t);
                     t.setMainCase(c);
                     c.setZlvl(lvl-1);
