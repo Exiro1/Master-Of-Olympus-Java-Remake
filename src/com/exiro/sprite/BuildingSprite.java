@@ -23,6 +23,8 @@ public class BuildingSprite extends Sprite {
         this.building = b;
         this.x = b.getXB();
         this.y = b.getYB();
+        this.setXB((int) x);
+        this.setYB((int) y);
         this.directional = false;
         setImage(0);
     }
@@ -32,6 +34,8 @@ public class BuildingSprite extends Sprite {
         this.building = b;
         this.x = b.getXB();
         this.y = b.getYB();
+        this.setXB((int) x);
+        this.setYB((int) y);
         this.directional = true;
         this.direction = direction;
         setImage(0);

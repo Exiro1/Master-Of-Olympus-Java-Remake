@@ -16,9 +16,8 @@ public class Grid {
         this.y = y;
     }
 
-    public void generateRandomGrid(){
+    public void generateRandomGrid(Random r){
         nodes.clear();
-        Random r = new Random();
         for(int i=0;i<x;i++){
             for(int j=0;j<y;j++){
                 nodes.add(Node.getNodeBy2Ran(r));

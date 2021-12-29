@@ -18,8 +18,8 @@ public class Immigrant extends MovingSprite {
 
     public Immigrant(City city, Path p, ObjectClass dest, int nbr) {
         super("SprMain", 0, 1792, 12, city, dest);
-        x = 0;
-        y = 0;
+        x = p.getStart().getxPos();
+        y = p.getStart().getyPos();
         this.nbr = nbr;
         path = p;
         offsetX = 0;

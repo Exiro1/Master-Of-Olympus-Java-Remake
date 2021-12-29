@@ -31,6 +31,8 @@ public class GameWindow extends JPanel {
     boolean lastClickState = false; //false : non préssé , true : préssé
     Case lastCase = new Case(0, 0, null, null);
 
+    int speedFactor = 15;
+
     public GameWindow(GameManager gm) {
         this.gm = gm;
         this.p = gm.getPlayer();
@@ -121,14 +123,14 @@ public class GameWindow extends JPanel {
         }
         if (lastP != null) {
             if (lastP.y > GameFrame.FHEIGHT - 2 && CameraPosy > -(Math.sqrt(2)/2)*gm.getCurrentCity().getMap().getWidth()*30 - getHeight()/2f + 45) {
-                CameraPosy = CameraPosy - 5;
+                CameraPosy = CameraPosy - speedFactor;
             } else if (lastP.y < 1 && CameraPosy < -(Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*30 -45) {
-                CameraPosy = CameraPosy + 5;
+                CameraPosy = CameraPosy + speedFactor;
             }
             if (lastP.x > GameFrame.FWIDTH - 2 && CameraPosx > -(Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*58 + getWidth() +87) {
-                CameraPosx = CameraPosx - 5;
+                CameraPosx = CameraPosx - speedFactor;
             } else if (lastP.x < 1 && CameraPosx < (Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*58 -87) {
-                CameraPosx = CameraPosx + 5;
+                CameraPosx = CameraPosx + speedFactor;
             }
         }
 
@@ -160,6 +162,7 @@ public class GameWindow extends JPanel {
 
         g.drawString("X " + getCameraPosx(), 1200, 10);
         g.drawString("Y " + getCameraPosy(), 1200, 30);
+        g.drawString("FPS " + gm.getGameThread().getFps(), 1200, 40);
 
     }
 

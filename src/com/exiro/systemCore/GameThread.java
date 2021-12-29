@@ -18,7 +18,7 @@ public class GameThread implements Runnable {
     static public float deltaTime;
     final boolean continu = true;
     float fps = 144;
-    final long deltaTimeResearched = (long) ((1f / 144f) * 1000f);
+    final long deltaTimeResearched = (long) ((1f / 60f) * 1000f);
     double timeSinceLastUpdateBuilding = 0;
     double timeSinceLastUpdateConstruct = 0;
     double timeSinceLastUpdateResources = 0;
@@ -32,6 +32,7 @@ public class GameThread implements Runnable {
         this.p = gm.player;
         this.frame = gm.frame;
         this.gm = gm;
+        gm.setGameThread(this);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class GameThread implements Runnable {
         }
     }
 
-
+    //TODO il faut détacher le thread d'affichage du thread de calcul !
     public void gameThread() throws InterruptedException {
         System.out.println("d : " + deltaTimeResearched);
         while (continu) {
@@ -72,11 +73,12 @@ public class GameThread implements Runnable {
                 timeSinceLastUpdateConstruct = 0;
                 deltaDaysC=0;
             }
-            if (timeSinceLastUpdateResources > 5) {
-
+            if (timeSinceLastUpdateResources > 500) {
+                /*
                 for (City c : p.getPlayerCities()) {
                     manageResources(c);
                 }
+                */
                 timeSinceLastUpdateResources = 0;
                 deltaDaysR=0;
             }
@@ -100,10 +102,14 @@ public class GameThread implements Runnable {
             float a = System.currentTimeMillis() - startTime;
             deltaTime = Math.min(a / 1000.0f, deltaTimeResearched / 1000.0f);
 
+            fps = 1f/(a / 1000.0f);
         }
     }
 
-
+    public float getFps() {
+        return fps;
+    }
+    //TODO revoir completement ce passage (trop gourmand)
     public void manageResources(City c) {
         for (Case r : c.getMap().getSilvers()) {
             ((Rock) r.getTerrain()).setAccessible(false);
@@ -130,7 +136,7 @@ public class GameThread implements Runnable {
         for (Case r : c.getMap().getTrees()) {
             ((Tree) r.getObject()).setAccessible(false);
             for (Case n : r.getNeighbour()) {
-                if (n.getTerrain().isBlocking())
+                if (n == null || n.getTerrain().isBlocking())
                     continue;
                 if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.NON_BLOCKING.getI()) != null) {
                     ((Tree) r.getObject()).setAccessible(true);
