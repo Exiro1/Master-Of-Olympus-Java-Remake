@@ -6,6 +6,7 @@ import com.exiro.buildingList.culture.Podium;
 import com.exiro.buildingList.culture.Theater;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
+import com.exiro.fileManager.MapSettings;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
 import com.exiro.sprite.Sprite;
@@ -93,14 +94,40 @@ public class City {
         this.buildingManager = new BuildingManager(this);
         Road start = new Road(this);
         this.constructions = new ArrayList<>();
-        this.map = new CityMap(150, 150, 0, 0, this);
+        //TODO voir comment faire le systeme de chargement de map proprement
+        this.map = new CityMap(MapSettings.loadSettings("Assets/savedMap.map"), this);
+
         this.map.populateMap();
         this.pathManager = new PathManager(owner, this.map);
         start.build(map.getStartCase().getxPos(), map.getStartCase().getyPos());
         start.setActive(true);
         start.setStart(true);
 
+        generateStartRoads();
+
+        toDestroyB = new ArrayList<>();
+        toDestroyC = new ArrayList<>();
+        toDestroyO = new ArrayList<>();
+
+        storage = new ArrayList<>();
+        theaters = new ArrayList<>();
+        podiums = new ArrayList<>();
+    }
+
+    public void generateStartRoads(){
         Path p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos(),map.getStartCase().getyPos()+15), FreeState.BUILDABLE.getI());
+        if(p == null){
+            p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos(),map.getStartCase().getyPos()-15), FreeState.BUILDABLE.getI());
+        }
+        if(p == null){
+            p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos()+15,map.getStartCase().getyPos()), FreeState.BUILDABLE.getI());
+        }
+        if(p == null){
+            p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos()-15,map.getStartCase().getyPos()), FreeState.BUILDABLE.getI());
+        }
+        if(p == null){
+           return;
+        }
         for(Case c : p.getPath()){
             if(!c.isOccupied()){
                 Road r = new Road(this);
@@ -109,13 +136,6 @@ public class City {
                 c.getTerrain().setConstructible(false);
             }
         }
-        toDestroyB = new ArrayList<>();
-        toDestroyC = new ArrayList<>();
-        toDestroyO = new ArrayList<>();
-
-        storage = new ArrayList<>();
-        theaters = new ArrayList<>();
-        podiums = new ArrayList<>();
     }
 
     public void removeObj(ObjectClass o) {
