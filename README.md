@@ -21,6 +21,6 @@ Exemple Montagne :
 
 ![screen2](https://user-images.githubusercontent.com/35780830/147518503-a2fd7a00-e998-447f-8b94-b40799b6ee8d.png)
 
-Exemple Bord d'eau :
+Exemple en gif :
 
-![screen3](https://user-images.githubusercontent.com/35780830/147518526-5c98dbfe-16f1-4074-9108-6e160274b230.png)
+![gif1](https://user-images.githubusercontent.com/35780830/147775930-33918ebe-1d27-4827-b22f-cbd48b47d607.gif)
