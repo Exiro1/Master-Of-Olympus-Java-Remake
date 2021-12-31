@@ -26,7 +26,6 @@ public class Podium extends Building {
     @Override
     public boolean build(int xPos, int yPos) {
         if (super.build(xPos, yPos)) {
-            city.addPodium(this);
             BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 84, 24, getCity(), this);
             s.setOffsetX(47);
             s.setOffsetY(6);
@@ -63,6 +62,5 @@ public class Podium extends Building {
     @Override
     public void delete() {
         super.delete();
-        city.removePodium(this);
     }
 }

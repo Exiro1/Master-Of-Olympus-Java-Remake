@@ -168,7 +168,7 @@ public class InterfaceRender extends JPanel {
                                 g2d.drawLine((k + 1) * twoDSquareSize, l * twoDSquareSize, (k) * twoDSquareSize, (l + 1) * twoDSquareSize);
                             }
 
-                            if(CaseInfo.compareEnv(v,CaseInfo.FISH)) {
+                            if(CaseInfo.compareEnv(v,CaseInfo.FISH) || CaseInfo.compareEnv(v,CaseInfo.STARTENDCASE)) {
                                 g2d.setColor(new Color(10, 114, 239));
                                 g2d.drawLine(k * twoDSquareSize, l * twoDSquareSize, (k + 1) * twoDSquareSize, (l + 1) * twoDSquareSize);
                                 g2d.drawLine((k + 1) * twoDSquareSize, l * twoDSquareSize, (k) * twoDSquareSize, (l + 1) * twoDSquareSize);

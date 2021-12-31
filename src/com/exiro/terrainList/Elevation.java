@@ -67,7 +67,7 @@ public class Elevation extends Terrain {
 
 
     public void setRockImg(ElevationType type, int nbr) {
-        if(type == ElevationType.E4){
+        if(type == ElevationType.E4){ //sud est
             if(nbr == 0){
                 setBitmapID(5);
                 setLocalID(type.getId());
@@ -75,7 +75,7 @@ public class Elevation extends Terrain {
                 setBitmapID(7);
                 setLocalID(13+nbr);
             }
-        }else if(type == ElevationType.E6){
+        }else if(type == ElevationType.E6){ // sud ouest
             if(nbr == 0){
                 setBitmapID(5);
                 setLocalID(type.getId());
@@ -83,7 +83,7 @@ public class Elevation extends Terrain {
                 setBitmapID(7);
                 setLocalID(16+nbr);
             }
-        }else if(type == ElevationType.E5){
+        }else if(type == ElevationType.E5){  //sud est-ouest
             if(nbr == 0){
                 setBitmapID(5);
                 setLocalID(type.getId());
@@ -92,6 +92,9 @@ public class Elevation extends Terrain {
                 setLocalID(28);
             }
         }
+
+
+
 
         /*else if(type == ElevationType.E13 || type == ElevationType.E14 || type == ElevationType.E15 || type == ElevationType.E16){
             if(nbr == 0){
@@ -104,6 +107,26 @@ public class Elevation extends Terrain {
         }*/else{
             setLocalID(type.getId());
         }
+
+        if(roadPossible){
+            nbr = 0;
+            this.setBitmapID(5);
+            switch (direction) {
+                case SUD_EST:
+                    setLocalID(33);
+                    break;
+                case NORD_EST:
+                    setLocalID(32);
+                    break;
+                case NORD_OUEST:
+                    setLocalID(35);
+                    break;
+                case SUD_OUEST:
+                    setLocalID(34);
+                    break;
+            }
+        }
+
         updateImg();
     }
 

@@ -13,6 +13,7 @@ import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Time;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class IndustryConverter extends ResourceGenerator{
 
@@ -130,8 +131,21 @@ public class IndustryConverter extends ResourceGenerator{
         }
     }
 
+    public void addIncomming(int incomming){
+        this.incomming+=incomming;
+    }
+
+    public int roomForInputResources(){
+        return  Math.max(0,maxStock - (stockIn + incomming));
+    }
+
     public void refuel() {
-        for (StoreBuilding sb : city.getStorage()) {
+        ArrayList<Building> stores = new ArrayList<>(city.getBuildingList(ObjectType.GRANARY));
+        stores.addAll(city.getBuildingList(ObjectType.STOCK));
+        for (Building b : stores) {
+            if(!(b instanceof StoreBuilding))
+                continue;
+            StoreBuilding sb = (StoreBuilding) b;
             if (sb.hasStockAvailable(needed)) {
                 int command = Math.min(maxStock - stockIn - incomming, sb.getStockAvailable(needed));
                 incomming += command;
@@ -145,6 +159,11 @@ public class IndustryConverter extends ResourceGenerator{
         }
     }
 
+    public void delivered(int amount){
+        incomming -= amount;
+        stockIn += amount;
+    }
+
     @Override
     public void manageCarter() {
         super.manageCarter();
@@ -155,8 +174,7 @@ public class IndustryConverter extends ResourceGenerator{
         for (MovingSprite c : msprites) {
             if (c.hasArrived && c instanceof Carter) {
                 if (c.getDestination() == this) {
-                    incomming -= ((Carter) c).getAmount();
-                    stockIn += ((Carter) c).getAmount();
+                    delivered(((Carter)c).getAmount());
                     toDestroy.add(c);
                     carterAvailable = true;
                     refueling = false;

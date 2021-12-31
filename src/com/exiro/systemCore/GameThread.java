@@ -3,10 +3,8 @@ package com.exiro.systemCore;
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
-import com.exiro.constructionList.Tree;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.*;
-import com.exiro.render.GameFrame;
 import com.exiro.render.MouseManager;
 import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Rock;
@@ -15,9 +13,9 @@ import com.exiro.terrainList.Terrain;
 public class GameThread implements Runnable {
 
 
-    static public float deltaTime;
+    static public float deltaTimeLogic;
     final boolean continu = true;
-    float fps = 144;
+    float fpsLogic = 144;
     final long deltaTimeResearched = (long) ((1f / 60f) * 1000f);
     double timeSinceLastUpdateBuilding = 0;
     double timeSinceLastUpdateConstruct = 0;
@@ -25,15 +23,16 @@ public class GameThread implements Runnable {
     int deltaDaysB,deltaDaysC,deltaDaysR;
     private final Player p;
     private int currentCity;
-    private final GameFrame frame;
+    //private final GameFrame frame;
     private final GameManager gm;
 
     public GameThread(GameManager gm) {
         this.p = gm.player;
-        this.frame = gm.frame;
         this.gm = gm;
         gm.setGameThread(this);
     }
+
+
 
     @Override
     public void run() {
@@ -49,11 +48,11 @@ public class GameThread implements Runnable {
         System.out.println("d : " + deltaTimeResearched);
         while (continu) {
             long startTime = System.currentTimeMillis();
-            timeSinceLastUpdateBuilding = timeSinceLastUpdateBuilding + deltaTime;
-            timeSinceLastUpdateConstruct = timeSinceLastUpdateConstruct + deltaTime;
-            timeSinceLastUpdateResources = timeSinceLastUpdateResources + deltaTime;
+            timeSinceLastUpdateBuilding = timeSinceLastUpdateBuilding + deltaTimeLogic;
+            timeSinceLastUpdateConstruct = timeSinceLastUpdateConstruct + deltaTimeLogic;
+            timeSinceLastUpdateResources = timeSinceLastUpdateResources + deltaTimeLogic;
 
-            int deltaDays = gm.timeManager.updateTime(deltaTime);
+            int deltaDays = gm.timeManager.updateTime(deltaTimeLogic);
             deltaDaysB+=deltaDays;
             deltaDaysC+=deltaDays;
             deltaDaysR+=deltaDays;
@@ -83,8 +82,8 @@ public class GameThread implements Runnable {
                 deltaDaysR=0;
             }
             for (City c : p.getPlayerCities()) {
-                manageSprite(c, deltaTime);
-                manageTerrain(c, deltaTime);
+                manageSprite(c, deltaTimeLogic);
+                manageTerrain(c, deltaTimeLogic);
             }
 
             try {
@@ -93,21 +92,18 @@ public class GameThread implements Runnable {
                 e.printStackTrace();
             }
 
-            gm.GameView.repaint();
-            gm.frame.getGi().repaint();
-            gm.frame.getIt().repaint();
             float toWait = System.currentTimeMillis() - startTime;
             Thread.sleep(Math.max(deltaTimeResearched - (int) toWait, 0));
 
             float a = System.currentTimeMillis() - startTime;
-            deltaTime = Math.min(a / 1000.0f, deltaTimeResearched / 1000.0f);
+            deltaTimeLogic = Math.min(a / 1000.0f, deltaTimeResearched / 1000.0f);
 
-            fps = 1f/(a / 1000.0f);
+            fpsLogic = 1f/(a / 1000.0f);
         }
     }
 
-    public float getFps() {
-        return fps;
+    public float getFpsLogic() {
+        return fpsLogic;
     }
     //TODO revoir completement ce passage (trop gourmand)
     public void manageResources(City c) {

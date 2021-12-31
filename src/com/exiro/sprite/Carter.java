@@ -1,15 +1,13 @@
 package com.exiro.sprite;
 
 import com.exiro.buildingList.Building;
+import com.exiro.buildingList.IndustryConverter;
 import com.exiro.buildingList.StoreBuilding;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
-import com.exiro.object.Case;
-import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
-import com.exiro.object.Resource;
+import com.exiro.object.*;
 import com.exiro.render.IsometricRender;
 import com.exiro.utils.Point;
 
@@ -225,7 +223,25 @@ public class Carter extends MovingSprite {
 
         if (getRoutePath() != null)
             return;
-
+        if(res.getDelivery() != null){
+            for (ObjectType type : res.getDelivery()) {
+                for (Building b : getC().getBuildingList(type)) {
+                    if (b instanceof IndustryConverter) {
+                        if (((IndustryConverter) b).roomForInputResources() > 0) {
+                            Path p = getC().getPathManager().getPathTo(getXB(), getYB(), b.getAccess().get(0).getxPos(), b.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
+                            if (p != null) {
+                                int delivery = Math.min(((IndustryConverter) b).roomForInputResources(), amount);
+                                ((IndustryConverter) b).addIncomming(delivery);
+                                currentDelivery = delivery;
+                                setPath(p);
+                                setDestination(b);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         for (Building b : getC().getBuildings()) {
             if (b instanceof StoreBuilding) {
                 StoreBuilding g = (StoreBuilding) b;

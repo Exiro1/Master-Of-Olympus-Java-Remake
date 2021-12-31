@@ -89,9 +89,9 @@ public class TheaterSchool extends Building {
 
     public void createActor() {
         Random r = new Random();
-        if(city.getTheaters().size() == 0)
+        if(city.getBuildingList(ObjectType.THEATER).size() == 0)
             return;
-        Theater destination = city.getTheaters().get(r.nextInt(city.getTheaters().size()));
+        Theater destination = (Theater) city.getBuildingList(ObjectType.THEATER).get(r.nextInt(city.getBuildingList(ObjectType.THEATER).size()));
         if (destination != null && destination.isWorking()) {
             Actor a = new Actor(city, destination, this.getAccess().get(0), destination.getAccess().get(0));
             addSprite(a);
