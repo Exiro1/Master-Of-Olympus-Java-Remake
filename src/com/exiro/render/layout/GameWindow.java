@@ -1,6 +1,5 @@
 package com.exiro.render.layout;
 
-import com.exiro.constructionList.Construction;
 import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
@@ -17,8 +16,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class GameWindow extends JPanel {
 
@@ -162,8 +159,8 @@ public class GameWindow extends JPanel {
 
         g.drawString("X " + getCameraPosx(), 1200, 10);
         g.drawString("Y " + getCameraPosy(), 1200, 30);
-        g.drawString("FPS " + gm.getGameThread().getFps(), 1200, 40);
-
+        g.drawString("Logic FPS " + gm.getGameThread().getFpsLogic(), 1200, 40);
+        g.drawString("FPS " + gm.getRenderingThread().getFps(), 1200, 60);
     }
 
     ObjectClass interfaceCaller;

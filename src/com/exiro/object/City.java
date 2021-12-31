@@ -17,6 +17,7 @@ import com.exiro.systemCore.PathManager;
 import com.exiro.terrainList.Terrain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class City {
 
@@ -31,9 +32,7 @@ public class City {
     private final ArrayList<Sheep> sheeps = new ArrayList<>();
     private final ArrayList<Goat> goats = new ArrayList<>();
 
-    private final ArrayList<StoreBuilding> storage;
-    private final ArrayList<Theater> theaters;
-    private final ArrayList<Podium> podiums;
+    private HashMap<ObjectType, ArrayList<Building>> buildingMap;
 
     //private ArrayList<Sprite> sprites;
     int activeBuilding = 0;
@@ -55,9 +54,7 @@ public class City {
         this.constructions = constructions;
         this.buildings = buildings;
         this.population = population;
-        storage = new ArrayList<>();
-        theaters = new ArrayList<>();
-        podiums = new ArrayList<>();
+        this.buildingMap = new HashMap<>();
     }
 
     public ArrayList<ObjectClass> getObj() {
@@ -80,11 +77,18 @@ public class City {
         synchronized (buildings) {
             buildings.add(o);
         }
+        if(!buildingMap.containsKey(o.getBuildingType()))
+            buildingMap.put(o.getBuildingType(),new ArrayList<>());
+        buildingMap.get(o.getBuildingType()).add(o);
     }
 
     ArrayList<ObjectClass> toDestroyC;
 
     public City(String name, Player owner) {
+        toDestroyB = new ArrayList<>();
+        toDestroyC = new ArrayList<>();
+        toDestroyO = new ArrayList<>();
+        this.buildingMap = new HashMap<>();
         this.name = name;
         this.owner = owner;
         this.buildings = new ArrayList<>();
@@ -103,38 +107,27 @@ public class City {
         start.setActive(true);
         start.setStart(true);
 
+
+
         generateStartRoads();
 
-        toDestroyB = new ArrayList<>();
-        toDestroyC = new ArrayList<>();
-        toDestroyO = new ArrayList<>();
 
-        storage = new ArrayList<>();
-        theaters = new ArrayList<>();
-        podiums = new ArrayList<>();
+
     }
 
     public void generateStartRoads(){
-        Path p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos(),map.getStartCase().getyPos()+15), FreeState.BUILDABLE.getI());
-        if(p == null){
-            p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos(),map.getStartCase().getyPos()-15), FreeState.BUILDABLE.getI());
-        }
-        if(p == null){
-            p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos()+15,map.getStartCase().getyPos()), FreeState.BUILDABLE.getI());
-        }
-        if(p == null){
-            p = pathManager.getPathTo(map.getStartCase(),map.getCase(map.getStartCase().getxPos()-15,map.getStartCase().getyPos()), FreeState.BUILDABLE.getI());
-        }
+        Path p = pathManager.getPathTo(map.getStartCase(),map.getEndCase(), FreeState.NON_BLOCKING.getI());
         if(p == null){
            return;
         }
         for(Case c : p.getPath()){
-            if(!c.isOccupied()){
                 Road r = new Road(this);
                 c.getTerrain().setConstructible(true);
+                if(c.getObject() != null)
+                    c.getObject().delete();
+                c.setObject(null);
                 r.build(c.getxPos(),c.getyPos());
                 c.getTerrain().setConstructible(false);
-            }
         }
     }
 
@@ -144,6 +137,7 @@ public class City {
 
     public void removeBuilding(Building o) {
         toDestroyB.add(o);
+        buildingMap.get(o.getBuildingType()).remove(o);
     }
 
     public void deleteQueue() {
@@ -167,41 +161,8 @@ public class City {
         }
     }
 
-
-    public void addStorage(StoreBuilding o) {
-        synchronized (storage) {
-            storage.add(o);
-        }
-    }
-
-    public void addTheater(Theater o) {
-        synchronized (theaters) {
-            theaters.add(o);
-        }
-    }
-
-    public void addPodium(Podium o) {
-        synchronized (podiums) {
-            podiums.add(o);
-        }
-    }
-
-    public void removeStorage(StoreBuilding o) {
-        synchronized (storage) {
-            storage.remove(o);
-        }
-    }
-
-    public void removeTheater(Theater o) {
-        synchronized (theaters) {
-            theaters.remove(o);
-        }
-    }
-
-    public void removePodium(Podium o) {
-        synchronized (podiums) {
-            podiums.remove(o);
-        }
+    public ArrayList<Building> getBuildingList(ObjectType buildingType){
+        return buildingMap.getOrDefault(buildingType,new ArrayList<>());
     }
 
     public void removeAnimal(Sprite o) {
@@ -256,49 +217,9 @@ public class City {
         return animals;
     }
 
-    public ArrayList<StoreBuilding> getStorage() {
-        return storage;
-    }
-
-    public ArrayList<Theater> getTheaters() {
-        return theaters;
-    }
-
-    public ArrayList<Podium> getPodiums() {
-        return podiums;
-    }
-
     public void removeConstruction(Construction o) {
         toDestroyC.add(o);
     }
-
-    /*
-        public ArrayList<Sprite> getSprites() {
-            return sprites;
-        }
-
-        public void setSprites(ArrayList<Sprite> sprites) {
-            this.sprites = sprites;
-        }
-
-        public void addSprite(Sprite s) {
-            synchronized (sprites) {
-                sprites.add(s);
-            }
-        }
-
-        public void removeSprite(Sprite s) {
-            synchronized (sprites) {
-                sprites.remove(s);
-            }
-        }
-
-        public void removeSpriteAll(ArrayList<Sprite> s) {
-            synchronized (sprites) {
-                sprites.removeAll(s);
-            }
-        }
-    */
 
     public ArrayList<Terrain> getTerrain() {
         return terrain;

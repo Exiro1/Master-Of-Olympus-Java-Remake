@@ -33,6 +33,7 @@ public class CityMap {
     private ArrayList<Case> silvers;
     private ArrayList<Case> trees;
     private ArrayList<Case> meadows;
+    private Case endCase;
 
 
     public CityMap(ArrayList<Case> cases, Case startCase, City city) {
@@ -70,14 +71,13 @@ public class CityMap {
             t = new Empty(r.nextInt(10)+105,city);
             t.setxPos(x);
             t.setyPos(y);
+            if(CaseInfo.compareEnv(value,CaseInfo.MEADOW)){
+                t = new Meadow(x,y,city,0);
+            }
         }else if(CaseInfo.compareTerrain(value,CaseInfo.WATER)){
             t = new Water(x,y,city);
         }else{
             t = new Elevation(x,y, ElevationType.NONE,city,1,false,0);
-
-        }
-        if(CaseInfo.compareEnv(value,CaseInfo.MEADOW)){
-            t = new Meadow(x,y,city,0);
         }
         return t;
     }
@@ -102,10 +102,15 @@ public class CityMap {
                     if(CaseInfo.compareTerrain(value,CaseInfo.WATER)){
                         //fish
                     }else{
-                        //startCase
-                        this.startCase = getCase(j-4, i+4);
-
+                        //stairs
                     }
+                }
+                if(CaseInfo.compareEnv(value,CaseInfo.STARTENDCASE)){
+                        if(startCase == null) {
+                            this.startCase = getCase(j , i );
+                        }else{
+                            this.endCase = getCase(j,i);
+                        }
                 }
                 if(CaseInfo.compareEnv(value,CaseInfo.FOREST) && getCase(j,i) != null && getCase(j,i).getTerrain().isConstructible() ){
                     Case c = getCase(j,i);
@@ -236,6 +241,9 @@ public class CityMap {
                 ElevationType type = ElevationType.getElevationType(getElevationNbr(getNeighbourg(c),lvl));
                 if(type == ElevationType.NONE){
                     Terrain t = getTerrain((map[i][j] & 0b00001111) | 0b00010000,j,i,city,r);//force empty but keep environment
+                    if(CaseInfo.compareEnv(map[i][j],CaseInfo.MEADOW)){
+                        t = new Meadow(j,i,city,0);
+                    }
                     c.setTerrain(t);
                     t.setMainCase(c);
                     c.setZlvl(lvl);
@@ -252,7 +260,12 @@ public class CityMap {
                         rock.setMainCase(c);
                     }else {
                         int nbr = r.nextInt(4);
-                        Elevation e = new Elevation(j, i, type, city, 1, false, nbr);
+                        /*
+                        if(CaseInfo.compareEnv(map[i][j], CaseInfo.OTHER)){
+
+                        }*/
+
+                        Elevation e = new Elevation(j, i, type, city, 1, CaseInfo.compareEnv(map[i][j], CaseInfo.OTHER), nbr);
                         c.setTerrain(e);
                         e.setMainCase(c);
                     }
@@ -577,6 +590,10 @@ public class CityMap {
 
     public void setCaseSorted(Case[] caseSorted) {
         this.caseSorted = caseSorted;
+    }
+
+    public Case getEndCase() {
+        return endCase;
     }
 }
 

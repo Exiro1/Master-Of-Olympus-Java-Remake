@@ -117,6 +117,17 @@ public abstract class ResourceGenerator extends Building {
                 }else if(des == this){
                     toDestroy.add(c);
                     carterAvailable = true;
+                }else if(des instanceof IndustryConverter){
+                    ((IndustryConverter) des).delivered(carter.getCurrentDelivery());
+                    carter.setAmount(carter.getAmount() - carter.getCurrentDelivery());
+                    if (carter.getAmount() > 0) {
+                        c.hasArrived = false;
+                        c.setRoutePath(null);
+                    }else {
+                        toDestroy.add(c);
+                        returnFrom = (Building) c.getDestination();
+                        returnFromHome = true;
+                    }
                 }
             } else if (c.hasArrived && c instanceof TrolleyDriver) {
                 ComplexCarter cc = ((TrolleyDriver) c).getCc();

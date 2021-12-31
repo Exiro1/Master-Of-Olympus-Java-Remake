@@ -81,7 +81,7 @@ public class RoadMap {
                     if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Meadow)
                         access = FreeState.MEADOW;
                 } else {
-                    access = FreeState.NON_BLOCKING;
+                    access = FreeState.WALKABLE_CASE;
                 }
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD && cityMap.getCase(xStart, yStart).getObject().isActive()) {
                 access = FreeState.ACTIVE_ROAD;

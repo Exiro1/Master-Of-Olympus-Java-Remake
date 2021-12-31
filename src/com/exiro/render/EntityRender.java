@@ -83,7 +83,7 @@ public class EntityRender {
     public static void addBuilding(Point p) {
         CityMap map = GameManager.currentCity.getMap();
         if (Btype == ObjectType.ROAD) {
-            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI() | FreeState.BUILDABLE_ROAD.getI()));
+            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), (FreeState.ALL_ROAD.getI() | FreeState.BUILDABLE_ROAD.getI()));
             if (path != null) {
                 toBuild.clear();
                 for (Case c : path.getPath()) {

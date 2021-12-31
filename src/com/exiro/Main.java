@@ -8,10 +8,12 @@ import com.exiro.object.Player;
 import com.exiro.render.EntityRender;
 import com.exiro.systemCore.GameManager;
 import com.exiro.systemCore.GameThread;
+import com.exiro.systemCore.RenderingThread;
 import com.exiro.terrainGenerator.MapCreatorFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class Main {
 
@@ -48,6 +50,8 @@ public class Main {
 
             Thread t = new Thread(new GameThread(gm));
             t.start();
+            Thread t2 = new Thread(new RenderingThread(gm));
+            t2.start();
         }
 
     }

@@ -226,8 +226,12 @@ public class Agora extends Building {
             shopsBuildings.add(shop);
             updateShop();
             shop.setMcase(shops.get(shopsBuildings.size() - 1));
-            city.removeObj(shops.get(shopsBuildings.size() - 1).getObject());
-            city.removeBuilding((Building) shops.get(shopsBuildings.size() - 1).getObject());
+            /*
+            if(shops.get(shopsBuildings.size() - 1).getObject() instanceof EmptyShop) {
+                city.removeObj(shops.get(shopsBuildings.size() - 1).getObject());
+                city.removeBuilding((Building) shops.get(shopsBuildings.size() - 1).getObject());
+            }
+            */
             shop.setxPos(shops.get(shopsBuildings.size() - 1).getxPos());
             shop.setyPos(shops.get(shopsBuildings.size() - 1).getyPos());
             return true;
