@@ -120,6 +120,7 @@ public class City {
         if(p == null){
            return;
         }
+        int index = 0;
         for(Case c : p.getPath()){
                 Road r = new Road(this);
                 c.getTerrain().setConstructible(true);
@@ -127,7 +128,10 @@ public class City {
                     c.getObject().delete();
                 c.setObject(null);
                 r.build(c.getxPos(),c.getyPos());
-                c.getTerrain().setConstructible(false);
+                if(index < 8)
+                    r.setInDestructible(true);
+                    c.getTerrain().setConstructible(false);
+                index++;
         }
     }
 

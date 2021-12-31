@@ -22,20 +22,20 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-public class Stock extends StoreBuilding {
+public class StoreHouse extends StoreBuilding {
 
 
-    public Stock(boolean isActive, ObjectType type, String path, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Map<Resource, Integer> stock) {
+    public StoreHouse(boolean isActive, ObjectType type, String path, int size, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID, Map<Resource, Integer> stock) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
 
-    public Stock(int xPos, int yPos, City c) {
+    public StoreHouse(int xPos, int yPos, City c) {
         //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
         super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 12, 40, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
     }
 
-    public Stock() {
+    public StoreHouse() {
         //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
         super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 12, 40, 30, 0, 0, 3, 3, new ArrayList<>(), false, GameManager.currentCity, 0);
     }
@@ -136,7 +136,7 @@ public class Stock extends StoreBuilding {
 
     @Override
     public boolean canStock(Resource r) {
-        return r.canStock();
+        return super.canStock(r) && r.canStock();
     }
 
     public void updateStock() {
@@ -214,7 +214,7 @@ public class Stock extends StoreBuilding {
 
     @Override
     public void process(double deltaTime, int deltaDays) {
-
+        super.process(deltaTime,deltaDays);
     }
 
     @Override

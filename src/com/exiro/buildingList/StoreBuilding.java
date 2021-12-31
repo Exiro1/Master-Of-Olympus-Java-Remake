@@ -1,18 +1,26 @@
 package com.exiro.buildingList;
 
-import com.exiro.object.Case;
-import com.exiro.object.City;
-import com.exiro.object.ObjectType;
-import com.exiro.object.Resource;
+import com.exiro.ai.AI;
+import com.exiro.moveRelated.FreeState;
+import com.exiro.moveRelated.Path;
+import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
+import com.exiro.sprite.Carter;
+import com.exiro.sprite.MovingSprite;
+import com.exiro.sprite.Sprite;
+import com.exiro.sprite.complexCarter.ComplexCarter;
+import com.exiro.sprite.complexCarter.TrolleyDriver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class StoreBuilding extends Building {
 
+
+
+    protected HashMap<Resource, Orders> orders;
     protected HashMap<Resource, Integer> stockage;
     int emptyCase = 8;
 
@@ -23,6 +31,8 @@ public abstract class StoreBuilding extends Building {
 
     protected HashMap<Resource, Integer> maxAllowed;
 
+    boolean complex;
+
     public StoreBuilding(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
         stockage = new HashMap<>();
@@ -30,6 +40,7 @@ public abstract class StoreBuilding extends Building {
         reservedUnstock = new HashMap<>();
         maxAllowed = new HashMap<>();
         ressourceIndexed = new ArrayList<>();
+        orders = new HashMap<>();
         for (Resource r : Resource.values()) {
             if (canStock(r) && r != Resource.NULL) {
                 maxAllowed.put(r, 32 / r.getWeight());
@@ -37,6 +48,7 @@ public abstract class StoreBuilding extends Building {
                 reserved.put(r, 0);
                 reservedUnstock.put(r,0);
                 ressourceIndexed.add(r);
+                orders.put(r,Orders.ACCEPT);
             }
         }
     }
@@ -49,7 +61,167 @@ public abstract class StoreBuilding extends Building {
         return false;
     }
 
-    public abstract boolean canStock(Resource r);
+    boolean carterAvailable = true;
+
+    @Override
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
+
+        manageCarter();
+    }
+
+    public void manageCarter(){
+
+        if(carterAvailable) {
+            for (Resource r : ressourceIndexed) {
+                if (orders.get(r) == Orders.EMPTY && stockage.get(r) > 0) {
+                    emptyResource(r);
+                    return;
+                }else if(orders.get(r) == Orders.OBTAIN && getFreeSpace(r)>0){
+
+                }
+            }
+        }
+
+        ArrayList<Sprite> toDestroy = new ArrayList<>();
+        boolean returnFromHome = false;
+        Building returnFrom = null;
+
+        for (MovingSprite c : msprites) {
+
+            if (c.hasArrived && c instanceof Carter) {
+                Carter carter = (Carter) c;
+                ObjectClass des = c.getDestination();
+                if (des == null || !des.isActive() || ((Building) des).isDeleted()) { //object supprimée / inactif -> on relance la recherche
+                    c.hasArrived = false;
+                    c.setRoutePath(null);
+                    c.setDestination(null);
+                } else if (des instanceof StoreBuilding && carter.getRes() != Resource.NULL) {
+                    StoreBuilding g = (StoreBuilding) des;
+                    g.stock(carter.getRes(), carter.getCurrentDelivery());
+                    carter.setAmount(carter.getAmount() - carter.getCurrentDelivery());
+                    if (carter.getAmount() > 0) {
+                        c.hasArrived = false;
+                        c.setRoutePath(null);
+                    } else {
+                        toDestroy.add(c);
+                        returnFrom = g;
+                        returnFromHome = true;
+                    }
+                }else if(des == this){
+                    toDestroy.add(c);
+                    carterAvailable = true;
+                }else if(des instanceof IndustryConverter){
+                    ((IndustryConverter) des).delivered(carter.getCurrentDelivery());
+                    carter.setAmount(carter.getAmount() - carter.getCurrentDelivery());
+                    if (carter.getAmount() > 0) {
+                        c.hasArrived = false;
+                        c.setRoutePath(null);
+                    }else {
+                        toDestroy.add(c);
+                        returnFrom = (Building) c.getDestination();
+                        returnFromHome = true;
+                    }
+                }
+            } else if (c.hasArrived && c instanceof TrolleyDriver) {
+                ComplexCarter cc = ((TrolleyDriver) c).getCc();
+                ObjectClass des = cc.getDest();
+                if (des == null || !des.isActive() || ((Building) des).isDeleted()) { //object supprimée / inactif -> on relance la recherche
+                    cc.setArrived(false);
+                    cc.setRoutePath(null);
+                    cc.setDest(null);
+                } else if (des instanceof StoreBuilding) {
+                    StoreBuilding g = (StoreBuilding) des;
+                    g.stock(cc.getTrolley().getRes(), cc.getTrolley().getCurrentDelivery());
+                    cc.getTrolley().setAmount(cc.getTrolley().getAmount() - cc.getTrolley().getCurrentDelivery());
+                    if (cc.getTrolley().getAmount() > 0) {
+                        cc.setArrived(false);
+                        cc.setRoutePath(null);
+                    } else {
+                        toDestroy.add(cc.getDriver());
+                        toDestroy.add(cc.getPuller());
+                        toDestroy.add(cc.getTrolley());
+                        returnFrom = g;
+                        returnFromHome = true;
+                    }
+                }else if(des == this){
+                    toDestroy.add(cc.getDriver());
+                    toDestroy.add(cc.getPuller());
+                    toDestroy.add(cc.getTrolley());
+                    carterAvailable = true;
+                }
+
+
+            }
+
+        }
+        for (Sprite s : toDestroy) {
+            removeSprites(s);
+        }
+        if(returnFromHome){
+            returnFromHome = false;
+            returnHome(returnFrom,complex);
+        }
+    }
+
+
+
+    public void addCarter(Resource r, int amount, Path p, StoreBuilding des) {
+        if (r == Resource.WOOD || r == Resource.MARBLE || r == Resource.SCULPTURE) {
+            ComplexCarter cc = new ComplexCarter(city, des, this.getAccess().get(0), r, amount);
+            cc.setRoutePath(p);
+            cc.getTrolley().setCurrentDelivery(amount - des.reserve(r, amount));
+            addSprite(cc.getDriver());
+            addSprite(cc.getPuller());
+            addSprite(cc.getTrolley());
+            complex = true;
+        } else {
+            Carter carter = new Carter(city, des, this, r, amount);
+            carter.setCurrentDelivery(amount - des.reserve(r, amount));
+            carter.setPath(p);
+            addSprite(carter);
+            complex = false;
+        }
+        carterAvailable = false;
+    }
+
+
+    public void returnHome(Building from, boolean complex){
+        if (complex) {
+            ComplexCarter cc = new ComplexCarter(city, this, from.getAccess().get(0), Resource.NULL, 0);
+            cc.setRoutePath(city.getPathManager().getPathTo(from.getAccess().get(0).getxPos(), from.getAccess().get(0).getyPos(), getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
+            addSprite(cc.getDriver());
+            addSprite(cc.getPuller());
+            addSprite(cc.getTrolley());
+        } else {
+            Carter carter = new Carter(city, this, from, Resource.NULL, 0);
+            carter.setPath(city.getPathManager().getPathTo(carter.getXB(), carter.getYB(), getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
+            addSprite(carter);
+        }
+    }
+
+    public void emptyResource(Resource r){
+        for (Building b : city.getBuildings()) {
+            if (b instanceof StoreBuilding) {
+                StoreBuilding g = (StoreBuilding) b;
+                if (g.getFreeSpace(r) > 0 && g.getAccess().size() > 0) {
+                    Path p = city.getPathManager().getPathTo(getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
+                    if (p != null) {
+                        int amount = Math.min(Math.min(getStockAvailable(r),r.getMaxPerCart()), g.getFreeSpace(r));
+                        amount = unStock(r,amount);
+                        addCarter(r,amount,p,g);
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    public boolean canStock(Resource r){
+        return (!orders.containsKey(r) || (orders.get(r)== Orders.OBTAIN || orders.get(r) == Orders.ACCEPT));
+    }
 
     /**
      * reserve some resource to be retrieved
@@ -193,6 +365,16 @@ public abstract class StoreBuilding extends Building {
         }
     }
 
+    public boolean hasStockAvailable(Resource resource, boolean order) {
+        if(orders.get(resource) == Orders.OBTAIN)
+            return false;
+        if (stockage.containsKey(resource) && stockage.get(resource)-reservedUnstock.getOrDefault(resource,0) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public int getStockAvailable(Resource resource) {
         if (stockage.containsKey(resource) && stockage.get(resource)-reservedUnstock.getOrDefault(resource,0) > 0) {
             return stockage.get(resource)-reservedUnstock.getOrDefault(resource,0);
@@ -254,6 +436,12 @@ public abstract class StoreBuilding extends Building {
 
     public abstract void updateStock();
 
+
+    public void changeOrder(Resource r, Orders o){
+        orders.replace(r,o);
+    }
+
+
     ArrayList<Resource> ressourceIndexed;
     Interface currInterface;
     @Override
@@ -269,7 +457,7 @@ public abstract class StoreBuilding extends Building {
         bi.addText("LIMITE DE STOCKAGE","Zeus.ttf",10f,450,101);
         bi.addLine(0,104,bi.getW());
         for (Resource r : ressourceIndexed) {
-            bi.addStockItem(stockage.get(r),r.getName(), BuildingInterface.Orders.ACCEPT,maxAllowed.get(r),i,"Zeus.ttf",ID);
+            bi.addStockItem(stockage.get(r),r.getName(), orders.get(r),maxAllowed.get(r),i,"Zeus.ttf",ID);
             ID++;
             i += 20;
         }
@@ -279,15 +467,18 @@ public abstract class StoreBuilding extends Building {
 
 
 
+
     @Override
     public void buttonClickedEvent(ButtonType type, int ID) {
         super.buttonClickedEvent(type, ID);
-        System.out.println(type.name() + " : ID = "+ID);
         if(type == ButtonType.INTERFACE_UP){
             maxAllowed.replace(ressourceIndexed.get(ID),Math.min(maxAllowed.get(ressourceIndexed.get(ID)) + 4/ressourceIndexed.get(ID).getWeight(),32/ressourceIndexed.get(ID).getWeight()));
             currInterface.requestUpdate();
         }else if(type == ButtonType.INTERFACE_DOWN){
             maxAllowed.replace(ressourceIndexed.get(ID),Math.max(maxAllowed.get(ressourceIndexed.get(ID)) - 4/ressourceIndexed.get(ID).getWeight(),0));
+            currInterface.requestUpdate();
+        }else if(type == ButtonType.INTERFACE_ORDER){
+            orders.replace(ressourceIndexed.get(ID),orders.get(ressourceIndexed.get(ID)).next());
             currInterface.requestUpdate();
         }
     }

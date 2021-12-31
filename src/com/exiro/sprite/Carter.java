@@ -21,7 +21,7 @@ public class Carter extends MovingSprite {
     BufferedImage cart;
     int cartH, cartW;
     int cartOffX, cartOffY;
-    final Resource res;
+    Resource res;
     int amount;
     int prio = 0;
     int currentDelivery = 0;
@@ -313,6 +313,10 @@ public class Carter extends MovingSprite {
                 break;
         }
         return i;
+    }
+
+    public Resource getRes() {
+        return res;
     }
 
     @Override

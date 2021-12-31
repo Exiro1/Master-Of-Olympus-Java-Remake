@@ -209,13 +209,13 @@ public class InterfaceRender extends JPanel {
         g.drawImage(test, (int) (50 * fw), (int) (300 * fh), (int) (128 * fw), (int) (18 * fh), null);
 
         for (Button b : buttons) {
-            b.Render(g, 0, 0);
+            b.Render(g, 0, 0, gm.getGameView().lastP);
         }
         for (Button b : buildButtons) {
-            b.Render(g, 0, 0);
+            b.Render(g, 0, 0, gm.getGameView().lastP);
         }
         for (Button b : quickButtons) {
-            b.Render(g, 0, 0);
+            b.Render(g, 0, 0, gm.getGameView().lastP);
         }
 
         drawMiniMap(g);

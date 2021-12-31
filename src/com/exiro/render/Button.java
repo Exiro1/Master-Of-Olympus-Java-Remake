@@ -2,6 +2,7 @@ package com.exiro.render;
 
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.utils.Point;
 
 import java.awt.*;
 
@@ -34,6 +35,16 @@ public class Button {
         this.ID = ID;
     }
 
+    public Button(int x, int y, int w, int h, ButtonType type,int ID) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.image = null;
+        this.type = type;
+        this.id = id;
+        this.ID = ID;
+    }
     public void setClicked(boolean clicked) {
         if (clicked) {
             this.image = ImageLoader.getImage("Zeus_Interface", image.getBitID(), id + 1);
@@ -54,8 +65,9 @@ public class Button {
         return type;
     }
 
-    public void Render(Graphics g, int offx, int offy) {
-        g.drawImage(image.getImg(), (x) + offx, (y) + offy, (w), (h), null);
+    public void Render(Graphics g, int offx, int offy, Point lastP) {
+        if(image != null)
+            g.drawImage(image.getImg(), (x) + offx, (y) + offy, (w), (h), null);
     }
 
     public int getID() {

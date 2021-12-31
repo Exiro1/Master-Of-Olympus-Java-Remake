@@ -260,4 +260,7 @@ public class Trolley extends MovingSprite {
         this.start = start;
     }
 
+    public Resource getRes() {
+        return resource;
+    }
 }
