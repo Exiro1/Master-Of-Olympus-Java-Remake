@@ -153,7 +153,7 @@ public class GameWindow extends JPanel {
 
 
         if (gameInterface != null)
-            gameInterface.Render(g);
+            gameInterface.Render(g,new Point(lastP.x,lastP.y-GameLayout.TOOLBAR_HEIGHT));
 
         g.setColor(Color.BLACK);
 

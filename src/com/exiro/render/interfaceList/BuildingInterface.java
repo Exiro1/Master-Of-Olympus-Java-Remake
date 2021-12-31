@@ -4,12 +4,13 @@ import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.ObjectClass;
+import com.exiro.object.Orders;
 import com.exiro.render.Button;
 import com.exiro.render.ButtonType;
+import com.exiro.render.HoverButton;
+import com.exiro.utils.Point;
 
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 public class BuildingInterface extends Interface {
@@ -25,9 +26,6 @@ public class BuildingInterface extends Interface {
     ArrayList<TileImage> fill;
     ObjectClass b;
 
-
-
-    public enum Orders {ACCEPT,EMPTY,OBTAIN,REJECT}
 
     public BuildingInterface(int x, int y, int w, int h, ArrayList<Button> buttons, ObjectClass b) {
         super(x, y, w, h, buttons,b);
@@ -88,13 +86,16 @@ public class BuildingInterface extends Interface {
         x+=16;
         y+=16;
 
-
         obj.add(new TextInterface(stocked+"   "+type,FontLoader.getFont(font).deriveFont(16f), x, y));
+        addHoverButton(new HoverButton(x+270-6,y-16,100,22,ButtonType.INTERFACE_ORDER,ID));
         obj.add(new TextInterface(order.toString(),FontLoader.getFont(font).deriveFont(16f), x+270, y));
         obj.add(new TextInterface(stockLimit+"",FontLoader.getFont(font).deriveFont(16f), x+443, y));
         buttons.add((new Button(x+470,y-14,17,17,1,377, ButtonType.INTERFACE_DOWN,ID)));
         buttons.add((new Button(x+488,y-14,17,17,1,375, ButtonType.INTERFACE_UP,ID)));
     }
+
+
+
 
     public void addLine(int x,int y,int w){
         obj.add(new LineInterface(x+16,y+16,w));
@@ -126,7 +127,7 @@ public class BuildingInterface extends Interface {
 
 
     @Override
-    public void Render(Graphics g) {
+    public void Render(Graphics g, Point lastP) {
         if (isOpen) {
             RenderBg(g);
             for(InterfaceLayout child : childrens){
@@ -134,7 +135,7 @@ public class BuildingInterface extends Interface {
             }
             if (buttons != null) {
                 for (Button b : buttons) {
-                    b.Render(g, x, y);
+                    b.Render(g, x, y, lastP);
                 }
             }
             if (obj != null) {

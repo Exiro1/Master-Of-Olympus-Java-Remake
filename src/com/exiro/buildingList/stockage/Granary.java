@@ -82,7 +82,7 @@ public class Granary extends StoreBuilding {
 
     @Override
     public boolean canStock(Resource r) {
-        return r.canGranary();
+        return super.canStock(r) && r.canGranary();
     }
 
     public void updateStock() {

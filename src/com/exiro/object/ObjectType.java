@@ -12,13 +12,11 @@ import com.exiro.buildingList.delivery.agorashop.OilShop;
 import com.exiro.buildingList.delivery.agorashop.WoolShop;
 import com.exiro.buildingList.industry.*;
 import com.exiro.buildingList.stockage.Granary;
-import com.exiro.buildingList.stockage.Stock;
+import com.exiro.buildingList.stockage.StoreHouse;
 import com.exiro.constructionList.*;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.sprite.DeliverySprite;
 import com.exiro.sprite.animals.Goat;
 import com.exiro.sprite.animals.Sheep;
-import com.exiro.sprite.delivery.AgoraDelivery;
 import com.exiro.terrainList.*;
 
 import java.awt.image.BufferedImage;
@@ -30,7 +28,7 @@ public enum ObjectType {
     //Buildings
     HOUSE("Maison", true, "Zeus_General", 2, 8, 14, House.class),
     WATERWELL("Puit", true, "Zeus_General", 2, 9, 0, WaterWell.class),
-    STOCK("Stock", true, "Zeus_General", 3, 3, 22, Stock.class),
+    STOCK("Stock", true, "Zeus_General", 3, 3, 22, StoreHouse.class),
     GRANARY("Grenier", true, "Zeus_General", 4, 3, 28, Granary.class),
     FARM("Ferme", true, "Zeus_General", 3, 4, 12, Farm.class),
     SMALLHOLDING("Métairie", true, "Zeus_General", 2, 4, 90, SmallHolding.class),
