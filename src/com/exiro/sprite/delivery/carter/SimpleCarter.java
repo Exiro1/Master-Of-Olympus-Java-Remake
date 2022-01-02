@@ -1,4 +1,4 @@
-package com.exiro.sprite;
+package com.exiro.sprite.delivery.carter;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.IndustryConverter;
@@ -9,6 +9,8 @@ import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.*;
 import com.exiro.render.IsometricRender;
+import com.exiro.sprite.Direction;
+import com.exiro.sprite.MovingSprite;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -16,20 +18,18 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Carter extends MovingSprite {
+public class SimpleCarter extends Carter {
 
     BufferedImage cart;
     int cartH, cartW;
     int cartOffX, cartOffY;
-    Resource res;
-    int amount;
+
     int prio = 0;
-    int currentDelivery = 0;
-    Building origin;
-    int command = 0;
 
-    public Carter(City c, ObjectClass destination, Building origin, Resource resource, int nbr) {
-        super("SprMain", 0, 4728, 12, c, destination);
+
+
+    public SimpleCarter(City c, ObjectClass destination, Building origin, Resource resource, int amount,int command,int currentDelivery) {
+        super("SprMain", 0, 4728, 12, c, destination,resource,amount,command,currentDelivery,origin);
         dir = Direction.EST;
         timeBetweenFrame = 0.05f;
         Case ca = origin.getAccess().get(0);
@@ -39,38 +39,8 @@ public class Carter extends MovingSprite {
         offsetY = -5;
         setXB(Math.round(x));
         setYB(Math.round(y));
-        res = resource;
-        this.amount = nbr;
         setCart(dir);
         setImage(dir, 0);
-        this.origin = origin;
-    }
-    public Carter(City c, ObjectClass destination, Building origin, Resource resource, int nbr, int command) {
-        super("SprMain", 0, 4728, 12, c, destination);
-        dir = Direction.EST;
-        timeBetweenFrame = 0.05f;
-        Case ca = origin.getAccess().get(0);
-        x = ca.getxPos();
-        y = ca.getyPos();
-        offsetX = 0;
-        offsetY = -5;
-        setXB(Math.round(x));
-        setYB(Math.round(y));
-        res = resource;
-        this.amount = nbr;
-        setCart(dir);
-        setImage(dir, 0);
-        this.origin = origin;
-        this.command = command;
-    }
-
-
-    public int getCurrentDelivery() {
-        return currentDelivery;
-    }
-
-    public void setCurrentDelivery(int currentDelivery) {
-        this.currentDelivery = currentDelivery;
     }
 
     public void setPath(Path path) {
@@ -80,6 +50,12 @@ public class Carter extends MovingSprite {
         } else {
 
         }
+    }
+
+    @Override
+    public void updateImg() {
+        super.updateImg();
+        setCart(dir);
     }
 
     public void setCart(Direction direction) {
@@ -144,7 +120,7 @@ public class Carter extends MovingSprite {
                 prio = 1;
                 break;
         }
-        int resid = resID(res);
+        int resid = resID(resource);
         int idnbr = 1;
 
         if (amount == 1)
@@ -156,7 +132,7 @@ public class Carter extends MovingSprite {
         if (amount == 4)
             idnbr = 3;
 
-        if ((res == Resource.WOOL || res == Resource.BRONZE || res == Resource.ARMEMENT || res == Resource.OLIVE_OIL || res == Resource.WINE) && amount > 2)
+        if ((resource == Resource.WOOL || resource == Resource.BRONZE || resource == Resource.ARMEMENT || resource == Resource.OLIVE_OIL || resource == Resource.WINE) && amount > 2)
             idnbr = 2;
 
         int id = resid + i + 8 * (idnbr - 1);
@@ -220,42 +196,14 @@ public class Carter extends MovingSprite {
     @Override
     public void process(double deltaTime) {
         super.process(deltaTime);
+    }
 
-        if (getRoutePath() != null)
-            return;
-        if(res.getDelivery() != null){
-            for (ObjectType type : res.getDelivery()) {
-                for (Building b : getC().getBuildingList(type)) {
-                    if (b instanceof IndustryConverter) {
-                        if (((IndustryConverter) b).roomForInputResources() > 0) {
-                            Path p = getC().getPathManager().getPathTo(getXB(), getYB(), b.getAccess().get(0).getxPos(), b.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
-                            if (p != null) {
-                                int delivery = Math.min(((IndustryConverter) b).roomForInputResources(), amount);
-                                ((IndustryConverter) b).addIncomming(delivery);
-                                currentDelivery = delivery;
-                                setPath(p);
-                                setDestination(b);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (Building b : getC().getBuildings()) {
-            if (b instanceof StoreBuilding) {
-                StoreBuilding g = (StoreBuilding) b;
-                if (g.getFreeSpace(res) > 0 && g.getAccess().size() > 0) {
-                    Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
-                    if (p != null) {
-                        setPath(p);
-                        setDestination(g);
-                        currentDelivery = getAmount() - g.reserve(res, getAmount());
-                        return;
-                    }
-                }
-            }
-        }
+    @Override
+    public void setArrived(boolean hasarrived) {
+        this.hasArrived = hasarrived;
+    }
+    public boolean hasArrived(){
+        return hasArrived;
     }
 
     public int resID(Resource r) {
@@ -315,9 +263,6 @@ public class Carter extends MovingSprite {
         return i;
     }
 
-    public Resource getRes() {
-        return res;
-    }
 
     @Override
     public boolean build(int xPos, int yPos) {
@@ -339,21 +284,10 @@ public class Carter extends MovingSprite {
         return null;
     }
 
-    public int getCommand() {
-        return command;
-    }
-
     @Override
     public void setDir(Direction dir) {
         super.setDir(dir);
         setCart(dir);
     }
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 }

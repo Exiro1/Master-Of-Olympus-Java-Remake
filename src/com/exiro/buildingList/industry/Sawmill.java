@@ -24,7 +24,6 @@ public class Sawmill extends IndustryHarverster {
     public Sawmill() {
         super(false, ObjectType.SAWMILL, BuildingCategory.INDUSTRY, 0, 12, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOD, 22, 3, 25, 100);
         maxPerCarter = 1;
-
     }
 
     public void createBuildingSpriteWork() {
