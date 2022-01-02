@@ -9,11 +9,12 @@ import com.exiro.object.Resource;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.*;
+import com.exiro.sprite.delivery.carter.Carter;
+import com.exiro.sprite.delivery.carter.SimpleCarter;
 import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Time;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class IndustryConverter extends ResourceGenerator{
 
@@ -106,6 +107,11 @@ public class IndustryConverter extends ResourceGenerator{
         super.process(deltaTime, deltaDays);
 
         if (isWorking()) {
+
+            if (stockIn + incomming < maxStock && carterAvailable) {
+                refuel();
+            }
+
             if (state == ConversionState.CONVERSION) {
                 int timeToComplete = (int) (timeToTransform * (((float) getPopMax() / (float) getPop())));
                 int timeSinceStart = GameManager.getInstance().getTimeManager().daysSince(startConvertion);
@@ -124,9 +130,7 @@ public class IndustryConverter extends ResourceGenerator{
                 }
             }
 
-            if (stockIn + incomming < maxStock && carterAvailable) {
-                refuel();
-            }
+
             updateStock();
         }
     }
@@ -150,11 +154,8 @@ public class IndustryConverter extends ResourceGenerator{
                 int command = Math.min(maxStock - stockIn - incomming, sb.getStockAvailable(needed));
                 incomming += command;
                 sb.reserveUnstockage(needed,command);
-                Carter carter = new Carter(city, sb, this, Resource.NULL, 0, command);
-                carter.setRoutePath(AI.goTo(city, this.getAccess().get(0), sb.getAccess().get(0), FreeState.ALL_ROAD.getI()));
-                addSprite(carter);
+                addSprite(Carter.startCommand(city,this,sb,needed,command));
                 carterAvailable = false;
-                refueling = true;
             }
         }
     }
@@ -168,30 +169,16 @@ public class IndustryConverter extends ResourceGenerator{
     public void manageCarter() {
         super.manageCarter();
         ArrayList<Sprite> toDestroy = new ArrayList<>();
-        boolean newcarter = false;
-        StoreBuilding g = null;
-        int retrieved = 0;
+
         for (MovingSprite c : msprites) {
-            if (c.hasArrived && c instanceof Carter) {
-                if (c.getDestination() == this) {
-                    delivered(((Carter)c).getAmount());
+            if(c instanceof Carter){
+                if(((Carter) c).getCarterState() == Carter.CarterState.DONE){
                     toDestroy.add(c);
                     carterAvailable = true;
-                    refueling = false;
-                }else if(c.getDestination() instanceof StoreBuilding){
-                    toDestroy.add(c);
-                    newcarter = true;
-                    g = (StoreBuilding)c.getDestination();
-                    retrieved = g.unstockWithReservation(needed, ((Carter) c).getCommand());
-                    incomming += retrieved - ((Carter) c).getCommand();
                 }
             }
         }
-        if(newcarter){
-            Carter carter = new Carter(city, this, g, needed, retrieved);
-            carter.setRoutePath(AI.goTo(city, g.getAccess().get(0), this.getAccess().get(0), FreeState.ALL_ROAD.getI()));
-            addSprite(carter);
-        }
+
         for (Sprite s : toDestroy) {
             removeSprites(s);
         }
