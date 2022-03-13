@@ -1,17 +1,11 @@
 package com.exiro.object;
 
 import com.exiro.buildingList.Building;
-import com.exiro.buildingList.StoreBuilding;
-import com.exiro.buildingList.culture.Podium;
-import com.exiro.buildingList.culture.Theater;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
 import com.exiro.fileManager.MapSettings;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
-import com.exiro.sprite.Sprite;
-import com.exiro.sprite.animals.Goat;
-import com.exiro.sprite.animals.Sheep;
 import com.exiro.systemCore.BuildingManager;
 import com.exiro.systemCore.PathManager;
 import com.exiro.terrainList.Terrain;
@@ -28,9 +22,8 @@ public class City {
     private ArrayList<ObjectClass> inActives = new ArrayList<>();
     private ArrayList<ObjectClass> obj = new ArrayList<>();
 
-    private final ArrayList<Sprite> animals = new ArrayList<>();
-    private final ArrayList<Sheep> sheeps = new ArrayList<>();
-    private final ArrayList<Goat> goats = new ArrayList<>();
+    private ResourceManager resourceManager;
+
 
     private HashMap<ObjectType, ArrayList<Building>> buildingMap;
 
@@ -55,6 +48,7 @@ public class City {
         this.buildings = buildings;
         this.population = population;
         this.buildingMap = new HashMap<>();
+        resourceManager = new ResourceManager();
     }
 
     public ArrayList<ObjectClass> getObj() {
@@ -100,7 +94,7 @@ public class City {
         this.constructions = new ArrayList<>();
         //TODO voir comment faire le systeme de chargement de map proprement
         this.map = new CityMap(MapSettings.loadSettings("Assets/savedMap.map"), this);
-
+        resourceManager = new ResourceManager();
         this.map.populateMap();
         this.pathManager = new PathManager(owner, this.map);
         start.build(map.getStartCase().getxPos(), map.getStartCase().getyPos());
@@ -165,61 +159,15 @@ public class City {
         }
     }
 
-    public ArrayList<Building> getBuildingList(ObjectType buildingType){
-        return buildingMap.getOrDefault(buildingType,new ArrayList<>());
+    public ArrayList<Building> getBuildingList(ObjectType buildingType) {
+        return buildingMap.getOrDefault(buildingType, new ArrayList<>());
     }
 
-    public void removeAnimal(Sprite o) {
-        synchronized (animals) {
-            animals.remove(o);
-        }
+
+    public ResourceManager getResourceManager() {
+        return resourceManager;
     }
 
-    public void addAnimal(Sprite s) {
-        synchronized (animals) {
-            animals.add(s);
-        }
-    }
-
-    public void addSheep(Sheep s) {
-        addAnimal(s);
-        synchronized (sheeps) {
-            sheeps.add(s);
-        }
-    }
-
-    public void removeSheep(Sheep s) {
-        removeAnimal(s);
-        synchronized (sheeps) {
-            sheeps.remove(s);
-        }
-    }
-
-    public ArrayList<Sheep> getSheeps() {
-        return sheeps;
-    }
-
-    public void addGoat(Goat s) {
-        addAnimal(s);
-        synchronized (goats) {
-            goats.add(s);
-        }
-    }
-
-    public void removeGoat(Goat s) {
-        removeAnimal(s);
-        synchronized (goats) {
-            goats.remove(s);
-        }
-    }
-
-    public ArrayList<Goat> getGoats() {
-        return goats;
-    }
-
-    public ArrayList<Sprite> getAnimals() {
-        return animals;
-    }
 
     public void removeConstruction(Construction o) {
         toDestroyC.add(o);
@@ -329,4 +277,6 @@ public class City {
     public void setActiveBuilding(int activeBuilding) {
         this.activeBuilding = activeBuilding;
     }
+
+
 }

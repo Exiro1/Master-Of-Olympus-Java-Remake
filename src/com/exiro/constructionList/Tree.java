@@ -55,8 +55,9 @@ public class Tree extends Construction {
         ca.setMainCase(true);
         this.setMainCase(ca);
     }
+
     @Override
-    public void process(double deltatime) {
+    public void process(double deltatime, int deltaDays) {
         if (cut) {
             if (GameManager.getInstance().getTimeManager().timeHasPassed(grown)) {
                 setCut(false);

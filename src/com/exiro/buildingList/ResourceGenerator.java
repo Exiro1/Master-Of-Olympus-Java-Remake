@@ -1,10 +1,12 @@
 package com.exiro.buildingList;
 
-import com.exiro.moveRelated.FreeState;
-import com.exiro.object.*;
-import com.exiro.sprite.delivery.carter.*;
+import com.exiro.object.Case;
+import com.exiro.object.City;
+import com.exiro.object.ObjectType;
+import com.exiro.object.Resource;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.delivery.carter.Carter;
 
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public abstract class ResourceGenerator extends Building {
     int stock;
     int maxStockOut;
     Resource resource;
-    boolean carterAvailable = true;
+    protected boolean carterAvailable = true;
     boolean complex = false;
     Building returnFrom;
     boolean returnFromHome = false;

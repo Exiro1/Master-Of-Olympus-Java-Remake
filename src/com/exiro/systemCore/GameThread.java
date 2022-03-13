@@ -67,8 +67,10 @@ public class GameThread implements Runnable {
             if (timeSinceLastUpdateConstruct > 3) {
 
                 for (City c : p.getPlayerCities()) {
-                    manageConstruction(c, timeSinceLastUpdateConstruct);
+                    manageConstruction(c, timeSinceLastUpdateConstruct, deltaDaysC);
+                    c.getResourceManager().process();
                 }
+
                 timeSinceLastUpdateConstruct = 0;
                 deltaDaysC=0;
             }
@@ -170,17 +172,17 @@ public class GameThread implements Runnable {
                 b.processSprite(deltaTime);
             }
         }
-        synchronized (c.getAnimals()) {
-            for (Sprite s : c.getAnimals()) {
+        synchronized (c.getResourceManager().getAnimals()) {
+            for (Sprite s : c.getResourceManager().getAnimals()) {
                 s.process(deltaTime);
             }
         }
     }
 
-    public void manageConstruction(City c, double delaTime) {
+    public void manageConstruction(City c, double delaTime, int deltaDays) {
         synchronized (c.getConstructions()) {
             for (Construction construction : c.getConstructions()) {
-                construction.process(delaTime);
+                construction.process(delaTime, deltaDays);
             }
         }
     }

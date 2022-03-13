@@ -107,7 +107,7 @@ public class Goat extends Animal {
     @Override
     public void delete() {
         super.delete();
-        c.removeGoat(this);
+        c.getResourceManager().removeGoat(this);
     }
 
     public void stop() {
@@ -169,7 +169,7 @@ public class Goat extends Animal {
             setY(yPos);
             setXB(xPos);
             setYB(yPos);
-            c.addGoat(this);
+            c.getResourceManager().addGoat(this);
             setMainCase(c.getMap().getCase(getXB(), getYB()));
             return true;
         }

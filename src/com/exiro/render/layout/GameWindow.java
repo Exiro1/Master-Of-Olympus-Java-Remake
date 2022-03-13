@@ -250,7 +250,7 @@ public class GameWindow extends JPanel {
                 EntityRender.setEntityRender(ObjectType.OLIVETREE);
                 break;
             case VITICULTURE_GRAPE:
-                //EntityRender.setEntityRender(ObjectType.FARM);
+                EntityRender.setEntityRender(ObjectType.VINE);
                 break;
             case AGORA_AGORA:
                 EntityRender.setEntityRender(ObjectType.AGORA);

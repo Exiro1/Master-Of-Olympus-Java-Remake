@@ -8,10 +8,8 @@ import com.exiro.sprite.Direction;
 import com.exiro.terrainGenerator.CoastSelector;
 import com.exiro.terrainGenerator.CoastType;
 import com.exiro.terrainGenerator.ElevationType;
-import com.exiro.terrainGenerator.PerlinNoise;
 import com.exiro.terrainList.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -48,7 +46,6 @@ public class CityMap {
         this.width = mapSettings.getSize();
         this.cases = new ArrayList<>();
         this.notNullCases = new ArrayList<>();
-
         this.coppers = new ArrayList<>();
         this.silvers = new ArrayList<>();
         this.trees = new ArrayList<>();
@@ -505,6 +502,7 @@ public class CityMap {
     public int getSize() {
         return size;
     }
+
 
     public ArrayList<Case> getCoppers() {
         return coppers;
