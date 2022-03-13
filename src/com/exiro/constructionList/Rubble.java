@@ -19,7 +19,7 @@ public class Rubble extends Construction {
     }
 
     @Override
-    public void process(double deltatime) {
+    public void process(double deltatime, int deltaDays) {
 
     }
 }

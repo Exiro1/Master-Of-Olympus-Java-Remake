@@ -34,7 +34,7 @@ public class Road extends Construction {
 
 
     @Override
-    public void process(double deltatime) {
+    public void process(double deltatime, int deltaDays) {
 
     }
 

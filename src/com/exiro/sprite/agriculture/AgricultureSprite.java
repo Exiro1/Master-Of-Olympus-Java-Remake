@@ -17,6 +17,9 @@ public class AgricultureSprite extends MovingSprite {
 
     protected int fullAnimCounter = 0;
     protected boolean unidir = false;
+    boolean finished = false;
+    boolean createRessource = false;
+
 
     public AgricultureSprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
         super(filePath, bitID, localId, frameNumber, c, destination);

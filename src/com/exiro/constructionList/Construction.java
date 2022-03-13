@@ -22,7 +22,7 @@ public abstract class Construction extends MapObject {
     int xPos, yPos;
     int xLenght, yLenght;
     float cachet;
-    final City city;
+    protected final City city;
     boolean built;
     boolean isFloor;
 
@@ -72,7 +72,7 @@ public abstract class Construction extends MapObject {
 
     }
 
-    public abstract void process(double deltatime);
+    public abstract void process(double deltatime, int deltaDays);
 
     public boolean build(int xPos, int yPos) {
         ArrayList<Case> place;

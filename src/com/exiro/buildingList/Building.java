@@ -25,7 +25,7 @@ public abstract class Building extends MapObject {
 
     final ObjectType type;
     protected final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
-    final ArrayList<MovingSprite> msprites = new ArrayList<>();
+    protected final ArrayList<MovingSprite> msprites = new ArrayList<>();
     protected final City city;
     BuildingCategory category;
 

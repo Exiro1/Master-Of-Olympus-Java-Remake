@@ -87,7 +87,7 @@ public class RoadMap {
                 access = FreeState.ACTIVE_ROAD;
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.BLOCKABLE_ROAD || (!cityMap.getCase(xStart, yStart).getObject().isActive() && cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD)) {
                 access = FreeState.BLOCKING_ROAD;
-            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.TREE) {
+            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType().isWalk()) {
                 access = FreeState.WALKABLE_CASE;
             }
         }
