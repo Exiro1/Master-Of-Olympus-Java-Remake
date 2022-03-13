@@ -18,8 +18,6 @@ public class Sheepherd extends AgricultureSprite {
     boolean wait, waiting = false;
     Sheepfold sheepfold;
     Sheep sheep;
-    boolean finished = false;
-    boolean createRessource = false;
 
 
     public Sheepherd(City c, Sheepfold sheepfold, Sheep sheep, boolean cut) {

@@ -86,9 +86,9 @@ public class College extends Building {
 
     public void createPhilosopher() {
         Random r = new Random();
-        if(city.getPodiums().size() == 0)
+        if(city.getBuildingList(ObjectType.PODIUM).size() == 0)
             return;
-        Podium destination = city.getPodiums().get(r.nextInt(city.getPodiums().size()));
+        Podium destination = (Podium) city.getBuildingList(ObjectType.PODIUM).get(r.nextInt(city.getBuildingList(ObjectType.PODIUM).size()));
         if (destination != null && destination.isWorking()) {
             Philosopher p = new Philosopher(city, destination, this.getAccess().get(0), destination.getAccess().get(0));
             addSprite(p);

@@ -1,27 +1,35 @@
 package com.exiro.buildingList;
 
-import com.exiro.object.Case;
-import com.exiro.object.City;
-import com.exiro.object.ObjectType;
-import com.exiro.object.Resource;
+import com.exiro.ai.AI;
+import com.exiro.moveRelated.FreeState;
+import com.exiro.moveRelated.Path;
+import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
+import com.exiro.sprite.delivery.carter.Carter;
+import com.exiro.sprite.delivery.carter.SimpleCarter;
+import com.exiro.sprite.MovingSprite;
+import com.exiro.sprite.Sprite;
+import com.exiro.sprite.delivery.carter.ComplexCarter;
+import com.exiro.sprite.delivery.carter.TrolleyDriver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class StoreBuilding extends Building {
 
-    protected HashMap<Resource, Integer> stockage;
-    int emptyCase = 8;
 
+    protected HashMap<Resource, Orders> orders;
+    protected HashMap<Resource, Integer> stockage;
+    protected HashMap<Resource, Integer> maxAllowed;
+    int emptyCase = 8;
     HashMap<Resource, Integer> reserved;
     HashMap<Resource, Integer> reservedUnstock;
-
     int emptyCaseReserved = 8;
-
-    protected HashMap<Resource, Integer> maxAllowed;
+    boolean carterAvailable = true;
+    ArrayList<Resource> ressourceIndexed;
+    Interface currInterface;
 
     public StoreBuilding(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
@@ -30,38 +38,116 @@ public abstract class StoreBuilding extends Building {
         reservedUnstock = new HashMap<>();
         maxAllowed = new HashMap<>();
         ressourceIndexed = new ArrayList<>();
+        orders = new HashMap<>();
         for (Resource r : Resource.values()) {
             if (canStock(r) && r != Resource.NULL) {
                 maxAllowed.put(r, 32 / r.getWeight());
                 stockage.put(r, 0);
                 reserved.put(r, 0);
-                reservedUnstock.put(r,0);
+                reservedUnstock.put(r, 0);
                 ressourceIndexed.add(r);
+                orders.put(r, Orders.ACCEPT);
             }
         }
     }
 
     @Override
     public boolean build(int xPos, int yPos) {
-        if (super.build(xPos, yPos)) {
-            city.addStorage(this);
-            return true;
-        }
-        return false;
+        return super.build(xPos, yPos);
     }
 
-    public abstract boolean canStock(Resource r);
+    @Override
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
+
+        manageCarter();
+    }
+
+    public void manageCarter() {
+
+        if (carterAvailable) {
+            for (Resource r : ressourceIndexed) {
+                if (!carterAvailable)
+                    break;
+                if (orders.get(r) == Orders.EMPTY && hasStockAvailable(r)) {
+                    emptyResource(r);
+                } else if (orders.get(r) == Orders.OBTAIN && getFreeSpace(r) > 0) {
+                    obtainResource(r);
+                }
+            }
+        }
+
+        ArrayList<Sprite> toDestroy = new ArrayList<>();
+
+        for (MovingSprite c : msprites) {
+            if(c instanceof Carter){
+                if(((Carter) c).getCarterState() == Carter.CarterState.DONE){
+                    toDestroy.add(c);
+                    carterAvailable = true;
+                }
+            }
+        }
+
+        for (Sprite s : toDestroy) {
+            removeSprites(s);
+        }
+
+    }
+
+
+
+    public void emptyResource(Resource r) {
+        for (Building b : city.getBuildings()) {
+            if (b instanceof StoreBuilding) {
+                StoreBuilding g = (StoreBuilding) b;
+                if (g.getFreeSpace(r) > 0 && g.getAccess().size() > 0) {
+                    Path p = city.getPathManager().getPathTo(getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
+                    if (p != null) {
+                        int amount = Math.min(Math.min(getStockAvailable(r), r.getMaxPerCart()), g.getFreeSpace(r));
+                        amount = unStock(r, amount);
+                        carterAvailable = false;
+                        g.reserve(r,amount);
+                        addSprite(Carter.startDelivery(city,this,g,r,amount,amount));
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public void obtainResource(Resource r) {
+        ArrayList<Building> stores = new ArrayList<>(city.getBuildingList(ObjectType.GRANARY));
+        stores.addAll(city.getBuildingList(ObjectType.STOCK));
+        for (Building b : stores) {
+            if (!(b instanceof StoreBuilding))
+                continue;
+            StoreBuilding sb = (StoreBuilding) b;
+            if (sb.hasStockAvailable(r)) {
+                int command = Math.min(Math.min(getFreeSpace(r), sb.getStockAvailable(r)), r.getMaxPerCart());
+                command = sb.reserveUnstockage(r, command);
+                reserve(r, command);
+                addSprite(Carter.startCommand(city,this,sb,r,command));
+                carterAvailable = false;
+                return;
+            }
+        }
+    }
+
+    public boolean canStock(Resource r) {
+        return (!orders.containsKey(r) || (orders.get(r) == Orders.OBTAIN || orders.get(r) == Orders.ACCEPT));
+    }
 
     /**
      * reserve some resource to be retrieved
-     * @param r resource to retrieve
+     *
+     * @param r      resource to retrieve
      * @param amount amount to retrieve
      */
-    public int reserveUnstockage(Resource r, int amount){
-        int unstockReserveAmount = Math.min(getStockAvailable(r),amount);
-        if(reservedUnstock.containsKey(r)){
-            reservedUnstock.replace(r,reservedUnstock.get(r)+unstockReserveAmount);
-        }else {
+    public int reserveUnstockage(Resource r, int amount) {
+        int unstockReserveAmount = Math.min(getStockAvailable(r), amount);
+        if (reservedUnstock.containsKey(r)) {
+            reservedUnstock.replace(r, reservedUnstock.get(r) + unstockReserveAmount);
+        } else {
             reservedUnstock.putIfAbsent(r, unstockReserveAmount);
         }
         return unstockReserveAmount;
@@ -69,14 +155,16 @@ public abstract class StoreBuilding extends Building {
 
     /**
      * unreserve some resource
-     * @param r resource to unreserve
+     *
+     * @param r      resource to unreserve
      * @param amount amount to unreserve
      */
-    public void unReserveUnstockage(Resource r, int amount){
-        if(reservedUnstock.containsKey(r)){
-            reservedUnstock.replace(r,reservedUnstock.get(r)-amount);
+    public void unReserveUnstockage(Resource r, int amount) {
+        if (reservedUnstock.containsKey(r)) {
+            reservedUnstock.replace(r, reservedUnstock.get(r) - amount);
         }
     }
+
     /**
      * get free space for a resource type
      *
@@ -158,9 +246,8 @@ public abstract class StoreBuilding extends Building {
         return amount - avail;
     }
 
-
     /**
-     * put ressources in the stockage
+     * put resources in the stock
      *
      * @param amount
      * @param r
@@ -181,22 +268,26 @@ public abstract class StoreBuilding extends Building {
                 emptyCase -= reservePossible;
             }
             stockage.replace(r, stockage.get(r) + amount);
+        }else{
+            return false;
         }
         updateStock();
         return true;
     }
 
     public boolean hasStockAvailable(Resource resource) {
-        if (stockage.containsKey(resource) && stockage.get(resource)-reservedUnstock.getOrDefault(resource,0) > 0) {
-            return true;
-        } else {
+        return stockage.containsKey(resource) && stockage.get(resource) - reservedUnstock.getOrDefault(resource, 0) > 0;
+    }
+
+    public boolean hasStockAvailable(Resource resource, boolean order) {
+        if (orders.get(resource) == Orders.OBTAIN)
             return false;
-        }
+        return stockage.containsKey(resource) && stockage.get(resource) - reservedUnstock.getOrDefault(resource, 0) > 0;
     }
 
     public int getStockAvailable(Resource resource) {
-        if (stockage.containsKey(resource) && stockage.get(resource)-reservedUnstock.getOrDefault(resource,0) > 0) {
-            return stockage.get(resource)-reservedUnstock.getOrDefault(resource,0);
+        if (stockage.containsKey(resource) && stockage.get(resource) - reservedUnstock.getOrDefault(resource, 0) > 0) {
+            return stockage.get(resource) - reservedUnstock.getOrDefault(resource, 0);
         } else {
             return 0;
         }
@@ -227,12 +318,12 @@ public abstract class StoreBuilding extends Building {
         emptyCase += stockNeededBefore - stockNeededAfter;
         emptyCaseReserved += stockNeededBeforer - stockNeededAfterr;
 
-        if (stockage.get(r)-reservedUnstock.getOrDefault(r,0) >= amount) {
+        if (stockage.get(r) - reservedUnstock.getOrDefault(r, 0) >= amount) {
             stockage.replace(r, stockage.get(r) - amount);
             reserved.replace(r, reserved.get(r) - amount);
             ret = amount;
         } else {
-            ret = stockage.get(r)-reservedUnstock.getOrDefault(r,0);
+            ret = stockage.get(r) - reservedUnstock.getOrDefault(r, 0);
             stockage.replace(r, 0); //not supposed to happen
             reserved.replace(r, 0);
         }
@@ -240,37 +331,39 @@ public abstract class StoreBuilding extends Building {
         return ret;
     }
 
-    public int unstockWithReservation(Resource r, int amount){
-        unReserveUnstockage(r,amount);
-        return unStock(r,amount);
+    public int unstockWithReservation(Resource r, int amount) {
+        unReserveUnstockage(r, amount);
+        return unStock(r, amount);
     }
 
-    public int getTotalStocked(){
+    public int getTotalStocked() {
         int tot = 0;
-        for(Resource r : stockage.keySet()){
-            tot += r.getWeight()*stockage.get(r);
+        for (Resource r : stockage.keySet()) {
+            tot += r.getWeight() * stockage.get(r);
         }
         return tot;
     }
 
     public abstract void updateStock();
 
-    ArrayList<Resource> ressourceIndexed;
-    Interface currInterface;
+    public void changeOrder(Resource r, Orders o) {
+        orders.replace(r, o);
+    }
+
     @Override
     public Interface getInterface() {
         BuildingInterface bi = (BuildingInterface) super.getInterface();
         int i = 122;
         int ID = 0;
-        bi.addLine(0,70,bi.getW());
+        bi.addLine(0, 70, bi.getW());
 
-        bi.addLine(0,87,bi.getW());
-        bi.addText("STOCK","Zeus.ttf",10f,20,101);
-        bi.addText("ORDRES","Zeus.ttf",10f,310,101);
-        bi.addText("LIMITE DE STOCKAGE","Zeus.ttf",10f,450,101);
-        bi.addLine(0,104,bi.getW());
+        bi.addLine(0, 87, bi.getW());
+        bi.addText("STOCK", "Zeus.ttf", 10f, 20, 101);
+        bi.addText("ORDRES", "Zeus.ttf", 10f, 310, 101);
+        bi.addText("LIMITE DE STOCKAGE", "Zeus.ttf", 10f, 450, 101);
+        bi.addLine(0, 104, bi.getW());
         for (Resource r : ressourceIndexed) {
-            bi.addStockItem(stockage.get(r),r.getName(), BuildingInterface.Orders.ACCEPT,maxAllowed.get(r),i,"Zeus.ttf",ID);
+            bi.addStockItem(stockage.get(r), r.getName(), orders.get(r), maxAllowed.get(r), i, "Zeus.ttf", ID);
             ID++;
             i += 20;
         }
@@ -279,23 +372,27 @@ public abstract class StoreBuilding extends Building {
     }
 
 
-
     @Override
     public void buttonClickedEvent(ButtonType type, int ID) {
         super.buttonClickedEvent(type, ID);
-        System.out.println(type.name() + " : ID = "+ID);
-        if(type == ButtonType.INTERFACE_UP){
-            maxAllowed.replace(ressourceIndexed.get(ID),Math.min(maxAllowed.get(ressourceIndexed.get(ID)) + 4/ressourceIndexed.get(ID).getWeight(),32/ressourceIndexed.get(ID).getWeight()));
+        if (type == ButtonType.INTERFACE_UP) {
+            maxAllowed.replace(ressourceIndexed.get(ID), Math.min(maxAllowed.get(ressourceIndexed.get(ID)) + 4 / ressourceIndexed.get(ID).getWeight(), 32 / ressourceIndexed.get(ID).getWeight()));
             currInterface.requestUpdate();
-        }else if(type == ButtonType.INTERFACE_DOWN){
-            maxAllowed.replace(ressourceIndexed.get(ID),Math.max(maxAllowed.get(ressourceIndexed.get(ID)) - 4/ressourceIndexed.get(ID).getWeight(),0));
+        } else if (type == ButtonType.INTERFACE_DOWN) {
+            maxAllowed.replace(ressourceIndexed.get(ID), Math.max(maxAllowed.get(ressourceIndexed.get(ID)) - 4 / ressourceIndexed.get(ID).getWeight(), 0));
+            currInterface.requestUpdate();
+        } else if (type == ButtonType.INTERFACE_ORDER) {
+            orders.replace(ressourceIndexed.get(ID), orders.get(ressourceIndexed.get(ID)).next());
             currInterface.requestUpdate();
         }
     }
 
-    @Override
-    public void delete() {
-        super.delete();
-        city.removeStorage(this);
+    public boolean isCarterAvailable() {
+        return carterAvailable;
     }
+
+    public void setCarterAvailable(boolean carterAvailable) {
+        this.carterAvailable = carterAvailable;
+    }
+
 }

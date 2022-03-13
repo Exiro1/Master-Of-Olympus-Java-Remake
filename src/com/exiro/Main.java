@@ -8,43 +8,56 @@ import com.exiro.object.Player;
 import com.exiro.render.EntityRender;
 import com.exiro.systemCore.GameManager;
 import com.exiro.systemCore.GameThread;
+import com.exiro.systemCore.RenderingThread;
+import com.exiro.terrainGenerator.MapCreatorFrame;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.Random;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        ImageLoader.initLoader();
-        ImageLoader.getImage("SprMain", 0, 81);
-        FontLoader.initLoader();
 
-        System.setProperty("sun.awt.noerasebackground", "true");
-        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-        ToolTipManager ttm = ToolTipManager.sharedInstance();
-        ttm.setLightWeightPopupEnabled(false);
+        if(args.length > 0 && args[0].contains("map")){
 
-        Player p = new Player(1000f, 0, "Exiro");
-        City c = p.getPlayerCities().get(0);
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        MapCreatorFrame ex = new MapCreatorFrame();
+                        ex.setVisible(true);
+                    }
+                });
+        }else {
+            ImageLoader.initLoader();
+            ImageLoader.getImage("SprMain", 0, 81);
+            FontLoader.initLoader();
 
-        GameManager gm = new GameManager(p, c);
+            System.setProperty("sun.awt.noerasebackground", "true");
+            JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+            ToolTipManager ttm = ToolTipManager.sharedInstance();
+            ttm.setLightWeightPopupEnabled(false);
 
-        /*  Immigrant immigrant = new Immigrant(c,c.getPathManager().getPathTo(c.getMap().getCase(0,0),c.getMap().getCase(6,3), RoadMap.FreeState.NON_BLOCKING),null);
-           c.addSprite(immigrant);*/
-        EntityRender.setEntityRender(ObjectType.ROAD);
+            Player p = new Player(1000f, 0, "Exiro");
+            City c = p.getPlayerCities().get(0);
 
-        System.out.println(c.getMap().toString());
+            GameManager gm = new GameManager(p, c);
 
-        Thread t = new Thread(new GameThread(gm));
-        t.start();
+            EntityRender.setEntityRender(ObjectType.ROAD);
+
+            System.out.println(c.getMap().toString());
+
+            Thread t = new Thread(new GameThread(gm));
+            t.start();
+            Thread t2 = new Thread(new RenderingThread(gm));
+            t2.start();
+        }
+
     }
 
-    /*
-    static void test() throws IOException {
-        TileImage img = ImageLoader.getImage("Zeus_Terrain",5,60);
-        img.getID();
-    }
-    */
+
+
 
 
 }

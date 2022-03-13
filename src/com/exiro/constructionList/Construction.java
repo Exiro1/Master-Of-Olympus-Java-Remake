@@ -22,7 +22,7 @@ public abstract class Construction extends MapObject {
     int xPos, yPos;
     int xLenght, yLenght;
     float cachet;
-    final City city;
+    protected final City city;
     boolean built;
     boolean isFloor;
 
@@ -49,6 +49,8 @@ public abstract class Construction extends MapObject {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
+                    if(c==null)
+                        continue;
                     if (!c.isOccupied() && c.getTerrain().isConstructible() && !(c.getTerrain() instanceof Elevation)) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }
@@ -70,7 +72,7 @@ public abstract class Construction extends MapObject {
 
     }
 
-    public abstract void process(double deltatime);
+    public abstract void process(double deltatime, int deltaDays);
 
     public boolean build(int xPos, int yPos) {
         ArrayList<Case> place;

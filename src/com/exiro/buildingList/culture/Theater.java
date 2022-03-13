@@ -24,7 +24,6 @@ public class Theater extends Building {
     @Override
     public boolean build(int xPos, int yPos) {
         if (super.build(xPos, yPos)) {
-            city.addTheater(this);
             return true;
         }
         return false;
@@ -61,6 +60,5 @@ public class Theater extends Building {
     @Override
     public void delete() {
         super.delete();
-        city.removeTheater(this);
     }
 }

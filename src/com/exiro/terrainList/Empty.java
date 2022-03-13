@@ -20,7 +20,7 @@ public class Empty extends Terrain {
 
     public Empty() {
         super(false, ObjectType.EMPTY, true, 0, 0, GameManager.currentCity, true, true, false);
-        this.number = 1;
+        this.number = 105;
         this.setLocalID(number);
         updateImg();
     }

@@ -1,4 +1,4 @@
-package com.exiro.sprite.complexCarter;
+package com.exiro.sprite.delivery.carter;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.StoreBuilding;
@@ -23,30 +23,22 @@ public class Trolley extends MovingSprite {
 
     boolean start = false;
     ComplexCarter cc;
-    Resource resource;
-    int amount;
-    int currentDelivery = 0;
+
     private int cartOffX;
     private int cartOffY;
 
-    public Trolley(City c, ObjectClass destination, int xpos, int ypos, ComplexCarter cc, Resource resource, int amount) {
+    public Trolley(City c, ObjectClass destination, int xpos, int ypos, ComplexCarter cc) {
         super("SprMain", 0, 2990, 1, c, destination);
         this.setX(xpos);
         this.setY(ypos);
         setXB(Math.round(xpos));
         setYB(Math.round(ypos));
         this.cc = cc;
-        this.resource = resource;
-        this.amount = amount;
-        setImage(getDir(), 0);
-
+        setImage(getDir(),0);
     }
 
     public void setImage(Direction direction, int frame) {
-
-
         TileImage t = ImageLoader.getImage(getPath(), getBitmapID(), getID(direction));
-
         currentFrame = makeColorTransparent(t.getImg(), Color.RED);
         height = t.getH();
         width = t.getW();
@@ -54,7 +46,8 @@ public class Trolley extends MovingSprite {
     }
 
     public int getID(Direction direction) {
-
+        if(cc == null)
+            return 0;
         int i = 0;
         switch (direction) {
 
@@ -99,15 +92,15 @@ public class Trolley extends MovingSprite {
                 cartOffY = 10;
                 break;
         }
-        int resid = resID(resource);
+        int resid = resID(cc.resource);
         int idnbr = 1;
-        if (amount == 1)
+        if (cc.amount == 1)
             idnbr = 1;
-        if (amount == 2)
+        if (cc.amount == 2)
             idnbr = 1;
-        if (amount == 3)
+        if (cc.amount == 3)
             idnbr = 2;
-        if (amount == 4)
+        if (cc.amount == 4)
             idnbr = 2;
 
         return resid + i + 8 * (idnbr - 1);
@@ -162,27 +155,6 @@ public class Trolley extends MovingSprite {
             setMainCase(c.getMap().getCase(getXB(), getYB()));
         }
 
-        if (getRoutePath() != null)
-            return;
-
-        for (Building b : getC().getBuildings()) {
-            if (b instanceof StoreBuilding) {
-                StoreBuilding g = (StoreBuilding) b;
-                if (g.getFreeSpace(resource) > 0 && g.getAccess().size() > 0) {
-                    Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
-                    if (p != null) {
-                        setPath(getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
-                        cc.getDriver().setPath(getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
-                        cc.getPuller().setPath(getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i));
-                        cc.setDest(g);
-                        currentDelivery = amount - g.reserve(resource, amount);
-                        return;
-                    }
-                }
-
-            }
-        }
-
     }
 
     public void setPath(Path path) {
@@ -196,7 +168,10 @@ public class Trolley extends MovingSprite {
 
     public int resID(Resource r) {
         int i = 0;
-        if(amount == 0)
+        if(cc == null)
+            return 2990;
+
+        if(cc.amount == 0)
             return 2990;
         if (r == null)
             return 2990;
@@ -218,22 +193,6 @@ public class Trolley extends MovingSprite {
                 break;
         }
         return i;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getCurrentDelivery() {
-        return currentDelivery;
-    }
-
-    public void setCurrentDelivery(int currentDelivery) {
-        this.currentDelivery = currentDelivery;
     }
 
     @Override

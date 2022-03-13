@@ -16,7 +16,7 @@ public class ImageLoader {
     static HashMap<Integer, TileImage> AssetsMap;
     static HashMap<Integer, Integer> AssetsMapUse;
 
-    public enum FilePath {ZEUS_GENERAL("Zeus_General"), SPR_MAIN("SprMain"), SPR_AMBIENT("SprAmbient"), ZEUS_TERRAIN("Zeus_Terrain");
+    public enum FilePath {ZEUS_GENERAL("Zeus_General"), SPR_MAIN("SprMain"), SPR_AMBIENT("SprAmbient"), ZEUS_TERRAIN("Zeus_Terrain"),ZEUS_INTERFACE("Zeus_Interface");
         String path;
         FilePath(String path) {
             this.path = path;

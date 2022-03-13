@@ -62,8 +62,8 @@ public class Sheepfold extends ResourceGenerator {
 
     public void createSheepherd() {
         Random r = new Random();
-        if (city.getSheeps().size() > 0) {
-            Sheep destination = city.getSheeps().get(r.nextInt(city.getSheeps().size()));
+        if (city.getResourceManager().getSheeps().size() > 0) {
+            Sheep destination = city.getResourceManager().getSheeps().get(r.nextInt(city.getResourceManager().getSheeps().size()));
             if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
                 Sheepherd p = new Sheepherd(city, this, destination, (!destination.isMowed() && getStock() < getMaxStockOut()));
                 destination.setAvailable(false);

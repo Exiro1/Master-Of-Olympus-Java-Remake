@@ -81,13 +81,13 @@ public class RoadMap {
                     if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Meadow)
                         access = FreeState.MEADOW;
                 } else {
-                    access = FreeState.NON_BLOCKING;
+                    access = FreeState.WALKABLE_CASE;
                 }
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD && cityMap.getCase(xStart, yStart).getObject().isActive()) {
                 access = FreeState.ACTIVE_ROAD;
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.BLOCKABLE_ROAD || (!cityMap.getCase(xStart, yStart).getObject().isActive() && cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.ROAD)) {
                 access = FreeState.BLOCKING_ROAD;
-            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType() == ObjectType.TREE) {
+            } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType().isWalk()) {
                 access = FreeState.WALKABLE_CASE;
             }
         }
@@ -145,8 +145,8 @@ public class RoadMap {
 
             for (int i = x - 1; i <= x + 1; i++) {
                 for (int j = y - 1; j <= y + 1; j++) {
-                    if ((i == x && j == y) || i < 0 || j < 0 || j >= cityMap.getWidth()
-                            || i >= cityMap.getHeight()) {
+                    if ((i == x && j == y) || i < 0 || j < 0 || j >= cityMap.getSize()
+                            || i >= cityMap.getSize()) {
                         continue;
                     }
 
@@ -157,7 +157,7 @@ public class RoadMap {
                         continue;
                     }
 
-                    if (cityMap.getCase(i, j).getTerrain().isBlocking()) {
+                    if (cityMap.getCase(i, j) == null || cityMap.getCase(i, j).getTerrain().isBlocking()) {
                         continue;
                     }
 
