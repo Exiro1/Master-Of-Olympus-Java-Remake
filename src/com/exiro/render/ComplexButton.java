@@ -3,6 +3,7 @@ package com.exiro.render;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.render.interfaceList.TextInterface;
+import com.exiro.utils.Point;
 
 import java.awt.*;
 
@@ -25,7 +26,7 @@ public class ComplexButton extends Button {
     }
 
     @Override
-    public void Render(Graphics g, int offx, int offy) {
+    public void Render(Graphics g, int offx, int offy, Point lastP) {
         int i = x + offx;
 
         g.drawImage(s.getImg(), i, y + offy, s.getW(), s.getH(), null);

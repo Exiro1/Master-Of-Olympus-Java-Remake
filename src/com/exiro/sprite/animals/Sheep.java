@@ -130,7 +130,7 @@ public class Sheep extends Animal {
     @Override
     public void delete() {
         super.delete();
-        c.removeSheep(this);
+        c.getResourceManager().removeSheep(this);
     }
 
     public void stop() {
@@ -193,7 +193,7 @@ public class Sheep extends Animal {
             setY(yPos);
             setXB(xPos);
             setYB(yPos);
-            c.addSheep(this);
+            c.getResourceManager().addSheep(this);
             setMainCase(c.getMap().getCase(getXB(), getYB()));
             return true;
         }

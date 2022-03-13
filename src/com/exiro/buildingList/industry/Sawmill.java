@@ -13,6 +13,9 @@ import com.exiro.sprite.Harvester;
 import com.exiro.sprite.industry.LumberJack;
 import com.exiro.systemCore.GameManager;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
 public class Sawmill extends IndustryHarverster {
 
 
@@ -50,38 +53,86 @@ public class Sawmill extends IndustryHarverster {
     }
 
 
+    public void initTree(){
+        ArrayList<Case> temp = new ArrayList<>(city.getMap().getTrees());
+        closeTrees = new ArrayList<>();
+        temp.sort((o1, o2) -> {
+            int dist1 = (int) (Math.pow(o1.getxPos()-getxPos(),2) + Math.pow(o1.getyPos()-getyPos(),2));
+            int dist2 = (int) (Math.pow(o2.getxPos()-getxPos(),2) + Math.pow(o2.getyPos()-getyPos(),2));
+            if(dist2==dist1)
+                return 0;
+            return dist1>dist2?1:-1;
+        });
+
+        int j = 0;
+        while (closeTrees.size()<30 && j<temp.size()){
+            Tree t = (Tree) temp.get(j).getObject();
+            j++;
+            if(t.isBeingcut() || t.isCut())
+                continue;
+            for (Case n : t.getMainCase().getNeighbour()) {
+                if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
+                    closeTrees.add(t.getMainCase());
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+        if(active){
+            initTree();
+        }
+    }
+
+    ArrayList<Case> closeTrees;
 
     @Override
     public void processSprite(double delta) {
         super.processSprite(delta);
     }
 
+    public void goCut(){
+        Case dir = null;
+        Tree tree=null;
+        if(closeTrees.size() > 0){
+            closeTrees.removeIf(o->!(o.getObject() instanceof Tree));
+            for(Case c : closeTrees){
+                Tree t = (Tree) c.getObject();
+                if (!t.isBeingcut() && !t.isCut()) {
+                    for (Case n : t.getMainCase().getNeighbour()) {
+                        if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
+                            dir = n;
+                            tree = t;
+                            t.setBeingcut(true);
+                            break;
+                        }
+                    }
+                    if (dir != null)
+                        break;
+                }
+            }
+
+        }else{
+            initTree();
+        }
+        if (dir != null) {
+            LumberJack bh = new LumberJack(city, dir, timeToHarvest, this, tree);
+            addSprite(bh);
+            harvester++;
+        }
+    }
+
+
+
     @Override
     public void process(double deltaTime, int deltaDays) {
         super.process(deltaTime, deltaDays);
         if (isWorking()) {
             if (harvester < harvesterNbr) {
-                Case dir = null;
-                Tree t = null;
-                for (Case c : city.getMap().getTrees()) {
-                    if (!((Tree) c.getObject()).isBeingcut() && !((Tree) c.getObject()).isCut() && ((Tree) c.getObject()).getAccessible()) {
-                        for (Case n : c.getNeighbour()) {
-                            if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
-                                dir = n;
-                                t = (Tree) c.getObject();
-                                t.setBeingcut(true);
-                                break;
-                            }
-                        }
-                        if (dir != null)
-                            break;
-                    }
-                }
-                if (dir != null) {
-                    LumberJack bh = new LumberJack(city, dir, timeToHarvest, this, t);
-                    addSprite(bh);
-                    harvester++;
-                }
+                goCut();
             }
         }
     }

@@ -248,7 +248,7 @@ public class House extends Building {
             if (a.time <= 0) {
                 toRemove.add(a);
                 System.out.println(a);
-                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getCase(0, 0), getAccess().get(0), FreeState.ALL_ROAD.i), this, a.getNbr());
+                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getStartCase(), getAccess().get(0), FreeState.ALL_ROAD.i), this, a.getNbr());
                 addSprite(immigrant);
             }
             i++;

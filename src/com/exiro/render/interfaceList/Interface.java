@@ -6,6 +6,8 @@ import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.ObjectClass;
 import com.exiro.render.Button;
 import com.exiro.render.ButtonType;
+import com.exiro.render.HoverButton;
+import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -72,13 +74,13 @@ public class Interface {
         return w;
     }
 
-    public void Render(Graphics g) {
+    public void Render(Graphics g, Point lastP) {
         if (isOpen) {
             for (InterfaceLayout child : childrens) {
                 child.Render(g,x,y);
             }
             for (Button b : buttons) {
-                b.Render(g, x, y);
+                b.Render(g, x, y,lastP);
             }
         }
     }
@@ -111,6 +113,11 @@ public class Interface {
         int textwidth = (int)(f.getStringBounds(text, frc).getWidth());
         obj.add(new TextInterface(text, f, (getW()-textwidth)/2 + 16, y));
     }
+
+    public void addHoverButton(HoverButton button){
+        buttons.add(button);
+    }
+
     public void addImage(TileImage img, int x,int y){
         obj.add(new InterfaceImage(img,x,y));
     }

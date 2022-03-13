@@ -72,13 +72,13 @@ public class Gymnasium extends Building {
         for (MovingSprite ms : toR) {
             removeSprites(ms);
         }
-
-        timeBeforeAthlete += deltaTime;
-        if (timeBeforeAthlete > 20) {
-            timeBeforeAthlete = 0;
-            createAthlete();
+        if (isWorking()) {
+            timeBeforeAthlete += deltaTime;
+            if (timeBeforeAthlete > 20) {
+                timeBeforeAthlete = 0;
+                createAthlete();
+            }
         }
-
 
     }
 

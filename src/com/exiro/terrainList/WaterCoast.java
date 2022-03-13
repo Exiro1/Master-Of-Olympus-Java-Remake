@@ -4,6 +4,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.Direction;
+import com.exiro.terrainGenerator.CoastType;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,13 @@ public class WaterCoast extends Terrain {
         this.setLocalID(getIDfromDir(direction, number));
         updateImg();
 
+    }
+
+    public WaterCoast(int xpos, int ypos, CoastType type, int nbr,City city) {
+        super(true, ObjectType.WATERTCOAST, false, xpos, ypos, city, true, false, true);
+        this.setLocalID(type.getId()+Math.min(type.getNbr()-1,nbr));
+        direction = type.getDir();
+        updateImg();
     }
 
     public int getIDfromDir(Direction dir, int number) {

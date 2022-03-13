@@ -1,7 +1,13 @@
 package com.exiro.object;
 
 import com.exiro.constructionList.Tree;
+import com.exiro.fileManager.CaseInfo;
+import com.exiro.fileManager.MapSettings;
+import com.exiro.fileManager.MapUtils;
 import com.exiro.sprite.Direction;
+import com.exiro.terrainGenerator.CoastSelector;
+import com.exiro.terrainGenerator.CoastType;
+import com.exiro.terrainGenerator.ElevationType;
 import com.exiro.terrainList.*;
 
 import java.util.ArrayList;
@@ -10,17 +16,22 @@ import java.util.Random;
 public class CityMap {
 
     private ArrayList<Case> cases;
+    private ArrayList<Case> notNullCases;
 
     private Case[] caseSorted;
     private int lenght;
     private int height, width;
     private Case startCase;
     private final City city;
+    int[][] map;
+    int size;
+
 
     private ArrayList<Case> coppers;
     private ArrayList<Case> silvers;
     private ArrayList<Case> trees;
     private ArrayList<Case> meadows;
+    private Case endCase;
 
 
     public CityMap(ArrayList<Case> cases, Case startCase, City city) {
@@ -29,50 +40,302 @@ public class CityMap {
         this.city = city;
     }
 
-    public CityMap(int height, int width, int xs, int ys, City city) {
-        this.height = height;
-        this.width = width;
-        this.cases = new ArrayList<>();
 
+    public CityMap(MapSettings mapSettings, City city) {
+        this.height = mapSettings.getSize();
+        this.width = mapSettings.getSize();
+        this.cases = new ArrayList<>();
+        this.notNullCases = new ArrayList<>();
         this.coppers = new ArrayList<>();
         this.silvers = new ArrayList<>();
         this.trees = new ArrayList<>();
         this.meadows = new ArrayList<>();
-
         this.city = city;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
 
-                Empty e = new Empty(1, city);
-                e.setxPos(j);
-                e.setyPos(i);
-                cases.add(new Case(j, i, null, e));
-                cases.get(cases.size() - 1).setMainCase(true);
-                e.setMainCase(cases.get(cases.size() - 1));
-                //TODO to remove
-                /*
-                cases.get(cases.size() - 1).setImg(e.getImg());
-                cases.get(cases.size() - 1).setHeight(e.getHeight());
-                cases.get(cases.size() - 1).setWidth(e.getWidth());
-                cases.get(cases.size() - 1).setSize(e.getSize());
-                */
-
-            }
-        }
+        createMap(mapSettings,-1);
 
         for (Case c : this.cases) {
-            c.initNeighbour(this);
+            if(c != null)
+                c.initNeighbour(this);
         }
-        //getCase(startCase.getxPos(),startCase.getyPos()).setOccuped(true);
-        //getCase(startCase.getxPos(),startCase.getyPos()).setBuildingType(BuildingType.ROAD);
-        //getCase(startCase.getxPos(),startCase.getyPos()).setObject(new Road(city));
-        // getCase(startCase.getxPos(),startCase.getyPos()).getObject().setActive(true);
-
-        this.startCase = getCase(xs, ys);
 
     }
 
+    public Terrain getTerrain(int value,int x, int y,City city,Random r){
+        Terrain t = null;
+
+        if(CaseInfo.compareTerrain(value,CaseInfo.LVL0)){
+            t = new Empty(r.nextInt(10)+105,city);
+            t.setxPos(x);
+            t.setyPos(y);
+            if(CaseInfo.compareEnv(value,CaseInfo.MEADOW)){
+                t = new Meadow(x,y,city,0);
+            }
+        }else if(CaseInfo.compareTerrain(value,CaseInfo.WATER)){
+            t = new Water(x,y,city);
+        }else{
+            t = new Elevation(x,y, ElevationType.NONE,city,1,false,0);
+        }
+        return t;
+    }
+
+    public void addEnvironment(){
+        Random r = new Random();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+
+                if(i<size/2){
+                    if(size/2+i < j || size/2-i > j){
+                        continue;
+                    }
+                }else{
+                    if(size+size/2-i < j || -size/2+i > j){
+                        continue;
+                    }
+                }
+
+                int value = map[i][j];
+                if(CaseInfo.compareEnv(value,CaseInfo.FISH)){
+                    if(CaseInfo.compareTerrain(value,CaseInfo.WATER)){
+                        //fish
+                    }else{
+                        //stairs
+                    }
+                }
+                if(CaseInfo.compareEnv(value,CaseInfo.STARTENDCASE)){
+                        if(startCase == null) {
+                            this.startCase = getCase(j , i );
+                        }else{
+                            this.endCase = getCase(j,i);
+                        }
+                }
+                if(CaseInfo.compareEnv(value,CaseInfo.FOREST) && getCase(j,i) != null && getCase(j,i).getTerrain().isConstructible() ){
+                    Case c = getCase(j,i);
+
+                    if(c.getTerrain() instanceof Empty){
+                        c.getTerrain().setLocalID(3 + r.nextInt(2));
+                        c.getTerrain().updateImg();
+                    }
+
+                    int type = r.nextInt(3);
+                    if(type==1) {
+                        int nbr = r.nextInt(96);
+                        Tree tree = new Tree(j, i, nbr, city, 0, c);
+                        c.setObject(tree);
+                        trees.add(c);
+                    }else if(type == 2){
+                        int nbr = r.nextInt(3);
+                        Tree tree = new Tree(j, i, nbr+33, city, 0, c);
+                        c.setObject(tree);
+                        trees.add(c);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    public int[][] getMap() {
+        return map;
+    }
+
+
+    public void initCase(int i, int j,Random r){
+        Terrain t;
+        t = getTerrain(map[i][j],j,i,city,r);
+        cases.add(new Case(j, i, null, t));
+        if(CaseInfo.compareTerrain(map[i][j], CaseInfo.LVL2)){
+            cases.get(cases.size() - 1).setZlvl(1);
+        }
+        if(CaseInfo.compareTerrain(map[i][j], CaseInfo.LVL3)){
+            cases.get(cases.size() - 1).setZlvl(2);
+        }
+        cases.get(cases.size() - 1).setMainCase(true);
+        cases.get(cases.size() - 1).setTerrain(t);
+        t.setMainCase(cases.get(cases.size() - 1));
+        notNullCases.add(cases.get(cases.size() - 1));
+    }
+
+    public void createMap(MapSettings settings, int seed){
+
+        if(seed==-1){
+            seed = settings.getSeed();
+        }
+
+        size = (int) (2f*settings.getSize()/Math.sqrt(2));
+        int demisize = (int) (size/2f);
+
+        map = MapUtils.createMap(seed, settings);
+        Random r = new Random();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+
+                if(i<demisize){
+                    if(demisize+i < j || demisize-i > j){
+                        cases.add(null);
+                        continue;
+                    }
+                }else{
+                    if(size+demisize-i < j || -demisize+i > j){
+                        cases.add(null);
+                        continue;
+                    }
+                }
+
+                initCase(i,j,r);
+
+                if(i<demisize){
+                    if(demisize+i -5+cases.get(cases.size() - 1).getZlvl()*5< j || demisize-i+5-cases.get(cases.size() - 1).getZlvl()*5 > j){
+                        cases.get(cases.size() - 1).getTerrain().setConstructible(false);
+                    }
+                }else{
+                    if(size+demisize-i-7+cases.get(cases.size() - 1).getZlvl()*5 < j || -demisize+i+6-cases.get(cases.size() - 1).getZlvl()*5 > j){
+                        cases.get(cases.size() - 1).getTerrain().setConstructible(false);
+                    }
+                }
+
+            }
+        }
+        updateCoast();
+        updateElevation(1);
+        updateElevation(2);
+        updateElevation(3);
+        addEnvironment();
+    }
+    public void correctError(int lvl){
+        Random r = new Random();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Case c = getCase(j, i);
+                if (c == null)
+                    continue;
+                if (!(c.getTerrain() instanceof Elevation && c.getZlvl() == lvl - 1))
+                    continue;
+                ElevationType type = ElevationType.getElevationType(getElevationNbr(getNeighbourg(c),lvl));
+                if(type == ElevationType.E13 || type == ElevationType.E14 || type == ElevationType.E15 || type == ElevationType.E16){
+                    int nbr = r.nextInt(4);
+                    Rock rock = new Rock(j,i,city,1, Rock.RockType.NORMAL,nbr);
+                    c.setTerrain(rock);
+                    rock.setMainCase(c);
+                }
+            }
+        }
+    }
+
+
+    public void updateElevation(int lvl){
+        correctError(lvl);
+        Random r = new Random();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Case c = getCase(j, i);
+                if(c == null)
+                    continue;
+                if(!((c.getTerrain() instanceof Elevation && c.getZlvl() == lvl - 1) || (c.getZlvl() == lvl && (c.getTerrain() instanceof Empty || c.getTerrain() instanceof Meadow))))
+                    continue;
+                ElevationType type = ElevationType.getElevationType(getElevationNbr(getNeighbourg(c),lvl));
+                if(type == ElevationType.NONE){
+                    Terrain t = getTerrain((map[i][j] & 0b00001111) | 0b00010000,j,i,city,r);//force empty but keep environment
+                    if(CaseInfo.compareEnv(map[i][j],CaseInfo.MEADOW)){
+                        t = new Meadow(j,i,city,0);
+                    }
+                    c.setTerrain(t);
+                    t.setMainCase(c);
+                    c.setZlvl(lvl);
+                }else if(type == ElevationType.ERROR) {
+                    Terrain t = getTerrain((map[i][j] & 0b00001111) | 0b00010000,j,i,city,r);//force empty but keep environment
+                    c.setTerrain(t);
+                    t.setMainCase(c);
+                    c.setZlvl(lvl-1);
+                }else{
+                    if(type == ElevationType.E13 || type == ElevationType.E14 || type == ElevationType.E15 || type == ElevationType.E16){
+                        int nbr = r.nextInt(4);
+                        Rock rock = new Rock(j,i,city,1, Rock.RockType.NORMAL,nbr);
+                        c.setTerrain(rock);
+                        rock.setMainCase(c);
+                    }else {
+                        int nbr = r.nextInt(4);
+                        /*
+                        if(CaseInfo.compareEnv(map[i][j], CaseInfo.OTHER)){
+
+                        }*/
+
+                        Elevation e = new Elevation(j, i, type, city, 1, CaseInfo.compareEnv(map[i][j], CaseInfo.OTHER), nbr);
+                        c.setTerrain(e);
+                        e.setMainCase(c);
+                    }
+                }
+            }
+        }
+    }
+
+    public int getElevationNbr(Case[] n, int lvl){
+        int v = 0;
+        for(int i=0;i<8;i++){
+            v = v<<1;
+            if(n[i] == null)
+                v+=1;
+            if(n[i] != null && ((n[i].getTerrain() instanceof Elevation && n[i].getZlvl() == lvl - 1)  || n[i].getZlvl() == lvl)){
+                v+=1;
+            }
+        }
+        return v;
+    }
+
+    public void updateCoast(){
+        Random r = new Random();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Case c = getCase(j, i);
+                if(c == null)
+                    continue;
+                if(!(c.getTerrain() instanceof Empty || c.getTerrain() instanceof WaterCoast))
+                    continue;
+                CoastType type = CoastSelector.getCoastType(getCoastNbr(getNeighbourg(c)));
+                if(type == CoastType.NONE)
+                    continue;
+                int nbr = r.nextInt(4);
+                WaterCoast w = new WaterCoast(j, i, type, nbr, city);
+                c.setTerrain(w);
+                w.setMainCase(c);
+            }
+        }
+    }
+    public int getCoastNbr(Case[] n){
+        int v = 0;
+        for(int i=0;i<8;i++){
+            v = v<<1;
+            if(n[i] != null && n[i].getTerrain() instanceof Water){
+                v+=1;
+            }
+        }
+        return v;
+    }
+
+    public Case[] getNeighbourg(Case c){
+        Case[] n = new Case[8];
+        int x = c.getxPos();
+        int y = c.getyPos();
+        n[0] = getCase(x-1,y-1);
+        n[1] = getCase(x,y-1);
+        n[2] = getCase(x+1,y-1);
+        n[3] = getCase(x+1,y);
+        n[4] = getCase(x+1,y+1);
+        n[5] = getCase(x,y+1);
+        n[6] = getCase(x-1,y+1);
+        n[7] = getCase(x-1,y);
+        return n;
+    }
+
+    public ArrayList<Case> getNotNullCases() {
+        return notNullCases;
+    }
+
     public void populateMap() {
+
+        /*
         createSea(15, 15, 9, 7);
         createForest(30, 30, 4, 6);
         createElevation(5, 30, 5, 5, 1);
@@ -84,6 +347,8 @@ public class CityMap {
         createMinerals(30, 25, 3, 3);
 
         createMeadow(20, 5, 10, 7);
+
+        */
     }
 
     public void createMeadow(int xs, int ys, int xlen, int ylen) {
@@ -234,6 +499,10 @@ public class CityMap {
 
     }
 
+    public int getSize() {
+        return size;
+    }
+
 
     public ArrayList<Case> getCoppers() {
         return coppers;
@@ -252,8 +521,8 @@ public class CityMap {
     }
 
     public Case getCase(int x, int y) {
-        if (x >= 0 && y >= 0 && x < width && y < height)
-            return cases.get(width * y + x);
+        if (x >= 0 && y >= 0 && x < size && y < size)
+            return cases.get(size * y + x);
 
         return null;
     }
@@ -319,6 +588,10 @@ public class CityMap {
 
     public void setCaseSorted(Case[] caseSorted) {
         this.caseSorted = caseSorted;
+    }
+
+    public Case getEndCase() {
+        return endCase;
     }
 }
 

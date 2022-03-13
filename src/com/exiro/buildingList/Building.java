@@ -25,7 +25,7 @@ public abstract class Building extends MapObject {
 
     final ObjectType type;
     protected final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
-    final ArrayList<MovingSprite> msprites = new ArrayList<>();
+    protected final ArrayList<MovingSprite> msprites = new ArrayList<>();
     protected final City city;
     BuildingCategory category;
 
@@ -179,6 +179,8 @@ public abstract class Building extends MapObject {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
+                    if(c==null)
+                        continue;
                     if (!c.isOccupied() && c.getTerrain().isConstructible() && !(c.getTerrain() instanceof Elevation)) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }

@@ -83,7 +83,7 @@ public class EntityRender {
     public static void addBuilding(Point p) {
         CityMap map = GameManager.currentCity.getMap();
         if (Btype == ObjectType.ROAD) {
-            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), ((FreeState.BUILDABLE.getI()) | FreeState.ALL_ROAD.getI() | FreeState.BUILDABLE_ROAD.getI()));
+            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), (FreeState.ALL_ROAD.getI() | FreeState.BUILDABLE_ROAD.getI()));
             if (path != null) {
                 toBuild.clear();
                 for (Case c : path.getPath()) {
@@ -102,7 +102,8 @@ public class EntityRender {
                     if (startY < p.getY()) {
                         for (int j = startY; j < p.getY(); j += defaultObject.getSize()) {
                             Case c = map.getCase(i, j);
-
+                            if(c == null)
+                                continue;
                             ArrayList<Case> place;
                             place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
                             if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
@@ -282,7 +283,7 @@ public class EntityRender {
         for (int i = (int) Math.min(startX, currCase.getxPos()); i < Math.max(startX, currCase.getxPos()); i += defaultObject.getSize()) {
             for (int j = Math.min(startY, currCase.getyPos()); j < Math.max(startY, currCase.getyPos()); j += defaultObject.getSize()) {
                 Case c = GameManager.currentCity.getMap().getCase(i, j);
-                if (c.getObject() != null) {
+                if (c != null && c.getObject() != null) {
                     c.getObject().delete();
                 }
             }
@@ -294,14 +295,16 @@ public class EntityRender {
 
         if (toBuild.size() == 0) {
             Case c = GameManager.currentCity.getMap().getCase(startX, startY);
-            ObjectClass obj = null;
-            obj = getDefault(defaultObject.getBuildingType());
-            if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
-                ((ResourceGenerator) obj).setResource(resource);
+            if(c != null) {
+                ObjectClass obj = null;
+                obj = getDefault(defaultObject.getBuildingType());
+                if (resource != Resource.NULL && obj instanceof ResourceGenerator) {
+                    ((ResourceGenerator) obj).setResource(resource);
+                }
+                obj.setXB(c.getxPos());
+                obj.setYB(c.getyPos());
+                toBuild.add(obj);
             }
-            obj.setXB(c.getxPos());
-            obj.setYB(c.getyPos());
-            toBuild.add(obj);
         }
 
         for (ObjectClass obj : toBuild) {

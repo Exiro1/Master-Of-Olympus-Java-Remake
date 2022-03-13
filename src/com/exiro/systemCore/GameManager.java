@@ -19,6 +19,8 @@ public class GameManager {
     private final InterfaceRender it;
     private final GameInfo gi;
     TimeManager timeManager;
+    GameThread gameThread;
+    RenderingThread renderingThread;
 
 
     public GameManager(Player player, City currentCity) {
@@ -31,6 +33,22 @@ public class GameManager {
         this.it = frame.getIt();
         this.timeManager = new TimeManager(0, 0, 0);
         gm = this;
+    }
+
+    public RenderingThread getRenderingThread() {
+        return renderingThread;
+    }
+
+    public void setRenderingThread(RenderingThread renderingThread) {
+        this.renderingThread = renderingThread;
+    }
+
+    public GameThread getGameThread() {
+        return gameThread;
+    }
+
+    public void setGameThread(GameThread gameThread) {
+        this.gameThread = gameThread;
     }
 
     public static GameManager getInstance() {

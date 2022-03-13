@@ -18,6 +18,7 @@ public class Road extends Construction {
     Agora agora;
 
     boolean start = false;
+    boolean inDestructible = false;
 
     public Road(boolean isActive, ObjectType type, ArrayList<Case> cases, int cost, int deleteCost, int xPos, int yPos, int xLenght, int yLenght, float cachet, City city, boolean built, boolean isFloor) {
         super(isActive, type, cases, cost, deleteCost, xPos, yPos, xLenght, yLenght, cachet, city, built, isFloor);
@@ -33,7 +34,7 @@ public class Road extends Construction {
 
 
     @Override
-    public void process(double deltatime) {
+    public void process(double deltatime, int deltaDays) {
 
     }
 
@@ -49,6 +50,8 @@ public class Road extends Construction {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
+                    if(c==null)
+                        continue;
                     if (!c.isOccupied() && c.getTerrain().isConstructible()) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }
@@ -132,7 +135,7 @@ public class Road extends Construction {
 
     @Override
     public void delete() {
-        if (!this.start && agora == null) {
+        if (!this.start && agora == null && !this.inDestructible) {
             super.delete();
             city.getPathManager().deleteRoad(this);
         }
@@ -152,6 +155,14 @@ public class Road extends Construction {
         TileImage img = ImageLoader.getImage("Zeus_General", 3, 12 + random.nextInt(3));
         assert img != null;
         setImg(img);
+    }
+
+    public boolean isInDestructible() {
+        return inDestructible;
+    }
+
+    public void setInDestructible(boolean inDestructible) {
+        this.inDestructible = inDestructible;
     }
 }
 

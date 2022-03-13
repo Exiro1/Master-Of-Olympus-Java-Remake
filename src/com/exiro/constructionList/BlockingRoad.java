@@ -84,7 +84,7 @@ public class BlockingRoad extends Construction {
     }
 
     @Override
-    public void process(double deltatime) {
+    public void process(double deltatime, int deltaDays) {
 
     }
 

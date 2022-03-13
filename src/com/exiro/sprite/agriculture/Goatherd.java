@@ -18,8 +18,6 @@ public class Goatherd extends AgricultureSprite {
     boolean wait, waiting = false;
     Dairy dairy;
     Goat goat;
-    boolean finished = false;
-    boolean createRessource = false;
 
     //2376
 
