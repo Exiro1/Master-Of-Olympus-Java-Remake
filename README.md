@@ -3,7 +3,8 @@
 Un remake en Java du Maitre de l'Olympe. 
 
 C'est surement pas très légal étant donnée que je récupere directement les fichiers .555 et .sg3 du jeu (sans les extraire préalablement), donc faut etre discret :). 
-Et je suis aucunement developpeur, c'est une sorte de hobby, donc c'est normal si c'est pas tres bien codé ;).
+
+Je pars de zero pour ce projet, tout est "fait maison", à part quelque partie telle que la lecture des fichiers .555 et .sg3, qui est une amelioration du SGReader de Pecunia.
 
 Le jeu est évidemment pas terminé, j'en suis qu'au début.
 
@@ -12,7 +13,6 @@ Screen:
 Exemple ville simple (map plate de test) :
 
 ![screen1](https://user-images.githubusercontent.com/35780830/147518417-3dfa6090-5884-4543-b703-dbb30441f186.png)
-
 
 
 Génération de terrain aléatoire :
@@ -24,3 +24,7 @@ Exemple Montagne :
 Exemple en gif :
 
 ![gif1](https://user-images.githubusercontent.com/35780830/147775930-33918ebe-1d27-4827-b22f-cbd48b47d607.gif)
+
+En video :
+
+[![Video_demo](https://img.youtube.com/vi/wYyd9aGLR6o/0.jpg)](https://youtu.be/wYyd9aGLR6o "Everything Is AWESOME")
