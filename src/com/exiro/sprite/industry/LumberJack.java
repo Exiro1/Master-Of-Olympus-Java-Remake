@@ -4,7 +4,6 @@ import com.exiro.buildingList.IndustryHarverster;
 import com.exiro.constructionList.Tree;
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.sprite.Direction;
 import com.exiro.sprite.Harvester;
 
 public class LumberJack extends Harvester {
@@ -30,7 +29,8 @@ public class LumberJack extends Harvester {
     @Override
     public void arrivedToSite() {
         super.arrivedToSite();
-        setDir(Direction.NORTH_EAST);
+        setDir(getDirToSite(tree.getMainCase()));
+        //setDir(Direction.NORTH_EAST);
         setLocalID(baseIndex + 104);
         setFrameNumber(12);
     }
@@ -38,7 +38,7 @@ public class LumberJack extends Harvester {
     @Override
     public void harvestFinished() {
         super.harvestFinished();
-        setDir(getDirToSite(tree.getMainCase()));
+        //setDir(getDirToSite(tree.getMainCase()));
         setLocalID(baseIndex + 200);
         setFrameNumber(12);
         tree.setCut(true);

@@ -13,4 +13,7 @@ public abstract class AI {
         return city.getPathManager().getPathTo(start, end, free);
     }
 
+    public static Path goTo(City city, Case start, Case end, int free, boolean straight) {
+        return city.getPathManager().getPathTo(start, end, free, straight);
+    }
 }

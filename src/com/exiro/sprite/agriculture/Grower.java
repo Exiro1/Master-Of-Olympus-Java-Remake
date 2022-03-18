@@ -40,7 +40,7 @@ public class Grower extends AgricultureSprite {
         setY(start.getyPos());
         setXB(start.getxPos());
         setYB(start.getyPos());
-        setRoutePath(AI.goTo(c, start, c.getMap().getCase(this.destination.getXB(), this.destination.getYB()), FreeState.NON_BLOCKING.getI()));
+        setRoutePath(AI.goTo(c, start, c.getMap().getCase(this.destination.getXB(), this.destination.getYB()), FreeState.NON_BLOCKING.getI(), false));
         this.createRessource = gather;
         tree = destinations.get(0);
         tree.setAvailable(false);
@@ -65,7 +65,7 @@ public class Grower extends AgricultureSprite {
                     gather();
                 } else {
                     hasArrived = false;
-                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(tree.getXB(), tree.getYB()), FreeState.NON_BLOCKING.getI()));
+                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(tree.getXB(), tree.getYB()), FreeState.NON_BLOCKING.getI(), false));
                 }
             }
             if (process && gstate != GrowerState.PROCESSING) {
@@ -80,7 +80,7 @@ public class Grower extends AgricultureSprite {
                 tree.setAvailable(true);
                 setLocalID(5504);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), origin.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
+                setRoutePath(AI.goTo(c, getMainCase(), origin.getAccess().get(0), FreeState.NON_BLOCKING.getI(), false));
                 setDestination(origin);
             } else if (gstate == GrowerState.PROCESSING && fullAnimCounter > 6) {
                 gstate = GrowerState.WALKING;
@@ -95,11 +95,11 @@ public class Grower extends AgricultureSprite {
                     tree = trees.get(index);
                     this.grape = tree instanceof Vine;
                     tree.setAvailable(false);
-                    setRoutePath(AI.goTo(c, getMainCase(), c.getMap().getCase(tree.getXB(), tree.getYB()), FreeState.NON_BLOCKING.getI()));
+                    setRoutePath(AI.goTo(c, getMainCase(), c.getMap().getCase(tree.getXB(), tree.getYB()), FreeState.NON_BLOCKING.getI(), false));
                     setDestination(tree);
                 } else {
                     process = false;
-                    setRoutePath(AI.goTo(c, getMainCase(), origin.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
+                    setRoutePath(AI.goTo(c, getMainCase(), origin.getAccess().get(0), FreeState.NON_BLOCKING.getI(), false));
                     setDestination(origin);
                 }
             }

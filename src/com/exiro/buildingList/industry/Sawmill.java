@@ -78,7 +78,7 @@ public class Sawmill extends IndustryHarverster {
             Tree t = (Tree) temp.get(j).getObject();
             j++;
             for (Case n : t.getMainCase().getNeighbour()) {
-                if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
+                if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI(), false) != null) {
                     closeTrees.add(t.getMainCase());
                     break;
                 }
@@ -106,7 +106,7 @@ public class Sawmill extends IndustryHarverster {
                 Tree t = (Tree) c.getObject();
                 if (!t.isBeingcut() && !t.isCut()) {
                     for (Case n : t.getMainCase().getNeighbour()) {
-                        if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
+                        if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI(), false) != null) {
                             dir = n;
                             tree = t;
                             t.setBeingcut(true);
