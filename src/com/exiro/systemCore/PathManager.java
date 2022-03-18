@@ -58,6 +58,18 @@ public class PathManager {
         return (c1.getxPos() - c2.getxPos()) * (c1.getxPos() - c2.getxPos()) + (c1.getyPos() - c2.getyPos()) * (c1.getyPos() - c2.getyPos()) <= 2;
     }
 
+    public Path getPathTo(Case c1, Case c2, int free, boolean straight) {
+        // if(map.getCase(c1.getxPos(),c1.getyPos())==null || map.getCase(c2.getxPos(),c2.getyPos())==null)
+        //   return null;
+        if (!lastroads.equals(roads)) {
+            roadMap = new RoadMap(map);
+            this.lastroads = new ArrayList<>(roads);
+        }
+        if (c1 == null || c2 == null)
+            return null;
+        return getPath(c1, c2, free) == null ? roadMap.findPath(c1.getxPos(), c1.getyPos(), c2.getxPos(), c2.getyPos(), free, straight) : getPath(c1, c2, free);//verifie si il existe un chemin deja calculé
+    }
+
     public Path getPathTo(Case c1, Case c2, int free) {
         // if(map.getCase(c1.getxPos(),c1.getyPos())==null || map.getCase(c2.getxPos(),c2.getyPos())==null)
         //   return null;

@@ -212,7 +212,7 @@ public class Fishery extends ResourceGenerator {
         int d = 0;
         setBuilding();
         for (Fish f : city.getResourceManager().getFishes()) {
-            Path p = city.getPathManager().getPathTo(this.getSpawnPoint(), f.getMainCase(), FreeState.WATER.getI());
+            Path p = city.getPathManager().getPathTo(this.getSpawnPoint(), f.getMainCase(), FreeState.WATER.getI(), false);
             if (p == null)
                 continue;
             d = p.getPath().size();

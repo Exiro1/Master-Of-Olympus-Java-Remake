@@ -16,7 +16,7 @@ public interface Node<T> {
      * @param goal
      * @return
      */
-    double getHeuristic(T goal);
+    double getHeuristic(T goal, boolean straigth);
 
 
     FreeState getType();
@@ -30,12 +30,12 @@ public interface Node<T> {
      * @param neighbour Neighbour of current node
      * @return Traversal cost
      */
-    double getTraversalCost(T neighbour, T last);
+    double getTraversalCost(T neighbour, T last, boolean straigth);
 
     /**
      * Gets the set of neighbouring nodes.
      *
      * @return Neighbouring nodes
      */
-    Set<T> getNeighbours();
+    Set<T> getNeighbours(boolean straight);
 }

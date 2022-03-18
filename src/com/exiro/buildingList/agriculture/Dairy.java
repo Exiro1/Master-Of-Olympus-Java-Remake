@@ -63,7 +63,7 @@ public class Dairy extends ResourceGenerator {
         Random r = new Random();
         if (city.getResourceManager().getGoats().size() > 0) {
             Goat destination = city.getResourceManager().getGoats().get(r.nextInt(city.getResourceManager().getGoats().size()));
-            if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
+            if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI(), false) != null) {
                 Goatherd p = new Goatherd(city, this, destination, (!destination.isMilked() && getStock() < getMaxStockOut()));
                 destination.setAvailable(false);
                 addSprite(p);

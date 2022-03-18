@@ -28,7 +28,7 @@ public class Sheepherd extends AgricultureSprite {
         setY(start.getyPos());
         setXB(start.getxPos());
         setYB(start.getyPos());
-        setRoutePath(AI.goTo(c, start, c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.NON_BLOCKING.getI()));
+        setRoutePath(AI.goTo(c, start, c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.NON_BLOCKING.getI(), false));
         this.cut = cut;
         this.createRessource = cut;
         this.wait = !cut;
@@ -73,7 +73,7 @@ public class Sheepherd extends AgricultureSprite {
                     cut();
                 } else {
                     hasArrived = false;
-                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.NON_BLOCKING.getI()));
+                    setRoutePath(AI.goTo(c, c.getMap().getCase(getXB(), getYB()), c.getMap().getCase(sheep.getXB(), sheep.getYB()), FreeState.NON_BLOCKING.getI(), false));
                 }
             }
             if (wait && !waiting) {
@@ -87,7 +87,7 @@ public class Sheepherd extends AgricultureSprite {
                 sheep.start();
                 setLocalID(3530);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
+                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.NON_BLOCKING.getI(), false));
                 setDestination(sheepfold);
             } else if (waiting && fullAnimCounter > 6) {
                 waiting = false;
@@ -97,7 +97,7 @@ public class Sheepherd extends AgricultureSprite {
                 sheep.addDays(-2);
                 setLocalID(3414);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
+                setRoutePath(AI.goTo(c, getMainCase(), sheepfold.getAccess().get(0), FreeState.NON_BLOCKING.getI(), false));
                 setDestination(sheepfold);
             }
 

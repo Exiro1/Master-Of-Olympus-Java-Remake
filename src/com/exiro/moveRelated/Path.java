@@ -51,6 +51,14 @@ public class Path {
             return Direction.NORTH_EAST;
         } else if (x == 0 && y == -1) {
             return Direction.SOUTH_WEST;
+        } else if (x == 1 && y == 1) {
+            return Direction.NORTH;
+        } else if (x == -1 && y == -1) {
+            return Direction.SOUTH;
+        } else if (x == -1 && y == +1) {
+            return Direction.EAST;
+        } else if (x == +1 && y == -1) {
+            return Direction.WEST;
         }
         return Direction.EAST;
     }
@@ -63,8 +71,18 @@ public class Path {
             return true;
         } else if (direction == Direction.NORTH_EAST && p.getY() < path.get(index).getyPos()) {
             return true;
-        } else return direction == Direction.SOUTH_WEST && p.getY() > path.get(index).getyPos();
-
+        } else if (direction == Direction.SOUTH_WEST && p.getY() > path.get(index).getyPos()) {
+            return true;
+        } else if (direction == Direction.NORTH && p.getY() < path.get(index).getyPos() && p.getX() < path.get(index).getxPos()) {
+            return true;
+        } else if (direction == Direction.SOUTH && p.getY() > path.get(index).getyPos() && p.getX() > path.get(index).getxPos()) {
+            return true;
+        } else if (direction == Direction.EAST && p.getY() < path.get(index).getyPos() && p.getX() > path.get(index).getxPos()) {
+            return true;
+        } else if (direction == Direction.WEST && p.getY() > path.get(index).getyPos() && p.getX() < path.get(index).getxPos()) {
+            return true;
+        }
+        return false;
     }
 
 

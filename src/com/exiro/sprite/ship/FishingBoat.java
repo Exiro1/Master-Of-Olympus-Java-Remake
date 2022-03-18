@@ -25,7 +25,7 @@ public class FishingBoat extends Boat {
         boatState = BoatState.TRAVEL;
         x = start.getxPos();
         y = start.getyPos();
-        this.setRoutePath(c.getPathManager().getPathTo(origin.getSpawnPoint(), destination.getMainCase(), FreeState.WATER.getI()));
+        this.setRoutePath(c.getPathManager().getPathTo(origin.getSpawnPoint(), destination.getMainCase(), FreeState.WATER.getI(), false));
         setXB(Math.round(x));
         setYB(Math.round(y));
         this.origin = origin;
@@ -74,7 +74,7 @@ public class FishingBoat extends Boat {
         hasArrived = false;
         setState(BoatState.TRAVEL);
         setDestination(destination);
-        this.setRoutePath(c.getPathManager().getPathTo(origin.getSpawnPoint(), destination.getMainCase(), FreeState.WATER.getI()));
+        this.setRoutePath(c.getPathManager().getPathTo(origin.getSpawnPoint(), destination.getMainCase(), FreeState.WATER.getI(), false));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class FishingBoat extends Boat {
             if (GameManager.getInstance().getTimeManager().daysSince(startFishing) > 15) {
                 setState(BoatState.TRAVEL);
                 hasArrived = false;
-                this.setRoutePath(c.getPathManager().getPathTo(getMainCase(), start, FreeState.WATER.getI()));
+                this.setRoutePath(c.getPathManager().getPathTo(getMainCase(), start, FreeState.WATER.getI(), false));
                 destination = origin;
             }
         } else if (boatState != BoatState.WAITING) {
