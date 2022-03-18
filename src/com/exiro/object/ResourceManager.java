@@ -1,7 +1,9 @@
 package com.exiro.object;
 
+import com.exiro.buildingList.agriculture.SmallHolding;
 import com.exiro.constructionList.SmallHoldingFruit.SmallHoldingTree;
 import com.exiro.sprite.Sprite;
+import com.exiro.sprite.animals.Fish;
 import com.exiro.sprite.animals.Goat;
 import com.exiro.sprite.animals.Sheep;
 
@@ -12,8 +14,9 @@ public class ResourceManager {
     private final ArrayList<Sprite> animals = new ArrayList<>();
     private final ArrayList<Sheep> sheeps = new ArrayList<>();
     private final ArrayList<Goat> goats = new ArrayList<>();
+    private final ArrayList<Fish> fishes = new ArrayList<>();
+    private final ArrayList<SmallHolding> smallHoldings = new ArrayList<>();
     private final ArrayList<SmallHoldingTree> smallHoldingTrees = new ArrayList<>();
-    private final ArrayList<SmallHoldingTree> matureTrees = new ArrayList<>();
 
     public ResourceManager() {
 
@@ -21,18 +24,8 @@ public class ResourceManager {
 
     public void process() {
 
-        matureTrees.removeIf(smallHoldingTree -> !smallHoldingTree.isMature());
-        for (SmallHoldingTree tree : smallHoldingTrees) {
-            if (tree.isMature() && !matureTrees.contains(tree))
-                matureTrees.add(tree);
-        }
-
     }
 
-
-    public ArrayList<SmallHoldingTree> getMatureTrees() {
-        return matureTrees;
-    }
 
     public void removeAnimal(Sprite o) {
         synchronized (animals) {
@@ -60,19 +53,46 @@ public class ResourceManager {
         }
     }
 
+    public void addSmallHolding(SmallHolding s) {
+        synchronized (smallHoldings) {
+            smallHoldings.add(s);
+        }
+        synchronized (smallHoldingTrees) {
+            for (SmallHoldingTree t : smallHoldingTrees) {
+                if (s.distanceTo(t) <= 40) {
+                    s.addTree(t);
+                }
+            }
+        }
+    }
+
+    public void removeSmallHolding(SmallHolding s) {
+        synchronized (smallHoldings) {
+            smallHoldings.remove(s);
+        }
+    }
+
     public ArrayList<Sheep> getSheeps() {
         return sheeps;
     }
 
     public void addTree(SmallHoldingTree t) {
-        synchronized (sheeps) {
+        synchronized (smallHoldingTrees) {
             smallHoldingTrees.add(t);
+        }
+        for (SmallHolding sh : smallHoldings) {
+            if (sh.distanceTo(t) <= 40) {
+                sh.addTree(t);
+            }
         }
     }
 
     public void removeTree(SmallHoldingTree t) {
         synchronized (smallHoldingTrees) {
             smallHoldingTrees.remove(t);
+        }
+        for (SmallHolding sh : smallHoldings) {
+            sh.removeTree(t);
         }
     }
 
@@ -103,5 +123,23 @@ public class ResourceManager {
         return animals;
     }
 
+
+    public void addFish(Fish fish) {
+        addAnimal(fish);
+        synchronized (fishes) {
+            fishes.add(fish);
+        }
+    }
+
+    public ArrayList<Fish> getFishes() {
+        return fishes;
+    }
+
+    public void removeFish(Fish fish) {
+        removeAnimal(fish);
+        synchronized (fishes) {
+            fishes.remove(fish);
+        }
+    }
 
 }

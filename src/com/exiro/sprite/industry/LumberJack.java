@@ -30,7 +30,7 @@ public class LumberJack extends Harvester {
     @Override
     public void arrivedToSite() {
         super.arrivedToSite();
-        setDir(Direction.NORD_EST);
+        setDir(Direction.NORTH_EAST);
         setLocalID(baseIndex + 104);
         setFrameNumber(12);
     }

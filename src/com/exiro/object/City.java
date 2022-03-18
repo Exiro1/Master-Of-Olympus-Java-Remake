@@ -82,6 +82,7 @@ public class City {
         toDestroyB = new ArrayList<>();
         toDestroyC = new ArrayList<>();
         toDestroyO = new ArrayList<>();
+        resourceManager = new ResourceManager();
         this.buildingMap = new HashMap<>();
         this.name = name;
         this.owner = owner;
@@ -92,15 +93,15 @@ public class City {
         this.buildingManager = new BuildingManager(this);
         Road start = new Road(this);
         this.constructions = new ArrayList<>();
+
         //TODO voir comment faire le systeme de chargement de map proprement
         this.map = new CityMap(MapSettings.loadSettings("Assets/savedMap.map"), this);
-        resourceManager = new ResourceManager();
+
         this.map.populateMap();
         this.pathManager = new PathManager(owner, this.map);
         start.build(map.getStartCase().getxPos(), map.getStartCase().getyPos());
         start.setActive(true);
         start.setStart(true);
-
 
 
         generateStartRoads();

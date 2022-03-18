@@ -9,6 +9,7 @@ import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Elevation;
+import com.exiro.terrainList.Water;
 import com.exiro.utils.Point;
 
 import javax.swing.*;
@@ -57,6 +58,8 @@ public class GameWindow extends JPanel {
     public boolean showEntity = true;
     Interface gameInterface;
 
+    BaseObject interfaceCaller;
+
     public void paintComponent(Graphics g) {
 
         g.setColor(Color.white);
@@ -81,14 +84,23 @@ public class GameWindow extends JPanel {
         sortRender(p.getPlayerCities().get(0).getMap().getCaseSorted());
 
         int xvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getxPos();
-        int xvisibleMax = IsometricRender.getCase(new Point(1400, 0), gm.getCurrentCity()).getxPos()+44;
-        int yvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getyPos()-30;
-        int yvisibleMax = IsometricRender.getCase(new Point(0, 800), gm.getCurrentCity()).getyPos()+15;
+        int xvisibleMax = IsometricRender.getCase(new Point(1400, 0), gm.getCurrentCity()).getxPos() + 44;
+        int yvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getyPos() - 30;
+        int yvisibleMax = IsometricRender.getCase(new Point(0, 800), gm.getCurrentCity()).getyPos() + 15;
 
         for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
-            if(!(obj.getxPos() <xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() <yvisibleMax && obj.getyPos() >yvisibleMin))
+            if (!(obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin))
                 continue;
-            if (obj.getObject() == null)
+            if (obj.getTerrain() instanceof Water) {
+                obj.getTerrain().Render(g, CameraPosx, CameraPosy);
+            }
+        }
+
+        for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
+
+            if (!(obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin))
+                continue;
+            if (obj.getObject() == null && !(obj.getTerrain() instanceof Water))
                 obj.getTerrain().Render(g, CameraPosx, CameraPosy);
             if (obj.getObject() != null && (obj.isMainCase())) {
                 obj.getObject().Render(g, CameraPosx, CameraPosy);
@@ -162,8 +174,6 @@ public class GameWindow extends JPanel {
         g.drawString("Logic FPS " + gm.getGameThread().getFpsLogic(), 1200, 40);
         g.drawString("FPS " + gm.getRenderingThread().getFps(), 1200, 60);
     }
-
-    ObjectClass interfaceCaller;
 
     public void clickManager(MouseEvent e) {
 
@@ -268,6 +278,7 @@ public class GameWindow extends JPanel {
                 EntityRender.setEntityRender(ObjectType.FOUNDRY);
                 break;
             case INDUSTRY_GUILD:
+                EntityRender.setEntityRender(ObjectType.GUILD);
                 break;
             case INDUSTRY_MARBLE:
                 EntityRender.setEntityRender(ObjectType.MARBLE_QUARRY);

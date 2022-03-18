@@ -36,7 +36,7 @@ public abstract class ResourceGenerator extends Building {
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
             if (isWorking())
-                s.process(delta);
+                s.process(delta, 0);
         }
     }
 

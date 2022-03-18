@@ -1,21 +1,19 @@
 package com.exiro.sprite.delivery.carter;
 
 import com.exiro.buildingList.Building;
-import com.exiro.buildingList.IndustryConverter;
-import com.exiro.buildingList.StoreBuilding;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
-import com.exiro.object.*;
+import com.exiro.object.Case;
+import com.exiro.object.City;
+import com.exiro.object.ObjectClass;
+import com.exiro.object.Resource;
 import com.exiro.render.IsometricRender;
 import com.exiro.sprite.Direction;
-import com.exiro.sprite.MovingSprite;
 import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class SimpleCarter extends Carter {
@@ -29,8 +27,8 @@ public class SimpleCarter extends Carter {
 
 
     public SimpleCarter(City c, ObjectClass destination, Building origin, Resource resource, int amount,int command,int currentDelivery) {
-        super("SprMain", 0, 4728, 12, c, destination,resource,amount,command,currentDelivery,origin);
-        dir = Direction.EST;
+        super("SprMain", 0, 4728, 12, c, destination, resource, amount, command, currentDelivery, origin);
+        dir = Direction.EAST;
         timeBetweenFrame = 0.05f;
         Case ca = origin.getAccess().get(0);
         x = ca.getxPos();
@@ -41,6 +39,7 @@ public class SimpleCarter extends Carter {
         setYB(Math.round(y));
         setCart(dir);
         setImage(dir, 0);
+        setMainCase(ca);
     }
 
     public void setPath(Path path) {
@@ -63,13 +62,13 @@ public class SimpleCarter extends Carter {
         int i = 0;
         switch (direction) {
 
-            case SUD:
+            case SOUTH:
                 i = 3;
                 prio = 1;
                 cartOffX = -4;
                 cartOffY = 9;
                 break;
-            case SUD_EST:
+            case SOUTH_EAST:
                 offsetX = -5;
                 offsetY = -8;
                 i = 2;
@@ -77,13 +76,13 @@ public class SimpleCarter extends Carter {
                 cartOffX = 3;
                 cartOffY = -24;
                 break;
-            case EST:
+            case EAST:
                 i = 1;
                 cartOffX = 10;
                 cartOffY = 10;
                 prio = 0;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 offsetX = 0;
                 offsetY = -5;
                 i = 0;
@@ -91,13 +90,13 @@ public class SimpleCarter extends Carter {
                 cartOffX = 0;
                 cartOffY = -38;
                 break;
-            case NORD:
+            case NORTH:
                 i = 7;
                 cartOffX = -6;
                 cartOffY = -2;
                 prio = 0;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 offsetX = 0;
                 offsetY = -5;
                 i = 6;
@@ -105,13 +104,13 @@ public class SimpleCarter extends Carter {
                 cartOffY = -39;
                 prio = 0;
                 break;
-            case OUEST:
+            case WEST:
                 i = 5;
                 cartOffX = -25;
                 cartOffY = 10;
                 prio = 0;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 offsetX = 8;
                 offsetY = -13;
                 i = 4;
@@ -143,35 +142,35 @@ public class SimpleCarter extends Carter {
         cartW = t.getW();
         switch (direction) {
 
-            case SUD:
+            case SOUTH:
                 cartOffX += 32 - cartW;
                 cartOffY += 26 - cartH;
                 break;
-            case SUD_EST:
+            case SOUTH_EAST:
                 cartOffX += 36 - cartW;
                 cartOffY += 30 - cartH;
                 break;
-            case EST:
+            case EAST:
                 cartOffX += 38 - cartW;
                 cartOffY += 22 - cartH;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 cartOffX += 36 - cartW;
                 cartOffY += 28 - cartH;
                 break;
-            case NORD:
+            case NORTH:
                 cartOffX += 26 - cartW;
                 cartOffY += 30 - cartH;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 cartOffX += 36 - cartW;
                 cartOffY += 28 - cartH;
                 break;
-            case OUEST:
+            case WEST:
                 cartOffX += 38 - cartW;
                 cartOffY += 22 - cartH;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 cartOffX += 36 - cartW;
                 cartOffY += 30 - cartH;
                 break;
@@ -194,8 +193,8 @@ public class SimpleCarter extends Carter {
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
     }
 
     @Override
@@ -263,21 +262,11 @@ public class SimpleCarter extends Carter {
         return i;
     }
 
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
     @Override
     public void delete() {
         super.delete();
     }
 
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
     @Override
     public Map<Direction, TileImage[]> getSpriteSet() {

@@ -38,12 +38,11 @@ public class IndustryHarverster extends ResourceGenerator {
     public Interface getInterface() {
         BuildingInterface bi = (BuildingInterface) super.getInterface();
         bi.addText("Ce batiment contient " + unit + " chargements de " + resource.getName(), 16, 20, 80);
-
         return bi;
     }
 
     public BuildingSprite createBuildingSpriteWait() {
-        BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2436, 12, getCity(), this, Direction.SUD_EST);
+        BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2436, 12, getCity(), this, Direction.SOUTH_EAST);
         s.setOffsetX(9);
         s.setOffsetY(16);
         s.setTimeBetweenFrame(0.1f);

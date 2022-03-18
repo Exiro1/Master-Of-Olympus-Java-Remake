@@ -9,7 +9,6 @@ import com.exiro.object.City;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.animals.Goat;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Goatherd extends AgricultureSprite {
@@ -43,7 +42,7 @@ public class Goatherd extends AgricultureSprite {
         milking = true;
         goat.milk();
         fullAnimCounter = 0;
-        setDir(Direction.NORD_EST);
+        setDir(Direction.NORTH_EAST);
         setLocalID(2480);
         setFrameNumber(8);
         unidir = true;
@@ -53,14 +52,14 @@ public class Goatherd extends AgricultureSprite {
         waiting = true;
         unidir = true;
         fullAnimCounter = 0;
-        setDir(Direction.NORD_EST);
+        setDir(Direction.NORTH_EAST);
         setLocalID(2584);
         setFrameNumber(10);
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
 
 
         if (hasArrived) {
@@ -116,16 +115,6 @@ public class Goatherd extends AgricultureSprite {
         if (goat.isStop() || goat.isBeingMilked())
             goat.start();
 
-    }
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
     }
 
     @Override

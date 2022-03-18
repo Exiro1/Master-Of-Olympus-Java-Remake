@@ -1,10 +1,12 @@
 package com.exiro.terrainList;
 
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
+import com.exiro.render.IsometricRender;
+import com.exiro.sprite.animals.Fish;
+import com.exiro.utils.Point;
 
-import java.util.ArrayList;
+import java.awt.*;
 
 public class Water extends Terrain {
 
@@ -12,30 +14,19 @@ public class Water extends Terrain {
     int index = 0;
     double timeSinceLastFrame = 0;
     double timeBetweenFrame = 0.1f;
+    Fish fish;
 
     public Water(int xpos, int ypos, City city) {
-        super(true, ObjectType.WATERTERRAIN, false, xpos, ypos, city, true, false, true);
+        super(ObjectType.WATERTERRAIN, false, xpos, ypos, city, true, false, true, 1);
         city.addTerrain(this);
     }
 
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
+    public void setFish(Fish fish) {
+        this.fish = fish;
     }
 
     @Override
-    public void delete() {
-
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
-
-    @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         timeSinceLastFrame += deltaTime;
         if (timeSinceLastFrame > timeBetweenFrame) {
             timeSinceLastFrame = 0;
@@ -48,4 +39,18 @@ public class Water extends Terrain {
         }
 
     }
+
+
+    @Override
+    public void Render(Graphics g, int camX, int camY) {
+        int lvl = getMainCase().getZlvl();
+        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
+        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
+        if (fish != null) {
+            fish.Render(g, camX, camY);
+        }
+
+    }
+
+
 }

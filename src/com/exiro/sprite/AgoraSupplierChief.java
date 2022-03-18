@@ -32,16 +32,6 @@ public class AgoraSupplierChief extends MovingSprite {
         this.building = building;
     }
 
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
     @Override
     public Map<Direction, TileImage[]> getSpriteSet() {

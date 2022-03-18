@@ -3,7 +3,6 @@ package com.exiro.buildingList.agriculture;
 import com.exiro.ai.AI;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
-import com.exiro.constructionList.SmallHoldingFruit.OliveTree;
 import com.exiro.constructionList.SmallHoldingFruit.SmallHoldingTree;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.ObjectType;
@@ -18,12 +17,17 @@ import com.exiro.sprite.delivery.carter.Carter;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class SmallHolding extends ResourceGenerator {
 
 
     private int growerNbr, stockOlive, stockGrape, harvesterNbr;
+    private ArrayList<SmallHoldingTree> trees = new ArrayList<>();
+    private ArrayList<SmallHoldingTree> matureTrees = new ArrayList<>();
 
     public SmallHolding() {
         super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, 0, 12, 40, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.OLIVE, 3);
@@ -47,11 +51,17 @@ public class SmallHolding extends ResourceGenerator {
             s.setOffsetY(1);
             s.setTimeBetweenFrame(0.1f);
             addSprite(s);
+            city.getResourceManager().addSmallHolding(this);
             return true;
         }
         return false;
     }
 
+    @Override
+    public void delete() {
+        super.delete();
+        city.getResourceManager().removeSmallHolding(this);
+    }
 
     @Override
     public void process(double deltaTime, int deltaDays) {
@@ -89,12 +99,12 @@ public class SmallHolding extends ResourceGenerator {
     public void startHarvesting() {
         Random r = new Random();
         for (int i = harvesterNbr; i < 3; i++) {
-            if (city.getResourceManager().getMatureTrees().size() > 0) {
-                SmallHoldingTree destination = city.getResourceManager().getTrees().get(r.nextInt(city.getResourceManager().getTrees().size()));
+            if (getMatureTrees().size() > 0) {
+                SmallHoldingTree destination = getMatureTrees().get(r.nextInt(getMatureTrees().size()));
                 if (!destination.isMature())
                     continue;
                 if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
-                    Grower g = new Grower(city, this, destination, true, !(destination instanceof OliveTree), true);
+                    Grower g = new Grower(city, this, new ArrayList<>(Collections.singletonList(destination)), true, true);
                     destination.setAvailable(false);
                     addSprite(g);
                     harvesterNbr++;
@@ -106,11 +116,16 @@ public class SmallHolding extends ResourceGenerator {
 
     public void createGrower() {
         Random r = new Random();
-        if (city.getResourceManager().getTrees().size() > 0) {
-            SmallHoldingTree destination = city.getResourceManager().getTrees().get(r.nextInt(city.getResourceManager().getTrees().size()));
-            if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
-                Grower g = new Grower(city, this, destination, destination.isMature(), !(destination instanceof OliveTree), false);
-                destination.setAvailable(false);
+        if (trees.size() > 0) {
+            ArrayList<SmallHoldingTree> dests = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                SmallHoldingTree destination = trees.get(r.nextInt(trees.size()));
+                if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
+                    dests.add(destination);
+                }
+            }
+            if (dests.size() > 0) {
+                Grower g = new Grower(city, this, dests, false, false);
                 addSprite(g);
                 growerNbr++;
             }
@@ -173,4 +188,15 @@ public class SmallHolding extends ResourceGenerator {
     }
 
 
+    public void addTree(SmallHoldingTree t) {
+        trees.add(t);
+    }
+
+    public List<SmallHoldingTree> getMatureTrees() {
+        return trees.stream().filter(SmallHoldingTree::isMature).collect(Collectors.toList());
+    }
+
+    public void removeTree(SmallHoldingTree t) {
+        trees.remove(t);
+    }
 }

@@ -2,7 +2,7 @@ package com.exiro.constructionList;
 
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.object.MapObject;
+import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
@@ -14,7 +14,7 @@ import com.exiro.utils.Point;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Construction extends MapObject {
+public abstract class Construction extends ObjectClass {
 
     ArrayList<Case> cases;
     int cost;
@@ -71,8 +71,6 @@ public abstract class Construction extends MapObject {
     public void buttonClickedEvent(ButtonType type, int ID) {
 
     }
-
-    public abstract void process(double deltatime, int deltaDays);
 
     public boolean build(int xPos, int yPos) {
         ArrayList<Case> place;

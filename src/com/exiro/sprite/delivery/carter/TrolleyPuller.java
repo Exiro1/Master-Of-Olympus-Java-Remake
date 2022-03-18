@@ -2,14 +2,12 @@ package com.exiro.sprite.delivery.carter;
 
 import com.exiro.depacking.TileImage;
 import com.exiro.moveRelated.Path;
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.utils.Point;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class TrolleyPuller extends MovingSprite {
@@ -37,7 +35,7 @@ public class TrolleyPuller extends MovingSprite {
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         if (!start) {
             if (Math.abs(cc.driver.getX() - getX()) > 0.8 || Math.abs(cc.driver.getY() - getY()) > 0.8)
                 start = true;
@@ -54,21 +52,21 @@ public class TrolleyPuller extends MovingSprite {
                 }
                 setImage(getDir(), index);
             }
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1) {
                 hasArrived = true;
             }
-            if (getDir() == Direction.SUD_OUEST) {
+            if (getDir() == Direction.SOUTH_WEST) {
                 y = y + (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.NORD_OUEST) {
+            } else if (getDir() == Direction.NORTH_WEST) {
                 x = x - (float) (speed * deltaTime);
                 y = Math.round(y);
-            } else if (getDir() == Direction.NORD_EST) {
+            } else if (getDir() == Direction.NORTH_EAST) {
                 y = y - (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.SUD_EST) {
+            } else if (getDir() == Direction.SOUTH_EAST) {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
             }
@@ -88,17 +86,6 @@ public class TrolleyPuller extends MovingSprite {
         this.start = start;
     }
 
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
     @Override
     public Map<Direction, TileImage[]> getSpriteSet() {

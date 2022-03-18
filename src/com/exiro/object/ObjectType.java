@@ -4,21 +4,21 @@ import com.exiro.buildingList.House;
 import com.exiro.buildingList.agriculture.*;
 import com.exiro.buildingList.culture.*;
 import com.exiro.buildingList.delivery.Agora;
-import com.exiro.buildingList.delivery.Safety;
 import com.exiro.buildingList.delivery.WaterWell;
 import com.exiro.buildingList.delivery.agorashop.EmptyShop;
 import com.exiro.buildingList.delivery.agorashop.FoodShop;
 import com.exiro.buildingList.delivery.agorashop.OilShop;
 import com.exiro.buildingList.delivery.agorashop.WoolShop;
 import com.exiro.buildingList.industry.*;
+import com.exiro.buildingList.palace.TaxBuilding;
+import com.exiro.buildingList.security.Safety;
+import com.exiro.buildingList.security.SecurityStation;
 import com.exiro.buildingList.stockage.Granary;
 import com.exiro.buildingList.stockage.StoreHouse;
 import com.exiro.constructionList.*;
 import com.exiro.constructionList.SmallHoldingFruit.OliveTree;
 import com.exiro.constructionList.SmallHoldingFruit.Vine;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.sprite.animals.Goat;
-import com.exiro.sprite.animals.Sheep;
 import com.exiro.terrainList.*;
 
 import java.awt.image.BufferedImage;
@@ -45,6 +45,8 @@ public enum ObjectType {
     THEATERSCHOOL("Ecole de théatre", true, false, "Zeus_General", 3, 2, 58, TheaterSchool.class),
     PODIUM("Podium", true, false, "Zeus_General", 2, 2, 83, Podium.class),
     THEATER("Théatre", true, false, "Zeus_General", 5, 2, 108, Theater.class),
+    TAX("Maison des impots", true, false, "Zeus_General", 2, 10, 45, TaxBuilding.class),
+    SECURITY_STATION("Poste de sécurité", true, false, "Zeus_General", 2, 10, 64, SecurityStation.class),
 
 
     //Indusrty
@@ -89,8 +91,8 @@ public enum ObjectType {
     ERASE("Destruction", true, true, "Zeus_Terrain", 1, 2, 36, Destruction.class),
 
     //SPRITE
-    SHEEP("Mouton", false, true, "SprMain", 1, 0, 3182, Sheep.class),
-    GOAT("Chevre", false, true, "SprMain", 1, 0, 11227, Goat.class);
+    SHEEP("Mouton", false, true, "SprMain", 1, 0, 3182, SheepBuildingBind.class),
+    GOAT("Chevre", false, true, "SprMain", 1, 0, 11227, GoatBuildingBind.class);
 
     private final Class c;
     private final String name;

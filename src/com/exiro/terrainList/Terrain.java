@@ -1,8 +1,7 @@
 package com.exiro.terrainList;
 
-import com.exiro.object.Case;
+import com.exiro.object.BaseObject;
 import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
@@ -11,9 +10,8 @@ import com.exiro.render.interfaceList.Interface;
 import com.exiro.utils.Point;
 
 import java.awt.*;
-import java.util.ArrayList;
 
-public abstract class Terrain extends ObjectClass {
+public abstract class Terrain extends BaseObject {
 
     boolean isWalkable;
     int xPos;
@@ -23,8 +21,8 @@ public abstract class Terrain extends ObjectClass {
     boolean constructible;
     boolean blocking;
 
-    public Terrain(boolean isActive, ObjectType type, boolean isWalkable, int xpos, int ypos, City c, boolean isFloor, boolean isConstructable, boolean blocking) {
-        super(isActive, type, type.getSize(), type.getSize());
+    public Terrain(ObjectType type, boolean isWalkable, int xpos, int ypos, City c, boolean isFloor, boolean isConstructable, boolean blocking, int size) {
+        super(type, type.getPath(), size, type.getBitmapID(), type.getLocalID(), size, size);
         this.isWalkable = isWalkable;
         this.xPos = xpos;
         this.yPos = ypos;
@@ -36,12 +34,6 @@ public abstract class Terrain extends ObjectClass {
         this.blocking = blocking;
         if (c.getMap() != null)
             this.setMainCase(c.getMap().getCase(xpos, ypos));
-        //this.c = city.getMap().getCase(getXB(),getYB());
-    }
-
-    @Override
-    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
-        return null;
     }
 
     @Override
@@ -60,8 +52,6 @@ public abstract class Terrain extends ObjectClass {
     /**
      * Appelés toute les secondes
      */
-    abstract public void process(double deltaTime);
-
 
     boolean test = true;
 

@@ -9,7 +9,6 @@ import com.exiro.object.ObjectClass;
 import com.exiro.sprite.DeliverySprite;
 import com.exiro.sprite.Direction;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class SafetyGuard extends DeliverySprite {
@@ -28,17 +27,6 @@ public class SafetyGuard extends DeliverySprite {
         for (Building b : getBuildingsToDeliver()) {
             b.setSafetyLvl(200);
         }
-    }
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
     }
 
     @Override

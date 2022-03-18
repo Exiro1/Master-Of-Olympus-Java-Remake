@@ -1,25 +1,24 @@
-package com.exiro.sprite.animals;
+package com.exiro.sprite.ship;
 
 import com.exiro.depacking.TileImage;
+import com.exiro.object.BaseObject;
 import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
+import com.exiro.render.IsometricRender;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.utils.Point;
 
 import java.util.Map;
 
-public class Animal extends MovingSprite {
+public class Boat extends MovingSprite {
 
 
-    public Animal(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
+    public Boat(String filePath, int bitID, int localId, int frameNumber, City c, BaseObject destination) {
         super(filePath, bitID, localId, frameNumber, c, destination);
-        setComplex(true);
     }
 
     @Override
     public void process(double deltaTime, int deltaDays) {
-
         timeSinceLastFrame = timeSinceLastFrame + deltaTime;
         // System.out.println(timeSinceLastFrame);
         if (timeSinceLastFrame > timeBetweenFrame) {
@@ -50,13 +49,37 @@ public class Animal extends MovingSprite {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
             }
-        } else if (hasArrived) {
-            y = Math.round(y);
-            x = Math.round(x);
+
+            setXB((int) Math.ceil(x));
+            setYB((int) Math.ceil(y));
+            //setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+            Point[] ps = IsometricRender.getHitbox(new Point(x, y), getWidth(), getHeight());
+
+            switch (getDir()) {
+
+                case SOUTH:
+                    break;
+                case SOUTH_EAST:
+                    setMainCase(c.getMap().getCase((int) (ps[2].getX()), (int) (getYB())));
+                    break;
+                case EAST:
+                    break;
+                case NORTH_EAST:
+                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+                    break;
+                case NORTH:
+                    break;
+                case NORTH_WEST:
+                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+                    break;
+                case WEST:
+                    break;
+                case SOUTH_WEST:
+                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (ps[3].getY())));
+                    break;
+            }
+
         }
-        setXB((int) Math.ceil(x));
-        setYB((int) Math.ceil(y));
-        setMainCase(c.getMap().getCase(getXB(), getYB()));
 
     }
 
@@ -64,4 +87,6 @@ public class Animal extends MovingSprite {
     public Map<Direction, TileImage[]> getSpriteSet() {
         return null;
     }
+
+
 }

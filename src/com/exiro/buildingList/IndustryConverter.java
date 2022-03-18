@@ -1,16 +1,16 @@
 package com.exiro.buildingList;
 
-import com.exiro.ai.AI;
-import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
-import com.exiro.sprite.*;
+import com.exiro.sprite.BuildingSprite;
+import com.exiro.sprite.Direction;
+import com.exiro.sprite.MovingSprite;
+import com.exiro.sprite.Sprite;
 import com.exiro.sprite.delivery.carter.Carter;
-import com.exiro.sprite.delivery.carter.SimpleCarter;
 import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Time;
 
@@ -50,7 +50,7 @@ public class IndustryConverter extends ResourceGenerator{
     }
 
     public BuildingSprite createBuildingSpriteWait() {
-        BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2436, 12, getCity(), this, Direction.SUD_EST);
+        BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2436, 12, getCity(), this, Direction.SOUTH_EAST);
         s.setOffsetX(9);
         s.setOffsetY(16);
         s.setTimeBetweenFrame(0.1f);
@@ -89,6 +89,8 @@ public class IndustryConverter extends ResourceGenerator{
             }
         }else{
             if (lastStockIn != 0) {
+                if (getBuildingSprites().size() == 1)
+                    createBuildingSpriteWait();
                 getBuildingSprites().get(1).setVisible(false);
                 lastStockIn = 0;
             }

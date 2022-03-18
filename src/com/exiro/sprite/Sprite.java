@@ -1,8 +1,8 @@
 package com.exiro.sprite;
 
+import com.exiro.object.BaseObject;
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
 import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.Interface;
@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.ArrayList;
 
-public abstract class Sprite extends ObjectClass {
+public abstract class Sprite extends BaseObject {
 
 
     final boolean DEBUG = false;
@@ -35,7 +35,7 @@ public abstract class Sprite extends ObjectClass {
     ArrayList<Case> onWalking = new ArrayList<>();
 
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c, Sticking sticking) {
-        super(true, null, filePath, 1, bitID, localId, 1, 1);
+        super(null, filePath, 1, bitID, localId, 1, 1);
         this.c = c;
         this.frameNumber = frameNumber;
         this.sticking = sticking;
@@ -88,7 +88,7 @@ public abstract class Sprite extends ObjectClass {
     int size = 1;
 
     public Sprite(String filePath, int bitID, int localId, int frameNumber, City c) {
-        super(true, null, filePath, 1, bitID, localId, 1, 1);
+        super(null, filePath, 1, bitID, localId, 1, 1);
         this.c = c;
         this.frameNumber = frameNumber;
         baseh = getHeight();
@@ -109,14 +109,15 @@ public abstract class Sprite extends ObjectClass {
         mainCase.getSprites().add(this);
     }
 
-    public abstract void process(double deltaTime);
+    public abstract void process(double deltaTime, int deltaDays);
+
+    public abstract void delete();
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
         int z = 1;
         if (c.getMap().getCase(getXB(), getYB()) != null)
             z = c.getMap().getCase(getXB(), getYB()).getZlvl();
-
 
 
         //Point p = IsometricRender.TwoDToIsoTexture(new Point(getX() - z, (getY()) - z), getWidth(), getHeight(),1);
@@ -142,11 +143,6 @@ public abstract class Sprite extends ObjectClass {
         }
 
 
-    }
-
-    @Override
-    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
-        return null;
     }
 
     public double getTimeBetweenFrame() {

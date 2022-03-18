@@ -8,22 +8,30 @@ import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.render.interfaceList.BuildingInterface;
+import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Harvester;
 import com.exiro.sprite.industry.LumberJack;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class Sawmill extends IndustryHarverster {
 
 
-
+    ArrayList<Case> closeTrees;
 
     public Sawmill() {
         super(false, ObjectType.SAWMILL, BuildingCategory.INDUSTRY, 0, 12, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOD, 22, 3, 25, 100);
         maxPerCarter = 1;
+    }
+
+    @Override
+    public Interface getInterface() {
+        BuildingInterface bi = (BuildingInterface) super.getInterface();
+        bi.addText("Ce batiment contient " + getStock() + " chargements de " + "planche", 16, 20, 100);
+        return bi;
     }
 
     public void createBuildingSpriteWork() {
@@ -31,7 +39,7 @@ public class Sawmill extends IndustryHarverster {
         s.setOffsetX(16);
         s.setOffsetY(-12);
         s.setTimeBetweenFrame(0.1f);
-        setSprite(0,s);
+        setSprite(0, s);
     }
 
     @Override
@@ -47,6 +55,7 @@ public class Sawmill extends IndustryHarverster {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
             setState(IndustryConverter.ConversionState.WAITING_RESOURCES);
+            initTree();
             return true;
         }
         return false;
@@ -68,8 +77,6 @@ public class Sawmill extends IndustryHarverster {
         while (closeTrees.size()<30 && j<temp.size()){
             Tree t = (Tree) temp.get(j).getObject();
             j++;
-            if(t.isBeingcut() || t.isCut())
-                continue;
             for (Case n : t.getMainCase().getNeighbour()) {
                 if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
                     closeTrees.add(t.getMainCase());
@@ -82,12 +89,8 @@ public class Sawmill extends IndustryHarverster {
     @Override
     public void setActive(boolean active) {
         super.setActive(active);
-        if(active){
-            initTree();
-        }
     }
 
-    ArrayList<Case> closeTrees;
 
     @Override
     public void processSprite(double delta) {
@@ -131,7 +134,7 @@ public class Sawmill extends IndustryHarverster {
     public void process(double deltaTime, int deltaDays) {
         super.process(deltaTime, deltaDays);
         if (isWorking()) {
-            if (harvester < harvesterNbr) {
+            if (harvester < harvesterNbr && getStock() < getMaxStockOut()) {
                 goCut();
             }
         }

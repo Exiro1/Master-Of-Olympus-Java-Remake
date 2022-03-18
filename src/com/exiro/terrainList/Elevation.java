@@ -1,6 +1,5 @@
 package com.exiro.terrainList;
 
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
@@ -8,7 +7,6 @@ import com.exiro.sprite.Direction;
 import com.exiro.terrainGenerator.ElevationType;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Elevation extends Terrain {
 
@@ -20,7 +18,7 @@ public class Elevation extends Terrain {
     boolean hasRoad = false;
 
     public Elevation(int xpos, int ypos, Direction dir, int id, City c, ObjectClass over, int size) {
-        super(true, ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true);
+        super(ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true, size);
         this.id = id;
         this.direction = dir;
         this.over = over;
@@ -29,7 +27,7 @@ public class Elevation extends Terrain {
     }
 
     public Elevation(int xpos, int ypos, Direction dir, int id, City c, ObjectClass over, int size, boolean roadPossible) {
-        super(true, ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true);
+        super(ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true, size);
         this.id = id;
         this.direction = dir;
         this.over = over;
@@ -43,7 +41,7 @@ public class Elevation extends Terrain {
     }
 
     public Elevation(int xpos, int ypos, ElevationType type, City c, int size, boolean roadPossible, int nbr) {
-        super(true, ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true);
+        super(ObjectType.ELEVATION, false, xpos, ypos, c, false, false, true, size);
         this.id = id;
         this.direction = type.getDir();
         this.size = size;
@@ -112,16 +110,16 @@ public class Elevation extends Terrain {
             nbr = 0;
             this.setBitmapID(5);
             switch (direction) {
-                case SUD_EST:
+                case SOUTH_EAST:
                     setLocalID(33);
                     break;
-                case NORD_EST:
+                case NORTH_EAST:
                     setLocalID(32);
                     break;
-                case NORD_OUEST:
+                case NORTH_WEST:
                     setLocalID(35);
                     break;
-                case SUD_OUEST:
+                case SOUTH_WEST:
                     setLocalID(34);
                     break;
             }
@@ -136,40 +134,40 @@ public class Elevation extends Terrain {
         int i = 0;
         if (size == 1) {
             switch (direction) {
-                case SUD:
+                case SOUTH:
                     i = 28;
                     break;
-                case SUD_EST:
+                case SOUTH_EAST:
                     if (roadPossible) {
                         i = 33;
                         break;
                     }
                     i = 14;
                     break;
-                case EST:
+                case EAST:
                     i = 27;
                     break;
-                case NORD_EST:
+                case NORTH_EAST:
                     if (roadPossible) {
                         i = 32;
                         break;
                     }
                     i = 25;
                     break;
-                case NORD:
+                case NORTH:
                     i = 26;
                     break;
-                case NORD_OUEST:
+                case NORTH_WEST:
                     if (roadPossible) {
                         i = 35;
                         break;
                     }
                     i = 24;
                     break;
-                case OUEST:
+                case WEST:
                     i = 29;
                     break;
-                case SUD_OUEST:
+                case SOUTH_WEST:
                     if (roadPossible) {
                         i = 34;
                         break;
@@ -179,28 +177,28 @@ public class Elevation extends Terrain {
             }
         } else {
             switch (direction) {
-                case SUD:
+                case SOUTH:
                     i = 12;
                     break;
-                case SUD_EST:
+                case SOUTH_EAST:
                     i = 0;
                     break;
-                case EST:
+                case EAST:
                     i = 11;
                     break;
-                case NORD_EST:
+                case NORTH_EAST:
                     i = 35;
                     break;
-                case NORD:
+                case NORTH:
                     i = 10;
                     break;
-                case NORD_OUEST:
+                case NORTH_WEST:
                     i = 34;
                     break;
-                case OUEST:
+                case WEST:
                     i = 13;
                     break;
-                case SUD_OUEST:
+                case SOUTH_WEST:
                     i = 3;
                     break;
             }
@@ -218,16 +216,6 @@ public class Elevation extends Terrain {
         }
     }
 
-    @Override
-    public boolean build(int xPos, int yPos) {
-
-        return false;
-    }
-
-    @Override
-    public void delete() {
-
-    }
 
     public boolean isRoadPossible() {
         return roadPossible;
@@ -237,13 +225,9 @@ public class Elevation extends Terrain {
         return hasRoad;
     }
 
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
 
     }
 }

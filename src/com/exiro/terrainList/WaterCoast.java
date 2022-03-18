@@ -1,12 +1,9 @@
 package com.exiro.terrainList;
 
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.Direction;
 import com.exiro.terrainGenerator.CoastType;
-
-import java.util.ArrayList;
 
 
 public class WaterCoast extends Terrain {
@@ -16,7 +13,7 @@ public class WaterCoast extends Terrain {
     int number;
 
     public WaterCoast(int xpos, int ypos, boolean angle, Direction direction, int number, City city) {
-        super(true, ObjectType.WATERTCOAST, false, xpos, ypos, city, true, false, true);
+        super(ObjectType.WATERTCOAST, false, xpos, ypos, city, true, false, true, 1);
         this.angle = angle;
         this.direction = direction;
         this.number = number;
@@ -26,37 +23,40 @@ public class WaterCoast extends Terrain {
     }
 
     public WaterCoast(int xpos, int ypos, CoastType type, int nbr,City city) {
-        super(true, ObjectType.WATERTCOAST, false, xpos, ypos, city, true, false, true);
-        this.setLocalID(type.getId()+Math.min(type.getNbr()-1,nbr));
+        super(ObjectType.WATERTCOAST, false, xpos, ypos, city, true, false, true, 1);
+        this.setLocalID(type.getId() + Math.min(type.getNbr() - 1, nbr));
         direction = type.getDir();
+        angle = true;
+        if (direction == Direction.SOUTH_WEST || direction == Direction.SOUTH_EAST || direction == Direction.NORTH_EAST || direction == Direction.NORTH_WEST)
+            angle = false;
         updateImg();
     }
 
     public int getIDfromDir(Direction dir, int number) {
         int i = 0;
         switch (dir) {
-            case SUD:
+            case SOUTH:
                 i = 191;
                 break;
-            case SUD_EST:
+            case SOUTH_EAST:
                 i = 175;
                 break;
-            case EST:
+            case EAST:
                 i = 187;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 i = 171;
                 break;
-            case NORD:
+            case NORTH:
                 i = 199;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 i = 183;
                 break;
-            case OUEST:
+            case WEST:
                 i = 195;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 i = 179;
                 break;
         }
@@ -65,23 +65,12 @@ public class WaterCoast extends Terrain {
     }
 
     @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-    @Override
-    public void delete() {
+    public void process(double deltaTime, int deltaDays) {
 
     }
 
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
-
-    @Override
-    public void process(double deltaTime) {
-
+    public boolean isAngle() {
+        return angle;
     }
 
     public Direction getDirection() {

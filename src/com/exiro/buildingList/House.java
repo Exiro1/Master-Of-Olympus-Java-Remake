@@ -220,7 +220,7 @@ public class House extends Building {
     @Override
     public void processSprite(double delta) {
         for (Sprite s : sprites) {
-            s.process(delta);
+            s.process(delta, 0);
         }
     }
 

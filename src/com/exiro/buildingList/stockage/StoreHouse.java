@@ -185,7 +185,7 @@ public class StoreHouse extends StoreBuilding {
                 c2.setSize(1);
             }
 
-            BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2276, 16, city, this, Direction.SUD_EST);
+            BuildingSprite s = new BuildingSprite("SprAmbient", 0, 2276, 16, city, this, Direction.SOUTH_EAST);
             s.setTimeBetweenFrame(0.1f);
             s.setOffsetX(58);
             s.setOffsetY(-44);
@@ -208,7 +208,7 @@ public class StoreHouse extends StoreBuilding {
     public void processSprite(double delta) {
         for (Sprite s : sprites) {
             if (isActive() && getPop() > 0)
-                s.process(delta);
+                s.process(delta, 0);
         }
     }
 

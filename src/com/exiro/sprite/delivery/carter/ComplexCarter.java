@@ -50,11 +50,11 @@ public class ComplexCarter extends Carter{
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
-        driver.process(deltaTime);
-        puller.process(deltaTime);
-        trolley.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
+        driver.process(deltaTime, deltaDays);
+        puller.process(deltaTime, deltaDays);
+        trolley.process(deltaTime, deltaDays);
         hasArrived = trolley.hasArrived;
     }
 
@@ -86,11 +86,6 @@ public class ComplexCarter extends Carter{
         return null;
     }
 
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
 
     @Override
     public Map<Direction, TileImage[]> getSpriteSet() {
@@ -102,12 +97,6 @@ public class ComplexCarter extends Carter{
         driver.delete();
         puller.delete();
     }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
-
 
     public Trolley getTrolley() {
         return trolley;

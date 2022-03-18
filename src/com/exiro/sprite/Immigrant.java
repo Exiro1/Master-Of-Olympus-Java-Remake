@@ -2,11 +2,9 @@ package com.exiro.sprite;
 
 import com.exiro.depacking.TileImage;
 import com.exiro.moveRelated.Path;
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Immigrant extends MovingSprite {
@@ -29,19 +27,9 @@ public class Immigrant extends MovingSprite {
 
 
     @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-    @Override
     public void delete() {
         super.delete();
         this.hasArrived = true;
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return new ArrayList<>();
     }
 
     @Override

@@ -1,12 +1,8 @@
 package com.exiro.sprite.delivery.carter;
 
-import com.exiro.buildingList.Building;
-import com.exiro.buildingList.StoreBuilding;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.Resource;
@@ -15,7 +11,6 @@ import com.exiro.sprite.MovingSprite;
 import com.exiro.utils.Point;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Trolley extends MovingSprite {
@@ -51,42 +46,42 @@ public class Trolley extends MovingSprite {
         int i = 0;
         switch (direction) {
 
-            case SUD:
+            case SOUTH:
                 i = 3;
                 cartOffX = -4;
                 cartOffY = 9;
                 break;
-            case SUD_EST:
+            case SOUTH_EAST:
                 i = 2;
                 cartOffX = 5;
                 cartOffY = 5;
                 break;
-            case EST:
+            case EAST:
                 i = 1;
                 cartOffX = 10;
                 cartOffY = 10;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 i = 0;
                 cartOffX = 0;
                 cartOffY = 0;
                 break;
-            case NORD:
+            case NORTH:
                 i = 7;
                 cartOffX = -6;
                 cartOffY = -2;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 i = 6;
                 cartOffX = -17;
                 cartOffY = 1;
                 break;
-            case OUEST:
+            case WEST:
                 i = 5;
                 cartOffX = -25;
                 cartOffY = 10;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 i = 4;
                 cartOffX = -26;
                 cartOffY = 10;
@@ -114,7 +109,7 @@ public class Trolley extends MovingSprite {
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         if (!start) {
             if (Math.abs(cc.puller.getX() - getX()) > 1 || Math.abs(cc.puller.getY() - getY()) > 1)
                 start = true;
@@ -131,21 +126,21 @@ public class Trolley extends MovingSprite {
                 }
                 setImage(getDir(), index);
             }
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1) {
                 hasArrived = true;
             }
-            if (getDir() == Direction.SUD_OUEST) {
+            if (getDir() == Direction.SOUTH_WEST) {
                 y = y + (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.NORD_OUEST) {
+            } else if (getDir() == Direction.NORTH_WEST) {
                 x = x - (float) (speed * deltaTime);
                 y = Math.round(y);
-            } else if (getDir() == Direction.NORD_EST) {
+            } else if (getDir() == Direction.NORTH_EAST) {
                 y = y - (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.SUD_EST) {
+            } else if (getDir() == Direction.SOUTH_EAST) {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
             }
@@ -193,17 +188,6 @@ public class Trolley extends MovingSprite {
                 break;
         }
         return i;
-    }
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
     }
 
     @Override
