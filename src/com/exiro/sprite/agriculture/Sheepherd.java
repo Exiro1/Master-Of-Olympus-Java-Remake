@@ -9,7 +9,6 @@ import com.exiro.object.City;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.animals.Sheep;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Sheepherd extends AgricultureSprite {
@@ -42,7 +41,7 @@ public class Sheepherd extends AgricultureSprite {
         cutting = true;
         sheep.cut();
         fullAnimCounter = 0;
-        setDir(Direction.NORD_EST);
+        setDir(Direction.NORTH_EAST);
         setLocalID(3518);
         setFrameNumber(12);
         unidir = true;
@@ -52,14 +51,14 @@ public class Sheepherd extends AgricultureSprite {
         waiting = true;
         unidir = true;
         fullAnimCounter = 0;
-        setDir(Direction.NORD_EST);
+        setDir(Direction.NORTH_EAST);
         setLocalID(3626);
         setFrameNumber(10);
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
 
 
         if (hasArrived) {
@@ -115,16 +114,6 @@ public class Sheepherd extends AgricultureSprite {
         if (sheep.isStop() || sheep.isCut())
             sheep.start();
 
-    }
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class Path {
 
     public Direction next() {
         if (path.size() == 1) {
-            return Direction.SUD_OUEST;
+            return Direction.SOUTH_WEST;
         }
 
         Case last = path.get(index);
@@ -44,26 +44,26 @@ public class Path {
         int y = last.getyPos() - next.getyPos();
 
         if (x == -1 && y == 0) {
-            return Direction.SUD_EST;
+            return Direction.SOUTH_EAST;
         } else if (x == 1 && y == 0) {
-            return Direction.NORD_OUEST;
+            return Direction.NORTH_WEST;
         } else if (x == 0 && y == 1) {
-            return Direction.NORD_EST;
+            return Direction.NORTH_EAST;
         } else if (x == 0 && y == -1) {
-            return Direction.SUD_OUEST;
+            return Direction.SOUTH_WEST;
         }
-        return Direction.EST;
+        return Direction.EAST;
     }
 
 
     public boolean isOnCase(Point p, Direction direction) {
-        if (direction == Direction.SUD_EST && p.getX() > path.get(index).getxPos()) {
+        if (direction == Direction.SOUTH_EAST && p.getX() > path.get(index).getxPos()) {
             return true;
-        } else if (direction == Direction.NORD_OUEST && p.getX() < path.get(index).getxPos()) {
+        } else if (direction == Direction.NORTH_WEST && p.getX() < path.get(index).getxPos()) {
             return true;
-        } else if (direction == Direction.NORD_EST && p.getY() < path.get(index).getyPos()) {
+        } else if (direction == Direction.NORTH_EAST && p.getY() < path.get(index).getyPos()) {
             return true;
-        } else return direction == Direction.SUD_OUEST && p.getY() > path.get(index).getyPos();
+        } else return direction == Direction.SOUTH_WEST && p.getY() > path.get(index).getyPos();
 
     }
 

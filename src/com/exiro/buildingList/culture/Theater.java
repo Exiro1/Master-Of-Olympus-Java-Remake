@@ -5,6 +5,7 @@ import com.exiro.buildingList.BuildingCategory;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
+import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
 
@@ -24,6 +25,11 @@ public class Theater extends Building {
     @Override
     public boolean build(int xPos, int yPos) {
         if (super.build(xPos, yPos)) {
+            BuildingSprite s = new BuildingSprite("SprAmbient", 0, 655, 24, getCity(), this);
+            s.setOffsetX(115);
+            s.setOffsetY(0);
+            s.setTimeBetweenFrame(0.1f);
+            addSprite(s);
             return true;
         }
         return false;
@@ -32,10 +38,11 @@ public class Theater extends Building {
     @Override
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
-            if (isActive() && getPop() > 0)
-                s.process(delta);
+            //if (isActive() && getPop() > 0)
+            s.process(delta, 0);
         }
     }
+
 
     @Override
     public void process(double deltaTime, int deltaDays) {

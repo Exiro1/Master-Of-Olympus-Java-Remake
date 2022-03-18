@@ -8,7 +8,6 @@ import com.exiro.object.Resource;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.MovingSprite;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class AgoraSupplier extends MovingSprite {
@@ -26,17 +25,6 @@ public class AgoraSupplier extends MovingSprite {
         setYB(Math.round(getY()));
         this.resource = resource;
         this.amount = amount;
-    }
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
     }
 
     @Override

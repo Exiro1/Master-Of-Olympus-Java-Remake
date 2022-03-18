@@ -3,13 +3,11 @@ package com.exiro.sprite;
 import com.exiro.buildingList.Building;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.render.IsometricRender;
 import com.exiro.utils.Point;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class BuildingSprite extends Sprite {
 
@@ -49,28 +47,28 @@ public class BuildingSprite extends Sprite {
         int i = 0;
         switch (direction) {
 
-            case SUD:
+            case SOUTH:
                 i = 3;
                 break;
-            case SUD_EST:
+            case SOUTH_EAST:
                 i = 2;
                 break;
-            case EST:
+            case EAST:
                 i = 1;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 i = 0;
                 break;
-            case NORD:
+            case NORTH:
                 i = 7;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 i = 6;
                 break;
-            case OUEST:
+            case WEST:
                 i = 5;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 i = 4;
                 break;
         }
@@ -92,8 +90,8 @@ public class BuildingSprite extends Sprite {
 
 
     @Override
-    public void process(double deltaTime) {
-        if(!visible)
+    public void process(double deltaTime, int deltaDays) {
+        if (!visible)
             return;
         if (frameNumber > 1) {
             timeSinceLastFrame = timeSinceLastFrame + deltaTime;
@@ -154,14 +152,12 @@ public class BuildingSprite extends Sprite {
         this.visible = visible;
     }
 
-    @Override
-    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
-        return null;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
+    public void setDirectional(boolean directional) {
+        this.directional = directional;
     }
 
     @Override
@@ -169,9 +165,5 @@ public class BuildingSprite extends Sprite {
 
     }
 
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
 }

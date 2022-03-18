@@ -9,7 +9,6 @@ import com.exiro.object.ObjectClass;
 import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Point;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Harvester extends MovingSprite {
@@ -45,20 +44,20 @@ public class Harvester extends MovingSprite {
         int y = last.getyPos() - next.getyPos();
 
         if (x == -1 && y == 0) {
-            return Direction.SUD_EST;
+            return Direction.SOUTH_EAST;
         } else if (x == 1 && y == 0) {
-            return Direction.NORD_OUEST;
+            return Direction.NORTH_WEST;
         } else if (x == 0 && y == 1) {
-            return Direction.NORD_EST;
+            return Direction.NORTH_EAST;
         } else if (x == 0 && y == -1) {
-            return Direction.SUD_OUEST;
+            return Direction.SOUTH_WEST;
         }
-        return Direction.EST;
+        return Direction.EAST;
     }
 
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
 
 
         timeSinceLastFrame = timeSinceLastFrame + deltaTime;
@@ -73,22 +72,22 @@ public class Harvester extends MovingSprite {
             setImage(getDir(), index);
         }
         if (path != null && !hasArrived) {
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) {
                 hasArrived = true;
             }
 
-            if (getDir() == Direction.SUD_OUEST) {
+            if (getDir() == Direction.SOUTH_WEST) {
                 y = y + (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.NORD_OUEST) {
+            } else if (getDir() == Direction.NORTH_WEST) {
                 x = x - (float) (speed * deltaTime);
                 y = Math.round(y);
-            } else if (getDir() == Direction.NORD_EST) {
+            } else if (getDir() == Direction.NORTH_EAST) {
                 y = y - (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.SUD_EST) {
+            } else if (getDir() == Direction.SOUTH_EAST) {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
             }
@@ -137,21 +136,11 @@ public class Harvester extends MovingSprite {
         setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), industry.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
     }
 
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
     @Override
     public void delete() {
         super.delete();
     }
 
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
     @Override
     public Map<Direction, TileImage[]> getSpriteSet() {

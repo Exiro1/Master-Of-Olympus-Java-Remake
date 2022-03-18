@@ -289,7 +289,7 @@ public class Agora extends Building {
         }
         for (Sprite s : sprites) {
             if (isActive())
-                s.process(delta);
+                s.process(delta, 0);
         }
     }
 

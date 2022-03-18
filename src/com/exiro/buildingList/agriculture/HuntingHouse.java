@@ -51,7 +51,7 @@ public class HuntingHouse extends ResourceGenerator {
     @Override
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
-            s.process(delta);
+            s.process(delta, 0);
         }
     }
 

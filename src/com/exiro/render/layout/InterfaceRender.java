@@ -409,10 +409,16 @@ public class InterfaceRender extends JPanel {
                 gm.getGameView().deleting = false;
                 break;
             case HEALTH_GUARD:
+                EntityRender.setEntityRender(ObjectType.SECURITY_STATION);
+                gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case PALACE_PALACE:
                 break;
             case PALACE_TAX:
+                EntityRender.setEntityRender(ObjectType.TAX);
+                gm.getGameView().showEntity = true;
+                gm.getGameView().deleting = false;
                 break;
             case PALACE_BRIDGE:
                 break;

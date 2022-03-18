@@ -2,7 +2,6 @@ package com.exiro.sprite.delivery;
 
 import com.exiro.ai.DeliveryAI;
 import com.exiro.buildingList.Building;
-import com.exiro.buildingList.House;
 import com.exiro.depacking.TileImage;
 import com.exiro.object.Case;
 import com.exiro.object.City;
@@ -12,22 +11,21 @@ import com.exiro.sprite.Direction;
 
 import java.util.Map;
 
-public class WaterDelivery extends DeliverySprite {
-
+public class SecurityGuard extends DeliverySprite {
 
     DeliveryAI ai;
-    int lastY, lastX;
 
-    public WaterDelivery(City c, ObjectClass destination, Case start) {
-        super("SprMain", 0, 6736, 12, c, destination, start, 30);
+    public SecurityGuard(City c, ObjectClass destination, Case start) {
+        super("SprMain", 0, 2208, 12, c, destination, start, 30);
+        setOffsetY(-5);
         setTimeBetweenFrame(0.05);
     }
 
     @Override
     public void deliverBuildings() {
+
         for (Building b : getBuildingsToDeliver()) {
-            if (b instanceof House)
-                ((House) b).setWater(100);
+            //b.setSafetyLvl(200);
         }
     }
 

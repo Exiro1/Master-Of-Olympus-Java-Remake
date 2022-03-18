@@ -4,9 +4,12 @@ import com.exiro.ai.AI;
 import com.exiro.buildingList.agriculture.SmallHolding;
 import com.exiro.constructionList.SmallHoldingFruit.OliveTree;
 import com.exiro.constructionList.SmallHoldingFruit.SmallHoldingTree;
+import com.exiro.constructionList.SmallHoldingFruit.Vine;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
+
+import java.util.ArrayList;
 
 public class Grower extends AgricultureSprite {
 
@@ -23,12 +26,14 @@ public class Grower extends AgricultureSprite {
     GrowerState gstate;
     SmallHolding origin;
     SmallHoldingTree tree;
+    ArrayList<SmallHoldingTree> trees;
+    int index = 0;
 
-    public Grower(City c, SmallHolding origin, SmallHoldingTree destination, boolean gather, boolean grape, boolean harvester) {
-        super("SprMain", 0, 5504, 12, c, destination);
+    public Grower(City c, SmallHolding origin, ArrayList<SmallHoldingTree> destinations, boolean gather, boolean harvester) {
+        super("SprMain", 0, 5504, 12, c, destinations.get(0));
         this.gather = gather;
         this.process = !gather;
-        this.grape = grape;
+        this.grape = destinations.get(0) instanceof Vine;
         this.origin = origin;
         Case start = origin.getAccess().get(0);
         setX(start.getxPos());
@@ -37,13 +42,15 @@ public class Grower extends AgricultureSprite {
         setYB(start.getyPos());
         setRoutePath(AI.goTo(c, start, c.getMap().getCase(this.destination.getXB(), this.destination.getYB()), FreeState.NON_BLOCKING.getI()));
         this.createRessource = gather;
-        tree = destination;
+        tree = destinations.get(0);
+        tree.setAvailable(false);
         this.harvester = harvester;
+        this.trees = destinations;
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
 
 
         if (hasArrived) {
@@ -77,14 +84,24 @@ public class Grower extends AgricultureSprite {
                 setDestination(origin);
             } else if (gstate == GrowerState.PROCESSING && fullAnimCounter > 6) {
                 gstate = GrowerState.WALKING;
-                process = false;
                 hasArrived = false;
                 unidir = false;
                 tree.setAvailable(true);
                 setLocalID(5504);
                 setFrameNumber(12);
-                setRoutePath(AI.goTo(c, getMainCase(), origin.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
-                setDestination(origin);
+
+                if (index < trees.size() - 1) {
+                    index++;
+                    tree = trees.get(index);
+                    this.grape = tree instanceof Vine;
+                    tree.setAvailable(false);
+                    setRoutePath(AI.goTo(c, getMainCase(), c.getMap().getCase(tree.getXB(), tree.getYB()), FreeState.NON_BLOCKING.getI()));
+                    setDestination(tree);
+                } else {
+                    process = false;
+                    setRoutePath(AI.goTo(c, getMainCase(), origin.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
+                    setDestination(origin);
+                }
             }
 
         }

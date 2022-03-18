@@ -3,9 +3,9 @@ package com.exiro.sprite;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.Path;
+import com.exiro.object.BaseObject;
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
 import com.exiro.render.IsometricRender;
 import com.exiro.utils.Point;
 
@@ -15,12 +15,12 @@ public abstract class MovingSprite extends Sprite {
 
     public boolean hasArrived = false;
     protected float speed = 2.5f;
-    protected Direction dir = Direction.EST;
+    protected Direction dir = Direction.EAST;
     protected Path path;
-    protected ObjectClass destination;
+    protected BaseObject destination;
     protected Path originPath;
 
-    public MovingSprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
+    public MovingSprite(String filePath, int bitID, int localId, int frameNumber, City c, BaseObject destination) {
         super(filePath, bitID, localId, frameNumber, c);
         this.destination = destination;
         setImage(dir, 0);
@@ -34,28 +34,28 @@ public abstract class MovingSprite extends Sprite {
         int i = 0;
         switch (direction) {
 
-            case SUD:
+            case SOUTH:
                 i = 3;
                 break;
-            case SUD_EST:
+            case SOUTH_EAST:
                 i = 2;
                 break;
-            case EST:
+            case EAST:
                 i = 1;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 i = 0;
                 break;
-            case NORD:
+            case NORTH:
                 i = 7;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 i = 6;
                 break;
-            case OUEST:
+            case WEST:
                 i = 5;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 i = 4;
                 break;
         }
@@ -68,7 +68,7 @@ public abstract class MovingSprite extends Sprite {
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         if (path != null && !hasArrived) {
             timeSinceLastFrame = timeSinceLastFrame + deltaTime;
             // System.out.println(timeSinceLastFrame);
@@ -81,21 +81,21 @@ public abstract class MovingSprite extends Sprite {
                 }
                 setImage(getDir(), index);
             }
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1) {
                 hasArrived = true;
             }
-            if (getDir() == Direction.SUD_OUEST) {
+            if (getDir() == Direction.SOUTH_WEST) {
                 y = y + (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.NORD_OUEST) {
+            } else if (getDir() == Direction.NORTH_WEST) {
                 x = x - (float) (speed * deltaTime);
                 y = Math.round(y);
-            } else if (getDir() == Direction.NORD_EST) {
+            } else if (getDir() == Direction.NORTH_EAST) {
                 y = y - (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.SUD_EST) {
+            } else if (getDir() == Direction.SOUTH_EAST) {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
             }
@@ -107,24 +107,24 @@ public abstract class MovingSprite extends Sprite {
 
             switch(getDir()){
 
-                case SUD:
+                case SOUTH:
                     break;
-                case SUD_EST:
+                case SOUTH_EAST:
                     setMainCase(c.getMap().getCase((int) (ps[2].getX()), (int) (getYB())));
                     break;
-                case EST:
+                case EAST:
                     break;
-                case NORD_EST:
+                case NORTH_EAST:
                     setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
                     break;
-                case NORD:
+                case NORTH:
                     break;
-                case NORD_OUEST:
+                case NORTH_WEST:
                     setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
                     break;
-                case OUEST:
+                case WEST:
                     break;
-                case SUD_OUEST:
+                case SOUTH_WEST:
                     setMainCase(c.getMap().getCase((int) (getXB()), (int) (ps[3].getY())));
                     break;
             }
@@ -157,16 +157,16 @@ public abstract class MovingSprite extends Sprite {
     public Case getCaseDir() {
         int i = 0;
         switch (dir) {
-            case SUD_EST:
+            case SOUTH_EAST:
                 i = 1;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 i = 0;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 i = 3;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 i = 2;
                 break;
         }
@@ -192,7 +192,7 @@ public abstract class MovingSprite extends Sprite {
         this.dir = dir;
     }
 
-    public ObjectClass getDestination() {
+    public BaseObject getDestination() {
         return destination;
     }
 
@@ -205,7 +205,7 @@ public abstract class MovingSprite extends Sprite {
 
     }
 
-    public void setDestination(ObjectClass destination) {
+    public void setDestination(BaseObject destination) {
         this.destination = destination;
     }
 

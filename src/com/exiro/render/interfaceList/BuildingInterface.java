@@ -3,7 +3,7 @@ package com.exiro.render.interfaceList;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.object.ObjectClass;
+import com.exiro.object.BaseObject;
 import com.exiro.object.Orders;
 import com.exiro.render.Button;
 import com.exiro.render.ButtonType;
@@ -24,11 +24,11 @@ public class BuildingInterface extends Interface {
     ArrayList<TileImage> right;
     ArrayList<TileImage> bot;
     ArrayList<TileImage> fill;
-    ObjectClass b;
+    BaseObject b;
 
 
-    public BuildingInterface(int x, int y, int w, int h, ArrayList<Button> buttons, ObjectClass b) {
-        super(x, y, w, h, buttons,b);
+    public BuildingInterface(int x, int y, int w, int h, ArrayList<Button> buttons, BaseObject b) {
+        super(x, y, w, h, buttons, b);
         top = new ArrayList<>();
         left = new ArrayList<>();
         right = new ArrayList<>();

@@ -3,7 +3,7 @@ package com.exiro.buildingList;
 import com.exiro.constructionList.Rubble;
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.object.MapObject;
+import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.ButtonType;
 import com.exiro.render.IsometricRender;
@@ -19,7 +19,7 @@ import com.exiro.utils.Point;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Building extends MapObject {
+public abstract class Building extends ObjectClass {
 
     final boolean DEBUG = false;
 

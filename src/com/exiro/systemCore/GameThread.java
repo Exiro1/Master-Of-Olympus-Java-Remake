@@ -84,8 +84,8 @@ public class GameThread implements Runnable {
                 deltaDaysR=0;
             }
             for (City c : p.getPlayerCities()) {
-                manageSprite(c, deltaTimeLogic);
-                manageTerrain(c, deltaTimeLogic);
+                manageSprite(c, deltaTimeLogic, 0);
+                manageTerrain(c, deltaTimeLogic, 0);
             }
 
             try {
@@ -157,15 +157,15 @@ public class GameThread implements Runnable {
 
     }
 
-    public void manageTerrain(City c, double deltaTime) {
+    public void manageTerrain(City c, double deltaTime, int deltaDays) {
         synchronized (c.getTerrain()) {
             for (Terrain b : c.getTerrain()) {
-                b.process(deltaTime);
+                b.process(deltaTime, deltaDays);
             }
         }
     }
 
-    public void manageSprite(City c, double deltaTime) {
+    public void manageSprite(City c, double deltaTime, int deltaDays) {
         synchronized (c.getBuildings()) {
 
             for (Building b : c.getBuildings()) {
@@ -174,7 +174,7 @@ public class GameThread implements Runnable {
         }
         synchronized (c.getResourceManager().getAnimals()) {
             for (Sprite s : c.getResourceManager().getAnimals()) {
-                s.process(deltaTime);
+                s.process(deltaTime, deltaDays);
             }
         }
     }

@@ -1,10 +1,7 @@
 package com.exiro.terrainList;
 
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
-
-import java.util.ArrayList;
 
 public class Rock extends Terrain {
 
@@ -13,7 +10,7 @@ public class Rock extends Terrain {
     boolean isAccessible;
 
     public Rock(int xpos, int ypos, City c, int size, RockType rtype, int nbr) {
-        super(true, ObjectType.ROCK, false, xpos, ypos, c, false, false, true);
+        super(ObjectType.ROCK, false, xpos, ypos, c, false, false, true, size);
         this.setSize(size);
         this.rtype = rtype;
         setRockImg(nbr);
@@ -49,15 +46,7 @@ public class Rock extends Terrain {
         updateImg();
     }
 
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
 
-    @Override
-    public void delete() {
-
-    }
 
     public boolean isAccessible() {
         return isAccessible;
@@ -68,12 +57,7 @@ public class Rock extends Terrain {
     }
 
     @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
-
-    @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
 
     }
 

@@ -10,7 +10,6 @@ import com.exiro.object.*;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.MovingSprite;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public abstract class Carter extends MovingSprite{
@@ -36,6 +35,7 @@ public abstract class Carter extends MovingSprite{
         this.command = command;
         this.origin = origin;
         this.trueOrigin = origin;
+
     }
 
     public static Carter startDelivery(City c,Building from, Building to, Resource r, int amount,int currentDelivery){
@@ -72,12 +72,12 @@ public abstract class Carter extends MovingSprite{
     }
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
 
-        if (hasArrived() && carterState != CarterState.WAITING){
+        if (hasArrived() && carterState != CarterState.WAITING) {
             Arrived();
-        }else if(carterState == CarterState.WAITING){
+        } else if (carterState == CarterState.WAITING) {
             searchForStoreBuilding();
         }
 
@@ -190,7 +190,7 @@ public abstract class Carter extends MovingSprite{
         updateImg();
         setOrigin((Building) getDestination());
         setDestination(trueOrigin);
-        setRoutePath(c.getPathManager().getPathTo(getOrigin().getAccess().get(0),getDestination().getAccess().get(0),FreeState.ALL_ROAD.getI()));
+        setRoutePath(c.getPathManager().getPathTo(getOrigin().getAccess().get(0), ((ObjectClass) getDestination()).getAccess().get(0), FreeState.ALL_ROAD.getI()));
         carterState = CarterState.RETURNING_EMPTY;
     }
 
@@ -200,7 +200,7 @@ public abstract class Carter extends MovingSprite{
         updateImg();
         setOrigin((Building) getDestination());
         setDestination(trueOrigin);
-        setRoutePath(c.getPathManager().getPathTo(getOrigin().getAccess().get(0),getDestination().getAccess().get(0),FreeState.ALL_ROAD.getI()));
+        setRoutePath(c.getPathManager().getPathTo(getOrigin().getAccess().get(0), ((ObjectClass) getDestination()).getAccess().get(0), FreeState.ALL_ROAD.getI()));
         carterState = CarterState.RETURNING_FULL;
     }
 
@@ -208,7 +208,7 @@ public abstract class Carter extends MovingSprite{
     @Override
     public void delete() {
         super.delete();
-        ObjectClass obj = getDestination();
+        BaseObject obj = getDestination();
         if(obj instanceof StoreBuilding){
             ((StoreBuilding) obj).setCarterAvailable(true);
         }else if(obj instanceof IndustryConverter){
@@ -242,16 +242,6 @@ public abstract class Carter extends MovingSprite{
             case DONE:
                 break;
         }
-    }
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
     }
 
     @Override

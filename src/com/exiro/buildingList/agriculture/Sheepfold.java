@@ -38,7 +38,6 @@ public class Sheepfold extends ResourceGenerator {
     public Interface getInterface() {
         BuildingInterface bi = (BuildingInterface) super.getInterface();
         bi.addText("Reserve de " + getStock() + " chargements de " + getResource().getName(), 16, 20, 80);
-
         return bi;
     }
 

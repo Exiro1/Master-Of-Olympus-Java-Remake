@@ -8,7 +8,6 @@ import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.sprite.agriculture.Sheepherd;
 import com.exiro.sprite.culture.Actor;
 import com.exiro.systemCore.GameManager;
 
@@ -46,7 +45,7 @@ public class TheaterSchool extends Building {
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
             if (isWorking())
-                s.process(delta);
+                s.process(delta, 0);
         }
     }
 

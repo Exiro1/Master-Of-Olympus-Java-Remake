@@ -85,11 +85,11 @@ public class Sheep extends Animal {
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         if (state == SheepState.BEING_CUT || state == SheepState.STOP)
             return;
         checkTime += deltaTime;
-        super.process(deltaTime);
+        super.process(deltaTime, deltaDays);
         if (mowed && checkTime > 3) {
             checkTime = 0;
             if (GameManager.getInstance().getTimeManager().daysSince(start) > days) {
@@ -185,7 +185,7 @@ public class Sheep extends Animal {
 
     }
 
-    @Override
+    //@Override
     public boolean build(int xPos, int yPos) {
 
         if (c.getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow && c.getMap().getCase(xPos, yPos).getObject() == null) {
@@ -201,7 +201,7 @@ public class Sheep extends Animal {
         return true;
     }
 
-    @Override
+    //@Override
     public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
         if (c.getMap().getCase(xPos, yPos) == null)
             return null;
@@ -210,11 +210,6 @@ public class Sheep extends Animal {
             cc.add(c.getMap().getCase(xPos, yPos));
             return cc;
         }
-        return null;
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
         return null;
     }
 

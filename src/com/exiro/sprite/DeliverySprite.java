@@ -42,8 +42,8 @@ public abstract class DeliverySprite extends MovingSprite {
 
 
     @Override
-    public void process(double deltaTime) {
-        super.process(deltaTime);
+    public void process(double deltaTime, int deltaDays) {
+        super.process(deltaTime, deltaDays);
         if (lastX != getXB() || lastY != getYB()) {
             lastY = getYB();
             lastX = getXB();
@@ -71,20 +71,10 @@ public abstract class DeliverySprite extends MovingSprite {
     }
 
     @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-    @Override
     public void delete() {
         super.delete();
     }
 
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
     @Override
     public Map<Direction, TileImage[]> getSpriteSet() {

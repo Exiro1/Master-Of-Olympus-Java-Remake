@@ -3,16 +3,13 @@ package com.exiro.sprite.animals;
 import com.exiro.ai.AnimalsAI;
 import com.exiro.depacking.TileImage;
 import com.exiro.moveRelated.FreeState;
-import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.Direction;
 import com.exiro.systemCore.GameManager;
-import com.exiro.terrainList.Meadow;
 import com.exiro.utils.Time;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -72,12 +69,12 @@ public class Goat extends Animal {
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
         if (state == GoatState.BEING_MILKED || state == GoatState.STOP)
             return;
 
         checkTime += deltaTime;
-        super.process(deltaTime);
+        super.process(deltaTime, deltaDays);
 
         if (milked && checkTime > 3) {
             checkTime = 0;
@@ -161,38 +158,8 @@ public class Goat extends Animal {
 
     }
 
-    @Override
-    public boolean build(int xPos, int yPos) {
+    //@Override
 
-        if (c.getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow && c.getMap().getCase(xPos, yPos).getObject() == null) {
-            setX(xPos);
-            setY(yPos);
-            setXB(xPos);
-            setYB(yPos);
-            c.getResourceManager().addGoat(this);
-            setMainCase(c.getMap().getCase(getXB(), getYB()));
-            return true;
-        }
-
-        return true;
-    }
-
-    @Override
-    public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {
-        if (c.getMap().getCase(xPos, yPos) == null)
-            return null;
-        if (c.getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow&& c.getMap().getCase(xPos, yPos).getObject() == null) {
-            ArrayList<Case> cc = new ArrayList<>();
-            cc.add(c.getMap().getCase(xPos, yPos));
-            return cc;
-        }
-        return null;
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
-    }
 
     public boolean isMilked() {
         return milked;

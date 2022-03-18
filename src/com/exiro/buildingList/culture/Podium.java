@@ -40,7 +40,7 @@ public class Podium extends Building {
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
             if (isActive() && getPop() > 0)
-                s.process(delta);
+                s.process(delta, 0);
         }
     }
 

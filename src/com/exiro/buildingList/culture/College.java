@@ -8,7 +8,6 @@ import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.sprite.agriculture.Sheepherd;
 import com.exiro.sprite.culture.Philosopher;
 import com.exiro.systemCore.GameManager;
 
@@ -70,7 +69,7 @@ public class College extends Building {
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
             if (isActive() && getPop() > 0)
-                s.process(delta);
+                s.process(delta, 0);
         }
     }
 

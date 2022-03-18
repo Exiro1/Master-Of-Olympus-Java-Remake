@@ -4,6 +4,7 @@ import com.exiro.object.CityMap;
 import com.exiro.object.ObjectType;
 import com.exiro.terrainList.Elevation;
 import com.exiro.terrainList.Meadow;
+import com.exiro.terrainList.Water;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -90,6 +91,11 @@ public class RoadMap {
             } else if (cityMap.getCase(xStart, yStart).getObject().getBuildingType().isWalk()) {
                 access = FreeState.WALKABLE_CASE;
             }
+        } else if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Water) {
+            access = FreeState.WATER;
+        }
+        if (cityMap.getCase(xStart, yStart).getTerrain() instanceof Water) {
+            access = FreeState.WATER;
         }
         return access;
     }
@@ -157,7 +163,7 @@ public class RoadMap {
                         continue;
                     }
 
-                    if (cityMap.getCase(i, j) == null || cityMap.getCase(i, j).getTerrain().isBlocking()) {
+                    if (cityMap.getCase(i, j) == null || (cityMap.getCase(i, j).getTerrain().isBlocking() && !(cityMap.getCase(i, j).getTerrain() instanceof Water))) {
                         continue;
                     }
 

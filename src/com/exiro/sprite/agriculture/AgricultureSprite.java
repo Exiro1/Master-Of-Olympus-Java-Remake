@@ -2,14 +2,12 @@ package com.exiro.sprite.agriculture;
 
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.object.Case;
+import com.exiro.object.BaseObject;
 import com.exiro.object.City;
-import com.exiro.object.ObjectClass;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.utils.Point;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class AgricultureSprite extends MovingSprite {
@@ -21,12 +19,12 @@ public class AgricultureSprite extends MovingSprite {
     boolean createRessource = false;
 
 
-    public AgricultureSprite(String filePath, int bitID, int localId, int frameNumber, City c, ObjectClass destination) {
+    public AgricultureSprite(String filePath, int bitID, int localId, int frameNumber, City c, BaseObject destination) {
         super(filePath, bitID, localId, frameNumber, c, destination);
     }
 
     @Override
-    public void process(double deltaTime) {
+    public void process(double deltaTime, int deltaDays) {
 
         timeSinceLastFrame = timeSinceLastFrame + deltaTime;
         // System.out.println(timeSinceLastFrame);
@@ -41,21 +39,21 @@ public class AgricultureSprite extends MovingSprite {
             setImage(getDir(), index, unidir);
         }
         if (path != null && !hasArrived) {
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) {
                 hasArrived = true;
             }
-            if (getDir() == Direction.SUD_OUEST) {
+            if (getDir() == Direction.SOUTH_WEST) {
                 y = y + (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.NORD_OUEST) {
+            } else if (getDir() == Direction.NORTH_WEST) {
                 x = x - (float) (speed * deltaTime);
                 y = Math.round(y);
-            } else if (getDir() == Direction.NORD_EST) {
+            } else if (getDir() == Direction.NORTH_EAST) {
                 y = y - (float) (speed * deltaTime);
                 x = Math.round(x);
-            } else if (getDir() == Direction.SUD_EST) {
+            } else if (getDir() == Direction.SOUTH_EAST) {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
             }
@@ -74,28 +72,28 @@ public class AgricultureSprite extends MovingSprite {
         int i = 0;
         switch (direction) {
 
-            case SUD:
+            case SOUTH:
                 i = 3;
                 break;
-            case SUD_EST:
+            case SOUTH_EAST:
                 i = 2;
                 break;
-            case EST:
+            case EAST:
                 i = 1;
                 break;
-            case NORD_EST:
+            case NORTH_EAST:
                 i = 0;
                 break;
-            case NORD:
+            case NORTH:
                 i = 7;
                 break;
-            case NORD_OUEST:
+            case NORTH_WEST:
                 i = 6;
                 break;
-            case OUEST:
+            case WEST:
                 i = 5;
                 break;
-            case SUD_OUEST:
+            case SOUTH_WEST:
                 i = 4;
                 break;
         }
@@ -109,16 +107,6 @@ public class AgricultureSprite extends MovingSprite {
         height = t.getH();
         width = t.getW();
         setImg(t);
-    }
-
-    @Override
-    public boolean build(int xPos, int yPos) {
-        return false;
-    }
-
-    @Override
-    public ArrayList<Case> getAccess() {
-        return null;
     }
 
     @Override

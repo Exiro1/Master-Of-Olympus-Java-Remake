@@ -1,4 +1,4 @@
-package com.exiro.buildingList.delivery;
+package com.exiro.buildingList.security;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
@@ -48,7 +48,7 @@ public class Safety extends Building {
     public void processSprite(double delta) {
         for (Sprite s : sprites) {
             if (isActive() && getPop() > 0)
-                s.process(delta);
+                s.process(delta, 0);
         }
     }
 

@@ -3,7 +3,7 @@ package com.exiro.render.interfaceList;
 import com.exiro.depacking.TileImage;
 import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
-import com.exiro.object.ObjectClass;
+import com.exiro.object.BaseObject;
 import com.exiro.render.Button;
 import com.exiro.render.ButtonType;
 import com.exiro.render.HoverButton;
@@ -25,7 +25,7 @@ public class Interface {
     ArrayList<InterfaceObject> obj = new ArrayList<>();
 
     boolean isOpen;
-    ObjectClass caller;
+    BaseObject caller;
     public Interface(int x, int y, int w, int h, ArrayList<Button> buttons) {
         childrens = new ArrayList<>();
         this.x = x;
@@ -44,7 +44,7 @@ public class Interface {
         this.y = y;
         this.h = h;
         this.w = w;
-        if(buttons == null){
+        if (buttons == null) {
             buttons = new ArrayList<>();
         }
         this.buttons = buttons;
@@ -52,12 +52,13 @@ public class Interface {
         this.isOpen = true;
         this.childrens = childrens;
     }
-    public Interface(int x, int y, int w, int h, ArrayList<Button> buttons, ObjectClass caller) {
+
+    public Interface(int x, int y, int w, int h, ArrayList<Button> buttons, BaseObject caller) {
         this.x = x;
         this.y = y;
         this.h = h;
         this.w = w;
-        if(buttons == null){
+        if (buttons == null) {
             buttons = new ArrayList<>();
         }
         this.buttons = buttons;

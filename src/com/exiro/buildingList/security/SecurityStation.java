@@ -1,4 +1,4 @@
-package com.exiro.buildingList.delivery;
+package com.exiro.buildingList.security;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
@@ -10,41 +10,40 @@ import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.sprite.delivery.WaterDelivery;
+import com.exiro.sprite.delivery.SecurityGuard;
 import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
-public class WaterWell extends Building {
+public class SecurityStation extends Building {
 
-    WaterDelivery waterDelivery;
+
+    SecurityGuard guard;
     float timeBeforeDelivery = 0.0f;
 
-    public WaterWell(boolean isActive, int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city) {
-        super(isActive, ObjectType.WATERWELL, BuildingCategory.FOOD, pop, 4, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0);
-        waterDelivery = null;
+    public SecurityStation(boolean isActive, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
+        super(isActive, ObjectType.SECURITY_STATION, BuildingCategory.SECURITY, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public WaterWell() {
-        super(false, ObjectType.WATERWELL, BuildingCategory.FOOD, 0, 4, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public SecurityStation() {
+        super(false, ObjectType.SECURITY_STATION, BuildingCategory.SECURITY, 0, 5, 16, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
 
     }
-
 
     @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
         if (succ) {
-            BuildingSprite water = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 1, 6, city, this);
-            water.setOffsetX(30);
-            water.setOffsetY(-10);
-            water.setTimeBetweenFrame(0.1f);
-            addSprite(water);
+            BuildingSprite guard = new BuildingSprite("SprAmbient", 0, 2957, 53, city, this);
+            guard.setComplex(true);
+            guard.setOffsetX(20);
+            guard.setOffsetY(-20);
+            guard.setTimeBetweenFrame(0.1f);
+            addSprite(guard);
             return true;
         }
         return false;
     }
-
 
     @Override
     public void processSprite(double delta) {
@@ -59,18 +58,17 @@ public class WaterWell extends Building {
         super.process(deltaTime, deltaDays);
         if (isActive() && getPop() > 0) {
             if (getMovingSprites().size() == 0) {
-                waterDelivery = new WaterDelivery(city, null, getAccess().get(0));
-                addSprite(waterDelivery);
-            } else if (waterDelivery.hasArrived && waterDelivery.getDestination() == this) {
+                guard = new SecurityGuard(city, null, getAccess().get(0));
+                addSprite(guard);
+            } else if (guard.hasArrived && guard.getDestination() == this) {
                 timeBeforeDelivery += deltaTime;
                 if (timeBeforeDelivery >= 10) {
-                    waterDelivery = new WaterDelivery(city, null, getAccess().get(0));
-                    addSprite(waterDelivery);
+                    guard = new SecurityGuard(city, null, getAccess().get(0));
+                    addSprite(guard);
                     timeBeforeDelivery = 0;
                 }
             }
         }
-
     }
 
     @Override
