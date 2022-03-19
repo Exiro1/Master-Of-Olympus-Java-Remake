@@ -2,6 +2,7 @@ package com.exiro.object;
 
 import com.exiro.buildingList.House;
 import com.exiro.buildingList.agriculture.*;
+import com.exiro.buildingList.army.Armory;
 import com.exiro.buildingList.culture.*;
 import com.exiro.buildingList.delivery.Agora;
 import com.exiro.buildingList.delivery.WaterWell;
@@ -65,6 +66,8 @@ public enum ObjectType {
     AGORAWOOL("Marchand de laine", true, false, "Zeus_General", 2, 3, 2, WoolShop.class),
     AGORAOIL("Marchand d'huile d'olive", true, false, "Zeus_General", 2, 3, 4, OilShop.class),
 
+    //ARMY
+    ARMORY("Armurerie", true, false, "Zeus_General", 2, 6, 21, Armory.class),
 
     //Terrain
     WATERTERRAIN("Eau", true, false, "Zeus_Terrain", 1, 1, 163, Water.class),

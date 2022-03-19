@@ -43,6 +43,12 @@ public class BuildingSprite extends Sprite {
         return ImageLoader.getImage(getPath(), getBitmapID(), getLocalID() + frame);
     }
 
+    @Override
+    public void updateImg() {
+        super.updateImg();
+        setImage(0);
+    }
+
     public void setImage(Direction direction, int frame) {
         int i = 0;
         switch (direction) {

@@ -93,17 +93,17 @@ public class Harvester extends MovingSprite {
                     x = x + (float) (speed * deltaTime);
                     y = Math.round(y);
                 } else if (getDir() == Direction.SOUTH) {
-                    y = y + (float) (speed * deltaTime);
-                    x = x + (float) (speed * deltaTime);
+                    y = y + (float) (speed * deltaTime * 0.71);
+                    x = x + (float) (speed * deltaTime * 0.71);
                 } else if (getDir() == Direction.NORTH) {
-                    y = y - (float) (speed * deltaTime);
-                    x = x - (float) (speed * deltaTime);
+                    y = y - (float) (speed * deltaTime * 0.71);
+                    x = x - (float) (speed * deltaTime * 0.71);
                 } else if (getDir() == Direction.EAST) {
-                    y = y - (float) (speed * deltaTime);
-                    x = x + (float) (speed * deltaTime);
+                    y = y - (float) (speed * deltaTime * 0.71);
+                    x = x + (float) (speed * deltaTime * 0.71);
                 } else if (getDir() == Direction.WEST) {
-                    y = y + (float) (speed * deltaTime);
-                    x = x - (float) (speed * deltaTime);
+                    y = y + (float) (speed * deltaTime * 0.71);
+                    x = x - (float) (speed * deltaTime * 0.71);
                 }
             }
             setXB((int) Math.ceil(x));

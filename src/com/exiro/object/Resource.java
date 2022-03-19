@@ -1,6 +1,5 @@
 package com.exiro.object;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public enum Resource {
     CARROT("Carotte", 1, false, true, 4, 75, null),
     ONION("Oignon", 1, false, true, 4, 75, null),
     WOOD("Bois", 1, true, false, 4, 0, null),
-    BRONZE("Bronze", 1, true, false, 4, 0, Arrays.asList(ObjectType.SCULPTURE_STUDIO)),
+    BRONZE("Bronze", 1, true, false, 4, 0, Arrays.asList(ObjectType.SCULPTURE_STUDIO, ObjectType.ARMORY)),
     MARBLE("Marbre", 1, true, false, 4, 0, Arrays.asList()),
     GRAPE("Raisin", 1, true, false, 4, 0, Arrays.asList(ObjectType.WINERY)),
     OLIVE("Olive", 1, true, false, 4, 0, Arrays.asList(ObjectType.OLIVE_PRESS)),

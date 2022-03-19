@@ -4,6 +4,7 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
+import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.delivery.carter.Carter;
@@ -35,6 +36,8 @@ public abstract class ResourceGenerator extends Building {
     @Override
     public void processSprite(double delta) {
         for (Sprite s : getSprites()) {
+            if (s instanceof BuildingSprite && !((BuildingSprite) s).isVisible())
+                continue;
             if (isWorking())
                 s.process(delta, 0);
         }

@@ -27,7 +27,15 @@ public class Foundry extends IndustryHarverster {
         s.setOffsetX(29);
         s.setOffsetY(-11);
         s.setTimeBetweenFrame(0.1f);
-        setSprite(0,s);
+        setSprite(0, s);
+    }
+
+    @Override
+    public BuildingSprite createBuildingSpriteWait() {
+        BuildingSprite s = super.createBuildingSpriteWait();
+        s.setOffsetX(30);
+        s.setOffsetY(10);
+        return s;
     }
 
     @Override

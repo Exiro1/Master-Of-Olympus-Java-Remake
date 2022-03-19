@@ -16,7 +16,7 @@ import com.exiro.utils.Time;
 
 import java.util.ArrayList;
 
-public class IndustryConverter extends ResourceGenerator{
+public abstract class IndustryConverter extends ResourceGenerator {
 
 
     int unitProduced, timeToTransform, unitNeeded;
@@ -26,7 +26,7 @@ public class IndustryConverter extends ResourceGenerator{
     protected int stockIn, incomming = 0, maxStock;
 
     public IndustryConverter(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLength, int xLength, ArrayList<Case> cases, boolean built, City city, int ID, Resource resourceProduced, int timeToTransform, int unitProduced, int unitNeeded, Resource resourceNeeded, int maxStock) {
-        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resourceProduced,1);
+        super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resourceProduced, 1);
         this.timeToTransform = timeToTransform;
         this.unitProduced = unitProduced;
         this.unitNeeded = unitNeeded;
@@ -55,43 +55,63 @@ public class IndustryConverter extends ResourceGenerator{
         s.setOffsetY(16);
         s.setTimeBetweenFrame(0.1f);
         s.setComplex(true);
-        if(getBuildingSprites().size()==0)
-            addSprite(s);
-        setSprite(0,s);
         return s;
     }
 
-    public void createBuildingSpriteWork() {
+    public abstract void createBuildingSpriteWork();
+
+    public abstract void createBSStock();
+
+    public abstract void updateBSStock();
+
+
+    public void initBSprite() {
+        addSprite(createBuildingSpriteWait());
+        createBuildingSpriteWork();
+        createBSStock();
+        getBuildingSprites().get(0).setVisible(true);
+        getBuildingSprites().get(1).setVisible(false);
+        getBuildingSprites().get(2).setVisible(false);
     }
+
+    @Override
+    public boolean build(int xPos, int yPos) {
+        boolean succ = super.build(xPos, yPos);
+        if (succ) {
+            initBSprite();
+            return true;
+        }
+        return false;
+    }
+
 
     public void setState(ConversionState state) {
         if (this.state == state)
             return;
         this.state = state;
         if (state == ConversionState.WAITING_RESOURCES) {
-            createBuildingSpriteWait();
+            getBuildingSprites().get(0).setVisible(true);
+            getBuildingSprites().get(1).setVisible(false);
         } else {
-            createBuildingSpriteWork();
+            getBuildingSprites().get(0).setVisible(false);
+            getBuildingSprites().get(1).setVisible(true);
         }
     }
     protected int lastStockIn = 0;
 
 
-    public void createBSStock() {
 
-    }
 
     public void updateStock(){
         if(stockIn>0) {
             if (lastStockIn != stockIn) {
-                createBSStock();
+                updateBSStock();
+                getBuildingSprites().get(2).setVisible(true);
                 lastStockIn = stockIn;
             }
         }else{
+            getBuildingSprites().get(2).setVisible(false);
             if (lastStockIn != 0) {
-                if (getBuildingSprites().size() == 1)
-                    createBuildingSpriteWait();
-                getBuildingSprites().get(1).setVisible(false);
                 lastStockIn = 0;
             }
         }

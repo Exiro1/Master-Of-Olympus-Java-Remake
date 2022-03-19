@@ -455,6 +455,10 @@ public class InterfaceRender extends JPanel {
             case ARMY_FORT:
                 break;
             case ARMY_BUILDING:
+                ArrayList<Button> buttons = new ArrayList<>();
+                buttons.add(new ComplexButton(0, 0, 460, 25, 1, 4, 5, 6, ButtonType.ARMY_ARMORY, new TextInterface(ObjectType.ARMORY.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 18)));
+                //buttons.add(new ComplexButton(0, 30, 460, 25, 1, 4, 5, 6, ButtonType.CULTURE_SCHOOLTHEATER, new TextInterface(ObjectType.THEATERSCHOOL.getName(), FontLoader.getFont("Zeus.ttf").deriveFont(16f), 50, 48)));
+                gm.getFrame().getWindow().gameInterface = new Interface(1100, 500, 460, 200, buttons);
                 break;
             case CACHET_SIMPLE:
                 break;

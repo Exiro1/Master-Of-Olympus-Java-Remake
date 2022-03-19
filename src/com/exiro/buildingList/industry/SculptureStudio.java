@@ -3,7 +3,6 @@ package com.exiro.buildingList.industry;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.depacking.TileImage;
-import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
@@ -26,7 +25,7 @@ public class SculptureStudio extends IndustryConverter {
         s.setOffsetX(36);
         s.setOffsetY(-8);
         s.setTimeBetweenFrame(0.08f);
-        setSprite(0,s);;
+        addSprite(s);
     }
 
 
@@ -53,9 +52,13 @@ public class SculptureStudio extends IndustryConverter {
         BuildingSprite s = new BuildingSprite("Zeus_General", 7, 93 + stockIn - 1, 1, getCity(), this);
         s.setOffsetX(25);
         s.setOffsetY(10);
-        if(getBuildingSprites().size()==1)
-            addSprite(s);
-        setSprite(1,s);
+        addSprite(s);
+    }
+
+    @Override
+    public void updateBSStock() {
+        getBuildingSprites().get(2).setLocalID(93 + stockIn - 1);
+        getBuildingSprites().get(2).updateImg();
     }
 
     @Override

@@ -17,6 +17,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class GameWindow extends JPanel {
 
@@ -107,9 +109,11 @@ public class GameWindow extends JPanel {
             }
             if (obj.getTerrain() instanceof Elevation && ((Elevation) obj.getTerrain()).isHasRoad())
                 obj.getTerrain().Render(g, CameraPosx, CameraPosy);
-
-            for (Sprite s : obj.getSprites()) {
-                s.Render(g, CameraPosx, CameraPosy);
+            List<Sprite> spr = obj.getSyncSprites();
+            synchronized (spr) {
+                Iterator<Sprite> it = spr.iterator();
+                while (it.hasNext())
+                    it.next().Render(g, CameraPosx, CameraPosy);
             }
         }
         /*
@@ -309,6 +313,9 @@ public class GameWindow extends JPanel {
                 break;
             case CULTURE_SCHOOLTHEATER:
                 EntityRender.setEntityRender(ObjectType.THEATERSCHOOL);
+                break;
+            case ARMY_ARMORY:
+                EntityRender.setEntityRender(ObjectType.ARMORY);
                 break;
             case INTERFACE_OK:
                 showEntity = false;

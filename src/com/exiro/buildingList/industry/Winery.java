@@ -29,7 +29,21 @@ public class Winery extends IndustryConverter {
         s.setOffsetX(28);
         s.setOffsetY(3);
         s.setTimeBetweenFrame(0.1f);
-        setSprite(0,s);
+        setSprite(0, s);
+    }
+
+    @Override
+    public void createBSStock() {
+        BuildingSprite s = new BuildingSprite("Zeus_General", 7, 93 + stockIn - 1, 1, getCity(), this);
+        s.setOffsetX(25);
+        s.setOffsetY(10);
+        addSprite(s);
+    }
+
+    @Override
+    public void updateBSStock() {
+        getBuildingSprites().get(2).setLocalID(98 + stockIn - 1);
+        getBuildingSprites().get(2).updateImg();
     }
 
     @Override

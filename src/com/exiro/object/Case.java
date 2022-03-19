@@ -7,6 +7,8 @@ import com.exiro.terrainList.Terrain;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Case {
     private int xPos, yPos;
@@ -141,14 +143,18 @@ public class Case {
     }
 
     public boolean isOccupied() {
-        return occupied || sprites.size()!=0;
+        return occupied || sprites.size() != 0;
     }
 
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
 
-    public ArrayList<Sprite> getSprites() {
+    public List<Sprite> getSyncSprites() {
+        return new CopyOnWriteArrayList<>(sprites);
+    }
+
+    public List<Sprite> getSprites() {
         return sprites;
     }
 

@@ -127,15 +127,17 @@ public class CityMap {
                         Tree tree = new Tree(j, i, nbr, city, 0, c);
                         c.setObject(tree);
                         trees.add(c);
-                    }else if(type == 2){
+                    } else if (type == 2) {
                         int nbr = r.nextInt(3);
-                        Tree tree = new Tree(j, i, nbr+33, city, 0, c);
+                        Tree tree = new Tree(j, i, nbr + 33, city, 0, c);
                         c.setObject(tree);
                         trees.add(c);
                     }
                 }
             }
         }
+        createMinerals(149, 105, 4, 4);
+
     }
 
 
@@ -385,6 +387,7 @@ public class CityMap {
                 Random r = new Random();
                 int nbr = r.nextInt(8);
                 Rock rock = new Rock(i, j, city, 1, Rock.RockType.COPPER, nbr);
+                rock.setMainCase(c);
                 c.setTerrain(rock);
                 coppers.add(c);
             }

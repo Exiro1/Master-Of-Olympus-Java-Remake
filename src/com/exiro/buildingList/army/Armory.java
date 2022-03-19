@@ -1,4 +1,4 @@
-package com.exiro.buildingList.industry;
+package com.exiro.buildingList.army;
 
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
@@ -10,33 +10,30 @@ import com.exiro.systemCore.GameManager;
 
 import java.awt.*;
 
-public class OlivePress extends IndustryConverter {
+public class Armory extends IndustryConverter {
 
-
-    //2436
-
-    int lastStockIn = 0;
     TileImage stockImg;
 
-    public OlivePress() {
-        super(false, ObjectType.OLIVE_PRESS, BuildingCategory.INDUSTRY, 0, 12, 72, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.OLIVE_OIL, 60, 1, 1, Resource.OLIVE, 3);
+    public Armory() {
+        super(false, ObjectType.ARMORY, BuildingCategory.ARMY, 0, 18, 85, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.ARMEMENT, 60, 1, 1, Resource.BRONZE, 4);
         maxPerCarter = 1;
     }
 
     @Override
     public void createBuildingSpriteWork() {
-        BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 60, 12, getCity(), this);
-        s.setOffsetX(33);
-        s.setOffsetY(-7);
-        s.setTimeBetweenFrame(0.1f);
+        BuildingSprite s = new BuildingSprite(getType().getPath(), getType().getBitmapID(), 22, 18, getCity(), this);
+        s.setOffsetX(36);
+        s.setOffsetY(-8);
+        s.setTimeBetweenFrame(0.08f);
         addSprite(s);
     }
+
 
     @Override
     public BuildingSprite createBuildingSpriteWait() {
         BuildingSprite s = super.createBuildingSpriteWait();
         s.setOffsetX(25);
-        s.setOffsetY(0);
+        s.setOffsetY(10);
         return s;
     }
 
@@ -50,22 +47,16 @@ public class OlivePress extends IndustryConverter {
         return false;
     }
 
-    @Override
-    public void process(double deltatime, int deltaDays) {
-        super.process(deltatime, deltaDays);
-
-    }
-
     public void createBSStock() {
-        BuildingSprite s = new BuildingSprite("Zeus_General", 7, 101 + stockIn - 1, 1, getCity(), this);
-        s.setOffsetX(32);
-        s.setOffsetY(2);
+        BuildingSprite s = new BuildingSprite("Zeus_General", 7, 93 + stockIn - 1, 1, getCity(), this);
+        s.setOffsetX(30);
+        s.setOffsetY(10);
         addSprite(s);
     }
 
     @Override
     public void updateBSStock() {
-        getBuildingSprites().get(2).setLocalID(101 + stockIn - 1);
+        getBuildingSprites().get(2).setLocalID(93 + stockIn - 1);
         getBuildingSprites().get(2).updateImg();
     }
 
