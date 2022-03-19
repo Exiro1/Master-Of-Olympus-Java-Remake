@@ -32,7 +32,7 @@ public class Harvester extends MovingSprite {
         y = start.getyPos();
         setXB(Math.round(x));
         setYB(Math.round(y));
-        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), harvestSite, FreeState.NON_BLOCKING.getI()));
+        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), harvestSite, FreeState.NON_BLOCKING.getI(), false));
 
     }
 
@@ -72,26 +72,40 @@ public class Harvester extends MovingSprite {
             setImage(getDir(), index);
         }
         if (path != null && !hasArrived) {
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir()))) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) {
                 hasArrived = true;
+                setX(path.getPath().get(path.getIndex()).getxPos());
+                setY(path.getPath().get(path.getIndex()).getyPos());
             }
-
-            if (getDir() == Direction.SOUTH_WEST) {
-                y = y + (float) (speed * deltaTime);
-                x = Math.round(x);
-            } else if (getDir() == Direction.NORTH_WEST) {
-                x = x - (float) (speed * deltaTime);
-                y = Math.round(y);
-            } else if (getDir() == Direction.NORTH_EAST) {
-                y = y - (float) (speed * deltaTime);
-                x = Math.round(x);
-            } else if (getDir() == Direction.SOUTH_EAST) {
-                x = x + (float) (speed * deltaTime);
-                y = Math.round(y);
+            if (!hasArrived) {
+                if (getDir() == Direction.SOUTH_WEST) {
+                    y = y + (float) (speed * deltaTime);
+                    x = Math.round(x);
+                } else if (getDir() == Direction.NORTH_WEST) {
+                    x = x - (float) (speed * deltaTime);
+                    y = Math.round(y);
+                } else if (getDir() == Direction.NORTH_EAST) {
+                    y = y - (float) (speed * deltaTime);
+                    x = Math.round(x);
+                } else if (getDir() == Direction.SOUTH_EAST) {
+                    x = x + (float) (speed * deltaTime);
+                    y = Math.round(y);
+                } else if (getDir() == Direction.SOUTH) {
+                    y = y + (float) (speed * deltaTime);
+                    x = x + (float) (speed * deltaTime);
+                } else if (getDir() == Direction.NORTH) {
+                    y = y - (float) (speed * deltaTime);
+                    x = x - (float) (speed * deltaTime);
+                } else if (getDir() == Direction.EAST) {
+                    y = y - (float) (speed * deltaTime);
+                    x = x + (float) (speed * deltaTime);
+                } else if (getDir() == Direction.WEST) {
+                    y = y + (float) (speed * deltaTime);
+                    x = x - (float) (speed * deltaTime);
+                }
             }
-
             setXB((int) Math.ceil(x));
             setYB((int) Math.ceil(y));
             setMainCase(c.getMap().getCase(getXB(), getYB()));
@@ -133,7 +147,7 @@ public class Harvester extends MovingSprite {
         loaded = true;
         harvesting = false;
         hasArrived = false;
-        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), industry.getAccess().get(0), FreeState.NON_BLOCKING.getI()));
+        setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), industry.getAccess().get(0), FreeState.NON_BLOCKING.getI(), false));
     }
 
     @Override

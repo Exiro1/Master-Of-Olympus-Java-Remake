@@ -81,7 +81,7 @@ public abstract class MovingSprite extends Sprite {
                 }
                 setImage(getDir(), index);
             }
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir()))) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1) {
                 hasArrived = true;
@@ -98,6 +98,18 @@ public abstract class MovingSprite extends Sprite {
             } else if (getDir() == Direction.SOUTH_EAST) {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
+            } else if (getDir() == Direction.SOUTH) {
+                y = y + (float) (speed * deltaTime);
+                x = x + (float) (speed * deltaTime);
+            } else if (getDir() == Direction.NORTH) {
+                y = y - (float) (speed * deltaTime);
+                x = x - (float) (speed * deltaTime);
+            } else if (getDir() == Direction.EAST) {
+                y = y - (float) (speed * deltaTime);
+                x = x + (float) (speed * deltaTime);
+            } else if (getDir() == Direction.WEST) {
+                y = y + (float) (speed * deltaTime);
+                x = x - (float) (speed * deltaTime);
             }
 
             setXB((int) Math.ceil(x));
@@ -200,6 +212,7 @@ public abstract class MovingSprite extends Sprite {
         if(path == null && originPath != null)
             path = originPath.getReversePath();
         this.path = path;
+        setDir(path.next());
         if(originPath == null)
             originPath = path;
 

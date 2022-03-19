@@ -49,11 +49,15 @@ public class RoadMap {
     }
 
     public Path findPath(int xStart, int yStart, int xGoal, int yGoal, int freeState) {
+        return findPath(xStart, yStart, xGoal, yGoal, freeState, true);
+    }
+
+    public Path findPath(int xStart, int yStart, int xGoal, int yGoal, int freeState, boolean straigth) {
         FreeState accessa = getFreeState(xStart, yStart);
 
         FreeState accessb = getFreeState(xGoal, yGoal);
 
-        List<MapNode> n = PathAlgo.doAStar(new MapNode(xStart, yStart, accessa), new MapNode(xGoal, yGoal, accessb), freeState);
+        List<MapNode> n = PathAlgo.doAStar(new MapNode(xStart, yStart, accessa), new MapNode(xGoal, yGoal, accessb), freeState, straigth);
         if (n == null)
             return null;
         Path p = new Path(new ArrayList<>());
@@ -124,29 +128,43 @@ public class RoadMap {
             return t;
         }
 
-        public double getHeuristic(MapNode goal) {
-            return Math.abs(x - goal.x) + Math.abs(y - goal.y);
+        public double getHeuristic(MapNode goal, boolean straight) {
+            if (!straight) {
+                double dx = Math.abs(x - goal.x);
+                double dy = Math.abs(y - goal.y);
+                return 1 * (dx + dy) + (1.414 - 1 * 2) * Math.min(dx, dy);
+
+            } else {
+                return Math.abs(x - goal.x) + Math.abs(y - goal.y);
+            }
         }
 
-        public double getTraversalCost(MapNode neighbour, MapNode last) {
+
+        public double getTraversalCost(MapNode neighbour, MapNode last, boolean straight) {
             //FreeState access = 0;
-            int i = neighbour.x;
-            int j = neighbour.y;
 
             if (last == null || last == neighbour)
+                return 0;
+
+            if (x != neighbour.x && y != neighbour.y) {
+                if (x != last.x && y != last.y)
+                    return 1.2;
+                return 1.414;
+            }
+
+            if (neighbour.x == last.x || neighbour.y == last.y)
                 return 1;
 
-            int k = last.x;
-            int l = last.y;
-
-            if (i == k || j == l)
-                return 1;
 
             //access = getFreeState(i,j);
-            return 5;
+            if (straight)
+                return 5;
+
+            return 1;
+
         }
 
-        public Set<MapNode> getNeighbours() {
+        public Set<MapNode> getNeighbours(boolean straight) {
             Set<MapNode> neighbours = new HashSet<>();
 
             for (int i = x - 1; i <= x + 1; i++) {
@@ -156,10 +174,11 @@ public class RoadMap {
                         continue;
                     }
 
-                    if ((i < x && j < y) ||
-                            (i < x && j > y) ||
-                            (i > x && j > y) ||
-                            (i > x && j < y)) {
+                    if (straight &&
+                            ((i < x && j < y) ||
+                                    (i < x && j > y) ||
+                                    (i > x && j > y) ||
+                                    (i > x && j < y))) {
                         continue;
                     }
 

@@ -103,7 +103,7 @@ public class SmallHolding extends ResourceGenerator {
                 SmallHoldingTree destination = getMatureTrees().get(r.nextInt(getMatureTrees().size()));
                 if (!destination.isMature())
                     continue;
-                if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
+                if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI(), false) != null) {
                     Grower g = new Grower(city, this, new ArrayList<>(Collections.singletonList(destination)), true, true);
                     destination.setAvailable(false);
                     addSprite(g);
@@ -120,7 +120,7 @@ public class SmallHolding extends ResourceGenerator {
             ArrayList<SmallHoldingTree> dests = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 SmallHoldingTree destination = trees.get(r.nextInt(trees.size()));
-                if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI()) != null) {
+                if (destination != null && destination.isAvailable() && AI.goTo(city, getAccess().get(0), city.getMap().getCase(destination.getXB(), destination.getYB()), FreeState.NON_BLOCKING.getI(), false) != null) {
                     dests.add(destination);
                 }
             }

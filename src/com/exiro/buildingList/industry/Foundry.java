@@ -56,7 +56,7 @@ public class Foundry extends IndustryHarverster {
                 for (Case c : city.getMap().getCoppers()) {
                     if (!((Rock) c.getTerrain()).isMined() && ((Rock) c.getTerrain()).isAccessible()) {
                         for (Case n : c.getNeighbour()) {
-                            if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI()) != null) {
+                            if (city.getPathManager().getPathTo(getAccess().get(0), n, FreeState.NON_BLOCKING.getI(), false) != null) {
                                 dir = n;
                                 r = ((Rock) c.getTerrain());
                                 ((Rock) c.getTerrain()).setMined(true);

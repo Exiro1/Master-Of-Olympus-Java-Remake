@@ -5,7 +5,7 @@ import java.util.*;
 public class PathAlgo {
 
 
-    public static <T extends Node<T>> List<T> doAStar(T start, T goal, int free) {
+    public static <T extends Node<T>> List<T> doAStar(T start, T goal, int free, boolean straigth) {
         Set<T> closed = new HashSet<>();
         Map<T, T> fromMap = new HashMap<>();
         List<T> route = new LinkedList<>();
@@ -14,7 +14,7 @@ public class PathAlgo {
         PriorityQueue<T> open = new PriorityQueue<>(11, (nodeA, nodeB) -> Double.compare(fScore.get(nodeA), fScore.get(nodeB)));
 
         gScore.put(start, 0.0);
-        fScore.put(start, start.getHeuristic(goal));
+        fScore.put(start, start.getHeuristic(goal, straigth));
         open.offer(start);
         while (!open.isEmpty()) {
             T current = open.poll();
@@ -29,18 +29,18 @@ public class PathAlgo {
 
             closed.add(current);
 
-            for (T neighbour : current.getNeighbours()) {
+            for (T neighbour : current.getNeighbours(straigth)) {
                 if (closed.contains(neighbour)) {
                     continue;
                 }
 
                 double tentG = gScore.get(current)
-                        + current.getTraversalCost(neighbour, fromMap.get(current));
+                        + current.getTraversalCost(neighbour, fromMap.get(current), straigth);
 
                 boolean contains = open.contains(neighbour);
                 if ((!contains || tentG < gScore.get(neighbour)) && (((neighbour.getType().getI() & free) != 0))) {
                     gScore.put(neighbour, tentG);
-                    fScore.put(neighbour, tentG + neighbour.getHeuristic(goal));
+                    fScore.put(neighbour, tentG + neighbour.getHeuristic(goal, straigth));
 
                     if (contains) {
                         open.remove(neighbour);

@@ -39,7 +39,7 @@ public class AgricultureSprite extends MovingSprite {
             setImage(getDir(), index, unidir);
         }
         if (path != null && !hasArrived) {
-            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) || (getDir() == Direction.EAST && path.getIndex() < path.getPath().size() - 1)) {
+            if ((path.getIndex() < path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir()))) {
                 setDir(path.next());
             } else if (path.getIndex() == path.getPath().size() - 1 && path.isOnCase(new Point(getX(), getY()), getDir())) {
                 hasArrived = true;
@@ -56,6 +56,18 @@ public class AgricultureSprite extends MovingSprite {
             } else if (getDir() == Direction.SOUTH_EAST) {
                 x = x + (float) (speed * deltaTime);
                 y = Math.round(y);
+            } else if (getDir() == Direction.SOUTH) {
+                y = y + (float) (speed * deltaTime);
+                x = x + (float) (speed * deltaTime);
+            } else if (getDir() == Direction.NORTH) {
+                y = y - (float) (speed * deltaTime);
+                x = x - (float) (speed * deltaTime);
+            } else if (getDir() == Direction.EAST) {
+                y = y - (float) (speed * deltaTime);
+                x = x + (float) (speed * deltaTime);
+            } else if (getDir() == Direction.WEST) {
+                y = y + (float) (speed * deltaTime);
+                x = x - (float) (speed * deltaTime);
             }
         } else if (hasArrived) {
             y = Math.round(y);
