@@ -1,7 +1,7 @@
 package com.exiro.sprite.ship;
 
 import com.exiro.buildingList.agriculture.Fishery;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.BaseObject;

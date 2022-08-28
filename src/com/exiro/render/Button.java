@@ -1,6 +1,6 @@
 package com.exiro.render;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.utils.Point;
 

@@ -1,6 +1,6 @@
 package com.exiro.object;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.render.ButtonType;
 import com.exiro.render.interfaceList.Interface;

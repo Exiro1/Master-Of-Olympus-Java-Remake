@@ -1,6 +1,6 @@
 package com.exiro.sprite.delivery.carter;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.City;

@@ -6,7 +6,7 @@ import com.exiro.buildingList.StoreBuilding;
 import com.exiro.buildingList.delivery.agorashop.AgoraShopBuilding;
 import com.exiro.buildingList.delivery.agorashop.EmptyShop;
 import com.exiro.constructionList.Road;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;

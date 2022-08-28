@@ -1,7 +1,7 @@
 package com.exiro.sprite.delivery.carter;
 
 import com.exiro.buildingList.Building;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
 import com.exiro.object.City;

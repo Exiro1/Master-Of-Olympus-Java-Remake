@@ -2,7 +2,7 @@ package com.exiro.buildingList.agriculture;
 
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;

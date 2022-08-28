@@ -1,6 +1,6 @@
 package com.exiro.sprite.delivery;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;

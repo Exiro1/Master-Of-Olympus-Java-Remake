@@ -1,6 +1,6 @@
 package com.exiro.sprite.agriculture;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.BaseObject;
 import com.exiro.object.City;

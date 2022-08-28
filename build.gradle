@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'com.exiro'
+version '1.0-SNAPSHOT'
+
+repositories{
+    mavenCentral()
+    maven {url "https://jitpack.io"}
+}
+sourceSets {
+    main{
+        java{
+            srcDirs = ['src']
+        }
+    }
+}
+dependencies {
+    implementation 'com.github.Exiro1:SGReaderJava:master-SNAPSHOT'
+}

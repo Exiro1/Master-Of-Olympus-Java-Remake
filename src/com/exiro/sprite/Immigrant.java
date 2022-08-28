@@ -1,6 +1,6 @@
 package com.exiro.sprite;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.City;
 import com.exiro.object.ObjectClass;

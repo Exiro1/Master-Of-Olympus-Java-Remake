@@ -1,6 +1,6 @@
 package com.exiro.render.interfaceList;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 
 import java.awt.*;

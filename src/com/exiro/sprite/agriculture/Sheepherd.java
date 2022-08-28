@@ -2,7 +2,7 @@ package com.exiro.sprite.agriculture;
 
 import com.exiro.ai.AI;
 import com.exiro.buildingList.agriculture.Sheepfold;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;

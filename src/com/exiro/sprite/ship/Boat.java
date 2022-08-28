@@ -1,6 +1,6 @@
 package com.exiro.sprite.ship;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.object.BaseObject;
 import com.exiro.object.City;
 import com.exiro.sprite.Direction;

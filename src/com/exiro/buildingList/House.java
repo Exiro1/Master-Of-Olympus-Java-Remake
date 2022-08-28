@@ -1,6 +1,6 @@
 package com.exiro.buildingList;
 
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;

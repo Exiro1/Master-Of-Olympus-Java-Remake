@@ -1,7 +1,6 @@
 package com.exiro.fileManager;
 
-import com.exiro.depacking.*;
-
+import com.exiro.reader.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;

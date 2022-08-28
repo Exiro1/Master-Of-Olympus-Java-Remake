@@ -1,7 +1,7 @@
 package com.exiro.sprite.animals;
 
 import com.exiro.ai.AnimalsAI;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;

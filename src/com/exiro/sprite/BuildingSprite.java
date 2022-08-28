@@ -1,7 +1,7 @@
 package com.exiro.sprite;
 
 import com.exiro.buildingList.Building;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.City;
 import com.exiro.render.IsometricRender;

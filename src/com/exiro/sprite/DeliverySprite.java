@@ -2,7 +2,7 @@ package com.exiro.sprite;
 
 import com.exiro.ai.DeliveryAI;
 import com.exiro.buildingList.Building;
-import com.exiro.depacking.TileImage;
+import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
