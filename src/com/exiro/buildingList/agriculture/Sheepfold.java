@@ -3,6 +3,7 @@ package com.exiro.buildingList.agriculture;
 import com.exiro.ai.AI;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
@@ -114,5 +115,9 @@ public class Sheepfold extends ResourceGenerator {
     @Override
     protected void addPopulation() {
 
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.SHEEP_FARM;
     }
 }

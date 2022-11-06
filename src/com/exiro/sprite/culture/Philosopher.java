@@ -1,5 +1,6 @@
 package com.exiro.sprite.culture;
 
+import com.exiro.ai.AI;
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.House;
 import com.exiro.moveRelated.FreeState;
@@ -14,7 +15,7 @@ public class Philosopher extends DeliverySprite {
         super("SprMain", 0, 12127, 12, c, destination, start, 0);
         setOffsetY(-10);
         setTimeBetweenFrame(0.05f);
-        setRoutePath(getAi().goTo(c, start, dest, FreeState.ALL_ROAD.getI()));
+        setRoutePath(AI.goTo(c, start, dest, FreeState.ALL_ROAD.getI()));
     }
 
     public Philosopher(City c, ObjectClass destination, Case start, int len) {

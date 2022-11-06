@@ -1,6 +1,7 @@
 package com.exiro.buildingList;
 
 import com.exiro.ai.AI;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.*;
@@ -98,8 +99,7 @@ public abstract class StoreBuilding extends Building {
 
     public void emptyResource(Resource r) {
         for (Building b : city.getBuildings()) {
-            if (b instanceof StoreBuilding) {
-                StoreBuilding g = (StoreBuilding) b;
+            if (b instanceof StoreBuilding g) {
                 if (g.getFreeSpace(r) > 0 && g.getAccess().size() > 0) {
                     Path p = city.getPathManager().getPathTo(getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
                     if (p != null) {
@@ -119,9 +119,8 @@ public abstract class StoreBuilding extends Building {
         ArrayList<Building> stores = new ArrayList<>(city.getBuildingList(ObjectType.GRANARY));
         stores.addAll(city.getBuildingList(ObjectType.STOCK));
         for (Building b : stores) {
-            if (!(b instanceof StoreBuilding))
+            if (!(b instanceof StoreBuilding sb))
                 continue;
-            StoreBuilding sb = (StoreBuilding) b;
             if (sb.hasStockAvailable(r)) {
                 int command = Math.min(Math.min(getFreeSpace(r), sb.getStockAvailable(r)), r.getMaxPerCart());
                 command = sb.reserveUnstockage(r, command);
@@ -395,4 +394,8 @@ public abstract class StoreBuilding extends Building {
         this.carterAvailable = carterAvailable;
     }
 
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.STORAGE;
+    }
 }

@@ -132,7 +132,7 @@ public class RoadMap {
             if (!straight) {
                 double dx = Math.abs(x - goal.x);
                 double dy = Math.abs(y - goal.y);
-                return 1 * (dx + dy) + (1.414 - 1 * 2) * Math.min(dx, dy);
+                return 1 * (dx + dy) + (1.414 - 2) * Math.min(dx, dy);
 
             } else {
                 return Math.abs(x - goal.x) + Math.abs(y - goal.y);

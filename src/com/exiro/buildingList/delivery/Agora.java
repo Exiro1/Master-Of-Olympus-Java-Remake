@@ -6,6 +6,7 @@ import com.exiro.buildingList.StoreBuilding;
 import com.exiro.buildingList.delivery.agorashop.AgoraShopBuilding;
 import com.exiro.buildingList.delivery.agorashop.EmptyShop;
 import com.exiro.constructionList.Road;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.FreeState;
@@ -108,21 +109,25 @@ public class Agora extends Building {
         for (Case c : horu) {
             if (!(c != null && c.getObject() != null && c.getObject().getBuildingType() == ObjectType.ROAD)) {
                 horbu = false;
+                break;
             }
         }
         for (Case c : hord) {
             if (!(c != null && c.getObject() != null && c.getObject().getBuildingType() == ObjectType.ROAD)) {
                 horbd = false;
+                break;
             }
         }
         for (Case c : verl) {
             if (!(c != null && c.getObject() != null && c.getObject().getBuildingType() == ObjectType.ROAD)) {
                 verbl = false;
+                break;
             }
         }
         for (Case c : verr) {
             if (!(c != null && c.getObject() != null && c.getObject().getBuildingType() == ObjectType.ROAD)) {
                 verbr = false;
+                break;
             }
         }
 
@@ -177,7 +182,7 @@ public class Agora extends Building {
                 }
             }
             if (place.size() == 12) {
-                shops.add(city.getMap().getCase(xPos + 1, yPos + 0));
+                shops.add(city.getMap().getCase(xPos + 1, yPos));
                 shops.add(city.getMap().getCase(xPos + 1, yPos + 2));
                 shops.add(city.getMap().getCase(xPos + 1, yPos + 4));
                 roads = verr;
@@ -196,7 +201,7 @@ public class Agora extends Building {
                 }
             }
             if (place.size() == 12) {
-                shops.add(city.getMap().getCase(xPos - 1, yPos + 0));
+                shops.add(city.getMap().getCase(xPos - 1, yPos));
                 shops.add(city.getMap().getCase(xPos - 1, yPos + 2));
                 shops.add(city.getMap().getCase(xPos - 1, yPos + 4));
                 roads = verl;
@@ -220,6 +225,7 @@ public class Agora extends Building {
         for (AgoraShopBuilding s : this.shopsBuildings) {
             if (s.getShop() == shop.getShop()) {
                 exist = true;
+                break;
             }
         }
         if ((shopsBuildings.size() < 3 && !exist) || shopsBuildings.size() == 0) {
@@ -337,8 +343,7 @@ public class Agora extends Building {
                         ArrayList<Resource> needed = shopBuilding.getResources();
                         for (Resource r : needed) {
                             for (Building b : city.getBuildings()) {
-                                if (b instanceof StoreBuilding) {
-                                    StoreBuilding g = (StoreBuilding) b;
+                                if (b instanceof StoreBuilding g) {
                                     if (g.hasStockAvailable(r)) {
                                         shopBuilding.setBuying(true);
                                         createResupply(g, needed, shopBuilding);
@@ -355,8 +360,10 @@ public class Agora extends Building {
             }
             boolean ready = false;
             for (AgoraShopBuilding b : shopsBuildings) {
-                if (b.getReserve() > 0)
+                if (b.getReserve() > 0) {
                     ready = true;
+                    break;
+                }
             }
             if (ready)
                 startDelivery();
@@ -374,7 +381,7 @@ public class Agora extends Building {
                         StoreBuilding st = (StoreBuilding) ch.getDestination();
                         for (Resource r : ch.getNeeded()) {
                             if (st.getStockAvailable(r) > 0) {
-                                int retr = st.unStock(r, Math.min(st.getStockAvailable(r), (int) (ch.getAType().getShop().getQuerry() - ch.getResourcesGathered()) / r.getFoodapprov()));
+                                int retr = st.unStock(r, Math.min(st.getStockAvailable(r), (ch.getAType().getShop().getQuerry() - ch.getResourcesGathered()) / r.getFoodapprov()));
                                 ch.setResourcesGathered(ch.getResourcesGathered() + retr * r.getFoodapprov());
                             }
                         }
@@ -404,4 +411,12 @@ public class Agora extends Building {
     public ArrayList<AgoraShopBuilding> getShopsBuildings() {
         return shopsBuildings;
     }
+
+    //TODO implement all agora shops sound
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.AGORA_FOOD;
+    }
+
+
 }

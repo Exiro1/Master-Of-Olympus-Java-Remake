@@ -64,4 +64,6 @@ public class Animal extends MovingSprite {
     public Map<Direction, TileImage[]> getSpriteSet() {
         return null;
     }
+
+
 }

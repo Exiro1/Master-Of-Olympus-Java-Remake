@@ -1,0 +1,415 @@
+; SOUND_FXU.TXT
+
+LAYER1_START
+
+FREQUENCY_L1 2000
+
+wind1.wav		0 	F 	2 	0 	2 	L 	1 	3	CCW	0.025	4	9
+wind2.wav		0	F 	2 	0 	2 	L 	5 	1	RCW	0.025	9 	18
+wind3.wav		0	F 	2 	0 	2 	L 	1	3	RCW	0.025	7  	14
+wind4.wav		0	F 	2 	0 	2 	L 	3 	1	CW	0.025	5 	10
+wind5.wav		0 	F 	2 	0 	2 	L 	7 	5	RCW	0.025	5	10
+wind6.wav		0 	F 	2 	0 	2 	L 	7 	3	RCW	0.025	5  	5
+wind7.wav		0 	F 	2 	0 	2 	L 	0 	4	RCW	0.025	5 	9
+shimmer3.wav		0	F 	2 	0 	2 	B 	0 	180	RCW	2	3  	3
+wind_sparkle2.wav	0 	F 	2 	0 	2 	C 	0 	180	RCW	1.0	5  	5
+dark2.wav		0 	F 	2 	0 	2 	C   	0 	180	RCW	1.0	4 	4
+bells.wav		0 	F 	2 	0 	2 	C 	0 	180	RCW	1.0	3  	3
+space_bells7.wav	0 	F 	2 	0 	2 	C 	0 	180	RCW	2.0	4  	4
+space_bells10.wav	0 	F  	2 	0 	2 	C 	0 	180	RCW	2.0	5  	5
+space_bells12.wav	0 	F 	2 	0 	2 	C 	0 	180	RCW	2.0	5  	5
+space_bells13.wav	0 	F  	2 	0 	2 	C 	0 	180	RCW	2.0	5  	5
+space_bells14.wav	0 	F 	2 	0 	2 	C 	0 	180	RCW	2.0	5  	9
+space_bells4a.wav	0 	F 	2 	0 	2 	C 	0 	180	RCW	2.0	4  	4
+chime2.wav		0 	F  	2 	0 	2 	C 	0 	180	RCW	1.0	4  	4
+voice.wav		0 	F 	2 	0 	2 	C 	0 	180	RCW	1.0	3  	3
+shimmer6.wav		0	F 	2 	0 	2 	C 	0 	270	CCW	1	8  	8
+shimmer7.wav		0 	F 	2 	0 	2 	B 	0 	0	CW	150	3	3
+
+LAYER2_START
+
+FREQUENCY_L2 300
+
+; BUILDINGS
+CATEGORY MAINTENANCE_OFFICE 50
+    maintenance1.wav
+	maintenance2.wav
+	maintenance3.wav
+	maintenance4.wav
+
+CATEGORY COMMON_HOUSING 50
+	wagon1.wav
+	wagon2.wav
+	wagon3.wav
+	city1.wav
+	city3.wav
+	city4.wav
+	city5.wav
+	city8.wav
+	city9.wav
+
+CATEGORY ELITE_HOUSING 20
+	elite1.wav
+	elite2.wav
+	city2.wav
+	city7.wav
+
+CATEGORY FARMING 50
+	dig3.wav
+	dig4.wav
+	dig5.wav
+	dig6.wav
+	dig7.wav
+	dig8.wav
+	bird1.wav
+	bird2.wav
+
+CATEGORY ORCHARD 50
+	rustling1.wav
+	rustling2.wav
+	orchard1.wav
+	orchard2.wav
+
+CATEGORY SHEEP_FARM 50
+	shearing1.wav
+	shearing2.wav
+	shearing3.wav
+
+CATEGORY GOAT_FARM 50
+	goatherd1.wav
+	goatherd2.wav
+	goatherd3.wav
+
+CATEGORY DOCK 100
+	dock1.wav
+	dock2.wav
+	dock3.wav
+
+CATEGORY URCHIN 100	
+	urchin1.wav
+	urchin2.wav
+	urchin3.wav
+
+CATEGORY TRIREME_WHARF 30
+	trireme1.wav
+	trireme2.wav
+	trireme3.wav
+	trireme4.wav
+
+CATEGORY HUNTING 50
+	hunting1.wav
+	hunting2.wav
+
+CATEGORY TIMBER_MILL 50
+	timber_mill1.wav
+	timber_mill2.wav
+	timber_mill3.wav
+
+CATEGORY MARBLE_QUARRY 50
+
+CATEGORY MARBLE 50
+	marble1.wav
+	marble2.wav
+
+CATEGORY MINT 100
+	mint1.wav
+	mint2.wav
+	mint3.wav
+	mint4.wav
+
+CATEGORY FOUNDRY 40
+	foundry1.wav
+	foundry2.wav
+	foundry3.wav
+	foundry4.wav
+	foundry5.wav
+
+CATEGORY WORKSHOPS 50
+	wagon4.wav
+	wagon5.wav
+	wagon6.wav
+	wagon7.wav
+
+CATEGORY STORAGE 50
+	chest1.wav
+	chest2.wav
+	chest3.wav
+	shovel.wav
+	drop_wood.wav
+	storage_cart1.wav
+	warehouse.wav
+
+CATEGORY AGORA_FOOD 20
+	agora_food1.wav
+	agora_food2.wav
+	agora_food3.wav
+	agora_food4.wav
+
+CATEGORY AGORA_FLEECE 20
+	agora_fleece1.wav
+	agora_fleece2.wav
+
+CATEGORY AGORA_OIL 20
+	agora_oil.wav	
+	agora_gen1.wav
+
+CATEGORY AGORA_WINE 20
+	agora_wine1.wav
+	agora_wine2.wav	
+
+CATEGORY AGORA_ARMS 20
+	agora_arms1.wav
+	agora_arms2.wav
+	agora_gen2.wav
+
+CATEGORY AGORA_HORSE 40
+	agora_horse1.wav
+	agora_horse2.wav
+
+CATEGORY TRADE 50
+	trade1.wav
+	trade2.wav
+	trade3.wav
+	trade4.wav
+
+CATEGORY MUNICIPAL 50
+	tax1.wav
+	tax2.wav
+	tax3.wav
+
+CATEGORY PALACE 50
+	palace1.wav
+	palace2.wav
+	palace3.wav
+
+CATEGORY DEFENSIVE 50
+	defensive1.wav
+	defensive2.wav
+	defensive3.wav
+
+CATEGORY INFIRMARY 50
+	infirmary1.wav
+	infirmary2.wav
+	infirmary3.wav
+	infirmary4.wav
+
+CATEGORY THEATRE 20
+	drama1.WAV
+	flying.WAV
+	thtr_spear1.WAV
+
+CATEGORY DRAMA 20
+	thtr_mumbl1.wav
+	thtr_mumbl2.wav
+	thtr_mumbl3.wav
+	thtr_spear2.wav
+	thtr_spin1.wav
+	thtr_spin2.wav
+	thtr_women.wav
+
+CATEGORY PHILOSOPHY 10
+	plato.wav
+	aristotle.wav
+	socrates.wav
+	college.wav
+	college2.wav
+	podium1.wav
+
+CATEGORY GYMNASIUM 50
+	gym1.wav
+	gym2.wav
+	gym3.wav
+
+CATEGORY STADIUM 50
+	cheer.wav
+	javelin.wav
+	wrestling.WAV
+	cheer2.wav
+
+CATEGORY SANCTUARY 20
+	sanctuary1.wav
+	sanctuary2.wav
+
+CATEGORY ARMORY 50
+	armory1.wav
+	armory2.wav
+	armory3.wav
+
+CATEGORY HORSE_RANCH 50
+	horse1.wav
+	horse2.wav
+	horse3.wav
+	horse4.wav
+	horse5.wav
+
+CATEGORY BEAUTIFICATION 40
+	win_chime1.wav
+	win_chime2.wav
+	recreation1.wav
+
+CATEGORY FOUNTAIN 50
+    fountain1.wav
+	fountain2.wav
+		
+CATEGORY ARTISAN 50
+    artisan_guild1.wav
+	artisan_guild2.wav
+
+CATEGORY CHARIOT_FACTORY 50
+	chariot_build1.wav
+	chariot_build2.wav
+
+CATEGORY RESEARCH 50
+	invention1.wav
+	invention2.wav
+	lab1.wav
+	lab2.wav
+	reading1.wav
+	writing1.wav	
+
+CATEGORY OBSERVATORY 50
+	observatory1.wav
+	observatory2.wav
+
+CATEGORY FRUIT_GROWERS_LODGE 50
+	fruit_lodge1.wav
+	fruit_lodge2.wav
+
+CATEGORY AGORA_CHARIOT 50
+	agora_chariot1.wav
+	agora_chariot2.wav
+
+CATEGORY BIBLIOTHEKE 50
+	reading1.wav
+	reading2.wav
+	get_book.wav
+	close_book.wav	
+
+CATEGORY MUSEUM 50
+	museum1.wav
+	museum2.wav
+
+CATEGORY RACETRACK 20
+	racetrack1.wav
+	racetrack2.wav
+
+CATEGORY MAMMALDROME 20
+    mammaldrome1.wav
+	mammaldrome2.wav
+	mammaldrome3.wav
+
+CATEGORY UNIVERSITY 50
+	university1.wav
+	university2.wav
+
+CATEGORY CORRAL 40
+	corral1.wav
+	corral2.wav
+	corral3.wav
+	cattle2.wav
+	cattle3.wav
+	cattle4.wav
+
+; TERRAIN
+CATEGORY DESERT 10
+
+CATEGORY MEADOW 50
+	bird7.wav
+	finch2.wav
+	sparrow1.wav
+	bird3.wav
+
+CATEGORY FARMLAND 50
+	bird1.wav
+	bird2.wav
+	bird4.wav
+	rustling1.wav
+	rustling2.wav
+
+CATEGORY BEACH 50
+	wave1.wav
+	wave2.wav
+	wave3.wav
+	wave4.wav
+
+CATEGORY ROCKY 50
+	rumble.wav
+	rockslide1.wav
+	rockslide2.wav
+
+CATEGORY VEGETATION 50
+	bird3.wav
+	bird4.wav
+	bird5.wav
+
+CATEGORY WATER 30
+    water_space2.wav
+
+CATEGORY LAVA 50
+	lava1.wav
+	lava2.wav
+	lava3.wav
+
+; ANIMALS
+CATEGORY BOAR 100
+    boar1.wav
+   	boar2.wav
+   	boar3.wav
+   	boar4.wav
+
+CATEGORY GOAT 100
+   	goat1.wav
+	goat2.wav
+	goat3.wav
+	goat4.wav
+
+CATEGORY WOLF 100
+    wolf1.wav
+   	wolf2.wav
+   	wolf3.wav
+   	wolf4.wav
+
+CATEGORY SHEEP 100
+   	sheep1.wav
+   	sheep2.wav
+   	sheep3.wav
+	sheep4.wav  
+
+CATEGORY CATTLE 100
+	cattle1.wav
+	cattle2.wav
+	cattle3.wav
+	cattle4.wav
+
+CATEGORY DEER 100
+	deer1.wav
+	deer2.wav
+	deer3.wav
+	deer4.wav
+
+CATEGORY GENERAL_MUSIC
+   Amolfi.ogg
+   Perifanos.ogg
+   Proi.ogg
+   Tamagia.ogg
+   Eplitha.ogg
+   Eilavia.ogg
+   Pnevma.ogg
+   Mnimio.ogg
+   Oyonos.ogg
+   Zoi.ogg
+   Iremos.ogg
+   Afigisi.ogg
+   Naoss.ogg
+   Fengari.ogg
+
+CATEGORY COMBAT_MUSIC_SHORT
+   Battle1.ogg
+   Battle2.ogg
+   Battle3.ogg
+   Battle4.ogg
+
+CATEGORY COMBAT_MUSIC_LONG
+   Battle_long.ogg
+   Battle_long2.ogg
+

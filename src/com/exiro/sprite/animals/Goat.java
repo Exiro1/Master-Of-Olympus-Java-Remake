@@ -1,6 +1,7 @@
 package com.exiro.sprite.animals;
 
 import com.exiro.ai.AnimalsAI;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.City;
@@ -171,6 +172,11 @@ public class Goat extends Animal {
     }
 
     enum GoatState {
-        NORMAL, NORMAL_EATING, NORMAL_SLEEPING, STOP, BEING_MILKED;
+        NORMAL, NORMAL_EATING, NORMAL_SLEEPING, STOP, BEING_MILKED
+    }
+
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.GOAT;
     }
 }

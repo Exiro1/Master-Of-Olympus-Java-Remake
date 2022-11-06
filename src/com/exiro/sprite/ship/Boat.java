@@ -63,7 +63,7 @@ public class Boat extends MovingSprite {
 
             setXB((int) Math.ceil(x));
             setYB((int) Math.ceil(y));
-            setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+            setMainCase(c.getMap().getCase(getXB(), getYB()));
         }
 
     }

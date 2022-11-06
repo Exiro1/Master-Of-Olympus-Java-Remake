@@ -1,5 +1,6 @@
 package com.exiro.terrainList;
 
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 
@@ -70,6 +71,10 @@ public class Rock extends Terrain {
     }
 
     public enum RockType {
-        NORMAL, COPPER, SILVER;
+        NORMAL, COPPER, SILVER
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.ROCKY;
     }
 }

@@ -1,7 +1,9 @@
 package com.exiro.sprite.culture;
 
+import com.exiro.ai.AI;
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.House;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
@@ -15,7 +17,7 @@ public class Actor extends DeliverySprite {
         super("SprMain", 0, 104, 12, c, destination, start, 0);
         setOffsetY(-5);
         setTimeBetweenFrame(0.05f);
-        setRoutePath(getAi().goTo(c, start, dest, FreeState.ALL_ROAD.getI()));
+        setRoutePath(AI.goTo(c, start, dest, FreeState.ALL_ROAD.getI()));
     }
 
     public Actor(City c, ObjectClass destination, Case start, int len) {
@@ -31,5 +33,4 @@ public class Actor extends DeliverySprite {
                 ((House) b).setDrama(100);
         }
     }
-
 }

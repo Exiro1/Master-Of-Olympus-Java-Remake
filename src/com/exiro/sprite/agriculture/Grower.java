@@ -128,7 +128,7 @@ public class Grower extends AgricultureSprite {
     }
 
     enum GrowerState {
-        WALKING, GATHERING, PROCESSING;
+        WALKING, GATHERING, PROCESSING
     }
 
 

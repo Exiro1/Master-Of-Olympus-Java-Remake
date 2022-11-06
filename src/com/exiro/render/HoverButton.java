@@ -64,10 +64,7 @@ public class HoverButton extends Button{
     }
 
     public boolean isHovering(int xc, int yc) {
-        if (xc > x && xc < x + w && yc > y && yc < y + h) {
-            return true;
-        }
-        return false;
+        return xc > x && xc < x + w && yc > y && yc < y + h;
     }
 
 

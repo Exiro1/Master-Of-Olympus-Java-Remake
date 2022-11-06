@@ -2,6 +2,7 @@ package com.exiro.buildingList.agriculture;
 
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.render.interfaceList.BuildingInterface;
@@ -76,5 +77,9 @@ public class HuntingHouse extends ResourceGenerator {
     @Override
     protected void addPopulation() {
 
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.HUNTING;
     }
 }

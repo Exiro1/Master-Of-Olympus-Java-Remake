@@ -1,6 +1,7 @@
 package com.exiro.render.layout;
 
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.render.GameFrame;
 import com.exiro.systemCore.GameManager;
 
 import javax.swing.*;
@@ -15,7 +16,9 @@ public class GameInfo extends JPanel {
     private final GameManager gm;
     private Font font;
     public static int HEIGHT;
-    private BufferedImage drachme, people, background1;
+    private final BufferedImage drachme;
+    private final BufferedImage people;
+    private final BufferedImage background1;
 
     public GameInfo(GameManager gm) {
         this.gm = gm;
@@ -36,10 +39,7 @@ public class GameInfo extends JPanel {
     }
 
     public boolean isClicked(int xc, int yc) {
-        if (xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height) {
-            return true;
-        }
-        return false;
+        return xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height;
     }
 
     public void paintComponent(Graphics g) {
@@ -56,14 +56,14 @@ public class GameInfo extends JPanel {
 
         g.drawString(gm.getTimeManager().toString(), 1400, 20);
         String money = (int) gm.getPlayer().getMoney() + "";
-        g.drawString(money, 800 - 12 * money.length(), 20);
-        g.drawImage(drachme, 800 - 12 * money.length() - 35, 5, null);
-        String pop = (int) gm.getCurrentCity().getPopulation() + "";
-        g.drawString(pop, 1000 - 12 * pop.length(), 20);
-        g.drawImage(people, 1000 - 12 * pop.length() - 30, 0, 19, 31, null);
+        g.drawString(money, GameFrame.scalingW(800) - 12 * money.length(), GameFrame.scalingH(20));
+        g.drawImage(drachme, GameFrame.scalingW(800) - 12 * money.length() - 35, 5, null);
+        String pop = gm.getCurrentCity().getPopulation() + "";
+        g.drawString(pop, GameFrame.scalingW(1000) - 12 * pop.length(), 20);
+        g.drawImage(people, GameFrame.scalingW(1000) - 12 * pop.length() - 30, 0, GameFrame.scalingW(19), GameFrame.scalingH(31), null);
 
     }
-
+    
     public void clickManager(MouseEvent e) {
     }
 }

@@ -2,6 +2,7 @@ package com.exiro.sprite.industry;
 
 import com.exiro.buildingList.IndustryHarverster;
 import com.exiro.constructionList.Tree;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.sprite.Harvester;
@@ -14,7 +15,7 @@ public class LumberJack extends Harvester {
     //state mining : 104 - 200 (12 frames)
     //state return home : 200 - 280 (12 frames)
 
-    private static int baseIndex = 4328;
+    private static final int baseIndex = 4328;
 
     Tree tree;
 
@@ -52,5 +53,8 @@ public class LumberJack extends Harvester {
             tree.setBeingcut(false);
         }
     }
-
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.LUMBERJACK;
+    }
 }

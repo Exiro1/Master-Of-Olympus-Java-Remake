@@ -1,5 +1,6 @@
 package com.exiro.terrainList;
 
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 
@@ -20,5 +21,10 @@ public class Meadow extends Terrain {
     @Override
     public void process(double deltaTime, int deltaDays) {
 
+    }
+
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.MEADOW;
     }
 }

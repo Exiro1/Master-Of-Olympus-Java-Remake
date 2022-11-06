@@ -1,6 +1,7 @@
 package com.exiro.render.layout;
 
 import com.exiro.fileManager.ImageLoader;
+import com.exiro.render.GameFrame;
 import com.exiro.systemCore.GameManager;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class MenuBar extends JPanel {
 
     private final GameManager gm;
     private Font font;
-    private BufferedImage background1;
+    private final BufferedImage background1;
 
     public MenuBar(GameManager gm) {
         this.gm = gm;
@@ -30,17 +31,14 @@ public class MenuBar extends JPanel {
     }
 
     public boolean isClicked(int xc, int yc) {
-        if (xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height) {
-            return true;
-        }
-        return false;
+        return xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height;
     }
 
     protected void paintComponent(Graphics g) {
 
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 800, getHeight());
-        g.drawImage(background1, 0, 0, 800, 30, null);
+        g.fillRect(0, 0, (int) (800 * GameFrame.FWRATIO), (int)(30* GameFrame.FHRATIO));
+        g.drawImage(background1, 0, 0, (int)(800* GameFrame.FWRATIO), (int)(30* GameFrame.FHRATIO), null);
 
 
         g.setColor(Color.BLACK);

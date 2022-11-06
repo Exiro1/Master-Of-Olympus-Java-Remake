@@ -3,6 +3,7 @@ package com.exiro.buildingList.culture;
 import com.exiro.ai.AI;
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.City;
@@ -93,6 +94,10 @@ public class Gymnasium extends Building {
     public void createAthlete() {
         Athlete p = new Athlete(city, null, this.getAccess().get(0), 40);
         addSprite(p);
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.GYMNASIUM;
     }
 
 }

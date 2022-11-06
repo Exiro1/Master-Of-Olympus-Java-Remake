@@ -4,6 +4,7 @@ import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.buildingList.IndustryHarverster;
 import com.exiro.constructionList.Tree;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
 import com.exiro.object.ObjectType;
@@ -160,5 +161,10 @@ public class Sawmill extends IndustryHarverster {
     @Override
     protected void addPopulation() {
 
+    }
+
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.TIMBER_MILL;
     }
 }

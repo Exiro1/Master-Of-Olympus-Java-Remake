@@ -113,11 +113,7 @@ public class MapUtils {
         }
         if(n[1] == lvl-1 && n[5] == lvl-1){
             return true;
-        }else if(n[7] == lvl-1 && n[3] == lvl-1){
-            return true;
-        }
-
-        return false;
+        }else return n[7] == lvl - 1 && n[3] == lvl - 1;
     }
 
     static boolean checkRoad(int[][] map,int l,int k){
@@ -149,9 +145,7 @@ public class MapUtils {
         if(n[3] == lvl && n[7] == lvl){
             if(n[0] == lvl-1 && n[1] == lvl-1 && n[2] == lvl-1){
                 return true;
-            }else if(n[4] == (lvl-1) && n[5] == (lvl-1) && n[6] == (lvl-1)){
-                return true;
-            }
+            }else return n[4] == (lvl - 1) && n[5] == (lvl - 1) && n[6] == (lvl - 1);
         }
     return false;
     }

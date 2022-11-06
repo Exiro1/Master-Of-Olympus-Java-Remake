@@ -1,6 +1,7 @@
 package com.exiro.sprite.industry;
 
 import com.exiro.buildingList.IndustryHarverster;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.sprite.Harvester;
@@ -15,7 +16,7 @@ public class SilverHarvester extends Harvester {
     //state return home : 116 - 212 (12 frames)
     //state mining : 212 - 292 (10 frames)
 
-    private static int baseIndex = 3740;
+    private static final int baseIndex = 3740;
 
     Rock silver;
 
@@ -48,6 +49,10 @@ public class SilverHarvester extends Harvester {
         if (this.harvesting) {
             silver.setMined(false);
         }
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.SILVERMINER;
     }
 }
 

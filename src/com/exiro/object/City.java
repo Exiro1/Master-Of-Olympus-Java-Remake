@@ -22,10 +22,10 @@ public class City {
     private ArrayList<ObjectClass> inActives = new ArrayList<>();
     private ArrayList<ObjectClass> obj = new ArrayList<>();
 
-    private ResourceManager resourceManager;
+    private final ResourceManager resourceManager;
 
 
-    private HashMap<ObjectType, ArrayList<Building>> buildingMap;
+    private final HashMap<ObjectType, ArrayList<Building>> buildingMap;
 
     //private ArrayList<Sprite> sprites;
     int activeBuilding = 0;

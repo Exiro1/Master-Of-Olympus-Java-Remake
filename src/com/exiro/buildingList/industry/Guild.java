@@ -2,6 +2,7 @@ package com.exiro.buildingList.industry;
 
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
@@ -33,14 +34,15 @@ public class Guild extends ResourceGenerator {
     @Override
     public boolean build(int xPos, int yPos) {
         boolean succ = super.build(xPos, yPos);
-        if (succ) {
-            return true;
-        }
-        return false;
+        return succ;
     }
 
     @Override
     protected void addPopulation() {
 
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.ARTISAN;
     }
 }

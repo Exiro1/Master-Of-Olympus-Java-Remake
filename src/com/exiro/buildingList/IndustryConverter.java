@@ -169,9 +169,8 @@ public abstract class IndustryConverter extends ResourceGenerator {
         ArrayList<Building> stores = new ArrayList<>(city.getBuildingList(ObjectType.GRANARY));
         stores.addAll(city.getBuildingList(ObjectType.STOCK));
         for (Building b : stores) {
-            if(!(b instanceof StoreBuilding))
+            if(!(b instanceof StoreBuilding sb))
                 continue;
-            StoreBuilding sb = (StoreBuilding) b;
             if (sb.hasStockAvailable(needed)) {
                 int command = Math.min(maxStock - stockIn - incomming, sb.getStockAvailable(needed));
                 incomming += command;

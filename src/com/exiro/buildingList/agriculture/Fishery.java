@@ -2,6 +2,7 @@ package com.exiro.buildingList.agriculture;
 
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.*;
@@ -380,4 +381,11 @@ public class Fishery extends ResourceGenerator {
     public Case getSpawnPoint() {
         return spawnPoint;
     }
+
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.DOCK;
+    }
 }
+
+

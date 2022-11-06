@@ -2,6 +2,7 @@ package com.exiro.buildingList.culture;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
@@ -63,4 +64,9 @@ public class Podium extends Building {
     public void delete() {
         super.delete();
     }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.PHILOSOPHY;
+    }
+
 }

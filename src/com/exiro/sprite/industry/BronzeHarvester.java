@@ -1,6 +1,7 @@
 package com.exiro.sprite.industry;
 
 import com.exiro.buildingList.IndustryHarverster;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.sprite.Harvester;
@@ -47,5 +48,9 @@ public class BronzeHarvester extends Harvester {
         if (this.harvesting) {
             copper.setMined(false);
         }
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.COPPERMINER;
     }
 }

@@ -1,3 +1,10 @@
 /Assets/DATA/
+/Assets/Audio/
 /.idea/
 /src/other/
+.gradle
+gradle
+build.gradle
+GameJava.iml
+settings.gradle
+!Assets/Audio/sound_fxU.txt

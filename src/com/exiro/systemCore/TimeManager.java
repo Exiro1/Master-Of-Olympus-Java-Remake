@@ -26,10 +26,7 @@ public class TimeManager {
     public boolean timeHasPassed(int year, int month, int day) {
         int tot1 = year * 12 * 30 + month * 30 + day;
         int tot2 = this.year * 12 * 30 + this.month * 30 + this.day;
-        if (tot1 < tot2) {
-            return true;
-        }
-        return false;
+        return tot1 < tot2;
     }
 
     public boolean timeHasPassed(Time time) {

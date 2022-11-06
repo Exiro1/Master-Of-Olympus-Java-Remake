@@ -1,5 +1,6 @@
 package com.exiro.terrainList;
 
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.Direction;
@@ -26,9 +27,7 @@ public class WaterCoast extends Terrain {
         super(ObjectType.WATERTCOAST, false, xpos, ypos, city, true, false, true, 1);
         this.setLocalID(type.getId() + Math.min(type.getNbr() - 1, nbr));
         direction = type.getDir();
-        angle = true;
-        if (direction == Direction.SOUTH_WEST || direction == Direction.SOUTH_EAST || direction == Direction.NORTH_EAST || direction == Direction.NORTH_WEST)
-            angle = false;
+        angle = direction != Direction.SOUTH_WEST && direction != Direction.SOUTH_EAST && direction != Direction.NORTH_EAST && direction != Direction.NORTH_WEST;
         updateImg();
     }
 
@@ -75,5 +74,10 @@ public class WaterCoast extends Terrain {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.WATER;
     }
 }

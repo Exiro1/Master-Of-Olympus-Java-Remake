@@ -2,6 +2,7 @@ package com.exiro.buildingList.security;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
@@ -95,5 +96,9 @@ public class Safety extends Building {
     @Override
     protected void addPopulation() {
 
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.MAINTENANCE_OFFICE;
     }
 }

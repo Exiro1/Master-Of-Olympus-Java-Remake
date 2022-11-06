@@ -1,14 +1,19 @@
 package com.exiro.systemCore;
 
+import com.exiro.Main;
 import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.*;
 import com.exiro.render.MouseManager;
+import com.exiro.render.layout.GameWindow;
+import com.exiro.soundManager.SoundManager;
 import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Rock;
 import com.exiro.terrainList.Terrain;
+
+import java.util.Random;
 
 public class GameThread implements Runnable {
 
@@ -25,10 +30,14 @@ public class GameThread implements Runnable {
     private int currentCity;
     //private final GameFrame frame;
     private final GameManager gm;
+    private final SoundManager sm;
 
-    public GameThread(GameManager gm) {
+    Random ran;
+    public GameThread(GameManager gm, SoundManager sm) {
         this.p = gm.player;
         this.gm = gm;
+        this.sm = sm;
+        ran = new Random();
         gm.setGameThread(this);
     }
 
@@ -52,11 +61,33 @@ public class GameThread implements Runnable {
             timeSinceLastUpdateConstruct = timeSinceLastUpdateConstruct + deltaTimeLogic;
             timeSinceLastUpdateResources = timeSinceLastUpdateResources + deltaTimeLogic;
 
+            sm.updateListener(GameWindow.getCameraPosx(),GameWindow.getCameraPosy());
+
             int deltaDays = gm.timeManager.updateTime(deltaTimeLogic);
             deltaDaysB+=deltaDays;
             deltaDaysC+=deltaDays;
             deltaDaysR+=deltaDays;
             if (timeSinceLastUpdateBuilding > 1) {
+                sm.updateSources();
+                /*
+                if(sm.secBeforeNextAmbient == 0)
+                    sm.playAmbientSound();
+                if(sm.secBeforeNextAmbient >= 0)
+                    sm.secBeforeNextAmbient--;
+                else
+                    if(sm.ambientCount<2)
+                        sm.secBeforeNextAmbient = ran.nextInt(3);
+                */
+                if(SoundManager.secBeforeNextMusic == 0)
+                    sm.playNewMusic();
+
+                if(SoundManager.secBeforeNextMusic >= 0)
+                    SoundManager.secBeforeNextMusic--;
+
+                if(sm.secBeforeNextLayer1 == 0)
+                    sm.playNewLayer1();
+                if(sm.secBeforeNextLayer1 >= 0)
+                    sm.secBeforeNextLayer1--;
 
                 for (City c : p.getPlayerCities()) {
                     manageBuilding(c, timeSinceLastUpdateBuilding,deltaDaysB);
@@ -93,6 +124,7 @@ public class GameThread implements Runnable {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
+
 
             float toWait = System.currentTimeMillis() - startTime;
             Thread.sleep(Math.max(deltaTimeResearched - (int) toWait, 0));

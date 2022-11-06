@@ -139,8 +139,6 @@ public class Harvester extends MovingSprite {
 
     }
 
-    ;
-
 
     public void harvestFinished() {
         setDestination(industry);

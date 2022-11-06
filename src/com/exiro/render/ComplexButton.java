@@ -15,10 +15,11 @@ public class ComplexButton extends Button {
     // long button
     public ComplexButton(int x, int y, int w, int h, int bitid, int id1, int id2, int id3, ButtonType type, TextInterface text) {
         super(x, y, w, h, bitid, id1, type);
+
         s = ImageLoader.getImage("Zeus_Interface", bitid, id1);
         m = ImageLoader.getImage("Zeus_Interface", bitid, id2);
         e = ImageLoader.getImage("Zeus_Interface", bitid, id3);
-
+        this.h = s.getH();
         if (s != null && m != null && e != null)
             mnbr = (w - s.getW() - e.getW()) / m.getW();
 

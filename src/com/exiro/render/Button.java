@@ -55,10 +55,7 @@ public class Button {
 
 
     public boolean clicked(int xc, int yc) {
-        if (xc > x && xc < x + w && yc > y && yc < y + h) {
-            return true;
-        }
-        return false;
+        return xc > x && xc < x + w && yc > y && yc < y + h;
     }
 
     public ButtonType getType() {

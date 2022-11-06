@@ -18,4 +18,8 @@ sourceSets {
 }
 dependencies {
     implementation 'com.github.Exiro1:SGReaderJava:master-SNAPSHOT'
+    implementation group: 'org.jogamp.joal', name: 'joal-main', version: '2.3.2'
+    implementation group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: '2.3.2'
+    implementation group: 'de.jarnbjo', name: 'j-ogg-all', version: '1.0.0'
+
 }

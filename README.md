@@ -1,30 +1,19 @@
 # Master Of Olympus Java Remake
 
-Un remake en Java du Maitre de l'Olympe. 
 
-C'est surement pas très légal étant donnée que je récupere directement les fichiers .555 et .sg3 du jeu (sans les extraire préalablement), donc faut etre discret :). 
 
-Je pars de zero pour ce projet, tout est "fait maison", à part quelque partie telle que la lecture des fichiers .555 et .sg3, qui est une amelioration du SGReader de Pecunia.
+A Java remake of the Master of Olympus.
 
-Le jeu est évidemment pas terminé, j'en suis qu'au début.
+The game is obviously not finished, I'm still in the beginning and I work on it when I have time.
+
+If you want to test the game, you must have the assets of the original game.
 
 Screen:
 
-Exemple ville simple (map plate de test) :
-
 ![screen1](https://user-images.githubusercontent.com/35780830/147518417-3dfa6090-5884-4543-b703-dbb30441f186.png)
-
-
-Génération de terrain aléatoire :
-
-Exemple Montagne :
 
 ![screen2](https://user-images.githubusercontent.com/35780830/147518503-a2fd7a00-e998-447f-8b94-b40799b6ee8d.png)
 
-Exemple en gif :
-
 ![gif1](https://user-images.githubusercontent.com/35780830/147775930-33918ebe-1d27-4827-b22f-cbd48b47d607.gif)
 
-En video :
-
-[![Video_demo](https://img.youtube.com/vi/wYyd9aGLR6o/0.jpg)](https://youtu.be/wYyd9aGLR6o "Everything Is AWESOME")
+[![Video_demo](https://img.youtube.com/vi/wYyd9aGLR6o/0.jpg)](https://youtu.be/wYyd9aGLR6o)

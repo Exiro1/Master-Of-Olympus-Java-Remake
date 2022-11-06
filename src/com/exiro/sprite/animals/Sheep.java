@@ -1,6 +1,7 @@
 package com.exiro.sprite.animals;
 
 import com.exiro.ai.AnimalsAI;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.Case;
@@ -223,6 +224,10 @@ public class Sheep extends Animal {
     }
 
     enum SheepState {
-        NORMAL, NORMAL_EATING, NORMAL_SLEEPING, MOWED, MOWED_EATING, MOWED_SLEEPING, STOP, BEING_CUT;
+        NORMAL, NORMAL_EATING, NORMAL_SLEEPING, MOWED, MOWED_EATING, MOWED_SLEEPING, STOP, BEING_CUT
+    }
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.SHEEP;
     }
 }

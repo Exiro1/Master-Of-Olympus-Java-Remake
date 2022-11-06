@@ -122,22 +122,22 @@ public abstract class MovingSprite extends Sprite {
                 case SOUTH:
                     break;
                 case SOUTH_EAST:
-                    setMainCase(c.getMap().getCase((int) (ps[2].getX()), (int) (getYB())));
+                    setMainCase(c.getMap().getCase((int) (ps[2].getX()), getYB()));
                     break;
                 case EAST:
                     break;
                 case NORTH_EAST:
-                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+                    setMainCase(c.getMap().getCase(getXB(), getYB()));
                     break;
                 case NORTH:
                     break;
                 case NORTH_WEST:
-                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
+                    setMainCase(c.getMap().getCase(getXB(), getYB()));
                     break;
                 case WEST:
                     break;
                 case SOUTH_WEST:
-                    setMainCase(c.getMap().getCase((int) (getXB()), (int) (ps[3].getY())));
+                    setMainCase(c.getMap().getCase(getXB(), (int) (ps[3].getY())));
                     break;
             }
 

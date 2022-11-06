@@ -159,8 +159,7 @@ public abstract class Carter extends MovingSprite{
             }
         }
         for (Building b : getC().getBuildings()) {
-            if (b instanceof StoreBuilding) {
-                StoreBuilding g = (StoreBuilding) b;
+            if (b instanceof StoreBuilding g) {
                 if (g.getFreeSpace(resource) > 0 && g.getAccess().size() > 0) {
                     Path p = getC().getPathManager().getPathTo(getXB(), getYB(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
                     if (p != null) {

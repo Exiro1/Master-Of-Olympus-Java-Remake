@@ -122,7 +122,7 @@ public class FishingBoat extends Boat {
     }
 
     enum BoatState {
-        TRAVEL, WAITING, FISHING;
+        TRAVEL, WAITING, FISHING
     }
 
 }

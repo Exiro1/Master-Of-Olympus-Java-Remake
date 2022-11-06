@@ -4,6 +4,7 @@ import com.exiro.ai.AI;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
 import com.exiro.constructionList.SmallHoldingFruit.SmallHoldingTree;
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
@@ -26,8 +27,8 @@ public class SmallHolding extends ResourceGenerator {
 
 
     private int growerNbr, stockOlive, stockGrape, harvesterNbr;
-    private ArrayList<SmallHoldingTree> trees = new ArrayList<>();
-    private ArrayList<SmallHoldingTree> matureTrees = new ArrayList<>();
+    private final ArrayList<SmallHoldingTree> trees = new ArrayList<>();
+    private final ArrayList<SmallHoldingTree> matureTrees = new ArrayList<>();
 
     public SmallHolding() {
         super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, 0, 12, 40, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.OLIVE, 3);
@@ -198,5 +199,10 @@ public class SmallHolding extends ResourceGenerator {
 
     public void removeTree(SmallHoldingTree t) {
         trees.remove(t);
+    }
+
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.FRUIT_GROWERS_LODGE;
     }
 }

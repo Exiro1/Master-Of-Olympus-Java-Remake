@@ -1,5 +1,6 @@
 package com.exiro.sprite.culture;
 
+import com.exiro.ai.AI;
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.House;
 import com.exiro.moveRelated.FreeState;
@@ -12,7 +13,7 @@ public class Athlete extends DeliverySprite {
 
     public Athlete(City c, ObjectClass destination, Case start, Case dest) {
         super("SprMain", 0, 10587, 12, c, destination, start, 0);
-        setRoutePath(getAi().goTo(c, start, dest, FreeState.ACTIVE_ROAD.getI()));
+        setRoutePath(AI.goTo(c, start, dest, FreeState.ACTIVE_ROAD.getI()));
         setOffsetY(-5);
         setTimeBetweenFrame(0.05f);
     }

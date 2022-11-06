@@ -1,5 +1,6 @@
 package com.exiro.terrainList;
 
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.render.IsometricRender;
@@ -52,5 +53,8 @@ public class Water extends Terrain {
 
     }
 
-
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.WATER;
+    }
 }

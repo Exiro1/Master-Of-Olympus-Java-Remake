@@ -6,7 +6,7 @@ public class RenderingThread implements Runnable{
 
     boolean continu = true;
 
-    final long deltaTimeResearched = (long) ((1f / 120f) * 1000f);
+    final long deltaTimeResearched = (long) ((1f / 144f) * 1000f);
 
     private final GameFrame frame;
     private final GameManager gm;

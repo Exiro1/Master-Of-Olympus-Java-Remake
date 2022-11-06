@@ -1,9 +1,11 @@
 package com.exiro.render;
 
 import com.exiro.render.layout.*;
+import com.exiro.render.layout.MenuBar;
 import com.exiro.systemCore.GameManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -19,10 +21,28 @@ public class GameFrame extends JFrame {
     public static int FHEIGHT = 1080;
     public static int FWIDTH = 1920;
 
+    public static float FHRATIO = 1;
+    public static float FWRATIO = 1;
+
+    public static int scalingH(int h){
+        return (int)(h*FHRATIO);
+    }
+    public static int scalingW(int w){
+        return (int)(w*FWRATIO);
+    }
     public GameFrame(String title, GameManager gm) {
         super(title);
         this.gm = gm;
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        FHRATIO = dim.height/(FHEIGHT*1f);
+        FWRATIO = dim.width/(FWIDTH*1f);
+
+        FHEIGHT = dim.height;
+        FWIDTH = dim.width;
         setSize(FWIDTH, FHEIGHT);
+
 
 
         window = new GameWindow(gm);

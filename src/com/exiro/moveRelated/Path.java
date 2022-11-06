@@ -79,10 +79,7 @@ public class Path {
             return true;
         } else if (direction == Direction.EAST && p.getY() < path.get(index).getyPos() && p.getX() > path.get(index).getxPos()) {
             return true;
-        } else if (direction == Direction.WEST && p.getY() > path.get(index).getyPos() && p.getX() < path.get(index).getxPos()) {
-            return true;
-        }
-        return false;
+        } else return direction == Direction.WEST && p.getY() > path.get(index).getyPos() && p.getX() < path.get(index).getxPos();
     }
 
 

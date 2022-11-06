@@ -7,6 +7,7 @@ import com.exiro.render.layout.GameInfo;
 import com.exiro.render.layout.GameWindow;
 import com.exiro.render.layout.InterfaceRender;
 import com.exiro.render.layout.MenuBar;
+import com.exiro.soundManager.SoundManager;
 
 public class GameManager {
 
@@ -21,7 +22,6 @@ public class GameManager {
     TimeManager timeManager;
     GameThread gameThread;
     RenderingThread renderingThread;
-
 
     public GameManager(Player player, City currentCity) {
         this.player = player;

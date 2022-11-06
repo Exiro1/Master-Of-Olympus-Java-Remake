@@ -1,5 +1,6 @@
 package com.exiro.render.layout;
 
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
@@ -15,9 +16,7 @@ import com.exiro.utils.Point;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 
 public class GameWindow extends JPanel {
@@ -25,18 +24,29 @@ public class GameWindow extends JPanel {
     public static int index = 0;
     static int CameraPosx = 0;
     static int CameraPosy = 0;
+
+    double SQRT2_OVER_2 = 0.707;
     Player p;
     GameManager gm;
     Point lastP;
     boolean lastClickState = false; //false : non préssé , true : préssé
     Case lastCase = new Case(0, 0, null, null);
+    Random r;
+    int speedFactor = 35;
 
-    int speedFactor = 15;
+    public static BaseObject currentRandomCase = null;
+
+    public static Sprite sprite = null;
+
+    public static final Object syncSound = new Object();
+
+
 
     public GameWindow(GameManager gm) {
         this.gm = gm;
         this.p = gm.getPlayer();
         CameraPosy = (int) (-(Math.sqrt(2)/2)*gm.getCurrentCity().getMap().getWidth()*30 - getHeight()/2f + 45);
+        r = new Random();
     }
 
     public boolean pressing;
@@ -62,9 +72,12 @@ public class GameWindow extends JPanel {
 
     BaseObject interfaceCaller;
 
+
+
+
     public void paintComponent(Graphics g) {
 
-        g.setColor(Color.white);
+        g.setColor(Color.RED);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         g.setColor(Color.BLACK);
         int x = 0;
@@ -86,22 +99,45 @@ public class GameWindow extends JPanel {
         sortRender(p.getPlayerCities().get(0).getMap().getCaseSorted());
 
         int xvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getxPos();
-        int xvisibleMax = IsometricRender.getCase(new Point(1400, 0), gm.getCurrentCity()).getxPos() + 44;
+        int xvisibleMax = IsometricRender.getCase(new Point(1400* GameFrame.FWRATIO, 0), gm.getCurrentCity()).getxPos() + 44;
         int yvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getyPos() - 30;
-        int yvisibleMax = IsometricRender.getCase(new Point(0, 800), gm.getCurrentCity()).getyPos() + 15;
+        int yvisibleMax = IsometricRender.getCase(new Point(0, 800* GameFrame.FHRATIO), gm.getCurrentCity()).getyPos() + 15;
 
+        int drawnObject = 0;
+        int drawn = 0;
+        int drawnSprite = 0;
         for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
             if (!(obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin))
                 continue;
+            drawn++;
+            drawnSprite += obj.getSprites().size();
+            if(obj.getObject() != null)
+                drawnObject++;
             if (obj.getTerrain() instanceof Water) {
                 obj.getTerrain().Render(g, CameraPosx, CameraPosy);
             }
         }
-
+        int idx = drawn > 0 ? r.nextInt(drawn): -1;
+        int idxObj = drawnObject > 0 ? r.nextInt(drawnObject): -1;
+        int idxSprite = drawnSprite > 0 ? r.nextInt(drawnSprite): -1;
+        BaseObject randomTerrain = null, randomObject = null, randomSprite;
+        int i = 0, io = 0, is = 0;
         for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
 
             if (!(obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin))
                 continue;
+
+            if(obj.getObject() != null) {
+                if(io == idxObj)
+                    randomObject = obj.getObject();
+                io++;
+            }else{
+                if(i == idx)
+                    randomTerrain = obj.getTerrain();
+                i++;
+            }
+
+
             if (obj.getObject() == null && !(obj.getTerrain() instanceof Water))
                 obj.getTerrain().Render(g, CameraPosx, CameraPosy);
             if (obj.getObject() != null && (obj.isMainCase())) {
@@ -112,10 +148,24 @@ public class GameWindow extends JPanel {
             List<Sprite> spr = obj.getSyncSprites();
             synchronized (spr) {
                 Iterator<Sprite> it = spr.iterator();
-                while (it.hasNext())
-                    it.next().Render(g, CameraPosx, CameraPosy);
+                while (it.hasNext()) {
+                    Sprite s = it.next();
+                    s.Render(g, CameraPosx, CameraPosy);
+                    if(is == idxSprite)
+                        randomSprite = s;
+                    is++;
+                }
             }
         }
+
+        synchronized (syncSound) {
+         if(r.nextInt(2) == 0 || (randomObject == null || randomObject.getSoundCategory() == SoundLoader.SoundCategory.NULL)){
+             currentRandomCase = randomTerrain;
+         }else{
+             currentRandomCase = randomObject;
+         }
+        }
+
         /*
         synchronized (p.getPlayerCities().get(0).getSprites()) {
             for (Sprite s : p.getPlayerCities().get(0).getSprites()) {
@@ -135,14 +185,14 @@ public class GameWindow extends JPanel {
             }
         }
         if (lastP != null) {
-            if (lastP.y > GameFrame.FHEIGHT - 2 && CameraPosy > -(Math.sqrt(2)/2)*gm.getCurrentCity().getMap().getWidth()*30 - getHeight()/2f + 45) {
+            if (lastP.y > GameFrame.FHEIGHT - 2 && CameraPosy > -(SQRT2_OVER_2)*gm.getCurrentCity().getMap().getWidth()*30 - getHeight()/2f + 45) {
                 CameraPosy = CameraPosy - speedFactor;
-            } else if (lastP.y < 1 && CameraPosy < -(Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*30 -45) {
+            } else if (lastP.y < 1 && CameraPosy < -(SQRT2_OVER_2/2)*gm.getCurrentCity().getMap().getWidth()*30 -45) {
                 CameraPosy = CameraPosy + speedFactor;
             }
-            if (lastP.x > GameFrame.FWIDTH - 2 && CameraPosx > -(Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*58 + getWidth() +87) {
+            if (lastP.x > GameFrame.FWIDTH - 2 && CameraPosx > -(SQRT2_OVER_2/2)*gm.getCurrentCity().getMap().getWidth()*58 + getWidth() +87) {
                 CameraPosx = CameraPosx - speedFactor;
-            } else if (lastP.x < 1 && CameraPosx < (Math.sqrt(2)/4)*gm.getCurrentCity().getMap().getWidth()*58 -87) {
+            } else if (lastP.x < 1 && CameraPosx < (SQRT2_OVER_2/2)*gm.getCurrentCity().getMap().getWidth()*58 -87) {
                 CameraPosx = CameraPosx + speedFactor;
             }
         }
@@ -169,7 +219,7 @@ public class GameWindow extends JPanel {
 
 
         if (gameInterface != null)
-            gameInterface.Render(g,new Point(lastP.x,lastP.y-GameLayout.TOOLBAR_HEIGHT));
+            gameInterface.Render(g,new Point(lastP.x,lastP.y-GameFrame.scalingH(GameLayout.TOOLBAR_HEIGHT)));
 
         g.setColor(Color.BLACK);
 
@@ -183,7 +233,7 @@ public class GameWindow extends JPanel {
 
         if (e.getButton() == MouseEvent.BUTTON1) {
             if (gameInterface != null && gameInterface.isOpen()) {
-                ButtonType type = gameInterface.clicked(e.getX(), e.getY() - GameLayout.TOOLBAR_HEIGHT);
+                ButtonType type = gameInterface.clicked(e.getX(), e.getY() - GameFrame.scalingH(GameLayout.TOOLBAR_HEIGHT));
                 if (type != ButtonType.NONE) {
                     buttonManager(type);
                     if(gameInterface != null && gameInterface.updateRequested())
@@ -218,7 +268,7 @@ public class GameWindow extends JPanel {
         Arrays.sort(a,
                 (o1, o2) -> {
 
-                    return Integer.compare(o1.getxPos() + o1.getyPos(), o2.getxPos() + o2.getyPos()) == 0 ? Integer.compare(o1.getxPos(), o2.getxPos()) : Integer.compare(o1.getxPos() + o1.getyPos(), o2.getxPos() + o2.getyPos());
+                    return o1.getxPos() + o1.getyPos() == o2.getxPos() + o2.getyPos() ? Integer.compare(o1.getxPos(), o2.getxPos()) : Integer.compare(o1.getxPos() + o1.getyPos(), o2.getxPos() + o2.getyPos());
                 });
     }
 
@@ -364,10 +414,7 @@ public class GameWindow extends JPanel {
     }
 
     public boolean isClicked(int xc, int yc) {
-        if (xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height) {
-            return true;
-        }
-        return false;
+        return xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height;
     }
 
     public Player getP() {

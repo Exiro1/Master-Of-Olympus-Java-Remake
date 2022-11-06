@@ -1,5 +1,6 @@
 package com.exiro.object;
 
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.render.ButtonType;
@@ -184,4 +185,7 @@ public abstract class BaseObject implements Cloneable {
         return super.clone();
     }
 
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.NULL;
+    }
 }

@@ -1,5 +1,6 @@
 package com.exiro.buildingList;
 
+import com.exiro.fileManager.SoundLoader;
 import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.FreeState;
@@ -48,7 +49,7 @@ public class House extends Building {
     boolean willDevolve = false;
     EvolveCause evolveCause;
 
-    enum EvolveCause {FOOD,WATER,CULTURE,WOOL,HDO,APPEAL,NONE};
+    enum EvolveCause {FOOD,WATER,CULTURE,WOOL,HDO,APPEAL,NONE}
     //enum HouseLevel {HUT,SHACK,HOVEL,HOMESTEAD,TENEMENT,APARTMENT,TOWNHOUSE}
 
     public House(int pop, int xPos, int yPos, ArrayList<Case> cases, boolean built, City city, int level) {
@@ -280,10 +281,10 @@ public class House extends Building {
     }
 
     public void newPopulation(Immigrant s){
-        pop = pop + ((Immigrant) s).getNbr();
-        popInArrival = popInArrival - ((Immigrant) s).getNbr();
-        city.setPopInArrvial(city.getPopInArrvial() - ((Immigrant) s).getNbr());
-        city.setPopulation(city.getPopulation() + ((Immigrant) s).getNbr());
+        pop = pop + s.getNbr();
+        popInArrival = popInArrival - s.getNbr();
+        city.setPopInArrvial(city.getPopInArrvial() - s.getNbr());
+        city.setPopulation(city.getPopulation() + s.getNbr());
     }
     public void removePopulation(int nbr){
         pop = pop - nbr;
@@ -474,5 +475,10 @@ public class House extends Building {
         float getTime() {
             return time;
         }
+    }
+
+    @Override
+    public SoundLoader.SoundCategory getSoundCategory() {
+        return SoundLoader.SoundCategory.COMMON_HOUSING;
     }
 }

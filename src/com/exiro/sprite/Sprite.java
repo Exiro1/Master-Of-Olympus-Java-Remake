@@ -57,7 +57,7 @@ public abstract class Sprite extends BaseObject {
             // the color we are looking for... Alpha bits are set to opaque
             public final int markerRGB = color.getRGB() | 0xFF000000;
 
-            public final int filterRGB(int x, int y, int rgb) {
+            public int filterRGB(int x, int y, int rgb) {
                 if ((rgb | 0xFF000000) == markerRGB) {
                     // Mark the alpha bits as zero - transparent
                     return 0x33000000;

@@ -1,5 +1,7 @@
 package com.exiro.render.layout;
 
+import com.exiro.render.GameFrame;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -35,23 +37,24 @@ public class GameLayout implements LayoutManager {
         //  Toolbar  //
         int currentWidth = 0;
         for (Component c : toolbarComponents) {
-            int width = 1600;
-            c.setBounds(currentWidth, 0, width, TOOLBAR_HEIGHT);
+            int width = GameFrame.scalingW(1600);
+            c.setBounds(currentWidth, 0, width, GameFrame.scalingH(TOOLBAR_HEIGHT));
             currentWidth = width + currentWidth;
         }
 
         //  Body  //
-        int currentHeight = TOOLBAR_HEIGHT;
+        int currentHeight = GameFrame.scalingH(TOOLBAR_HEIGHT);
         for (Component c : GameComponents) {
-            int height = (1080 - TOOLBAR_HEIGHT) / GameComponents.size();
-            c.setBounds(0, currentHeight, 1600, height);
+            int height = (int) ((1080 - TOOLBAR_HEIGHT)* GameFrame.FHRATIO);
+
+            c.setBounds(0, currentHeight, GameFrame.scalingW(1600), height);
             currentHeight += height;
         }
 
         for (Component c : InterfaceComponents) {
-            int height = 1080;
-            c.setBounds(1600, 0, 1920 - 1600, 1080);
-            currentHeight += height;
+            //int height = GameFrame.scalingW(1600);
+            c.setBounds(GameFrame.scalingW(1600), 0,  GameFrame.scalingH(1920 - 1600), GameFrame.scalingH(1080));
+            //currentHeight += height;
         }
 
     }
