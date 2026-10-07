@@ -6,6 +6,7 @@ import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
 import com.exiro.render.GameFrame;
 import com.exiro.render.IsometricRender;
+import com.exiro.render.WorldRenderer;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.Sprite;
 import com.exiro.systemCore.GameManager;
@@ -39,6 +40,9 @@ public class GameWindow extends JPanel {
     public static Sprite sprite = null;
 
     public static final Object syncSound = new Object();
+
+    private final WorldRenderer worldRenderer = new WorldRenderer();
+    private final ArrayList<Case> visibleCases = new ArrayList<>();
 
 
 
@@ -83,34 +87,29 @@ public class GameWindow extends JPanel {
         int x = 0;
 
 
-        Case[] oc;
-        ArrayList<Case> allcase;
-
+        // Cases never move, so sorting back to front once is enough.
         if (p.getPlayerCities().get(0).getMap().getCaseSorted() == null) {
-            synchronized (p.getPlayerCities().get(0).getMap().getCases()) {
-
-                allcase = new ArrayList<>(p.getPlayerCities().get(0).getMap().getNotNullCases());
-            }
-            oc = allcase.toArray(new Case[0]);
+            Case[] oc = p.getPlayerCities().get(0).getMap().getNotNullCases().toArray(new Case[0]);
             sortRender(oc);
             p.getPlayerCities().get(0).getMap().setCaseSorted(oc);
         }
-
-        sortRender(p.getPlayerCities().get(0).getMap().getCaseSorted());
 
         int xvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getxPos();
         int xvisibleMax = IsometricRender.getCase(new Point(1400* GameFrame.FWRATIO, 0), gm.getCurrentCity()).getxPos() + 44;
         int yvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getyPos() - 30;
         int yvisibleMax = IsometricRender.getCase(new Point(0, 800* GameFrame.FHRATIO), gm.getCurrentCity()).getyPos() + 15;
 
+        visibleCases.clear();
+        for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
+            if (obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin)
+                visibleCases.add(obj);
+        }
+
+        // Water is drawn first, under everything (unchanged).
         int drawnObject = 0;
         int drawn = 0;
-        int drawnSprite = 0;
-        for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
-            if (!(obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin))
-                continue;
+        for (Case obj : visibleCases) {
             drawn++;
-            drawnSprite += obj.getSprites().size();
             if(obj.getObject() != null)
                 drawnObject++;
             if (obj.getTerrain() instanceof Water) {
@@ -119,14 +118,9 @@ public class GameWindow extends JPanel {
         }
         int idx = drawn > 0 ? r.nextInt(drawn): -1;
         int idxObj = drawnObject > 0 ? r.nextInt(drawnObject): -1;
-        int idxSprite = drawnSprite > 0 ? r.nextInt(drawnSprite): -1;
-        BaseObject randomTerrain = null, randomObject = null, randomSprite;
-        int i = 0, io = 0, is = 0;
-        for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
-
-            if (!(obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin))
-                continue;
-
+        BaseObject randomTerrain = null, randomObject = null;
+        int i = 0, io = 0;
+        for (Case obj : visibleCases) {
             if(obj.getObject() != null) {
                 if(io == idxObj)
                     randomObject = obj.getObject();
@@ -136,27 +130,9 @@ public class GameWindow extends JPanel {
                     randomTerrain = obj.getTerrain();
                 i++;
             }
-
-
-            if (obj.getObject() == null && !(obj.getTerrain() instanceof Water))
-                obj.getTerrain().Render(g, CameraPosx, CameraPosy);
-            if (obj.getObject() != null && (obj.isMainCase())) {
-                obj.getObject().Render(g, CameraPosx, CameraPosy);
-            }
-            if (obj.getTerrain() instanceof Elevation && ((Elevation) obj.getTerrain()).isHasRoad())
-                obj.getTerrain().Render(g, CameraPosx, CameraPosy);
-            List<Sprite> spr = obj.getSyncSprites();
-            synchronized (spr) {
-                Iterator<Sprite> it = spr.iterator();
-                while (it.hasNext()) {
-                    Sprite s = it.next();
-                    s.Render(g, CameraPosx, CameraPosy);
-                    if(is == idxSprite)
-                        randomSprite = s;
-                    is++;
-                }
-            }
         }
+
+        worldRenderer.render(g, visibleCases, CameraPosx, CameraPosy, getWidth(), getHeight());
 
         synchronized (syncSound) {
          if(r.nextInt(2) == 0 || (randomObject == null || randomObject.getSoundCategory() == SoundLoader.SoundCategory.NULL)){
@@ -225,8 +201,10 @@ public class GameWindow extends JPanel {
 
         g.drawString("X " + getCameraPosx(), 1200, 10);
         g.drawString("Y " + getCameraPosy(), 1200, 30);
-        g.drawString("Logic FPS " + gm.getGameThread().getFpsLogic(), 1200, 40);
-        g.drawString("FPS " + gm.getRenderingThread().getFps(), 1200, 60);
+        if (gm.getGameLoop() != null) {
+            g.drawString(String.format("Logic TPS %.0f", gm.getGameLoop().getTps()), 1200, 40);
+            g.drawString(String.format("FPS %.0f", gm.getGameLoop().getFps()), 1200, 60);
+        }
     }
 
     public void clickManager(MouseEvent e) {

@@ -5,7 +5,6 @@ import com.exiro.fileManager.OggStreamer;
 import com.exiro.fileManager.SoundLoader;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.layout.GameWindow;
-import com.exiro.systemCore.GameThread;
 import com.exiro.terrainList.Terrain;
 import com.jogamp.openal.AL;
 

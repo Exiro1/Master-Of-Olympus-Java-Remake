@@ -102,7 +102,7 @@ public abstract class Building extends ObjectClass {
 
     /**
      * Remplis si possible le batiment
-     * Appelés a chaque image par GameThread
+     * Appelés a chaque image par Simulation
      */
     abstract public void populate(double deltaTime);
 

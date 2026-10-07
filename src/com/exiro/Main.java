@@ -9,8 +9,8 @@ import com.exiro.object.Player;
 import com.exiro.render.EntityRender;
 import com.exiro.soundManager.SoundManager;
 import com.exiro.systemCore.GameManager;
-import com.exiro.systemCore.GameThread;
-import com.exiro.systemCore.RenderingThread;
+import com.exiro.systemCore.GameLoop;
+import com.exiro.systemCore.Simulation;
 import com.exiro.terrainGenerator.MapCreatorFrame;
 
 import javax.swing.*;
@@ -55,18 +55,16 @@ public class Main {
 
 
 
-            Thread t = new Thread(new GameThread(gm, sm));
-            t.start();
-            Thread t2 = new Thread(new RenderingThread(gm));
-            t2.start();
+            Simulation simulation = new Simulation(gm, sm);
+            Thread loop = new Thread(new GameLoop(gm, simulation), "GameLoop");
+            loop.start();
 
             sm.playSound(SoundLoader.SoundCategory.FARMLAND);
             sm.playSound(SoundLoader.SoundCategory.VEGETATION);
             sm.playSound(SoundLoader.SoundCategory.FARMLAND);
             sm.playSound(SoundLoader.SoundCategory.VEGETATION);
 
-            t.join();
-            t2.join();
+            loop.join();
             SoundLoader.exit();
             sm.exit();
 

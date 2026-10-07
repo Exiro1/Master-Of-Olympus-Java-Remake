@@ -7,13 +7,20 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static com.exiro.sprite.Sprite.makeColorTransparent;
 
 public class ImageLoader {
 
-    static HashMap<Integer, TileImage> AssetsMap;
-    static HashMap<Integer, Integer> AssetsMapUse;
+    // Keyed by "file|bitmap|image". The old key concatenated the three values with no separator
+    // and used String.hashCode(), so e.g. (SprMain, 1, 23) and (SprMain, 12, 3) collided.
+    static HashMap<String, TileImage> AssetsMap;
+    static HashMap<String, Integer> AssetsMapUse;
+    // Parsed .sg3 indexes, one per file. Parsing the index used to happen on every cache miss.
+    static HashMap<String, sgFile> sgFiles;
+    // Images that exist in the index but are 0x0; remembered so we don't reload them every call.
+    static HashSet<String> emptyImages;
 
     public enum FilePath {ZEUS_GENERAL("Zeus_General"), SPR_MAIN("SprMain"), SPR_AMBIENT("SprAmbient"), ZEUS_TERRAIN("Zeus_Terrain"),ZEUS_INTERFACE("Zeus_Interface");
         String path;
@@ -28,16 +35,33 @@ public class ImageLoader {
     public static void initLoader() {
         AssetsMap = new HashMap<>();
         AssetsMapUse = new HashMap<>();
+        sgFiles = new HashMap<>();
+        emptyImages = new HashSet<>();
     }
 
+    private static String key(String filename, int bitmapID, int imgID) {
+        return filename + '|' + bitmapID + '|' + imgID;
+    }
+
+    private static sgFile getSgFile(String filename) throws IOException {
+        sgFile sg = sgFiles.get(filename);
+        if (sg == null) {
+            sg = new sgFile("Assets/DATA/" + filename + ".sg3");
+            sgFiles.put(filename, sg);
+        }
+        return sg;
+    }
 
     public static void unloadImage(String filename, int bitmapID, int imgID) {
-        String hash = filename + "" + bitmapID + "" + imgID;
-        int globalID = hash.hashCode();
-        AssetsMapUse.replace(globalID, AssetsMapUse.get(globalID) - 1);
-        if (AssetsMapUse.get(globalID) == 0) {
+        String globalID = key(filename, bitmapID, imgID);
+        Integer uses = AssetsMapUse.get(globalID);
+        if (uses == null)
+            return;
+        if (uses <= 1) {
             AssetsMap.remove(globalID);
             AssetsMapUse.remove(globalID);
+        } else {
+            AssetsMapUse.put(globalID, uses - 1);
         }
     }
     public static TileImage getImage(FilePath filePath, int bitmapID, int imgID) {
@@ -46,14 +70,16 @@ public class ImageLoader {
 
     public static TileImage getImage(String filename, int bitmapID, int imgID) {
 
-        String hash = filename + "" + bitmapID + "" + imgID;
-        int globalID = hash.hashCode();
+        String globalID = key(filename, bitmapID, imgID);
+        if (emptyImages.contains(globalID))
+            return null;
         if (!AssetsMap.containsKey(globalID)) {
-            sgFile sg = null;
+            sgFile sg;
             try {
-                sg = new sgFile("Assets/DATA/" + filename + ".sg3");
+                sg = getSgFile(filename);
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
             }
             sgBitmap bitmap = sg.getBitmaps()[bitmapID];
 
@@ -64,9 +90,12 @@ public class ImageLoader {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            assert sgData != null;
-            if (sgData.getWidth() == 0 || sgData.getHeight() == 0)
+            if (sgData == null)
                 return null;
+            if (sgData.getWidth() == 0 || sgData.getHeight() == 0) {
+                emptyImages.add(globalID);
+                return null;
+            }
             //BufferedImage imgg = new BufferedImage(sgData.getWidth(),sgData.getHeight(), BufferedImage.TYPE_INT_ARGB);
             GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
             GraphicsDevice device = env.getDefaultScreenDevice();

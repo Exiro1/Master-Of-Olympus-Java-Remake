@@ -6,7 +6,6 @@ import com.exiro.moveRelated.Path;
 import com.exiro.object.BaseObject;
 import com.exiro.object.Case;
 import com.exiro.object.City;
-import com.exiro.render.IsometricRender;
 import com.exiro.utils.Point;
 
 import java.util.Map;
@@ -114,33 +113,13 @@ public abstract class MovingSprite extends Sprite {
 
             setXB((int) Math.ceil(x));
             setYB((int) Math.ceil(y));
-            //setMainCase(c.getMap().getCase((int) (getXB()), (int) (getYB())));
-            Point[] ps = IsometricRender.getHitbox(new Point(x,y), getWidth(), getHeight());
-
-            switch(getDir()){
-
-                case SOUTH:
-                    break;
-                case SOUTH_EAST:
-                    setMainCase(c.getMap().getCase((int) (ps[2].getX()), getYB()));
-                    break;
-                case EAST:
-                    break;
-                case NORTH_EAST:
-                    setMainCase(c.getMap().getCase(getXB(), getYB()));
-                    break;
-                case NORTH:
-                    break;
-                case NORTH_WEST:
-                    setMainCase(c.getMap().getCase(getXB(), getYB()));
-                    break;
-                case WEST:
-                    break;
-                case SOUTH_WEST:
-                    setMainCase(c.getMap().getCase(getXB(), (int) (ps[3].getY())));
-                    break;
-            }
-
+            // Register on the tile the sprite is drawn with. ceil() picks, for every direction,
+            // the front-most of the tiles the sprite straddles: the destination when moving
+            // towards the camera, the origin when moving away. Before, only the four axis moves
+            // updated the tile (the diagonal ones never did, so the sprite kept the depth of the
+            // tile it started on), and SOUTH_EAST / SOUTH_WEST looked ahead by the sprite's
+            // pixel size converted to tiles, about two tiles for a walker.
+            setMainCase(c.getMap().getCase(getXB(), getYB()));
         }
 
     }
@@ -150,19 +129,14 @@ public abstract class MovingSprite extends Sprite {
         if (mainCase == this.mainCase || mainCase == null)
             return;
 
-        onWalking.add(mainCase);
-        this.mainCase = mainCase;
-
-        /*
-        if(getCaseDir() != null) {
-            onWalking.add(getCaseDir());
-            getCaseDir().getSprites().add(this);
-        }*/
-
-        if (onWalking.size() > size) {
+        // Keep the sprite on exactly one tile. This used to keep the previous tile as well,
+        // so the sprite was drawn twice per frame, once at each depth.
+        while (onWalking.size() >= size) {
             onWalking.get(0).getSprites().remove(this);
             onWalking.remove(0);
         }
+        onWalking.add(mainCase);
+        this.mainCase = mainCase;
         mainCase.getSprites().add(this);
     }
 

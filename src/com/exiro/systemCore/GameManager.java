@@ -20,8 +20,8 @@ public class GameManager {
     private final InterfaceRender it;
     private final GameInfo gi;
     TimeManager timeManager;
-    GameThread gameThread;
-    RenderingThread renderingThread;
+    Simulation simulation;
+    GameLoop gameLoop;
 
     public GameManager(Player player, City currentCity) {
         this.player = player;
@@ -35,20 +35,20 @@ public class GameManager {
         gm = this;
     }
 
-    public RenderingThread getRenderingThread() {
-        return renderingThread;
+    public GameLoop getGameLoop() {
+        return gameLoop;
     }
 
-    public void setRenderingThread(RenderingThread renderingThread) {
-        this.renderingThread = renderingThread;
+    public void setGameLoop(GameLoop gameLoop) {
+        this.gameLoop = gameLoop;
     }
 
-    public GameThread getGameThread() {
-        return gameThread;
+    public Simulation getSimulation() {
+        return simulation;
     }
 
-    public void setGameThread(GameThread gameThread) {
-        this.gameThread = gameThread;
+    public void setSimulation(Simulation simulation) {
+        this.simulation = simulation;
     }
 
     public static GameManager getInstance() {
