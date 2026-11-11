@@ -92,7 +92,7 @@ public class ImageLoader {
             String filename555 = "Assets/DATA/" + filename + ".555";
             sgImageData sgData = null;
             try {
-                sgData = SgImageReader.loadImageData(bitmap.getImages().get(imgID), filename555);
+                sgData = sgImage.sg_load_image_data(bitmap.getImages().get(imgID), filename555);
             } catch (IOException e) {
                 e.printStackTrace();
             }
