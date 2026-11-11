@@ -12,12 +12,16 @@ public class PathAlgo {
         Map<T, Double> gScore = new HashMap<>();
         final Map<T, Double> fScore = new HashMap<>();
         PriorityQueue<T> open = new PriorityQueue<>(11, (nodeA, nodeB) -> Double.compare(fScore.get(nodeA), fScore.get(nodeB)));
+        // mirror of the queue's content: PriorityQueue.contains is a linear scan
+        Set<T> openSet = new HashSet<>();
 
         gScore.put(start, 0.0);
         fScore.put(start, start.getHeuristic(goal, straigth));
         open.offer(start);
+        openSet.add(start);
         while (!open.isEmpty()) {
             T current = open.poll();
+            openSet.remove(current);
             if (current.equals(goal)) {
                 while (current != null) {
                     route.add(0, current);
@@ -37,7 +41,7 @@ public class PathAlgo {
                 double tentG = gScore.get(current)
                         + current.getTraversalCost(neighbour, fromMap.get(current), straigth);
 
-                boolean contains = open.contains(neighbour);
+                boolean contains = openSet.contains(neighbour);
                 if ((!contains || tentG < gScore.get(neighbour)) && (((neighbour.getType().getI() & free) != 0))) {
                     gScore.put(neighbour, tentG);
                     fScore.put(neighbour, tentG + neighbour.getHeuristic(goal, straigth));
@@ -47,6 +51,7 @@ public class PathAlgo {
                     }
 
                     open.offer(neighbour);
+                    openSet.add(neighbour);
                     fromMap.put(neighbour, current);
                 }
             }

@@ -46,6 +46,7 @@ public abstract class Building extends ObjectClass {
     int xpos2;
     int ypos2;
     boolean deleted = false;
+    private boolean collapsing = false;
 
 
     public Building(boolean isActive, ObjectType type, BuildingCategory category, int pop, int popMax, int cost, int deleteCost, int xPos, int yPos, int yLenght, int xLenght, ArrayList<Case> cases, boolean built, City city, int ID) {
@@ -163,7 +164,9 @@ public abstract class Building extends ObjectClass {
     }
 
     public void destroy() {
+        collapsing = true; // a collapse is not a demolition: don't charge the player for it
         this.delete();
+        collapsing = false;
         if (this.built) {
             for (Case c : getCases()) {
                 c.setObject(new Rubble());
@@ -218,7 +221,8 @@ public abstract class Building extends ObjectClass {
 
         if (this.built) {
             setActive(false);
-            city.getOwner().pay(this.getDeleteCost());
+            if (!collapsing)
+                city.getOwner().pay(this.getDeleteCost());
             city.removeBuilding(this);
             for (Case c : getCases()) {
                 c.setOccupied(false);
@@ -237,6 +241,23 @@ public abstract class Building extends ObjectClass {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
+        renderBase(g, camX, camY);
+
+        //render only buildingSprite because movingSprite are render separately
+        for (BuildingSprite s : bsprites) {
+            if (isWorking()) {
+                s.Render(g, camX, camY);
+            }else{
+                stop();
+            }
+        }
+
+    }
+
+    /**
+     * Draws the building image only, without its sprites.
+     */
+    protected void renderBase(Graphics g, int camX, int camY) {
         int lvl = getMainCase().getZlvl();
 
         com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
@@ -248,16 +269,6 @@ public abstract class Building extends ObjectClass {
             g.drawRect(camX + (int) p.getX(), camY + (int) p.getY(), getWidth(), getHeight());
             g.setColor(Color.BLACK);
         }
-
-        //render only buildingSprite because movingSprite are render separately
-        for (BuildingSprite s : bsprites) {
-            if (isWorking()) {
-                s.Render(g, camX, camY);
-            }else{
-                stop();
-            }
-        }
-
     }
 
     public void stop(){

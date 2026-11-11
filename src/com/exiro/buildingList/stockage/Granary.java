@@ -44,7 +44,8 @@ public class Granary extends StoreBuilding {
 
     @Override
     public void Render(Graphics g, int camX, int camY) {
-        super.Render(g, camX, camY);
+        // not super.Render: it already draws every sprite, so they were drawn twice
+        renderBase(g, camX, camY);
 
         int i = 0;
         for (BuildingSprite s : bsprites) {

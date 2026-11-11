@@ -118,7 +118,7 @@ public abstract class Construction extends ObjectClass {
 
         if (this.built) {
             city.getOwner().pay(this.getDeleteCost());
-            city.getConstructions().remove(this);
+            city.removeConstruction(this); // deferred like the other removals, safe while iterating
             city.removeObj(this);
             for (Case c : getCases()) {
                 c.setOccupied(false);

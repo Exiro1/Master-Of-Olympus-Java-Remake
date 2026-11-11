@@ -95,14 +95,12 @@ public class SoundManager {
         }
         SoundLoader.al.alSourcePlay(source);
         sourcesMap.put(source, soundCategory);
-        System.out.println("play "+soundCategory.toString());
 
     }
 
     public void playAmbientSound(){
         synchronized (GameWindow.syncSound) {
             if(GameWindow.currentRandomCase != null) {
-                System.out.println("ambient : "+GameWindow.currentRandomCase.getSoundCategory().toString());
                 if (GameWindow.currentRandomCase instanceof Building)
                     playSound(GameWindow.currentRandomCase.getSoundCategory(), ((Building) GameWindow.currentRandomCase).getxPos(), ((Building) GameWindow.currentRandomCase).getyPos());
                 else if (GameWindow.currentRandomCase instanceof Terrain)
@@ -201,7 +199,6 @@ public class SoundManager {
                 else if(sourcesMap.get(s) == SoundLoader.SoundCategory.LAYER1)
                     secBeforeNextLayer1 = random.nextInt(10);
                 else {
-                    System.out.println("fdddddd");
                     sourcesMap.remove(s);
                     playAmbientSound();
                     continue;

@@ -51,7 +51,6 @@ public class Main {
 
             EntityRender.setEntityRender(ObjectType.ROAD);
 
-            System.out.println(c.getMap().toString());
 
 
 

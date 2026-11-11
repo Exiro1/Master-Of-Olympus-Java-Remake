@@ -67,11 +67,6 @@ public class RoadMap {
         for (MapNode mn : n) {
             p.addCases(cityMap.getCase(mn.x, mn.y));
         }
-        Path newpath = new Path(p.getPath());
-        newpath.setStart(cityMap.getCase(xStart, yStart));
-        newpath.setEnd(cityMap.getCase(xGoal, yGoal));
-        newpath.setFree(freeState);
-        //pathsCalculated.add(newpath);
         return p;
     }
 

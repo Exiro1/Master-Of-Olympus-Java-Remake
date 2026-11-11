@@ -6,22 +6,25 @@ import com.exiro.moveRelated.RoadMap;
 import com.exiro.object.Case;
 import com.exiro.object.CityMap;
 import com.exiro.object.Player;
+import com.exiro.terrainList.Water;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PathManager {
 
     private Player p;
     private ArrayList<Road> roads;
-    private ArrayList<Road> lastroads;
     private ArrayList<Path> paths;
     private CityMap map;
-    private RoadMap roadMap;
+    // RoadMap keeps no state about the roads, so one instance is enough
+    private final RoadMap roadMap;
 
     public PathManager(Player p, ArrayList<Road> roads, ArrayList<Path> paths, CityMap map) {
         this.p = p;
         this.roads = roads;
-        this.lastroads = new ArrayList<>(roads);
         this.paths = paths;
         this.map = map;
         this.roadMap = new RoadMap(map);
@@ -31,26 +34,32 @@ public class PathManager {
         this.p = p;
         this.map = map;
         this.roads = new ArrayList<>();
-        this.lastroads = new ArrayList<>(roads);
         this.paths = new ArrayList<>();
         this.roadMap = new RoadMap(map);
     }
 
     public void addRoad(Road r) {
-        synchronized (roads) {
-            roads.add(r);
-            for (Road road : roads) {
-                road.updateRoadImg();
-            }
-        }
+        roads.add(r);
+        updateRoadImgAround(r);
     }
 
     public void deleteRoad(Road r) {
-        synchronized (roads) {
-            roads.remove(r);
-            for (Road road : roads) {
-                road.updateRoadImg();
-            }
+        roads.remove(r);
+        updateRoadImgAround(r);
+    }
+
+    /**
+     * Only the road and its 4 neighbours can change shape, no need to redo every road of the map.
+     */
+    private void updateRoadImgAround(Road r) {
+        Case c = r.getMainCase();
+        if (c == null)
+            return;
+        if (c.getObject() == r)
+            r.updateRoadImg();
+        for (Case n : c.getNeighbour()) {
+            if (n != null && n.getObject() instanceof Road)
+                ((Road) n.getObject()).updateRoadImg();
         }
     }
 
@@ -59,59 +68,51 @@ public class PathManager {
     }
 
     public Path getPathTo(Case c1, Case c2, int free, boolean straight) {
-        // if(map.getCase(c1.getxPos(),c1.getyPos())==null || map.getCase(c2.getxPos(),c2.getyPos())==null)
-        //   return null;
-        if (!lastroads.equals(roads)) {
-            roadMap = new RoadMap(map);
-            this.lastroads = new ArrayList<>(roads);
-        }
         if (c1 == null || c2 == null)
             return null;
-        return getPath(c1, c2, free) == null ? roadMap.findPath(c1.getxPos(), c1.getyPos(), c2.getxPos(), c2.getyPos(), free, straight) : getPath(c1, c2, free);//verifie si il existe un chemin deja calculé
+        return roadMap.findPath(c1.getxPos(), c1.getyPos(), c2.getxPos(), c2.getyPos(), free, straight);
     }
 
     public Path getPathTo(Case c1, Case c2, int free) {
-        // if(map.getCase(c1.getxPos(),c1.getyPos())==null || map.getCase(c2.getxPos(),c2.getyPos())==null)
-        //   return null;
-        if (!lastroads.equals(roads)) {
-            roadMap = new RoadMap(map);
-            this.lastroads = new ArrayList<>(roads);
-        }
         if (c1 == null || c2 == null)
             return null;
-        return getPath(c1, c2, free) == null ? roadMap.findPath(c1.getxPos(), c1.getyPos(), c2.getxPos(), c2.getyPos(), free) : getPath(c1, c2, free);//verifie si il existe un chemin deja calculé
+        return roadMap.findPath(c1.getxPos(), c1.getyPos(), c2.getxPos(), c2.getyPos(), free);
     }
 
     public Path getPathTo(int x1, int y1, int x2, int y2, int free) {
-        // if(map.getCase(c1.getxPos(),c1.getyPos())==null || map.getCase(c2.getxPos(),c2.getyPos())==null)
-        //   return null;
-        if (!lastroads.equals(roads)) {
-            roadMap = new RoadMap(map);
-            this.lastroads = new ArrayList<>(roads);
-        }
-        return roadMap.findPath(x1, y1, x2, y2, free);//verifie si il existe un chemin deja calculé
+        return roadMap.findPath(x1, y1, x2, y2, free);
     }
 
     public boolean isReachable(Case c1, Case c2, int free) {
-        if (!lastroads.equals(roads)) {
-            roadMap = new RoadMap(map);
-            this.lastroads = new ArrayList<>(roads);
-        }
         return getPathTo(c1, c2, free) != null;
     }
 
-
-    public Path getPath(Case c1, Case c2, int free) {
-        /*for(Path p : roadMap.getPathsCalculated()){
-            if(p.getPath().contains(c1) && p.getPath().contains(c2) && p.isFree()==free) {
-                Path p2 = new Path(p.getPath());
-              //  p2.setStart(p.getPath().get(0));
-             //   p2.setEnd(p.getPath().get(p.getPath().size()-1));
-                p2.setFree(free);
-                return p2;
+    /**
+     * Every case reachable from {@code start} with straight moves, walking only on cases whose
+     * free state matches {@code free} (same rules as the A* in {@link RoadMap}). One flood fill
+     * answers "is X reachable from start" for all X at once, instead of one A* per X.
+     */
+    public Set<Case> reachableFrom(Case start, int free) {
+        Set<Case> visited = new HashSet<>();
+        if (start == null)
+            return visited;
+        ArrayDeque<Case> queue = new ArrayDeque<>();
+        visited.add(start);
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            Case c = queue.poll();
+            for (Case n : c.getNeighbour()) {
+                if (n == null || visited.contains(n))
+                    continue;
+                if (n.getTerrain().isBlocking() && !(n.getTerrain() instanceof Water))
+                    continue;
+                if ((RoadMap.getFreeState(n.getxPos(), n.getyPos(), map).getI() & free) == 0)
+                    continue;
+                visited.add(n);
+                queue.add(n);
             }
-        }*/
-        return null;
+        }
+        return visited;
     }
 
     public Player getP() {

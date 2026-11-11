@@ -11,7 +11,10 @@ import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Rock;
 import com.exiro.terrainList.Terrain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Game logic. Holds no thread of its own: {@link GameLoop} calls {@link #tick(double)} on the
@@ -107,30 +110,11 @@ public class Simulation {
         }
     }
 
-    //TODO revoir completement ce passage (trop gourmand)
     public void manageResources(City c) {
-        for (Case r : c.getMap().getSilvers()) {
-            ((Rock) r.getTerrain()).setAccessible(false);
-            for (Case n : r.getNeighbour()) {
-                if (n.getTerrain().isBlocking())
-                    continue;
-                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.NON_BLOCKING.getI()) != null) {
-                    ((Rock) r.getTerrain()).setAccessible(true);
-                    break;
-                }
-            }
-        }
-        for (Case r : c.getMap().getCoppers()) {
-            ((Rock) r.getTerrain()).setAccessible(false);
-            for (Case n : r.getNeighbour()) {
-                if (n.getTerrain().isBlocking())
-                    continue;
-                if (c.getPathManager().getPathTo(c.getMap().getStartCase(), n, FreeState.NON_BLOCKING.getI()) != null) {
-                    ((Rock) r.getTerrain()).setAccessible(true);
-                    break;
-                }
-            }
-        }
+        // one flood fill from the start case instead of one A* per ore neighbour
+        Set<Case> reachable = c.getPathManager().reachableFrom(c.getMap().getStartCase(), FreeState.NON_BLOCKING.getI());
+        updateRockAccess(c.getMap().getSilvers(), reachable);
+        updateRockAccess(c.getMap().getCoppers(), reachable);
        /*
        for (Case r : c.getMap().getTrees()) {
             ((Tree) r.getObject()).setAccessible(false);
@@ -144,6 +128,19 @@ public class Simulation {
             }
         }
         */
+    }
+
+    private void updateRockAccess(List<Case> rocks, Set<Case> reachable) {
+        for (Case r : rocks) {
+            boolean accessible = false;
+            for (Case n : r.getNeighbour()) {
+                if (n != null && !n.getTerrain().isBlocking() && reachable.contains(n)) {
+                    accessible = true;
+                    break;
+                }
+            }
+            ((Rock) r.getTerrain()).setAccessible(accessible);
+        }
     }
 
 
@@ -177,9 +174,11 @@ public class Simulation {
         }
         c.deleteQueue();
 
-        City current = p.getPlayerCities().get(currentCity);
+        // A road is active when it is connected to the start case: one flood fill for all of them
+        Case startCase = c.getMap().getStartCase();
+        Set<Case> connected = c.getPathManager().reachableFrom(startCase, FreeState.ALL_ROAD.i);
         for (Road r : c.getPathManager().getRoads()) {
-            r.setActive(current.getPathManager().isReachable(current.getMap().getCase(r.getxPos(), r.getYpos()), current.getMap().getStartCase(), FreeState.ALL_ROAD.i));
+            r.setActive(connected.contains(c.getMap().getCase(r.getxPos(), r.getYpos())));
         }
 
         // Plain loop (was a parallelStream): game state is now single-threaded by design.
@@ -190,9 +189,11 @@ public class Simulation {
     }
 
     public void activate(ObjectClass o) {
-        if (o.getBuildingType() == ObjectType.ROAD || o.getAccess() == null)
+        if (o.getBuildingType() == ObjectType.ROAD)
             return;
-        o.setActive(o.getAccess().size() != 0);
+        ArrayList<Case> access = o.getAccess();
+        if (access != null)
+            o.setActive(!access.isEmpty());
     }
 
 

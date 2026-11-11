@@ -27,8 +27,6 @@ public class Path {
         for (int i = path.size() - 1; i >= 0; i--) {
             reverse.add(path.get(i));
         }
-        System.out.println(reverse);
-        System.out.println(path.toString());
         return new Path(reverse);
     }
 

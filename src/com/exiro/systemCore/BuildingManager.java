@@ -70,6 +70,7 @@ public class BuildingManager {
                     b.setPop(0);
             }
             while (popR > pop - getWorkforceNeeded() || popR == 0) {
+                int before = popR;
 
                 for (Building b : buildings) {
                     if (!b.isActive())
@@ -91,13 +92,14 @@ public class BuildingManager {
 
                 if (popR <= 0)
                     break;
+                if (popR == before) // nobody could take a worker this pass: stop instead of looping forever
+                    break;
 
             }
-            System.out.println("reste " + popR + " personne(s) qui ne travaille(nt) pas");
             unemployed = popR;
             lastActiveNbr = city.getActiveBuilding();
             lastPop = city.getPopulation();
-            lastPriorityMap = priorityMap;
+            lastPriorityMap = new HashMap<>(priorityMap); // a copy, so later priority changes are detected
         }
     }
 

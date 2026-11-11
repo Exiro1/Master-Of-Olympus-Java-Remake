@@ -22,6 +22,8 @@ public abstract class Carter extends MovingSprite{
     int command = 0;
     Building origin,trueOrigin;
     CarterState carterState;
+    // starts full so the first search happens right away
+    double timeSinceLastSearch = 1;
 
 
 
@@ -79,7 +81,12 @@ public abstract class Carter extends MovingSprite{
         if (hasArrived() && carterState != CarterState.WAITING) {
             Arrived();
         } else if (carterState == CarterState.WAITING) {
-            searchForStoreBuilding();
+            // every store is full: look again once a second, not every tick (each search runs A*)
+            timeSinceLastSearch += deltaTime;
+            if (timeSinceLastSearch >= 1) {
+                timeSinceLastSearch = 0;
+                searchForStoreBuilding();
+            }
         }
 
     }
