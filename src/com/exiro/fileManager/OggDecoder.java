@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class OggDecoder {
+public class OggDecoder implements MusicDecoder {
         private static int BLOCK_SIZE = 4096*64;
 
         private VorbisStream vStream;
@@ -30,6 +30,7 @@ public class OggDecoder {
             this.url = url;
         }
 
+        @Override
         public boolean initialize() {
             try {
                 CachedUrlStream os = new CachedUrlStream(url);
@@ -55,14 +56,17 @@ public class OggDecoder {
             return true;
         }
 
+        @Override
         public int numChannels() {
             return vStreamHdr.getChannels();
         }
 
+        @Override
         public int sampleRate() {
             return vStreamHdr.getSampleRate();
         }
 
+        @Override
         public void setSwap(boolean swap) {
             this.swap = swap;
         }
@@ -149,6 +153,7 @@ public class OggDecoder {
             }
         }
 
+        @Override
         public int read(byte[] buffer) throws IOException {
 
             if (endOfStream)
@@ -170,6 +175,7 @@ public class OggDecoder {
             return bytesRead;
         }
 
+        @Override
         public void dump() {
             System.err.println("#Channels: " + vStreamHdr.getChannels());
             System.err.println("Sample rate: " + vStreamHdr.getSampleRate());

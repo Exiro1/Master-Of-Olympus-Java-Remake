@@ -1,7 +1,7 @@
 package com.exiro.soundManager;
 
 import com.exiro.buildingList.Building;
-import com.exiro.fileManager.OggStreamer;
+import com.exiro.fileManager.MusicStreamer;
 import com.exiro.fileManager.SoundLoader;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.layout.GameWindow;
@@ -69,7 +69,7 @@ public class SoundManager {
     public void playSound(SoundLoader.SoundCategory soundCategory, float x, float y){
         if(soundCategory == SoundLoader.SoundCategory.GENERAL_MUSIC || soundCategory == SoundLoader.SoundCategory.COMBAT_MUSIC_LONG|| soundCategory == SoundLoader.SoundCategory.COMBAT_MUSIC_SHORT) {
             int r = random.nextInt(SoundLoader.getSoundPaths(soundCategory).size());
-            Thread t = new Thread(new OggStreamer(SoundLoader.getSoundPaths(soundCategory).get(r)));
+            Thread t = new Thread(new MusicStreamer(SoundLoader.getSoundPaths(soundCategory).get(r)));
             t.start();
             return;
         }
