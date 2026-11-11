@@ -15,7 +15,7 @@ public class MapCreatorFrame extends JFrame {
 
 
 
-        setTitle("Points");
+        setTitle("MapCreator");
         setSize(1300, 1000);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,7 +62,7 @@ public class MapCreatorFrame extends JFrame {
         JButton exportMap = new JButton("Export Map");
         JSlider[] sliders = new JSlider[]{s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12};
         final MapCreatorPanel surface = new MapCreatorPanel(sliders, seed, mapSettings.getSeed());
-        sliderp.setLayout(new GridLayout(28,1,0,5));
+        sliderp.setLayout(new GridLayout(28,1,0,0));
         sliderp.add(j1);
         sliderp.add(s1);
         sliderp.add(j2);
@@ -108,7 +108,7 @@ public class MapCreatorFrame extends JFrame {
         seed.addActionListener(surface::seedChanged);
 
 
-        surface.setPreferredSize(new Dimension( 1000, 1000 ));
+        surface.setPreferredSize(new Dimension( 700, 700 ));
         add(surface);
         add(sliderp);
 

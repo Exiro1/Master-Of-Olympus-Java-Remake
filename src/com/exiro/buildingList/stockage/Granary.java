@@ -52,6 +52,7 @@ public class Granary extends StoreBuilding {
     @Override
     public void process(double deltaTime, int deltaDays) {
         if (isActive() && getPop() > 0) {
+            //super.process(deltaTime, deltaDays);
             manageCarter(); // what StoreBuilding.process does, without the safety decay
         }
     }

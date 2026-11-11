@@ -98,20 +98,28 @@ public abstract class StoreBuilding extends Building {
 
 
     public void emptyResource(Resource r) {
+        int pathLength = Integer.MAX_VALUE;
+        StoreBuilding sb = null;
+
         for (Building b : city.getBuildings()) {
             if (b instanceof StoreBuilding g) {
                 if (g.getFreeSpace(r) > 0 && g.getAccess().size() > 0) {
                     Path p = city.getPathManager().getPathTo(getAccess().get(0).getxPos(), getAccess().get(0).getyPos(), g.getAccess().get(0).getxPos(), g.getAccess().get(0).getyPos(), FreeState.ALL_ROAD.i);
                     if (p != null) {
-                        int amount = Math.min(Math.min(getStockAvailable(r), r.getMaxPerCart()), g.getFreeSpace(r));
-                        amount = unStock(r, amount);
-                        carterAvailable = false;
-                        g.reserve(r,amount);
-                        addSprite(Carter.startDelivery(city,this,g,r,amount,amount));
-                        return;
+                        if(p.getPath().size()<pathLength){
+                            sb = g;
+                            pathLength = p.getPath().size();
+                        }
                     }
                 }
             }
+        }
+        if(sb != null){
+            int amount = Math.min(Math.min(getStockAvailable(r), r.getMaxPerCart()), sb.getFreeSpace(r));
+            amount = unStock(r, amount);
+            carterAvailable = false;
+            sb.reserve(r,amount);
+            addSprite(Carter.startDelivery(city,this,sb,r,amount,amount));
         }
     }
 

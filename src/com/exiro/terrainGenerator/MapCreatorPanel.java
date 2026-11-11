@@ -29,7 +29,7 @@ public class MapCreatorPanel extends JPanel{
         seedText = seedt;
         this.seed = seed;
         seedText.setText(seed+"");
-        setSize(1000,1000);
+        setSize(800,800);
         applyTreshold(null);
     }
     MapSettings settings;
@@ -137,7 +137,7 @@ public class MapCreatorPanel extends JPanel{
         int w = getWidth();
         int h = getHeight();
 
-        g.drawImage(img,0,0,null);
+        g.drawImage(img,0,0,w,h,null);
 
         ArrayList<Point> meadow = new ArrayList<>();
 

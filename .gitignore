@@ -8,3 +8,6 @@ build.gradle
 GameJava.iml
 settings.gradle
 !Assets/Audio/sound_fxU.txt
+/out/
+/build/
+/META-INF/
