@@ -34,7 +34,7 @@ public class Trolley extends MovingSprite {
 
     public void setImage(Direction direction, int frame) {
         TileImage t = ImageLoader.getImage(getPath(), getBitmapID(), getID(direction));
-        currentFrame = makeColorTransparent(t.getImg(), Color.RED);
+        currentFrame = t.getImg(); // ImageLoader already made the red key colour transparent
         height = t.getH();
         width = t.getW();
         setImg(t);

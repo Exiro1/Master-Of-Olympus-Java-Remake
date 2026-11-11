@@ -42,8 +42,23 @@ public class GameInfo extends JPanel {
         return xc > getBounds().x && xc < getBounds().x + getBounds().width && yc > getBounds().y && yc < getBounds().y + getBounds().height;
     }
 
+    // What the last paint showed; the bar only needs repainting when one of these changes.
+    private String paintedDate;
+    private int paintedMoney = Integer.MIN_VALUE, paintedPop = Integer.MIN_VALUE;
+
+    public boolean needsRepaint() {
+        return paintedDate == null
+                || (int) gm.getPlayer().getMoney() != paintedMoney
+                || gm.getCurrentCity().getPopulation() != paintedPop
+                || !gm.getTimeManager().toString().equals(paintedDate);
+    }
+
     public void paintComponent(Graphics g) {
         //   super.paintComponent(g);
+        paintedDate = gm.getTimeManager().toString();
+        paintedMoney = (int) gm.getPlayer().getMoney();
+        paintedPop = gm.getCurrentCity().getPopulation();
+
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
 

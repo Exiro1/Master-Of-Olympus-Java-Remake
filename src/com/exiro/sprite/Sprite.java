@@ -60,7 +60,7 @@ public abstract class Sprite extends BaseObject {
             public int filterRGB(int x, int y, int rgb) {
                 if ((rgb | 0xFF000000) == markerRGB) {
                     // Mark the alpha bits as zero - transparent
-                    return 0x33000000;
+                    return 0x00000000;
                 } else {
                     // nothing to do
                     return rgb;

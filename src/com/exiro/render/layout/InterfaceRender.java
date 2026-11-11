@@ -194,8 +194,16 @@ public class InterfaceRender extends JPanel {
     }
 
 
+    // The panel only changes when a button is clicked (pressed state, build sub-buttons).
+    private boolean dirty = true;
+
+    public boolean needsRepaint() {
+        return dirty;
+    }
+
     public void paintComponent(Graphics g) {
         //  super.paintComponent(g);
+        dirty = false;
 
 
         g.drawImage(bg, 0, 0, getWidth() - 16, getHeight(), null);
@@ -216,6 +224,7 @@ public class InterfaceRender extends JPanel {
     }
 
     public void clickManager(MouseEvent e) {
+        dirty = true;
 
         for (Button b : buttons) {
             if (b.clicked(e.getX() - this.getBounds().x, e.getY() - this.getBounds().y)) {
@@ -235,6 +244,7 @@ public class InterfaceRender extends JPanel {
     }
 
     public void buttonClicked(Button b) {
+        dirty = true;
         for (Button ob : buttons) {
             ob.setClicked(false);
         }

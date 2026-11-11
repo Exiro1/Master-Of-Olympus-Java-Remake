@@ -11,6 +11,7 @@ import com.exiro.utils.Point;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 //dessine le batiment selectionner pour construire
 public class EntityRender {
@@ -245,7 +246,20 @@ public class EntityRender {
 
     }
 
+    // Tinted copies of the preview image, by colour. The preview image only changes in
+    // setEntityRender (a new BufferedImage each time), so the cache is dropped when it differs.
+    private static BufferedImage tintSource;
+    private static final HashMap<Color, BufferedImage> tinted = new HashMap<>();
+
     public static BufferedImage tint(BufferedImage image, Color color) {
+        if (image != tintSource) {
+            tinted.clear();
+            tintSource = image;
+        }
+        return tinted.computeIfAbsent(color, c -> computeTint(image, c));
+    }
+
+    private static BufferedImage computeTint(BufferedImage image, Color color) {
 
         BufferedImage bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), Transparency.TRANSLUCENT);
         bimage.getGraphics().drawImage(image, 0, 0, null);

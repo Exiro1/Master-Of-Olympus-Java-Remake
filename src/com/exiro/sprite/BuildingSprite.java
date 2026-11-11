@@ -88,7 +88,7 @@ public class BuildingSprite extends Sprite {
 
     public void setImage(int frame) {
         TileImage t = getImage(frame);
-        currentFrame = makeColorTransparent(t.getImg(), Color.RED);
+        currentFrame = t.getImg(); // ImageLoader already made the red key colour transparent
         height = t.getH();
         width = t.getW();
         setImg(t);

@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static com.exiro.sprite.Sprite.makeColorTransparent;
-
 public class ImageLoader {
 
     // Keyed by "file|bitmap|image". The old key concatenated the three values with no separator
@@ -37,6 +35,14 @@ public class ImageLoader {
         AssetsMapUse = new HashMap<>();
         sgFiles = new HashMap<>();
         emptyImages = new HashSet<>();
+    }
+
+    private static GraphicsConfiguration config;
+
+    private static GraphicsConfiguration config() {
+        if (config == null)
+            config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+        return config;
     }
 
     private static String key(String filename, int bitmapID, int imgID) {
@@ -86,7 +92,7 @@ public class ImageLoader {
             String filename555 = "Assets/DATA/" + filename + ".555";
             sgImageData sgData = null;
             try {
-                sgData = sgImage.sg_load_image_data(bitmap.getImages().get(imgID), filename555);
+                sgData = SgImageReader.loadImageData(bitmap.getImages().get(imgID), filename555);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -96,20 +102,21 @@ public class ImageLoader {
                 emptyImages.add(globalID);
                 return null;
             }
-            //BufferedImage imgg = new BufferedImage(sgData.getWidth(),sgData.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice device = env.getDefaultScreenDevice();
-            GraphicsConfiguration config = device.getDefaultConfiguration();
-            BufferedImage img = config.createCompatibleImage(sgData.getWidth(), sgData.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-            BufferedImage imgg = config.createCompatibleImage(sgData.getWidth(), sgData.getHeight(), Transparency.BITMASK);
+            BufferedImage img = new BufferedImage(sgData.getWidth(), sgData.getHeight(), BufferedImage.TYPE_INT_ARGB);
             final int[] a = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
             System.arraycopy(sgData.getData(), 0, a, 0, sgData.getData().length);
-            //imgg.getGraphics().drawImage(img,0,0,null);
-            Graphics g = imgg.createGraphics();
+            // Pure red is the key colour. It used to become alpha 0x33 instead of 0, which turned
+            // every image translucent, so each tile was alpha-blended in software every frame.
+            for (int i = 0; i < a.length; i++)
+                if ((a[i] & 0xFFFFFF) == 0xFF0000)
+                    a[i] = 0;
+            // Copy into an image in the screen's format with 1-bit transparency, which Java2D can
+            // cache in video memory and draw without blending.
+            BufferedImage imgg = config().createCompatibleImage(sgData.getWidth(), sgData.getHeight(), Transparency.BITMASK);
+            Graphics2D g = imgg.createGraphics();
+            g.setComposite(AlphaComposite.Src);
             g.drawImage(img, 0, 0, null);
             g.dispose();
-            imgg = makeColorTransparent(imgg, Color.RED);
             sgData.setData(null);
             AssetsMap.put(globalID, new TileImage(imgg, sgData.getWidth(), sgData.getHeight(), bitmapID, imgID, bitmap.getImages().get(imgID).getRecord().getOffx(), bitmap.getImages().get(imgID).getRecord().getOffy()));
             AssetsMapUse.put(globalID, 1);

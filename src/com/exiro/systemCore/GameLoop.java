@@ -1,5 +1,8 @@
 package com.exiro.systemCore;
 
+import com.exiro.render.layout.GameInfo;
+import com.exiro.render.layout.InterfaceRender;
+
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.locks.LockSupport;
@@ -85,8 +88,14 @@ public class GameLoop implements Runnable {
             accumulator = 0; // too far behind: drop the backlog instead of spiralling
 
         paint(gm.getGameView());
-        paint(gm.getFrame().getGi());
-        paint(gm.getFrame().getIt());
+        // The toolbar and the side panel are static most of the time; Swing still repaints them
+        // on its own when the window is exposed.
+        GameInfo gi = gm.getFrame().getGi();
+        if (gi != null && gi.needsRepaint())
+            paint(gi);
+        InterfaceRender it = gm.getFrame().getIt();
+        if (it != null && it.needsRepaint())
+            paint(it);
 
         framesInWindow++;
         ticksInWindow += ticks;

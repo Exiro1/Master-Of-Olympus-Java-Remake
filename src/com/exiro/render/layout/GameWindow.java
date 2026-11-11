@@ -44,6 +44,31 @@ public class GameWindow extends JPanel {
     private final WorldRenderer worldRenderer = new WorldRenderer();
     private final ArrayList<Case> visibleCases = new ArrayList<>();
 
+    // Screen-space culling margins, in pixels around the panel. A case is kept when its tile's top
+    // corner is inside the panel grown by these margins. Sideways: the widest footprint (6 tiles)
+    // is drawn from one main case. Above: a main case off the top still owns a footprint that
+    // reaches down into view. Below: tall images (buildings, trees, raised terrain) are drawn
+    // upwards from tiles under the bottom edge.
+    private static final int CULL_MARGIN_X = 6 * 58;
+    private static final int CULL_MARGIN_TOP = 6 * 30;
+    private static final int CULL_MARGIN_BOTTOM = 400;
+
+    // Top corner of each case of the sorted array, relative to the camera (x - y, x + y and z
+    // level never change, so this is computed once alongside the sort).
+    private Case[] screenPosOf;
+    private int[] screenX, screenY;
+
+    private void computeScreenPos(Case[] sorted) {
+        screenX = new int[sorted.length];
+        screenY = new int[sorted.length];
+        for (int k = 0; k < sorted.length; k++) {
+            Case c = sorted[k];
+            screenX[k] = (c.getxPos() - c.getyPos()) * 29;
+            screenY[k] = (c.getxPos() + c.getyPos()) * 15 - c.getZlvl() * 30;
+        }
+        screenPosOf = sorted;
+    }
+
 
 
     public GameWindow(GameManager gm) {
@@ -88,21 +113,25 @@ public class GameWindow extends JPanel {
 
 
         // Cases never move, so sorting back to front once is enough.
-        if (p.getPlayerCities().get(0).getMap().getCaseSorted() == null) {
-            Case[] oc = p.getPlayerCities().get(0).getMap().getNotNullCases().toArray(new Case[0]);
-            sortRender(oc);
-            p.getPlayerCities().get(0).getMap().setCaseSorted(oc);
+        Case[] sorted = p.getPlayerCities().get(0).getMap().getCaseSorted();
+        if (sorted == null) {
+            sorted = p.getPlayerCities().get(0).getMap().getNotNullCases().toArray(new Case[0]);
+            sortRender(sorted);
+            p.getPlayerCities().get(0).getMap().setCaseSorted(sorted);
+        }
+        if (sorted != screenPosOf) {
+            computeScreenPos(sorted);
         }
 
-        int xvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getxPos();
-        int xvisibleMax = IsometricRender.getCase(new Point(1400* GameFrame.FWRATIO, 0), gm.getCurrentCity()).getxPos() + 44;
-        int yvisibleMin = IsometricRender.getCase(new Point(0, 0), gm.getCurrentCity()).getyPos() - 30;
-        int yvisibleMax = IsometricRender.getCase(new Point(0, 800* GameFrame.FHRATIO), gm.getCurrentCity()).getyPos() + 15;
-
+        // Keep the cases whose top corner lands near the panel. The old test used a rectangle in
+        // tile coordinates, which is a diamond twice the size of the screen once projected.
+        int left = -CULL_MARGIN_X - CameraPosx, right = getWidth() + CULL_MARGIN_X - CameraPosx;
+        int top = -CULL_MARGIN_TOP - CameraPosy, bottom = getHeight() + CULL_MARGIN_BOTTOM - CameraPosy;
         visibleCases.clear();
-        for (Case obj : p.getPlayerCities().get(0).getMap().getCaseSorted()) {
-            if (obj.getxPos() < xvisibleMax && obj.getxPos() > xvisibleMin && obj.getyPos() < yvisibleMax && obj.getyPos() > yvisibleMin)
-                visibleCases.add(obj);
+        for (int k = 0; k < sorted.length; k++) {
+            int sx = screenX[k], sy = screenY[k];
+            if (sx >= left && sx <= right && sy >= top && sy <= bottom)
+                visibleCases.add(sorted[k]);
         }
 
         // Water is drawn first, under everything (unchanged).
@@ -205,6 +234,7 @@ public class GameWindow extends JPanel {
             g.drawString(String.format("Logic TPS %.0f", gm.getGameLoop().getTps()), 1200, 40);
             g.drawString(String.format("FPS %.0f", gm.getGameLoop().getFps()), 1200, 60);
         }
+        g.drawString("Tiles " + visibleCases.size(), 1200, 80);
     }
 
     public void clickManager(MouseEvent e) {
