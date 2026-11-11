@@ -60,14 +60,9 @@ public class Main {
             Thread loop = new Thread(new GameLoop(gm, simulation), "GameLoop");
             loop.start();
 
-            sm.playSound(SoundLoader.SoundCategory.FARMLAND);
-            sm.playSound(SoundLoader.SoundCategory.VEGETATION);
-            sm.playSound(SoundLoader.SoundCategory.FARMLAND);
-            sm.playSound(SoundLoader.SoundCategory.VEGETATION);
-
             loop.join();
-            SoundLoader.exit();
             sm.exit();
+            SoundLoader.exit();
 
         }
 

@@ -1,5 +1,6 @@
 package com.exiro.render.layout;
 
+import com.exiro.soundManager.SoundManager;
 import com.exiro.fileManager.CaseInfo;
 import com.exiro.fileManager.FontLoader;
 import com.exiro.fileManager.ImageLoader;
@@ -245,6 +246,7 @@ public class InterfaceRender extends JPanel {
 
     public void buttonClicked(Button b) {
         dirty = true;
+        SoundManager.playUi(SoundManager.SoundEvent.BUTTON);
         for (Button ob : buttons) {
             ob.setClicked(false);
         }

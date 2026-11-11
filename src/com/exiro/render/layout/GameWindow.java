@@ -1,6 +1,6 @@
 package com.exiro.render.layout;
 
-import com.exiro.fileManager.SoundLoader;
+import com.exiro.soundManager.SoundManager;
 import com.exiro.object.*;
 import com.exiro.render.ButtonType;
 import com.exiro.render.EntityRender;
@@ -30,16 +30,14 @@ public class GameWindow extends JPanel {
     Player p;
     GameManager gm;
     Point lastP;
-    boolean lastClickState = false; //false : non préssé , true : préssé
+    boolean lastClickState = false; //false : non prÃ©ssÃ© , true : prÃ©ssÃ©
     Case lastCase = new Case(0, 0, null, null);
     Random r;
     int speedFactor = 35;
 
-    public static BaseObject currentRandomCase = null;
 
     public static Sprite sprite = null;
 
-    public static final Object syncSound = new Object();
 
     private final WorldRenderer worldRenderer = new WorldRenderer();
     private final ArrayList<Case> visibleCases = new ArrayList<>();
@@ -164,31 +162,9 @@ public class GameWindow extends JPanel {
                 obj.getTerrain().Render(g, CameraPosx, CameraPosy);
             }
         }
-        int idx = drawn > 0 ? r.nextInt(drawn): -1;
-        int idxObj = drawnObject > 0 ? r.nextInt(drawnObject): -1;
-        BaseObject randomTerrain = null, randomObject = null;
-        int i = 0, io = 0;
-        for (Case obj : visibleCases) {
-            if(obj.getObject() != null) {
-                if(io == idxObj)
-                    randomObject = obj.getObject();
-                io++;
-            }else{
-                if(i == idx)
-                    randomTerrain = obj.getTerrain();
-                i++;
-            }
-        }
 
         worldRenderer.render(g, visibleCases, CameraPosx, CameraPosy, getWidth(), getHeight());
 
-        synchronized (syncSound) {
-         if(r.nextInt(2) == 0 || (randomObject == null || randomObject.getSoundCategory() == SoundLoader.SoundCategory.NULL)){
-             currentRandomCase = randomTerrain;
-         }else{
-             currentRandomCase = randomObject;
-         }
-        }
 
         /*
         synchronized (p.getPlayerCities().get(0).getSprites()) {
@@ -262,6 +238,7 @@ public class GameWindow extends JPanel {
             if (gameInterface != null && gameInterface.isOpen()) {
                 ButtonType type = gameInterface.clicked(e.getX(), e.getY() - GameFrame.scalingH(GameLayout.TOOLBAR_HEIGHT));
                 if (type != ButtonType.NONE) {
+                    SoundManager.playUi(SoundManager.SoundEvent.BUTTON);
                     buttonManager(type);
                     if(gameInterface != null && gameInterface.updateRequested())
                         updateInterface();
@@ -420,12 +397,18 @@ public class GameWindow extends JPanel {
                         EntityRender.addBuilding(new Point(lastCaseBuild.getxPos(), lastCaseBuild.getyPos()));
                     }
                 } else if (build) {
+                    Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
                     if (deleting) {
-                        Case currCase = IsometricRender.getCase(new Point(x, y), gm.getCurrentCity());
                         EntityRender.EraseAll(currCase);
+                        if (currCase != null)
+                            SoundManager.playIn(gm.getCurrentCity(), SoundManager.SoundEvent.COLLAPSE, currCase.getxPos(), currCase.getyPos());
                     }
-                    if (!deleting)
+                    if (!deleting) {
+                        boolean placing = !EntityRender.toBuild.isEmpty();
                         EntityRender.buildAll();
+                        if (placing && currCase != null)
+                            SoundManager.playIn(gm.getCurrentCity(), SoundManager.SoundEvent.PLACE_BUILDING, currCase.getxPos(), currCase.getyPos());
+                    }
                     startCaseBuild = null;
                     build = false;
                 } else {
