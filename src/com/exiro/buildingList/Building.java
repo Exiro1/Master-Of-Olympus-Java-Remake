@@ -1,5 +1,6 @@
 package com.exiro.buildingList;
 
+import com.exiro.soundManager.SoundManager;
 import com.exiro.constructionList.Rubble;
 import com.exiro.object.Case;
 import com.exiro.object.City;
@@ -165,6 +166,7 @@ public abstract class Building extends ObjectClass {
         this.delete();
         collapsing = false;
         if (this.built) {
+            SoundManager.playIn(city, SoundManager.SoundEvent.COLLAPSE, xPos, yPos);
             for (Case c : getCases()) {
                 c.setObject(new Rubble(city));
                 c.getObject().build(c.getxPos(), c.getyPos());

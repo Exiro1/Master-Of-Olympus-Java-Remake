@@ -5,7 +5,7 @@ import com.exiro.constructionList.Construction;
 import com.exiro.constructionList.Road;
 import com.exiro.moveRelated.FreeState;
 import com.exiro.object.*;
-import com.exiro.render.layout.GameWindow;
+import com.exiro.soundManager.CityAmbience;
 import com.exiro.soundManager.SoundManager;
 import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Rock;
@@ -31,6 +31,7 @@ public class Simulation {
     private final World world;
     private final GameManager gm;
     private final SoundManager sm;
+    private final CityAmbience ambience;
 
     Random ran;
     public Simulation(GameManager gm, SoundManager sm) {
@@ -39,6 +40,8 @@ public class Simulation {
         this.sm = sm;
         ran = new Random();
         gm.setSimulation(this);
+        ambience = new CityAmbience(gm);
+        sm.setAmbientPicker(ambience);
     }
 
     /**
@@ -51,28 +54,16 @@ public class Simulation {
         timeSinceLastUpdateConstruct = timeSinceLastUpdateConstruct + dt;
         timeSinceLastUpdateResources = timeSinceLastUpdateResources + dt;
 
-        sm.updateListener(GameWindow.getCameraPosx(),GameWindow.getCameraPosy());
-        sm.updateMusic();
+        sm.setListenedCity(gm.getCurrentCity());
+        float[] centre = ambience.viewCentre();
+        sm.updateListener(centre[0], centre[1]);
+        sm.update();
 
         int deltaDays = world.getTimeManager().updateTime(dt);
         deltaDaysB+=deltaDays;
         deltaDaysC+=deltaDays;
         deltaDaysR+=deltaDays;
         if (timeSinceLastUpdateBuilding > 1) {
-            sm.updateSources();
-            /*
-            if(sm.secBeforeNextAmbient == 0)
-                sm.playAmbientSound();
-            if(sm.secBeforeNextAmbient >= 0)
-                sm.secBeforeNextAmbient--;
-            else
-                if(sm.ambientCount<2)
-                    sm.secBeforeNextAmbient = ran.nextInt(3);
-            */
-            if(sm.secBeforeNextLayer1 == 0)
-                sm.playNewLayer1();
-            if(sm.secBeforeNextLayer1 >= 0)
-                sm.secBeforeNextLayer1--;
 
             for (City c : world.getCities()) {
                 manageBuilding(c, timeSinceLastUpdateBuilding,deltaDaysB);
