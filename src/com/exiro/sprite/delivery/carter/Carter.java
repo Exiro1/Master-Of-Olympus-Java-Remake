@@ -2,6 +2,7 @@ package com.exiro.sprite.delivery.carter;
 
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.IndustryConverter;
+import com.exiro.buildingList.ResourceGenerator;
 import com.exiro.buildingList.StoreBuilding;
 import com.exiro.reader.TileImage;
 import com.exiro.moveRelated.FreeState;
@@ -208,11 +209,14 @@ public abstract class Carter extends MovingSprite{
     public void delete() {
         super.delete();
         BaseObject obj = getDestination();
-        if(obj instanceof StoreBuilding){
-            ((StoreBuilding) obj).setCarterAvailable(true);
-        }else if(obj instanceof IndustryConverter){
-            ((IndustryConverter) obj).setCarterAvailable(true);
+        // the carter belongs to trueOrigin: that is the building waiting for it to come back
+        if(trueOrigin instanceof StoreBuilding){
+            ((StoreBuilding) trueOrigin).setCarterAvailable(true);
+        }else if(trueOrigin instanceof ResourceGenerator){
+            ((ResourceGenerator) trueOrigin).setCarterAvailable(true);
         }
+        if (carterState == null)
+            return;
         switch (carterState) {
             case WAITING:
 
@@ -231,7 +235,8 @@ public abstract class Carter extends MovingSprite{
                 ((StoreBuilding) getDestination()).unReserved(getResource(),getCurrentDelivery());
                 break;
             case DELIVERING_CONVERTER:
-                ((IndustryConverter) trueOrigin).addIncomming(-getCurrentDelivery());
+                // destination is the converter that reserved the delivery; trueOrigin can be any producer
+                ((IndustryConverter) obj).addIncomming(-getCurrentDelivery());
                 break;
             case COMMAND:
                 if(obj instanceof StoreBuilding){

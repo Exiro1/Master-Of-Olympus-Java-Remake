@@ -385,6 +385,9 @@ public abstract class Building extends ObjectClass {
 
     @Override
     public void setActive(boolean active) {
+        // called every second by Simulation.activate: only count real changes
+        if (active == isActive())
+            return;
         super.setActive(active);
         city.setActiveBuilding(city.getActiveBuilding() + (active ? 1 : -1));
     }

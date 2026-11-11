@@ -125,7 +125,7 @@ public class City {
                 r.build(c.getxPos(),c.getyPos());
                 if(index < 8)
                     r.setInDestructible(true);
-                    c.getTerrain().setConstructible(false);
+                c.getTerrain().setConstructible(false);
                 index++;
         }
     }

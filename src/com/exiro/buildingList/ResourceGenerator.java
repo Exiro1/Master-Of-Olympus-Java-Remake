@@ -64,7 +64,8 @@ public abstract class ResourceGenerator extends Building {
 
     public void manageCarter() {
 
-        if (stock > 0 && carterAvailable) {
+        // the carter starts on our road access, so there must be one
+        if (stock > 0 && carterAvailable && !getAccess().isEmpty()) {
             int toDeliver = Math.min(stock, maxPerCarter);
             stock -= toDeliver;
             addSprite(Carter.startDelivery(city,this,null,resource,toDeliver,0));

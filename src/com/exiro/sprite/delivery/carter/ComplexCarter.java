@@ -93,6 +93,7 @@ public class ComplexCarter extends Carter{
     }
 
     public void delete() {
+        super.delete(); // releases reservations and frees the origin's carter
         trolley.delete();
         driver.delete();
         puller.delete();

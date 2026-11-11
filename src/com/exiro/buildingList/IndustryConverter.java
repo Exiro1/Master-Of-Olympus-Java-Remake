@@ -173,10 +173,13 @@ public abstract class IndustryConverter extends ResourceGenerator {
                 continue;
             if (sb.hasStockAvailable(needed)) {
                 int command = Math.min(maxStock - stockIn - incomming, sb.getStockAvailable(needed));
+                if (command <= 0 || sb.getAccess().isEmpty() || getAccess().isEmpty())
+                    continue;
                 incomming += command;
                 sb.reserveUnstockage(needed,command);
                 addSprite(Carter.startCommand(city,this,sb,needed,command));
                 carterAvailable = false;
+                return; // one carter at a time
             }
         }
     }

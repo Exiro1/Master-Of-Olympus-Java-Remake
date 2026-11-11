@@ -78,7 +78,7 @@ public class Road extends Construction {
         } else {
             //setType(BuildingType.BLOCKABLE_ROAD);
         }
-        return true;
+        return isBuilt;
     }
 
     public void updateRoadImg() {

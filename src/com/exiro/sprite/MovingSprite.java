@@ -186,6 +186,8 @@ public abstract class MovingSprite extends Sprite {
         if(path == null && originPath != null)
             path = originPath.getReversePath();
         this.path = path;
+        if (path == null) // no route (e.g. a road was cut): stay put instead of crashing
+            return;
         setDir(path.next());
         if(originPath == null)
             originPath = path;

@@ -4,6 +4,7 @@ import com.exiro.fileManager.SoundLoader;
 import com.exiro.reader.TileImage;
 import com.exiro.fileManager.ImageLoader;
 import com.exiro.moveRelated.FreeState;
+import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
@@ -247,9 +248,14 @@ public class House extends Building {
         for (Arrival a : arrivals) {
             a.time -= (float) deltaTime;
             if (a.time <= 0) {
+                // no road or no route yet: keep the arrival and retry next time
+                if (getAccess().isEmpty())
+                    continue;
+                Path p = city.getPathManager().getPathTo(city.getMap().getStartCase(), getAccess().get(0), FreeState.ALL_ROAD.i);
+                if (p == null)
+                    continue;
                 toRemove.add(a);
-                System.out.println(a);
-                Immigrant immigrant = new Immigrant(city, city.getPathManager().getPathTo(city.getMap().getStartCase(), getAccess().get(0), FreeState.ALL_ROAD.i), this, a.getNbr());
+                Immigrant immigrant = new Immigrant(city, p, this, a.getNbr());
                 addSprite(immigrant);
             }
             i++;

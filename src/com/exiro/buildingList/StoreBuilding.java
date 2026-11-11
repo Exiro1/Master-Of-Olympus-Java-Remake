@@ -119,9 +119,12 @@ public abstract class StoreBuilding extends Building {
         ArrayList<Building> stores = new ArrayList<>(city.getBuildingList(ObjectType.GRANARY));
         stores.addAll(city.getBuildingList(ObjectType.STOCK));
         for (Building b : stores) {
-            if (!(b instanceof StoreBuilding sb))
+            // never from ourselves, nor from a store that is itself obtaining this resource
+            if (!(b instanceof StoreBuilding sb) || sb == this)
                 continue;
-            if (sb.hasStockAvailable(r)) {
+            if (sb.getAccess().isEmpty() || getAccess().isEmpty())
+                continue;
+            if (sb.hasStockAvailable(r, true)) {
                 int command = Math.min(Math.min(getFreeSpace(r), sb.getStockAvailable(r)), r.getMaxPerCart());
                 command = sb.reserveUnstockage(r, command);
                 reserve(r, command);
@@ -263,7 +266,7 @@ public abstract class StoreBuilding extends Building {
                 temp -= Math.min(temp, spaceLeftInCase);
             }
             if (temp > 0) {
-                int reservePossible = emptyCaseReserved >= (temp * r.getWeight()) / 4.0 ? (int) Math.ceil((temp * r.getWeight()) / 4.0) : emptyCase;
+                int reservePossible = emptyCase >= (temp * r.getWeight()) / 4.0 ? (int) Math.ceil((temp * r.getWeight()) / 4.0) : emptyCase;
                 emptyCase -= reservePossible;
             }
             stockage.replace(r, stockage.get(r) + amount);
