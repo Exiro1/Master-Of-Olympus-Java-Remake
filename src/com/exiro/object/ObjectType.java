@@ -23,81 +23,82 @@ import com.exiro.fileManager.ImageLoader;
 import com.exiro.terrainList.*;
 
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
+import java.util.function.Supplier;
 
 public enum ObjectType {
 
 
     //Buildings
-    HOUSE("Maison", true, false, "Zeus_General", 2, 8, 14, House.class),
-    WATERWELL("Puit", true, false, "Zeus_General", 2, 9, 0, WaterWell.class),
-    STOCK("Stock", true, false, "Zeus_General", 3, 3, 22, StoreHouse.class),
-    GRANARY("Grenier", true, false, "Zeus_General", 4, 3, 28, Granary.class),
-    FARM("Ferme", true, false, "Zeus_General", 3, 4, 12, Farm.class),
-    SMALLHOLDING("Métairie", true, false, "Zeus_General", 2, 4, 90, SmallHolding.class),
-    SHEEPFOLD("Bergerie", true, false, "Zeus_General", 2, 4, 55, Sheepfold.class),
-    DAIRY("Laiterie", true, false, "Zeus_General", 2, 4, 68, Dairy.class),
-    HUNTINGHOUSE("Maison de chasse", false, true, "Zeus_General", 2, 4, 31, HuntingHouse.class),
-    FISHERY("Pecherie", true, false, "Zeus_General", 2, 4, 47, Fishery.class),
-    SAFETY("Sécurité", true, false, "Zeus_General", 2, 10, 0, Safety.class),
-    AGORA("Agora", true, false, "Zeus_General", 2, 3, 15, Agora.class),
-    COLLEGE("Collège", true, false, "Zeus_General", 3, 2, 0, College.class),
-    GYMNASIUM("Gymnase", true, false, "Zeus_General", 3, 2, 25, Gymnasium.class),
-    THEATERSCHOOL("Ecole de théatre", true, false, "Zeus_General", 3, 2, 58, TheaterSchool.class),
-    PODIUM("Podium", true, false, "Zeus_General", 2, 2, 83, Podium.class),
-    THEATER("Théatre", true, false, "Zeus_General", 5, 2, 108, Theater.class),
-    TAX("Maison des impots", true, false, "Zeus_General", 2, 10, 45, TaxBuilding.class),
-    SECURITY_STATION("Poste de sécurité", true, false, "Zeus_General", 2, 10, 64, SecurityStation.class),
+    HOUSE("Maison", true, false, "Zeus_General", 2, 8, 14, House::new),
+    WATERWELL("Puit", true, false, "Zeus_General", 2, 9, 0, WaterWell::new),
+    STOCK("Stock", true, false, "Zeus_General", 3, 3, 22, StoreHouse::new),
+    GRANARY("Grenier", true, false, "Zeus_General", 4, 3, 28, Granary::new),
+    FARM("Ferme", true, false, "Zeus_General", 3, 4, 12, Farm::new),
+    SMALLHOLDING("Métairie", true, false, "Zeus_General", 2, 4, 90, SmallHolding::new),
+    SHEEPFOLD("Bergerie", true, false, "Zeus_General", 2, 4, 55, Sheepfold::new),
+    DAIRY("Laiterie", true, false, "Zeus_General", 2, 4, 68, Dairy::new),
+    HUNTINGHOUSE("Maison de chasse", false, true, "Zeus_General", 2, 4, 31, HuntingHouse::new),
+    FISHERY("Pecherie", true, false, "Zeus_General", 2, 4, 47, Fishery::new),
+    SAFETY("Sécurité", true, false, "Zeus_General", 2, 10, 0, Safety::new),
+    AGORA("Agora", true, false, "Zeus_General", 2, 3, 15, Agora::new),
+    COLLEGE("Collège", true, false, "Zeus_General", 3, 2, 0, College::new),
+    GYMNASIUM("Gymnase", true, false, "Zeus_General", 3, 2, 25, Gymnasium::new),
+    THEATERSCHOOL("Ecole de théatre", true, false, "Zeus_General", 3, 2, 58, TheaterSchool::new),
+    PODIUM("Podium", true, false, "Zeus_General", 2, 2, 83, Podium::new),
+    THEATER("Théatre", true, false, "Zeus_General", 5, 2, 108, Theater::new),
+    TAX("Maison des impots", true, false, "Zeus_General", 2, 10, 45, TaxBuilding::new),
+    SECURITY_STATION("Poste de sécurité", true, false, "Zeus_General", 2, 10, 64, SecurityStation::new),
 
 
     //Indusrty
-    SAWMILL("Scierie", true, false, "Zeus_General", 2, 5, 0, Sawmill.class),
-    MARBLE_QUARRY("Carriere de marbre", true, false, "Zeus_General", 2, 5, 11, MarbleFactory.class),
-    MINT("Atelier de monnayage", true, false, "Zeus_General", 2, 5, 20, Mint.class),
-    FOUNDRY("Fonderie", true, false, "Zeus_General", 2, 5, 35, Foundry.class),
-    GUILD("Guilde d'artisant", true, false, "Zeus_General", 2, 5, 48, Guild.class),
-    OLIVE_PRESS("Pressoir à olives", true, false, "Zeus_General", 2, 5, 59, OlivePress.class),
-    WINERY("Pressoir à vin", true, false, "Zeus_General", 2, 5, 72, Winery.class),
-    SCULPTURE_STUDIO("Atelier de sculpture", true, false, "Zeus_General", 2, 5, 85, SculptureStudio.class),
+    SAWMILL("Scierie", true, false, "Zeus_General", 2, 5, 0, Sawmill::new),
+    MARBLE_QUARRY("Carriere de marbre", true, false, "Zeus_General", 2, 5, 11, MarbleFactory::new),
+    MINT("Atelier de monnayage", true, false, "Zeus_General", 2, 5, 20, Mint::new),
+    FOUNDRY("Fonderie", true, false, "Zeus_General", 2, 5, 35, Foundry::new),
+    GUILD("Guilde d'artisant", true, false, "Zeus_General", 2, 5, 48, Guild::new),
+    OLIVE_PRESS("Pressoir à olives", true, false, "Zeus_General", 2, 5, 59, OlivePress::new),
+    WINERY("Pressoir à vin", true, false, "Zeus_General", 2, 5, 72, Winery::new),
+    SCULPTURE_STUDIO("Atelier de sculpture", true, false, "Zeus_General", 2, 5, 85, SculptureStudio::new),
 
     //agora shop
-    AGORAEMPTY("Emplacement libre", true, false, "Zeus_General", 2, 3, 15, EmptyShop.class),
-    AGORAFOOD("Epicerie", true, false, "Zeus_General", 2, 3, 0, FoodShop.class),
-    AGORAWOOL("Marchand de laine", true, false, "Zeus_General", 2, 3, 2, WoolShop.class),
-    AGORAOIL("Marchand d'huile d'olive", true, false, "Zeus_General", 2, 3, 4, OilShop.class),
+    AGORAEMPTY("Emplacement libre", true, false, "Zeus_General", 2, 3, 15, EmptyShop::new),
+    AGORAFOOD("Epicerie", true, false, "Zeus_General", 2, 3, 0, FoodShop::new),
+    AGORAWOOL("Marchand de laine", true, false, "Zeus_General", 2, 3, 2, WoolShop::new),
+    AGORAOIL("Marchand d'huile d'olive", true, false, "Zeus_General", 2, 3, 4, OilShop::new),
 
     //ARMY
-    ARMORY("Armurerie", true, false, "Zeus_General", 2, 6, 21, Armory.class),
+    ARMORY("Armurerie", true, false, "Zeus_General", 2, 6, 21, Armory::new),
 
     //Terrain
-    WATERTERRAIN("Eau", true, false, "Zeus_Terrain", 1, 1, 163, Water.class),
-    WATERTCOAST("Cote maritime", true, false, "Zeus_Terrain", 1, 1, 171, WaterCoast.class),
-    EMPTY("Rien", false, true, "Zeus_Terrain", 1, 1, 1, Empty.class),
-    EARTHQUAKE("Tremblement de terre", true, false, "Zeus_Terrain", 1, 1, 243, Earthquake.class),
-    ROCK("Pierre", true, false, "Zeus_Terrain", 1, 1, 333, Rock.class),
-    ELEVATION("Elevation", true, false, "Zeus_Terrain", 1, 7, 14, Elevation.class),
-    MEADOW("Prairie", false, true, "Zeus_Terrain", 1, 4, 120, Meadow.class),
+    WATERTERRAIN("Eau", true, false, "Zeus_Terrain", 1, 1, 163, null),
+    WATERTCOAST("Cote maritime", true, false, "Zeus_Terrain", 1, 1, 171, null),
+    EMPTY("Rien", false, true, "Zeus_Terrain", 1, 1, 1, null),
+    EARTHQUAKE("Tremblement de terre", true, false, "Zeus_Terrain", 1, 1, 243, null),
+    ROCK("Pierre", true, false, "Zeus_Terrain", 1, 1, 333, null),
+    ELEVATION("Elevation", true, false, "Zeus_Terrain", 1, 7, 14, null),
+    MEADOW("Prairie", false, true, "Zeus_Terrain", 1, 4, 120, null),
 
     //Construction
-    ROAD("Route", false, true, "Zeus_General", 1, 1, 54, Road.class),
-    BLOCKABLE_ROAD("Stop", true, true, "Zeus_General", 1, 10, 75, BlockingRoad.class),
-    RUBBLE("Décombre", true, false, "Zeus_Terrain", 1, 2, 20, Rubble.class),
+    ROAD("Route", false, true, "Zeus_General", 1, 1, 54, Road::new),
+    BLOCKABLE_ROAD("Stop", true, true, "Zeus_General", 1, 10, 75, BlockingRoad::new),
+    RUBBLE("Décombre", true, false, "Zeus_Terrain", 1, 2, 20, Rubble::new),
 
     //Environment
-    TREE("Arbre", true, true, "Zeus_Terrain", 1, 4, 0, Tree.class),
+    TREE("Arbre", true, true, "Zeus_Terrain", 1, 4, 0, null),
 
     //Other
-    OLIVETREE("Olivier", true, true, "Zeus_General", 1, 4, 0, OliveTree.class),
-    VINE("Vigne", true, true, "Zeus_General", 1, 4, 6, Vine.class),
+    OLIVETREE("Olivier", true, true, "Zeus_General", 1, 4, 0, OliveTree::new),
+    VINE("Vigne", true, true, "Zeus_General", 1, 4, 6, Vine::new),
 
     //SPECIAL
-    ERASE("Destruction", true, true, "Zeus_Terrain", 1, 2, 36, Destruction.class),
+    ERASE("Destruction", true, true, "Zeus_Terrain", 1, 2, 36, Destruction::new),
 
     //SPRITE
-    SHEEP("Mouton", false, true, "SprMain", 1, 0, 3182, SheepBuildingBind.class),
-    GOAT("Chevre", false, true, "SprMain", 1, 0, 11227, GoatBuildingBind.class);
+    SHEEP("Mouton", false, true, "SprMain", 1, 0, 3182, SheepBuildingBind::new),
+    GOAT("Chevre", false, true, "SprMain", 1, 0, 11227, GoatBuildingBind::new);
 
-    private final Class c;
+    // creates the object placed by the build tool; null for terrain, which is never placed
+    private final Supplier<ObjectClass> factory;
     private final String name;
     private final boolean block, walk;
     private final int heigth, width;
@@ -106,8 +107,8 @@ public enum ObjectType {
     private BufferedImage img;
     private int bitmapID, localID;
 
-    ObjectType(String name, boolean block, boolean walk, String path, int size, int bitmapID, int localID, Class c) {
-        this.c = c;
+    ObjectType(String name, boolean block, boolean walk, String path, int size, int bitmapID, int localID, Supplier<ObjectClass> factory) {
+        this.factory = factory;
         this.size = size;
         this.name = name;
         this.path = path;
@@ -122,12 +123,7 @@ public enum ObjectType {
     }
 
     public ObjectClass getDefault() {
-        try {
-            return (ObjectClass) c.getConstructor().newInstance();
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return factory == null ? null : factory.get();
     }
 
     public int getBitmapID() {
@@ -176,10 +172,6 @@ public enum ObjectType {
 
     public boolean isBlock() {
         return block;
-    }
-
-    public Class getC() {
-        return c;
     }
 
     public boolean isWalk() {

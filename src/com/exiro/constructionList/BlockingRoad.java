@@ -27,7 +27,7 @@ public class BlockingRoad extends Construction {
             for (int j = 0; j < xLenght; j++) {
                 if (!(xPos + j < 0 || yPos - i < 0)) {
                     Case c = city.getMap().getCase(xPos + j, yPos - i);
-                    if (c.getObject() != null && c.getObject().getBuildingType() == ObjectType.ROAD) {
+                    if (c != null && c.getObject() != null && c.getObject().getBuildingType() == ObjectType.ROAD) {
                         place.add(city.getMap().getCase(xPos + j, yPos - i));
                     }
                 }

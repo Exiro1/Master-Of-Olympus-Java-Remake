@@ -81,34 +81,7 @@ public class AgricultureSprite extends MovingSprite {
 
     public void setImage(Direction direction, int frame, boolean unidir) {
 
-        int i = 0;
-        switch (direction) {
-
-            case SOUTH:
-                i = 3;
-                break;
-            case SOUTH_EAST:
-                i = 2;
-                break;
-            case EAST:
-                i = 1;
-                break;
-            case NORTH_EAST:
-                i = 0;
-                break;
-            case NORTH:
-                i = 7;
-                break;
-            case NORTH_WEST:
-                i = 6;
-                break;
-            case WEST:
-                i = 5;
-                break;
-            case SOUTH_WEST:
-                i = 4;
-                break;
-        }
+        int i = direction.getSpriteIndex();
         TileImage t;
         if (!unidir) {
             t = ImageLoader.getImage(getPath(), getBitmapID(), getLocalID() + i + frame * 8);
