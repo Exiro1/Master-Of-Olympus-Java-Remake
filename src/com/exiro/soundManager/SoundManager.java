@@ -1,7 +1,6 @@
 package com.exiro.soundManager;
 
 import com.exiro.buildingList.Building;
-import com.exiro.fileManager.MusicStreamer;
 import com.exiro.fileManager.SoundLoader;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.layout.GameWindow;
@@ -19,11 +18,11 @@ public class SoundManager {
     public int secBeforeNextAmbient;
 
     public int secBeforeNextLayer1;
-    public static int secBeforeNextMusic;
     Random random;
     ArrayList<Integer> sources;
     public int ambientCount = 0;
     HashMap<Integer, SoundLoader.SoundCategory> sourcesMap;
+    private final MusicManager music = new MusicManager();
 
     public SoundManager(){
         sources = new ArrayList<>();
@@ -68,9 +67,8 @@ public class SoundManager {
     }
     public void playSound(SoundLoader.SoundCategory soundCategory, float x, float y){
         if(soundCategory == SoundLoader.SoundCategory.GENERAL_MUSIC || soundCategory == SoundLoader.SoundCategory.COMBAT_MUSIC_LONG|| soundCategory == SoundLoader.SoundCategory.COMBAT_MUSIC_SHORT) {
-            int r = random.nextInt(SoundLoader.getSoundPaths(soundCategory).size());
-            Thread t = new Thread(new MusicStreamer(SoundLoader.getSoundPaths(soundCategory).get(r)));
-            t.start();
+            // Music is streamed and scheduled by MusicManager, not played as a one-shot sound.
+            music.setMode(soundCategory == SoundLoader.SoundCategory.GENERAL_MUSIC ? MusicManager.Mode.CALM : MusicManager.Mode.COMBAT);
             return;
         }
         int buffer = SoundLoader.requestSoundBuffer(soundCategory);
@@ -129,15 +127,21 @@ public class SoundManager {
     }
 
     public void stopMusic(){
-        for(int s : sourcesMap.keySet()){
-            if(sourcesMap.get(s) == SoundLoader.SoundCategory.GENERAL_MUSIC){
-                SoundLoader.al.alSourceStop(s);
-            }
-        }
+        music.setEnabled(false);
+    }
+
+    public MusicManager getMusic(){
+        return music;
+    }
+
+    /** Starts and ends music tracks; call it every tick. */
+    public void updateMusic(){
+        music.update();
     }
 
     public void exit()
     {
+        music.shutdown();
         // Release all buffer
 
         for (Integer source : sources) {
@@ -194,9 +198,7 @@ public class SoundManager {
                 SoundLoader.al.alSourcei(s, AL.AL_BUFFER, AL.AL_NONE);
                 SoundLoader.processedSoundBuffer(buffer[0]);
 
-                if(sourcesMap.get(s) == SoundLoader.SoundCategory.GENERAL_MUSIC || sourcesMap.get(s) == SoundLoader.SoundCategory.COMBAT_MUSIC_LONG|| sourcesMap.get(s) == SoundLoader.SoundCategory.COMBAT_MUSIC_SHORT)
-                    secBeforeNextMusic = random.nextInt(60) + 30;
-                else if(sourcesMap.get(s) == SoundLoader.SoundCategory.LAYER1)
+                if(sourcesMap.get(s) == SoundLoader.SoundCategory.LAYER1)
                     secBeforeNextLayer1 = random.nextInt(10);
                 else {
                     sourcesMap.remove(s);
@@ -208,7 +210,7 @@ public class SoundManager {
         }
     }
     public void playNewMusic(){
-        playSound(SoundLoader.SoundCategory.GENERAL_MUSIC);
+        music.next();
     }
 
     public void playNewLayer1(){

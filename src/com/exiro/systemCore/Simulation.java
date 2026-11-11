@@ -52,6 +52,7 @@ public class Simulation {
         timeSinceLastUpdateResources = timeSinceLastUpdateResources + dt;
 
         sm.updateListener(GameWindow.getCameraPosx(),GameWindow.getCameraPosy());
+        sm.updateMusic();
 
         int deltaDays = world.getTimeManager().updateTime(dt);
         deltaDaysB+=deltaDays;
@@ -68,12 +69,6 @@ public class Simulation {
                 if(sm.ambientCount<2)
                     sm.secBeforeNextAmbient = ran.nextInt(3);
             */
-            if(SoundManager.secBeforeNextMusic == 0)
-                sm.playNewMusic();
-
-            if(SoundManager.secBeforeNextMusic >= 0)
-                SoundManager.secBeforeNextMusic--;
-
             if(sm.secBeforeNextLayer1 == 0)
                 sm.playNewLayer1();
             if(sm.secBeforeNextLayer1 >= 0)

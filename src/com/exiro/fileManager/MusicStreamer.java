@@ -1,74 +1,94 @@
 package com.exiro.fileManager;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.util.Random;
-
-import com.exiro.soundManager.SoundManager;
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALException;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.nio.ByteBuffer;
+
 /**
- *
- * Streams one music track through OpenAL. Based on the OggVorbis streamer OpenAL tutorial
- * at http://www.devmaster.net/articles/openal-tutorials/lesson8.php
+ * Streams one music track through OpenAL on its own thread.
+ * Based on the OggVorbis streamer OpenAL tutorial
+ * at http://www.devmaster.net/articles/openal-tutorials/lesson8.php (Krishna K Gadepalli).
  *
  * Decodes Ogg Vorbis (j-ogg) and MP3 (JLayer). The playlist in sound_fxU.txt names
  * .ogg files while the Steam release ships .mp3, so a track is looked up under
  * both extensions.
  *
- * @author Krishna K Gadepalli
+ * The track can be faded in, faded out and stopped from any thread; {@link com.exiro.soundManager.MusicManager}
+ * owns the streamers and decides what plays.
  */
-public class MusicStreamer implements Runnable{
+public class MusicStreamer implements Runnable {
 
     static AL al = SoundLoader.al;
 
-    private static boolean debug = false;
-    private static int totalBytes = 0;
+    // Size of the chunk decoded for each buffer: 64 KB is about 0.37 s of 44.1 kHz stereo.
+    private static final int BUFFER_SIZE = 4096 * 16;
+    // Four buffers queued, so about 1.5 s of audio is ready ahead of the playhead.
+    private static final int NUM_BUFFERS = 4;
+    // How often the streaming thread refills buffers and updates the fade.
+    private static final long POLL_MS = 20;
 
-    private static void debugMsg(String str) {
-        if (debug) System.err.println(str);
-    }
+    private final int[] buffers = new int[NUM_BUFFERS];
+    private final int[] source = new int[1];
 
+    private final String path;
     private MusicDecoder decoder;
-
-    // The size of a chunk from the stream that we want to read for each update.
-    private static int BUFFER_SIZE = 4096*16;
-
-    // The number of buffers used in the audio pipeline
-    private static int NUM_BUFFERS = 2;
-
-    // Buffers hold sound data. There are two of them by default (front/back)
-    private int[] buffers = new int[NUM_BUFFERS];
-
-    // Sources are points emitting sound.
-    private int[] source = new int[1];
-
-    private int format;	// OpenAL data format
-    private int rate;	// sample rate
-
-    // Position, Velocity, Direction of the source sound.
-    private float[] sourcePos = { 0.0f, 0.0f, 0.0f };
-    private float[] sourceVel = { 0.0f, 0.0f, 0.0f };
-    private float[] sourceDir = { 0.0f, 0.0f, 0.0f };
-
-    private String url;
-
-    private long sleepTime = 0;
-
+    private int format;
+    private int rate;
     private boolean opened = false;
 
-    public MusicStreamer(String url) {
-        this.url = "Assets/Audio/Music/"+url;
+    private volatile float volume;
+    private final long fadeInMs;
+    private long startedAt;
+
+    private volatile long fadeOutMs = -1;   // >= 0 once stop was requested
+    private volatile long fadeOutStart;
+    private volatile boolean finished = false;
+
+    /**
+     * @param track    file name relative to Assets/Audio/Music
+     * @param volume   gain between 0 and 1
+     * @param fadeInMs fade-in duration, 0 to start at full volume
+     */
+    public MusicStreamer(String track, float volume, long fadeInMs) {
+        this.path = "Assets/Audio/Music/" + track;
+        this.volume = volume;
+        this.fadeInMs = fadeInMs;
+    }
+
+    /** Fades the track out over {@code fadeMs} milliseconds, then stops it. Safe to call from any thread. */
+    public void stop(long fadeMs) {
+        if (fadeOutMs >= 0 && fadeMs >= fadeOutMs)
+            return; // already fading out at least as fast
+        fadeOutStart = System.currentTimeMillis();
+        fadeOutMs = Math.max(0, fadeMs);
+    }
+
+    public void setVolume(float volume) {
+        this.volume = volume;
+    }
+
+    /** True once the track ended or was stopped and its OpenAL resources are freed. */
+    public boolean isFinished() {
+        return finished;
+    }
+
+    /** True once a stop was requested (the track may still be fading out). */
+    public boolean isStopping() {
+        return fadeOutMs >= 0;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     /**
      * Returns the track file, trying the other known extension (.ogg/.mp3)
      * when the listed one is missing.
      */
-    static File resolveTrack(String path) {
+    public static File resolveTrack(String path) {
         File f = new File(path);
         if (f.exists())
             return f;
@@ -88,142 +108,70 @@ public class MusicStreamer implements Runnable{
         return new OggDecoder(file.toURI().toURL());
     }
 
-    /**
-     * Open the music stream and initialize OpenAL based
-     * on the stream properties
-     */
-    public boolean open() throws MalformedURLException {
-        File track = resolveTrack(url);
+    private boolean open() throws MalformedURLException {
+        File track = resolveTrack(path);
         if (track == null) {
-            System.err.println("Music file not found: " + url);
+            System.err.println("Music file not found: " + path);
             return false;
         }
         decoder = createDecoder(track);
-
         if (!decoder.initialize()) {
             System.err.println("Error initializing music stream: " + track);
             return false;
         }
-
-        int numChannels = decoder.numChannels();
-        int numBytesPerSample = 2;
-
-        if (numChannels == 1)
-            format = AL.AL_FORMAT_MONO16;
-        else
-            format = AL.AL_FORMAT_STEREO16;
-
+        format = decoder.numChannels() == 1 ? AL.AL_FORMAT_MONO16 : AL.AL_FORMAT_STEREO16;
         rate = decoder.sampleRate();
-
-        // A rough estimation of how much time in milliseconds we can sleep
-        // before checking to see if the queued buffers have been played
-        // (so that we dont peg the CPU by doing an active wait). We divide
-        // by 10 at the end to be safe...
-        // round it off to the nearest multiple of 10.
-        sleepTime = (long)(1000.0 * BUFFER_SIZE /
-                numBytesPerSample / numChannels / rate / 10.0);
-        sleepTime = (sleepTime + 10)/10 * 10;
-
-
-
-        // TODO: I am not if this is the right way to fix the endian
-        // problems I am having... but this seems to fix it on Linux
+        // Decoders produce big-endian samples; OpenAL wants little-endian.
         decoder.setSwap(true);
 
         al.alGenBuffers(NUM_BUFFERS, buffers, 0); check();
         al.alGenSources(1, source, 0); check();
-
-        al.alSourcefv(source[0], AL.AL_POSITION , sourcePos, 0);
-        al.alSourcefv(source[0], AL.AL_VELOCITY , sourceVel, 0);
-        al.alSourcefv(source[0], AL.AL_DIRECTION, sourceDir, 0);
-
-        al.alSourcef(source[0], AL.AL_ROLLOFF_FACTOR,  0.0f    );
-        al.alSourcei(source[0], AL.AL_SOURCE_RELATIVE, AL.AL_TRUE);
-
         opened = true;
+
+        float[] zero = {0f, 0f, 0f};
+        al.alSourcefv(source[0], AL.AL_POSITION, zero, 0);
+        al.alSourcefv(source[0], AL.AL_VELOCITY, zero, 0);
+        al.alSourcefv(source[0], AL.AL_DIRECTION, zero, 0);
+        al.alSourcef(source[0], AL.AL_ROLLOFF_FACTOR, 0.0f);
+        al.alSourcei(source[0], AL.AL_SOURCE_RELATIVE, AL.AL_TRUE);
+        startedAt = System.currentTimeMillis();
+        applyGain();
         return true;
     }
 
-    /**
-     * OpenAL cleanup
-     */
-    public void release() {
-        if (!opened)
-            return;
-        al.alSourceStop(source[0]);
-        empty();
-
-        al.alDeleteSources(1, source, 0); check();
-        al.alDeleteBuffers(NUM_BUFFERS, buffers, 0); check();
-        opened = false;
+    /** Current gain: the volume scaled by the fade-in and fade-out ramps. */
+    private float currentGain() {
+        long now = System.currentTimeMillis();
+        float f = 1f;
+        if (fadeInMs > 0)
+            f = Math.min(f, (now - startedAt) / (float) fadeInMs);
+        long out = fadeOutMs;
+        if (out == 0)
+            f = 0f;
+        else if (out > 0)
+            f = Math.min(f, 1f - (now - fadeOutStart) / (float) out);
+        return volume * Math.max(0f, Math.min(1f, f));
     }
 
-    /**
-     * Play the music stream
-     */
-    public boolean playback() {
-        if (playing())
-            return true;
-
-        debugMsg("playback(): stream all buffers");
-        for (int i = 0; i < NUM_BUFFERS; i++) {
-            if (!stream(buffers[i]))
-                return false;
-        }
-
-        debugMsg("playback(): queue all buffers & play source");
-        al.alSourceQueueBuffers(source[0], NUM_BUFFERS, buffers, 0);
-        al.alSourcePlay(source[0]);
-
-        return true;
+    private void applyGain() {
+        al.alSourcef(source[0], AL.AL_GAIN, currentGain());
     }
 
-    /**
-     * Check if the source is playing
-     */
-    public boolean playing() {
+    private boolean fadedOut() {
+        long out = fadeOutMs;
+        return out >= 0 && System.currentTimeMillis() - fadeOutStart >= out;
+    }
+
+    private boolean playing() {
         int[] state = new int[1];
-
         al.alGetSourcei(source[0], AL.AL_SOURCE_STATE, state, 0);
-
-        return (state[0] == AL.AL_PLAYING);
+        return state[0] == AL.AL_PLAYING;
     }
 
-    /**
-     * Update the stream if necessary
-     */
-    public boolean update() {
-        int[] processed = new int[1];
-        boolean active = true;
-
-        debugMsg("update()");
-        al.alGetSourcei(source[0], AL.AL_BUFFERS_PROCESSED, processed, 0);
-
-        while (processed[0] > 0)
-        {
-            int[] buffer = new int[1];
-
-            al.alSourceUnqueueBuffers(source[0], 1, buffer, 0); check();
-            debugMsg("update(): buffer unqueued => " + buffer[0]);
-
-            active = stream(buffer[0]);
-
-            debugMsg("update(): buffer queued => " + buffer[0]);
-            al.alSourceQueueBuffers(source[0], 1, buffer, 0); check();
-
-            processed[0]--;
-        }
-
-        return active;
-    }
-
-    /**
-     * Reloads a buffer (reads in the next chunk)
-     */
-    public boolean stream(int buffer) {
+    /** Decodes the next chunk into {@code buffer}; returns false at the end of the track. */
+    private boolean stream(int buffer) {
         byte[] pcm = new byte[BUFFER_SIZE];
-        int    size = 0;
-
+        int size;
         try {
             if ((size = decoder.read(pcm)) <= 0)
                 return false;
@@ -231,80 +179,97 @@ public class MusicStreamer implements Runnable{
             e.printStackTrace();
             return false;
         }
-
-        totalBytes += size;
-        debugMsg("stream(): buffer data => " + buffer + " totalBytes:" + totalBytes);
-
-        ByteBuffer data = ByteBuffer.wrap(pcm, 0, size);
-        al.alBufferData(buffer, format, data, size, rate);
+        al.alBufferData(buffer, format, ByteBuffer.wrap(pcm, 0, size), size, rate);
         check();
-
         return true;
     }
 
-    /**
-     * Empties the queue
-     */
-    protected void empty() {
-        int[] queued = new int[1];
-
-        al.alGetSourcei(source[0], AL.AL_BUFFERS_QUEUED, queued, 0);
-
-        while (queued[0] > 0)
-        {
-            int[] buffer = new int[1];
-
-            al.alSourceUnqueueBuffers(source[0], 1, buffer, 0);
-            check();
-
-            queued[0]--;
+    /** Fills and queues the initial buffers; returns false if the track is empty. */
+    private boolean prime() {
+        int queued = 0;
+        for (int i = 0; i < NUM_BUFFERS; i++) {
+            if (!stream(buffers[i]))
+                break;
+            queued++;
         }
+        if (queued == 0)
+            return false;
+        al.alSourceQueueBuffers(source[0], queued, buffers, 0); check();
+        al.alSourcePlay(source[0]);
+        return true;
+    }
 
+    /** Refills the buffers OpenAL has finished playing; returns false once the decoder is exhausted. */
+    private boolean refill() {
+        int[] processed = new int[1];
+        al.alGetSourcei(source[0], AL.AL_BUFFERS_PROCESSED, processed, 0);
+        boolean active = true;
+        while (processed[0] > 0) {
+            int[] buffer = new int[1];
+            al.alSourceUnqueueBuffers(source[0], 1, buffer, 0); check();
+            if (active && stream(buffer[0])) {
+                al.alSourceQueueBuffers(source[0], 1, buffer, 0); check();
+            } else {
+                active = false;
+            }
+            processed[0]--;
+        }
+        return active;
+    }
+
+    private void playStream() throws MalformedURLException {
+        if (!open())
+            return;
+        decoder.dump();
+        if (!prime())
+            return;
+
+        boolean decoding = true;
+        while (!fadedOut()) {
+            if (decoding)
+                decoding = refill();
+            applyGain();
+            if (!playing()) {
+                if (!decoding)
+                    break;              // last buffer played: the track is over
+                al.alSourcePlay(source[0]); // buffer underrun after a hitch: resume
+            }
+            try {
+                Thread.sleep(POLL_MS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+    }
+
+    private void release() {
+        if (!opened)
+            return;
+        al.alSourceStop(source[0]);
+        // Stopping marks every queued buffer as processed, so they can all be unqueued.
+        int[] queued = new int[1];
+        al.alGetSourcei(source[0], AL.AL_BUFFERS_QUEUED, queued, 0);
+        while (queued[0]-- > 0) {
+            int[] buffer = new int[1];
+            al.alSourceUnqueueBuffers(source[0], 1, buffer, 0);
+        }
+        al.alDeleteSources(1, source, 0);
+        al.alDeleteBuffers(NUM_BUFFERS, buffers, 0);
+        al.alGetError();
+        opened = false;
         decoder = null;
     }
 
-    /**
-     * Check for OpenAL errors...
-     */
-    protected void check() {
+    private void check() {
         if (al.alGetError() != AL.AL_NO_ERROR)
             throw new ALException("OpenAL error raised...");
-    }
-
-    /**
-     * The main loop to initialize and play the entire stream
-     */
-    public boolean playstream() throws MalformedURLException {
-        if (!open())
-            return false;
-
-        decoder.dump();
-
-        if (!playback())
-            return false;
-
-        while (update()) {
-            // We will try sleeping for sometime so that we dont
-            // peg the CPU...
-            try {
-                Thread.sleep(sleepTime);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (playing()) continue;
-
-            if (!playback())
-                return false;
-        }
-
-        return true;
     }
 
     @Override
     public void run() {
         try {
-            playstream();
+            playStream();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -313,8 +278,7 @@ public class MusicStreamer implements Runnable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            // Always schedule the next track, otherwise music stops for good after one failure.
-            SoundManager.secBeforeNextMusic = new Random().nextInt(60);
+            finished = true;
         }
     }
 }
