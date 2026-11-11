@@ -59,7 +59,7 @@ public class Tree extends Construction {
     @Override
     public void process(double deltatime, int deltaDays) {
         if (cut) {
-            if (GameManager.getInstance().getTimeManager().timeHasPassed(grown)) {
+            if (city.getTime().timeHasPassed(grown)) {
                 setCut(false);
             }
         }
@@ -73,7 +73,7 @@ public class Tree extends Construction {
     public void setCut(boolean cut) {
         this.cut = cut;
         if (cut) {
-            grown = GameManager.getInstance().getTimeManager().getFutureTime(0, 3, 0);
+            grown = city.getTime().getFutureTime(0, 3, 0);
             Random r = new Random();
             this.setLocalID(terraintype * 8 + r.nextInt(8) + 96);
         } else {

@@ -8,7 +8,6 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -19,8 +18,8 @@ public class Guild extends ResourceGenerator {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLength, xLength, cases, built, city, ID, resource,0);
     }
 
-    public Guild() {
-        super(false, ObjectType.GUILD, BuildingCategory.INDUSTRY, 0, 25, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.NULL,0);
+    public Guild(City city) {
+        super(false, ObjectType.GUILD, BuildingCategory.INDUSTRY, 0, 25, 60, 5, 0, 0, 2, 2, null, false, city, 0, Resource.NULL,0);
     }
 
     public void createBuildingSpriteWork() {

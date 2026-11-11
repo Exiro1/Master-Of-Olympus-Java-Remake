@@ -9,30 +9,40 @@ import com.exiro.render.layout.InterfaceRender;
 import com.exiro.render.layout.MenuBar;
 import com.exiro.soundManager.SoundManager;
 
+/**
+ * The local game client: the window, the local player and the city on screen.
+ * Game state lives in {@link World}; objects reach it through their own {@link City}, never
+ * through this class, so nothing depends on which city is being viewed.
+ */
 public class GameManager {
 
-    public static City currentCity;
     private static GameManager gm;
+    private final World world;
+    // the city shown on screen, see setCurrentCity
+    private City currentCity;
     GameFrame frame;
     GameWindow GameView;
     MenuBar menuBar;
     Player player;
     private final InterfaceRender it;
     private final GameInfo gi;
-    TimeManager timeManager;
     Simulation simulation;
     GameLoop gameLoop;
 
-    public GameManager(Player player, City currentCity) {
+    public GameManager(World world, Player player, City currentCity) {
+        this.world = world;
         this.player = player;
-        GameManager.currentCity = currentCity;
-        frame = new GameFrame("lol", this);
+        this.currentCity = currentCity;
+        gm = this;
+        frame = new GameFrame("Master of Olympus", this);
         this.GameView = frame.getWindow();
         this.menuBar = frame.getMenu();
         this.gi = frame.getGi();
         this.it = frame.getIt();
-        this.timeManager = new TimeManager(0, 0, 0);
-        gm = this;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public GameLoop getGameLoop() {
@@ -57,7 +67,7 @@ public class GameManager {
 
 
     public TimeManager getTimeManager() {
-        return timeManager;
+        return world.getTimeManager();
     }
 
     public GameFrame getFrame() {
@@ -96,7 +106,26 @@ public class GameManager {
         return currentCity;
     }
 
-    public void setCurrentCity(City currentCity) {
-        GameManager.currentCity = currentCity;
+    /**
+     * Shows another city. Every city keeps being simulated; this only changes what the window
+     * displays and where the build tool acts.
+     */
+    public void setCurrentCity(City city) {
+        if (city == null || city == currentCity)
+            return;
+        currentCity = city;
+        if (GameView != null)
+            GameView.cityChanged();
+    }
+
+    /**
+     * Shows the local player's next city (wraps around).
+     */
+    public void nextCity() {
+        java.util.List<City> cities = player.getPlayerCities();
+        if (cities.isEmpty())
+            return;
+        int i = cities.indexOf(currentCity);
+        setCurrentCity(cities.get((i + 1) % cities.size()));
     }
 }

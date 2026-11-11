@@ -3,7 +3,6 @@ package com.exiro.terrainList;
 import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
-import com.exiro.systemCore.GameManager;
 
 public class Empty extends Terrain {
 
@@ -16,8 +15,8 @@ public class Empty extends Terrain {
         updateImg();
     }
 
-    public Empty() {
-        super(ObjectType.EMPTY, true, 0, 0, GameManager.currentCity, true, true, false, 1);
+    public Empty(City city) {
+        super(ObjectType.EMPTY, true, 0, 0, city, true, true, false, 1);
         this.number = 105;
         this.setLocalID(number);
         updateImg();

@@ -12,7 +12,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.delivery.WaterDelivery;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -26,8 +25,8 @@ public class WaterWell extends Building {
         waterDelivery = null;
     }
 
-    public WaterWell() {
-        super(false, ObjectType.WATERWELL, BuildingCategory.FOOD, 0, 4, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public WaterWell(City city) {
+        super(false, ObjectType.WATERWELL, BuildingCategory.FOOD, 0, 4, 30, 10, 0, 0, 2, 2, null, false, city, 0);
 
     }
 

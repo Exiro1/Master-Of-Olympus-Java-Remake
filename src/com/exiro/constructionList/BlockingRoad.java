@@ -3,7 +3,6 @@ package com.exiro.constructionList;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -16,9 +15,7 @@ public class BlockingRoad extends Construction {
         super(true, ObjectType.BLOCKABLE_ROAD, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, city, false, true);
     }
 
-    public BlockingRoad() {
-        super(true, ObjectType.BLOCKABLE_ROAD, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, GameManager.currentCity, false, true);
-    }
+
 
     @Override
     public ArrayList<Case> getPlace(int xPos, int yPos, int yLenght, int xLenght, City city) {

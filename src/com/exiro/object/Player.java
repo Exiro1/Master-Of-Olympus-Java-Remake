@@ -1,5 +1,7 @@
 package com.exiro.object;
 
+import com.exiro.systemCore.World;
+
 import java.util.ArrayList;
 
 public class Player {
@@ -18,13 +20,14 @@ public class Player {
         this.friendship = friendship;
     }
 
-    public Player(float money, int populaionTotal, String name) {
+    public Player(World world, float money, int populaionTotal, String name) {
         this.money = money;
         this.populaionTotal = populaionTotal;
         this.name = name;
         this.friendship = new ArrayList<>();
         this.playerCities = new ArrayList<>();
-        this.playerCities.add(new City(this.name + "'s city", this));
+        world.addPlayer(this);
+        this.playerCities.add(new City(this.name + "'s city", this, world));
     }
 
     public float getMoney() {

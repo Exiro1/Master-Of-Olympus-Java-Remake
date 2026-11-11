@@ -8,7 +8,6 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -19,8 +18,8 @@ public class Podium extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public Podium() {
-        super(false, ObjectType.PODIUM, BuildingCategory.CULTURE, 0, 4, 30, 2, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public Podium(City city) {
+        super(false, ObjectType.PODIUM, BuildingCategory.CULTURE, 0, 4, 30, 2, 0, 0, 2, 2, null, false, city, 0);
     }
 
 

@@ -6,7 +6,6 @@ import com.exiro.fileManager.ImageLoader;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
-import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Elevation;
 
 import java.util.ArrayList;
@@ -28,9 +27,7 @@ public class Road extends Construction {
         super(false, ObjectType.ROAD, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, city, false, true);
     }
 
-    public Road() {
-        super(false, ObjectType.ROAD, new ArrayList<>(), 5, 1, 0, 0, 1, 1, 0f, GameManager.currentCity, false, true);
-    }
+
 
 
     @Override

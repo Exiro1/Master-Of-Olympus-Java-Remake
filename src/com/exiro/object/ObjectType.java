@@ -23,7 +23,7 @@ import com.exiro.fileManager.ImageLoader;
 import com.exiro.terrainList.*;
 
 import java.awt.image.BufferedImage;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public enum ObjectType {
 
@@ -98,7 +98,7 @@ public enum ObjectType {
     GOAT("Chevre", false, true, "SprMain", 1, 0, 11227, GoatBuildingBind::new);
 
     // creates the object placed by the build tool; null for terrain, which is never placed
-    private final Supplier<ObjectClass> factory;
+    private final Function<City, ObjectClass> factory;
     private final String name;
     private final boolean block, walk;
     private final int heigth, width;
@@ -107,7 +107,7 @@ public enum ObjectType {
     private BufferedImage img;
     private int bitmapID, localID;
 
-    ObjectType(String name, boolean block, boolean walk, String path, int size, int bitmapID, int localID, Supplier<ObjectClass> factory) {
+    ObjectType(String name, boolean block, boolean walk, String path, int size, int bitmapID, int localID, Function<City, ObjectClass> factory) {
         this.factory = factory;
         this.size = size;
         this.name = name;
@@ -122,8 +122,11 @@ public enum ObjectType {
         this.block = block;
     }
 
-    public ObjectClass getDefault() {
-        return factory == null ? null : factory.get();
+    /**
+     * A new, unbuilt object of this type belonging to {@code city}.
+     */
+    public ObjectClass getDefault(City city) {
+        return factory == null ? null : factory.apply(city);
     }
 
     public int getBitmapID() {

@@ -1,5 +1,7 @@
 package com.exiro.buildingList.delivery.agorashop;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.delivery.Agora;
 import com.exiro.buildingList.delivery.AgoraShop;
 import com.exiro.object.Case;
@@ -12,8 +14,8 @@ import java.util.ArrayList;
 public class FoodShop extends AgoraShopBuilding {
 
 
-    public FoodShop() {
-        super(AgoraShop.FOOD, ObjectType.AGORAFOOD);
+    public FoodShop(City city) {
+        super(AgoraShop.FOOD, ObjectType.AGORAFOOD, city);
         resourcesPossible = new ArrayList<>();
         resourcesPossible.add(Resource.CHEESE);
         resourcesPossible.add(Resource.FISH);

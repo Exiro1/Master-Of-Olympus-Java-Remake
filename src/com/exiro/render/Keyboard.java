@@ -2,6 +2,7 @@ package com.exiro.render;
 
 import com.exiro.object.ObjectType;
 import com.exiro.render.layout.GameWindow;
+import com.exiro.systemCore.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -80,9 +81,12 @@ public class Keyboard implements KeyListener {
         }
         if (key == 'a') {
             GameWindow.index++;
-            if (GameWindow.index > frame.getWindow().getP().getPlayerCities().get(0).getPathManager().getPaths().size() - 1) {
+            if (GameWindow.index > GameManager.getInstance().getCurrentCity().getPathManager().getPaths().size() - 1) {
                 GameWindow.index = 0;
             }
+        }
+        if (key == 'n') { // show the next city of the local player
+            GameManager.getInstance().nextCity();
         }
         if (key == 'z')
             System.exit(0);

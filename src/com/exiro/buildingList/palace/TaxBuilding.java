@@ -1,17 +1,18 @@
 package com.exiro.buildingList.palace;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.Building;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 
 public class TaxBuilding extends Building {
 
 
-    public TaxBuilding() {
-        super(false, ObjectType.TAX, BuildingCategory.ARMY, 0, 8, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public TaxBuilding(City city) {
+        super(false, ObjectType.TAX, BuildingCategory.ARMY, 0, 8, 50, 10, 0, 0, 2, 2, null, false, city, 0);
     }
 
 

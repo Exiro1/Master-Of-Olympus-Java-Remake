@@ -1,5 +1,7 @@
 package com.exiro.buildingList.industry;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.buildingList.IndustryHarverster;
@@ -12,15 +14,14 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Harvester;
 import com.exiro.sprite.delivery.carter.ComplexCarter;
 import com.exiro.sprite.industry.BronzeHarvester;
-import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Rock;
 
 public class Foundry extends IndustryHarverster {
 
     ComplexCarter cc;
 
-    public Foundry() {
-        super(false, ObjectType.FOUNDRY, BuildingCategory.INDUSTRY, 0, 15, 105, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.BRONZE, 8, 3, 25, 100);
+    public Foundry(City city) {
+        super(false, ObjectType.FOUNDRY, BuildingCategory.INDUSTRY, 0, 15, 105, 5, 0, 0, 2, 2, null, false, city, 0, Resource.BRONZE, 8, 3, 25, 100);
     }
 
     public void createBuildingSpriteWork() {

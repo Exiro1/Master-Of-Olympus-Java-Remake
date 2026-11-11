@@ -12,7 +12,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.culture.Athlete;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -25,8 +24,8 @@ public class Gymnasium extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public Gymnasium() {
-        super(false, ObjectType.GYMNASIUM, BuildingCategory.CULTURE, 0, 7, 75, 2, 0, 0, 3, 3, null, false, GameManager.currentCity, 0);
+    public Gymnasium(City city) {
+        super(false, ObjectType.GYMNASIUM, BuildingCategory.CULTURE, 0, 7, 75, 2, 0, 0, 3, 3, null, false, city, 0);
     }
 
     @Override

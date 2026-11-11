@@ -169,7 +169,7 @@ public abstract class Building extends ObjectClass {
         collapsing = false;
         if (this.built) {
             for (Case c : getCases()) {
-                c.setObject(new Rubble());
+                c.setObject(new Rubble(city));
                 c.getObject().build(c.getxPos(), c.getyPos());
                 c.setMainCase(true);
             }

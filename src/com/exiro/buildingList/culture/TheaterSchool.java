@@ -10,7 +10,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.culture.Actor;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,8 +23,8 @@ public class TheaterSchool extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public TheaterSchool() {
-        super(false, ObjectType.THEATERSCHOOL, BuildingCategory.CULTURE, 0, 10, 35, 10, 0, 0, 3, 3, null, false, GameManager.currentCity, 0);
+    public TheaterSchool(City city) {
+        super(false, ObjectType.THEATERSCHOOL, BuildingCategory.CULTURE, 0, 10, 35, 10, 0, 0, 3, 3, null, false, city, 0);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.exiro.buildingList.industry;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.fileManager.SoundLoader;
@@ -7,7 +9,6 @@ import com.exiro.reader.TileImage;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
-import com.exiro.systemCore.GameManager;
 
 import java.awt.*;
 
@@ -19,8 +20,8 @@ public class OlivePress extends IndustryConverter {
     int lastStockIn = 0;
     TileImage stockImg;
 
-    public OlivePress() {
-        super(false, ObjectType.OLIVE_PRESS, BuildingCategory.INDUSTRY, 0, 12, 72, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.OLIVE_OIL, 60, 1, 1, Resource.OLIVE, 3);
+    public OlivePress(City city) {
+        super(false, ObjectType.OLIVE_PRESS, BuildingCategory.INDUSTRY, 0, 12, 72, 5, 0, 0, 2, 2, null, false, city, 0, Resource.OLIVE_OIL, 60, 1, 1, Resource.OLIVE, 3);
         maxPerCarter = 1;
     }
 

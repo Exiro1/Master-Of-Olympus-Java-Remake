@@ -1,5 +1,7 @@
 package com.exiro.buildingList.agriculture;
 
+import com.exiro.object.City;
+
 import com.exiro.ai.AI;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
@@ -13,7 +15,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.agriculture.Goatherd;
 import com.exiro.sprite.animals.Goat;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,8 +25,8 @@ public class Dairy extends ResourceGenerator {
     int speedFactor = 1;
 
 
-    public Dairy() {
-        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.CHEESE,3);
+    public Dairy(City city) {
+        super(false, ObjectType.DAIRY, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, city, 0, Resource.CHEESE,3);
         maxPerCarter = 1;
     }
 

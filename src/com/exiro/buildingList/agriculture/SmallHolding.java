@@ -1,5 +1,7 @@
 package com.exiro.buildingList.agriculture;
 
+import com.exiro.object.City;
+
 import com.exiro.ai.AI;
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
@@ -15,7 +17,6 @@ import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.agriculture.Grower;
 import com.exiro.sprite.delivery.carter.Carter;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,8 +31,8 @@ public class SmallHolding extends ResourceGenerator {
     private final ArrayList<SmallHoldingTree> trees = new ArrayList<>();
     private final ArrayList<SmallHoldingTree> matureTrees = new ArrayList<>();
 
-    public SmallHolding() {
-        super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, 0, 12, 40, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.OLIVE, 3);
+    public SmallHolding(City city) {
+        super(false, ObjectType.SMALLHOLDING, BuildingCategory.FOOD, 0, 12, 40, 10, 0, 0, 2, 2, null, false, city, 0, Resource.OLIVE, 3);
         maxPerCarter = 1;
     }
 
@@ -71,9 +72,9 @@ public class SmallHolding extends ResourceGenerator {
             if (growerNbr < 1) {
                 createGrower();
             }
-            if (GameManager.getInstance().getTimeManager().getMonth() >= 0 && GameManager.getInstance().getTimeManager().getMonth() < 2) {
+            if (city.getTime().getMonth() >= 0 && city.getTime().getMonth() < 2) {
                 startHarvesting();
-            } else if (GameManager.getInstance().getTimeManager().getMonth() >= 9 && GameManager.getInstance().getTimeManager().getMonth() < 11) {
+            } else if (city.getTime().getMonth() >= 9 && city.getTime().getMonth() < 11) {
                 startHarvesting();
             }
         }

@@ -8,7 +8,6 @@ import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,8 +20,8 @@ public class Granary extends StoreBuilding {
         interfaceH = 400;
     }
 
-    public Granary() {
-        super(false, ObjectType.GRANARY, BuildingCategory.MARKET, 0, 18, 80, 10, 0, 0, 4, 4, null, false, GameManager.currentCity, 0);
+    public Granary(City city) {
+        super(false, ObjectType.GRANARY, BuildingCategory.MARKET, 0, 18, 80, 10, 0, 0, 4, 4, null, false, city, 0);
         interfaceH = 400;
     }
 

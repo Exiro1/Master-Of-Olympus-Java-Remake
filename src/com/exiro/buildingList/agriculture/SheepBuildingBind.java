@@ -9,7 +9,6 @@ import com.exiro.object.ObjectType;
 import com.exiro.render.ButtonType;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.animals.Sheep;
-import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Meadow;
 
 import java.awt.*;
@@ -18,8 +17,8 @@ import java.util.ArrayList;
 public class SheepBuildingBind extends Building {
 
 
-    public SheepBuildingBind() {
-        super(false, ObjectType.SHEEP, BuildingCategory.FOOD, 0, 0, 10, 10, 0, 0, 1, 1, null, false, GameManager.currentCity, 0);
+    public SheepBuildingBind(City city) {
+        super(false, ObjectType.SHEEP, BuildingCategory.FOOD, 0, 0, 10, 10, 0, 0, 1, 1, null, false, city, 0);
     }
 
     @Override
@@ -75,7 +74,7 @@ public class SheepBuildingBind extends Building {
     public boolean build(int xPos, int yPos) {
 
         if (getCity().getMap().getCase(xPos, yPos).getTerrain() instanceof Meadow && getCity().getMap().getCase(xPos, yPos).getObject() == null) {
-            Sheep s = new Sheep();
+            Sheep s = new Sheep(city);
             s.setX(xPos);
             s.setY(yPos);
             s.setXB(xPos);

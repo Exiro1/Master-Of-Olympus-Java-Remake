@@ -1,18 +1,19 @@
 package com.exiro.buildingList.industry;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.fileManager.SoundLoader;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
-import com.exiro.systemCore.GameManager;
 
 public class Winery extends IndustryConverter {
 
 
-    public Winery() {
-        super(false, ObjectType.WINERY, BuildingCategory.INDUSTRY, 0, 12, 72, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WINE, 60, 1, 1, Resource.GRAPE, 2);
+    public Winery(City city) {
+        super(false, ObjectType.WINERY, BuildingCategory.INDUSTRY, 0, 12, 72, 5, 0, 0, 2, 2, null, false, city, 0, Resource.WINE, 60, 1, 1, Resource.GRAPE, 2);
     }
 
 

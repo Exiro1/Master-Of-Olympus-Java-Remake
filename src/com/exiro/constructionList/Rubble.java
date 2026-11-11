@@ -3,7 +3,6 @@ package com.exiro.constructionList;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -14,8 +13,8 @@ public class Rubble extends Construction {
         super(isActive, type, cases, cost, deleteCost, xPos, yPos, xLenght, yLenght, cachet, city, built, isFloor);
     }
 
-    public Rubble() {
-        super(false, ObjectType.RUBBLE, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, GameManager.currentCity, true, true);
+    public Rubble(City city) {
+        super(false, ObjectType.RUBBLE, new ArrayList<>(), 0, 0, 0, 0, 1, 1, 0f, city, true, true);
     }
 
     @Override

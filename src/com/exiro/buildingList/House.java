@@ -15,7 +15,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Immigrant;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Point;
 import com.exiro.utils.Time;
 
@@ -61,8 +60,8 @@ public class House extends Building {
     private int popInArrival = 0;
 
 
-    public House() {
-        super(false, ObjectType.HOUSE, null, 0, maxPerLvl[0], 15, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public House(City city) {
+        super(false, ObjectType.HOUSE, null, 0, maxPerLvl[0], 15, 10, 0, 0, 2, 2, null, false, city, 0);
     }
 
     @Override
@@ -139,10 +138,10 @@ public class House extends Building {
 
             if(devolvabe){
                 if(timeDevolve == null){
-                    timeDevolve = GameManager.getInstance().getTimeManager().getTime();
+                    timeDevolve = city.getTime().getTime();
                     willDevolve = true;
                 }else {
-                    if(GameManager.getInstance().getTimeManager().daysSince(timeDevolve) > 30){
+                    if(city.getTime().daysSince(timeDevolve) > 30){
                         level--;
                         changeLvlImg(level);
                         popMax = maxPerLvl[level];

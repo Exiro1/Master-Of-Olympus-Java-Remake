@@ -8,6 +8,8 @@ import com.exiro.moveRelated.FreeState;
 import com.exiro.moveRelated.Path;
 import com.exiro.systemCore.BuildingManager;
 import com.exiro.systemCore.PathManager;
+import com.exiro.systemCore.TimeManager;
+import com.exiro.systemCore.World;
 import com.exiro.terrainList.Terrain;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class City {
 
     private String name;
     private Player owner;
+    // the game this city belongs to: shared calendar, other players' cities
+    private final World world;
     private CityMap map;
     private ArrayList<Construction> constructions;
     private ArrayList<ObjectClass> inActives = new ArrayList<>();
@@ -41,17 +45,6 @@ public class City {
     // initialised here so both constructors get them
     ArrayList<Building> toDestroyB = new ArrayList<>();
 
-    public City(String name, Player owner, CityMap map, ArrayList<Construction> constructions, ArrayList<Building> buildings, int population) {
-        this.name = name;
-        this.owner = owner;
-        this.map = map;
-        this.constructions = constructions;
-        this.buildings = buildings;
-        this.population = population;
-        this.buildingMap = new HashMap<>();
-        resourceManager = new ResourceManager();
-    }
-
     public ArrayList<ObjectClass> getObj() {
         return obj;
     }
@@ -75,7 +68,8 @@ public class City {
 
     ArrayList<ObjectClass> toDestroyC = new ArrayList<>();
 
-    public City(String name, Player owner) {
+    public City(String name, Player owner, World world) {
+        this.world = world;
         resourceManager = new ResourceManager();
         this.buildingMap = new HashMap<>();
         this.name = name;
@@ -228,6 +222,17 @@ public class City {
 
     public void setConstructions(ArrayList<Construction> constructions) {
         this.constructions = constructions;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    /**
+     * The game calendar, shared by every city.
+     */
+    public TimeManager getTime() {
+        return world.getTimeManager();
     }
 
     public Player getOwner() {

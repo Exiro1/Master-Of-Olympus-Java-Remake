@@ -1,5 +1,7 @@
 package com.exiro.buildingList.delivery.agorashop;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.delivery.Agora;
 import com.exiro.buildingList.delivery.AgoraShop;
 import com.exiro.object.Case;
@@ -10,8 +12,8 @@ import java.util.ArrayList;
 public class EmptyShop extends AgoraShopBuilding {
 
 
-    public EmptyShop() {
-        super(AgoraShop.EMPTY, ObjectType.AGORAEMPTY);
+    public EmptyShop(City city) {
+        super(AgoraShop.EMPTY, ObjectType.AGORAEMPTY, city);
         this.setPopMax(0);
     }
 

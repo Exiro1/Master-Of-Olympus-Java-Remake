@@ -12,7 +12,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.delivery.SafetyGuard;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -26,8 +25,8 @@ public class Safety extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public Safety() {
-        super(false, ObjectType.SAFETY, BuildingCategory.SECURITY, 0, 5, 16, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public Safety(City city) {
+        super(false, ObjectType.SAFETY, BuildingCategory.SECURITY, 0, 5, 16, 10, 0, 0, 2, 2, null, false, city, 0);
 
     }
 

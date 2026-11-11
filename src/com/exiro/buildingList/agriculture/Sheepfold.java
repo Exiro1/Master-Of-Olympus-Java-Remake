@@ -15,7 +15,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.agriculture.Sheepherd;
 import com.exiro.sprite.animals.Sheep;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,8 +29,8 @@ public class Sheepfold extends ResourceGenerator {
         super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, pop, 8, 30, 10, xPos, yPos, 2, 2, cases, built, city, 0, Resource.WOOL,5);
 
     }
-    public Sheepfold() {
-        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOL,5);
+    public Sheepfold(City city) {
+        super(false, ObjectType.SHEEPFOLD, BuildingCategory.FOOD, 0, 8, 30, 10, 0, 0, 2, 2, null, false, city, 0, Resource.WOOL,5);
         maxPerCarter = 1;
     }
 

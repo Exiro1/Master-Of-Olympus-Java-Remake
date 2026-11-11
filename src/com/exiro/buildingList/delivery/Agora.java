@@ -19,7 +19,6 @@ import com.exiro.sprite.AgoraSupplierChief;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.delivery.AgoraDelivery;
-import com.exiro.systemCore.GameManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -40,8 +39,8 @@ public class Agora extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public Agora() {
-        super(false, ObjectType.AGORA, BuildingCategory.MARKET, 0, 0, 40, 10, 0, 0, 6, 2, null, false, GameManager.currentCity, 0);
+    public Agora(City city) {
+        super(false, ObjectType.AGORA, BuildingCategory.MARKET, 0, 0, 40, 10, 0, 0, 6, 2, null, false, city, 0);
         shops = new ArrayList<>();
         shopsBuildings = new ArrayList<>();
         chiefs = new ArrayList<>();
@@ -50,7 +49,7 @@ public class Agora extends Building {
 
     public void initAgora() {
         for (int i = 0; i < 3; i++) {
-            EmptyShop e = new EmptyShop();
+            EmptyShop e = new EmptyShop(city);
             Case c = shops.get(i);
             e.build(c.getxPos(), c.getyPos());
 

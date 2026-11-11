@@ -55,7 +55,7 @@ public class FishingBoat extends Boat {
         super.process(deltaTime, deltaDays);
 
         if (boatState == BoatState.FISHING) {
-            if (GameManager.getInstance().getTimeManager().daysSince(startFishing) > 15) {
+            if (c.getTime().daysSince(startFishing) > 15) {
                 setState(BoatState.TRAVEL);
                 hasArrived = false;
                 this.setRoutePath(c.getPathManager().getPathTo(getMainCase(), start, FreeState.WATER.getI(), false));
@@ -67,7 +67,7 @@ public class FishingBoat extends Boat {
                 origin.fishingFinished();
             } else if (hasArrived) {
                 setState(BoatState.FISHING);
-                startFishing = GameManager.getInstance().getTimeManager().getTime();
+                startFishing = c.getTime().getTime();
             }
         }
     }

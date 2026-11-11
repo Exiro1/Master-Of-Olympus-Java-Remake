@@ -11,7 +11,6 @@ import com.exiro.object.Resource;
 import com.exiro.render.IsometricRender;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -26,8 +25,8 @@ public class AgoraShopBuilding extends Building {
     ArrayList<Resource> resourcesPossible;
     boolean buying = false;
 
-    public AgoraShopBuilding(AgoraShop shop, ObjectType type) {
-        super(false, type, BuildingCategory.FOOD, 0, 4, 16, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public AgoraShopBuilding(AgoraShop shop, ObjectType type, City city) {
+        super(false, type, BuildingCategory.FOOD, 0, 4, 16, 10, 0, 0, 2, 2, null, false, city, 0);
         this.shop = shop;
         reserve = distribution = 0;
     }

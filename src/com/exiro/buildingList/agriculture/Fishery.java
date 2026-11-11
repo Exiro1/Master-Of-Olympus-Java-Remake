@@ -13,7 +13,6 @@ import com.exiro.sprite.Direction;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.animals.Fish;
 import com.exiro.sprite.ship.FishingBoat;
-import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Water;
 import com.exiro.terrainList.WaterCoast;
 import com.exiro.utils.Time;
@@ -32,8 +31,8 @@ public class Fishery extends ResourceGenerator {
     Case spawnPoint;
     FishingBoat boat = null;
 
-    public Fishery() {
-        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, 0, 10, 50, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.FISH, 2);
+    public Fishery(City city) {
+        super(false, ObjectType.FISHERY, BuildingCategory.FOOD, 0, 10, 50, 10, 0, 0, 2, 2, null, false, city, 0, Resource.FISH, 2);
         maxPerCarter = 1;
     }
 
@@ -208,7 +207,7 @@ public class Fishery extends ResourceGenerator {
     }
 
     public void createBoat() {
-        start = GameManager.getInstance().getTimeManager().getTime();
+        start = city.getTime().getTime();
         int min = 10000;
         int d = 0;
         setBuilding();
@@ -238,7 +237,7 @@ public class Fishery extends ResourceGenerator {
                 createBoat();
                 boatStarted = true;
             }
-            if (!boatBuilt && GameManager.getInstance().getTimeManager().daysSince(start) > 15) {
+            if (!boatBuilt && city.getTime().daysSince(start) > 15) {
                 boatBuilt = true;
                 FishingBoat p = new FishingBoat(city, getFishingPlace(), this);
                 boatFishing = true;
@@ -246,7 +245,7 @@ public class Fishery extends ResourceGenerator {
                 boat = p;
                 setWaiting();
             }
-            if (!boatFishing && GameManager.getInstance().getTimeManager().daysSince(start) > 15) {
+            if (!boatFishing && city.getTime().daysSince(start) > 15) {
                 boat.goFishing(getFishingPlace());
                 boatFishing = true;
                 setWaiting();
@@ -257,7 +256,7 @@ public class Fishery extends ResourceGenerator {
 
     public void fishingFinished() {
         boatFishing = false;
-        start = GameManager.getInstance().getTimeManager().getTime();
+        start = city.getTime().getTime();
         setUnloading();
     }
 

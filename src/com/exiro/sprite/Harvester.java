@@ -112,8 +112,8 @@ public class Harvester extends MovingSprite {
         }
 
         if (harvesting) {
-            if (GameManager.getInstance().getTimeManager().getDay() != lastDay) {
-                lastDay = GameManager.getInstance().getTimeManager().getDay();
+            if (c.getTime().getDay() != lastDay) {
+                lastDay = c.getTime().getDay();
                 daysUntilFinish--;
                 if (daysUntilFinish <= 0) {
                     harvestFinished();

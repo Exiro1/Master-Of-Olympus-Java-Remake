@@ -11,6 +11,7 @@ import com.exiro.soundManager.SoundManager;
 import com.exiro.systemCore.GameManager;
 import com.exiro.systemCore.GameLoop;
 import com.exiro.systemCore.Simulation;
+import com.exiro.systemCore.World;
 import com.exiro.terrainGenerator.MapCreatorFrame;
 
 import javax.swing.*;
@@ -44,10 +45,11 @@ public class Main {
             ToolTipManager ttm = ToolTipManager.sharedInstance();
             ttm.setLightWeightPopupEnabled(false);
 
-            Player p = new Player(1000f, 0, "Exiro");
+            World world = new World();
+            Player p = new Player(world, 1000f, 0, "Exiro");
             City c = p.getPlayerCities().get(0);
 
-            GameManager gm = new GameManager(p, c);
+            GameManager gm = new GameManager(world, p, c);
 
             EntityRender.setEntityRender(ObjectType.ROAD);
 

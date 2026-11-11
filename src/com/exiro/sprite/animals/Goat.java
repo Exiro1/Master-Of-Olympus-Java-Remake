@@ -7,7 +7,6 @@ import com.exiro.moveRelated.FreeState;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.Direction;
-import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Time;
 
 import java.awt.*;
@@ -34,20 +33,14 @@ public class Goat extends Animal {
     double checkTime = 0;
     GoatState lastState;
 
-    public Goat() {
-        super("SprMain", 0, 11227, 12, GameManager.currentCity, null);
-        setType(ObjectType.GOAT);
-        ai = new AnimalsAI();
-        setState(GoatState.NORMAL_EATING);
-        start = GameManager.getInstance().getTimeManager().getTime();
-    }
+
 
     public Goat(City c) {
         super("SprMain", 0, 11227, 12, c, null);
         setType(ObjectType.GOAT);
         ai = new AnimalsAI();
         setState(GoatState.NORMAL_EATING);
-        start = GameManager.getInstance().getTimeManager().getTime();
+        start = c.getTime().getTime();
     }
 
     public void setState(GoatState state) {
@@ -79,7 +72,7 @@ public class Goat extends Animal {
 
         if (milked && checkTime > 3) {
             checkTime = 0;
-            if (GameManager.getInstance().getTimeManager().daysSince(start) > days) {
+            if (c.getTime().daysSince(start) > days) {
                 milked = false;
             }
         }
@@ -149,7 +142,7 @@ public class Goat extends Animal {
         setState(GoatState.BEING_MILKED);
         milked = true;
         days = 360;
-        start = GameManager.getInstance().getTimeManager().getTime();
+        start = c.getTime().getTime();
     }
 
     @Override

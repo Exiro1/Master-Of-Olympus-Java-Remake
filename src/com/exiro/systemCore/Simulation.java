@@ -27,14 +27,14 @@ public class Simulation {
     double timeSinceLastUpdateConstruct = 0;
     double timeSinceLastUpdateResources = 0;
     int deltaDaysB,deltaDaysC,deltaDaysR;
-    private final Player p;
-    private int currentCity;
+    // every city of every player is simulated, not only the one on screen
+    private final World world;
     private final GameManager gm;
     private final SoundManager sm;
 
     Random ran;
     public Simulation(GameManager gm, SoundManager sm) {
-        this.p = gm.player;
+        this.world = gm.getWorld();
         this.gm = gm;
         this.sm = sm;
         ran = new Random();
@@ -53,7 +53,7 @@ public class Simulation {
 
         sm.updateListener(GameWindow.getCameraPosx(),GameWindow.getCameraPosy());
 
-        int deltaDays = gm.timeManager.updateTime(dt);
+        int deltaDays = world.getTimeManager().updateTime(dt);
         deltaDaysB+=deltaDays;
         deltaDaysC+=deltaDays;
         deltaDaysR+=deltaDays;
@@ -79,7 +79,7 @@ public class Simulation {
             if(sm.secBeforeNextLayer1 >= 0)
                 sm.secBeforeNextLayer1--;
 
-            for (City c : p.getPlayerCities()) {
+            for (City c : world.getCities()) {
                 manageBuilding(c, timeSinceLastUpdateBuilding,deltaDaysB);
             }
             timeSinceLastUpdateBuilding = 0;
@@ -87,7 +87,7 @@ public class Simulation {
         }
         if (timeSinceLastUpdateConstruct > 3) {
 
-            for (City c : p.getPlayerCities()) {
+            for (City c : world.getCities()) {
                 manageConstruction(c, timeSinceLastUpdateConstruct, deltaDaysC);
                 c.getResourceManager().process();
             }
@@ -97,14 +97,14 @@ public class Simulation {
         }
         if (timeSinceLastUpdateResources > 30) {
 
-            for (City c : p.getPlayerCities()) {
+            for (City c : world.getCities()) {
                 manageResources(c);
             }
 
             timeSinceLastUpdateResources = 0;
             deltaDaysR=0;
         }
-        for (City c : p.getPlayerCities()) {
+        for (City c : world.getCities()) {
             manageSprite(c, dt, 0);
             manageTerrain(c, dt, 0);
         }

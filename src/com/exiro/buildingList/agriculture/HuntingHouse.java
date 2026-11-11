@@ -1,5 +1,7 @@
 package com.exiro.buildingList.agriculture;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.ResourceGenerator;
 import com.exiro.fileManager.SoundLoader;
@@ -9,7 +11,6 @@ import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 
 import java.awt.*;
 
@@ -20,8 +21,8 @@ public class HuntingHouse extends ResourceGenerator {
 
 
 
-    public HuntingHouse() {
-        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, 0, 8, 32, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.MEAT,4);
+    public HuntingHouse(City city) {
+        super(false, ObjectType.HUNTINGHOUSE, BuildingCategory.FOOD, 0, 8, 32, 10, 0, 0, 2, 2, null, false, city, 0, Resource.MEAT,4);
         maxPerCarter = 3;
     }
 

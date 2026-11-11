@@ -8,7 +8,6 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.Direction;
-import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Meadow;
 import com.exiro.utils.Time;
 
@@ -37,20 +36,14 @@ public class Sheep extends Animal {
     double checkTime = 0;
     SheepState lastState;
 
-    public Sheep() {
-        super("SprMain", 0, 3182, 12, GameManager.currentCity, null);
-        setType(ObjectType.SHEEP);
-        ai = new AnimalsAI();
-        setState(SheepState.MOWED_EATING);
-        start = GameManager.getInstance().getTimeManager().getTime();
-    }
+
 
     public Sheep(City c) {
         super("SprMain", 0, 3182, 12, c, null);
         setType(ObjectType.SHEEP);
         ai = new AnimalsAI();
         setState(SheepState.MOWED_EATING);
-        start = GameManager.getInstance().getTimeManager().getTime();
+        start = c.getTime().getTime();
     }
 
 
@@ -93,7 +86,7 @@ public class Sheep extends Animal {
         super.process(deltaTime, deltaDays);
         if (mowed && checkTime > 3) {
             checkTime = 0;
-            if (GameManager.getInstance().getTimeManager().daysSince(start) > days) {
+            if (c.getTime().daysSince(start) > days) {
                 mowed = false;
                 setState(SheepState.values()[state.ordinal() - 3]);
             }
@@ -175,7 +168,7 @@ public class Sheep extends Animal {
         setState(SheepState.BEING_CUT);
         mowed = true;
         days = 360;
-        start = GameManager.getInstance().getTimeManager().getTime();
+        start = c.getTime().getTime();
         lastState = SheepState.values()[lastState.ordinal() + 3];
     }
 

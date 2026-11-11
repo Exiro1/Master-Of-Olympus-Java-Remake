@@ -10,7 +10,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.culture.Philosopher;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,8 +22,8 @@ public class College extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public College() {
-        super(false, ObjectType.COLLEGE, BuildingCategory.CULTURE, 0, 12, 65, 2, 0, 0, 3, 3, null, false, GameManager.currentCity, 0);
+    public College(City city) {
+        super(false, ObjectType.COLLEGE, BuildingCategory.CULTURE, 0, 12, 65, 2, 0, 0, 3, 3, null, false, city, 0);
     }
 
     @Override

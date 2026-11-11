@@ -12,7 +12,6 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.sprite.delivery.SecurityGuard;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -26,8 +25,8 @@ public class SecurityStation extends Building {
         super(isActive, ObjectType.SECURITY_STATION, BuildingCategory.SECURITY, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public SecurityStation() {
-        super(false, ObjectType.SECURITY_STATION, BuildingCategory.SECURITY, 0, 5, 16, 10, 0, 0, 2, 2, null, false, GameManager.currentCity, 0);
+    public SecurityStation(City city) {
+        super(false, ObjectType.SECURITY_STATION, BuildingCategory.SECURITY, 0, 5, 16, 10, 0, 0, 2, 2, null, false, city, 0);
 
     }
 

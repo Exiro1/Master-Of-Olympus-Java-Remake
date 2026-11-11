@@ -31,7 +31,7 @@ public class EntityRender {
         toBuild.get(0).setXB(startX);
         toBuild.get(0).setYB(startY);
         ArrayList<Case> place;
-        place = defaultObject.getPlace(startX, startY, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+        place = defaultObject.getPlace(startX, startY, defaultObject.getSize(), defaultObject.getSize(), city());
         if (place == null) {
             toBuild.get(0).canBuild = false;
         } else {
@@ -82,9 +82,9 @@ public class EntityRender {
 
 
     public static void addBuilding(Point p) {
-        CityMap map = GameManager.currentCity.getMap();
+        CityMap map = city().getMap();
         if (Btype == ObjectType.ROAD) {
-            Path path = GameManager.currentCity.getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), (FreeState.ALL_ROAD.getI() | FreeState.BUILDABLE_ROAD.getI()));
+            Path path = city().getPathManager().getPathTo(map.getCase(startX, startY), map.getCase((int) p.x, (int) p.y), (FreeState.ALL_ROAD.getI() | FreeState.BUILDABLE_ROAD.getI()));
             if (path != null) {
                 toBuild.clear();
                 for (Case c : path.getPath()) {
@@ -106,7 +106,7 @@ public class EntityRender {
                             if(c == null)
                                 continue;
                             ArrayList<Case> place;
-                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), city());
                             if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
@@ -146,7 +146,7 @@ public class EntityRender {
                             Case c = map.getCase(i, j);
 
                             ArrayList<Case> place;
-                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), city());
                             if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
@@ -188,7 +188,7 @@ public class EntityRender {
                         for (int j = startY; j < p.getY(); j += defaultObject.getSize()) {
                             Case c = map.getCase(i, j);
                             ArrayList<Case> place;
-                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), city());
                             if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
@@ -215,7 +215,7 @@ public class EntityRender {
                         for (int j = (int) p.getY(); j < startY; j += defaultObject.getSize()) {
                             Case c = map.getCase(i, j);
                             ArrayList<Case> place;
-                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), GameManager.currentCity);
+                            place = defaultObject.getPlace(i, j, defaultObject.getSize(), defaultObject.getSize(), city());
                             if (place.size() == defaultObject.getSize() * defaultObject.getSize()) {
                                 ObjectClass obj = null;
                                 obj = getDefault(defaultObject.getBuildingType());
@@ -279,7 +279,14 @@ public class EntityRender {
     }
 
     public static ObjectClass getDefault(ObjectType type) {
-        return type.getDefault();
+        return type.getDefault(city());
+    }
+
+    /**
+     * The build tool always acts on the city on screen.
+     */
+    private static City city() {
+        return GameManager.getInstance().getCurrentCity();
     }
 
     public static Point getStartPoint() {
@@ -293,7 +300,7 @@ public class EntityRender {
         // every tile of the dragged rectangle, both corners included (the start tile is part of it)
         for (int i = Math.min(startX, currCase.getxPos()); i <= Math.max(startX, currCase.getxPos()); i++) {
             for (int j = Math.min(startY, currCase.getyPos()); j <= Math.max(startY, currCase.getyPos()); j++) {
-                Case c = GameManager.currentCity.getMap().getCase(i, j);
+                Case c = city().getMap().getCase(i, j);
                 if (c != null && c.getObject() != null) {
                     c.getObject().delete();
                 }
@@ -305,7 +312,7 @@ public class EntityRender {
     public static void buildAll() {
 
         if (toBuild.size() == 0) {
-            Case c = GameManager.currentCity.getMap().getCase(startX, startY);
+            Case c = city().getMap().getCase(startX, startY);
             if(c != null) {
                 ObjectClass obj = null;
                 obj = getDefault(defaultObject.getBuildingType());

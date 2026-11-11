@@ -88,6 +88,25 @@ public class GameWindow extends JPanel {
     Case lastCaseBuild;
     boolean build;
 
+    /**
+     * Called by GameManager when another city is shown: drop what belonged to the old one
+     * (open building window, build preview) and recentre the camera on the new map.
+     */
+    public void cityChanged() {
+        gameInterface = null;
+        interfaceCaller = null;
+        startCaseBuild = null;
+        lastCaseBuild = null;
+        build = false;
+        // the build preview objects belong to the old city: recreate them for the new one
+        EntityRender.toBuild.clear();
+        if (EntityRender.defaultObject != null)
+            EntityRender.setEntityRender(EntityRender.defaultObject.getBuildingType());
+        CameraPosy = (int) (-(Math.sqrt(2)/2)*gm.getCurrentCity().getMap().getWidth()*30 - getHeight()/2f + 45);
+        CameraPosx = 0;
+        repaint();
+    }
+
     public static int getCameraPosx() {
         return CameraPosx;
     }
@@ -113,11 +132,11 @@ public class GameWindow extends JPanel {
 
 
         // Cases never move, so sorting back to front once is enough.
-        Case[] sorted = p.getPlayerCities().get(0).getMap().getCaseSorted();
+        Case[] sorted = gm.getCurrentCity().getMap().getCaseSorted();
         if (sorted == null) {
-            sorted = p.getPlayerCities().get(0).getMap().getNotNullCases().toArray(new Case[0]);
+            sorted = gm.getCurrentCity().getMap().getNotNullCases().toArray(new Case[0]);
             sortRender(sorted);
-            p.getPlayerCities().get(0).getMap().setCaseSorted(sorted);
+            gm.getCurrentCity().getMap().setCaseSorted(sorted);
         }
         if (sorted != screenPosOf) {
             computeScreenPos(sorted);

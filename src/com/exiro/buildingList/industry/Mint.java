@@ -1,5 +1,7 @@
 package com.exiro.buildingList.industry;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.buildingList.IndustryHarverster;
@@ -11,7 +13,6 @@ import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Harvester;
 import com.exiro.sprite.industry.SilverHarvester;
-import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Rock;
 
 public class Mint extends IndustryHarverster {
@@ -36,8 +37,8 @@ public class Mint extends IndustryHarverster {
         return false;
     }
 
-    public Mint() {
-        super(false, ObjectType.MINT, BuildingCategory.INDUSTRY, 0, 15, 160, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.NULL, 22, 3, 25, 200);
+    public Mint(City city) {
+        super(false, ObjectType.MINT, BuildingCategory.INDUSTRY, 0, 15, 160, 5, 0, 0, 2, 2, null, false, city, 0, Resource.NULL, 22, 3, 25, 200);
     }
 
     @Override

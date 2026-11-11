@@ -1,5 +1,7 @@
 package com.exiro.buildingList.industry;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.buildingList.IndustryHarverster;
@@ -14,7 +16,6 @@ import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Harvester;
 import com.exiro.sprite.industry.LumberJack;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -23,8 +24,8 @@ public class Sawmill extends IndustryHarverster {
 
     ArrayList<Case> closeTrees;
 
-    public Sawmill() {
-        super(false, ObjectType.SAWMILL, BuildingCategory.INDUSTRY, 0, 12, 60, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.WOOD, 22, 3, 25, 100);
+    public Sawmill(City city) {
+        super(false, ObjectType.SAWMILL, BuildingCategory.INDUSTRY, 0, 12, 60, 5, 0, 0, 2, 2, null, false, city, 0, Resource.WOOD, 22, 3, 25, 100);
         maxPerCarter = 1;
     }
 

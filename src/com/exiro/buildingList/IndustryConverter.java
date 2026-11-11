@@ -136,7 +136,7 @@ public abstract class IndustryConverter extends ResourceGenerator {
 
             if (state == ConversionState.CONVERSION) {
                 int timeToComplete = (int) (timeToTransform * (((float) getPopMax() / (float) getPop())));
-                int timeSinceStart = GameManager.getInstance().getTimeManager().daysSince(startConvertion);
+                int timeSinceStart = city.getTime().daysSince(startConvertion);
                 percentCompleted = Math.min((int)(((float)timeSinceStart/(float)timeToComplete)*100),100);
                 if (timeSinceStart > timeToComplete && carterAvailable) {
                     resourceCreated(unitProduced);
@@ -146,7 +146,7 @@ public abstract class IndustryConverter extends ResourceGenerator {
             if (state == ConversionState.WAITING_RESOURCES) {
                 if (stockIn >= unitNeeded) {
                     setState(ConversionState.CONVERSION);
-                    startConvertion = GameManager.getInstance().getTimeManager().getTime();
+                    startConvertion = city.getTime().getTime();
                     stockIn -= unitNeeded;
 
                 }

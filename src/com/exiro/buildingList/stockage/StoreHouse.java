@@ -14,7 +14,6 @@ import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 import com.exiro.utils.Point;
 
 import java.awt.*;
@@ -35,9 +34,9 @@ public class StoreHouse extends StoreBuilding {
         super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 12, 40, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
     }
 
-    public StoreHouse() {
+    public StoreHouse(City city) {
         //super(false, BuildingType.STOCK, "Assets/Building/Stock/stockInactive.png", 58, 114, 1, BuildingCategory.STOCKAGE, 0, 2, 150, 30, xPos, yPos, 3, 3, new ArrayList<>(), false, c, 0);
-        super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 12, 40, 30, 0, 0, 3, 3, new ArrayList<>(), false, GameManager.currentCity, 0);
+        super(false, ObjectType.STOCK, BuildingCategory.STOCKAGE, 0, 12, 40, 30, 0, 0, 3, 3, new ArrayList<>(), false, city, 0);
     }
 
     public TileImage getRessourceTile(Resource res, int nbr) {

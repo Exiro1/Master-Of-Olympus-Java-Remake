@@ -1,5 +1,7 @@
 package com.exiro.buildingList.industry;
 
+import com.exiro.object.City;
+
 import com.exiro.buildingList.BuildingCategory;
 import com.exiro.buildingList.IndustryConverter;
 import com.exiro.fileManager.SoundLoader;
@@ -7,7 +9,6 @@ import com.exiro.reader.TileImage;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
 import com.exiro.sprite.BuildingSprite;
-import com.exiro.systemCore.GameManager;
 
 import java.awt.*;
 
@@ -15,8 +16,8 @@ public class SculptureStudio extends IndustryConverter {
 
     TileImage stockImg;
 
-    public SculptureStudio() {
-        super(false, ObjectType.SCULPTURE_STUDIO, BuildingCategory.INDUSTRY, 0, 18, 160, 5, 0, 0, 2, 2, null, false, GameManager.currentCity, 0, Resource.SCULPTURE, 60, 1, 4, Resource.BRONZE, 4);
+    public SculptureStudio(City city) {
+        super(false, ObjectType.SCULPTURE_STUDIO, BuildingCategory.INDUSTRY, 0, 18, 160, 5, 0, 0, 2, 2, null, false, city, 0, Resource.SCULPTURE, 60, 1, 4, Resource.BRONZE, 4);
         maxPerCarter = 1;
     }
 

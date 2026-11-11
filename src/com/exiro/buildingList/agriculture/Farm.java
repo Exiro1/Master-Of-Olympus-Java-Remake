@@ -12,7 +12,6 @@ import com.exiro.object.Resource;
 import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
-import com.exiro.systemCore.GameManager;
 import com.exiro.terrainList.Meadow;
 import com.exiro.utils.Point;
 import com.exiro.utils.Time;
@@ -27,8 +26,8 @@ public class Farm extends ResourceGenerator {
     TileImage growthImg;
 
 
-    public Farm() {
-        super(false, ObjectType.FARM, BuildingCategory.FOOD, 0, 10, 36, 10, 0, 0, 3, 3, null, false, GameManager.currentCity, 0, Resource.CORN,8);
+    public Farm(City city) {
+        super(false, ObjectType.FARM, BuildingCategory.FOOD, 0, 10, 36, 10, 0, 0, 3, 3, null, false, city, 0, Resource.CORN,8);
         this.Rlevel = 0;
         maxPerCarter = 4;
     }
@@ -65,45 +64,45 @@ public class Farm extends ResourceGenerator {
             tickSinceStart++;
             integralStaff += getPop();
             if(startConvertion == null)
-                startConvertion = GameManager.getInstance().getTimeManager().getTime();
-            int timeSinceStart = GameManager.getInstance().getTimeManager().daysSince(startConvertion);
+                startConvertion = city.getTime().getTime();
+            int timeSinceStart = city.getTime().daysSince(startConvertion);
             percentCompleted = Math.min((int) (((float) timeSinceStart / (float) 365) * 100), 100);
 
             if (year == -1) {
-                if (GameManager.getInstance().getTimeManager().timeHasPassed(GameManager.getInstance().getTimeManager().getYear(), month, 0)) {
-                    year = GameManager.getInstance().getTimeManager().getYear() + 1;
-                    timeStart = GameManager.getInstance().getTimeManager().getTime();
+                if (city.getTime().timeHasPassed(city.getTime().getYear(), month, 0)) {
+                    year = city.getTime().getYear() + 1;
+                    timeStart = city.getTime().getTime();
                     tickSinceStart = 0;
                     integralStaff = 0;
                     Rlevel = 0;
-                    nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
+                    nextEvolve = city.getTime().getFutureTime(0, 2, 0);
 
                 } else {
-                    year = GameManager.getInstance().getTimeManager().getYear();
-                    timeStart = GameManager.getInstance().getTimeManager().getTime();
+                    year = city.getTime().getYear();
+                    timeStart = city.getTime().getTime();
                     tickSinceStart = 0;
                     integralStaff = 0;
                     Rlevel = 0;
-                    nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
+                    nextEvolve = city.getTime().getFutureTime(0, 2, 0);
                 }
-            } else if (GameManager.getInstance().getTimeManager().timeHasPassed(year, month, 0) && (getStock()<getMaxStockOut())) {
-                int unit = (int) Math.ceil((((float) integralStaff / ((float) tickSinceStart * getPopMax())) * 8.0f) * (GameManager.getInstance().getTimeManager().daysSince(timeStart) / 360.0f));
+            } else if (city.getTime().timeHasPassed(year, month, 0) && (getStock()<getMaxStockOut())) {
+                int unit = (int) Math.ceil((((float) integralStaff / ((float) tickSinceStart * getPopMax())) * 8.0f) * (city.getTime().daysSince(timeStart) / 360.0f));
                 resourceCreated(unit);
                 tickSinceStart = 0;
                 integralStaff = 0;
                 Rlevel = 0;
-                startConvertion = GameManager.getInstance().getTimeManager().getTime();
-                timeStart = GameManager.getInstance().getTimeManager().getTime();
-                year = GameManager.getInstance().getTimeManager().getYear() + 1;
-                nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
+                startConvertion = city.getTime().getTime();
+                timeStart = city.getTime().getTime();
+                year = city.getTime().getYear() + 1;
+                nextEvolve = city.getTime().getFutureTime(0, 2, 0);
             }
 
-            if (GameManager.getInstance().getTimeManager().timeHasPassed(nextEvolve)) {
+            if (city.getTime().timeHasPassed(nextEvolve)) {
                 if (Rlevel < 6) {
                     Rlevel++;
                     changeLevel(Rlevel);
                 }
-                nextEvolve = GameManager.getInstance().getTimeManager().getFutureTime(0, 2, 0);
+                nextEvolve = city.getTime().getFutureTime(0, 2, 0);
             }
 
         }

@@ -10,7 +10,6 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.DeliverySprite;
-import com.exiro.systemCore.GameManager;
 
 public class AgoraDelivery extends DeliverySprite {
 
@@ -22,8 +21,8 @@ public class AgoraDelivery extends DeliverySprite {
         setOffsetY(-5);
         this.agora = agora;
     }
-    public AgoraDelivery() {
-        super("SprMain", 0, 3, 12, GameManager.currentCity, null, null, 0);
+    public AgoraDelivery(City city) {
+        super("SprMain", 0, 3, 12, city, null, null, 0);
         setTimeBetweenFrame(0.05);
         setOffsetY(-5);
         setType(ObjectType.SHEEP);

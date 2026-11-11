@@ -8,7 +8,6 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.systemCore.GameManager;
 
 import java.util.ArrayList;
 
@@ -19,8 +18,8 @@ public class Theater extends Building {
         super(isActive, type, category, pop, popMax, cost, deleteCost, xPos, yPos, yLenght, xLenght, cases, built, city, ID);
     }
 
-    public Theater() {
-        super(false, ObjectType.THEATER, BuildingCategory.CULTURE, 0, 18, 120, 2, 0, 0, 5, 5, null, false, GameManager.currentCity, 0);
+    public Theater(City city) {
+        super(false, ObjectType.THEATER, BuildingCategory.CULTURE, 0, 18, 120, 2, 0, 0, 5, 5, null, false, city, 0);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class SmallHoldingTree extends Construction {
     public void process(double deltatime, int deltaDays) {
 
 
-        int month = GameManager.getInstance().getTimeManager().getMonth();
+        int month = city.getTime().getMonth();
 
         growth += deltaDays + ran.nextInt(3) - 1;
 
