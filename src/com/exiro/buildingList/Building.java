@@ -6,7 +6,6 @@ import com.exiro.object.City;
 import com.exiro.object.ObjectClass;
 import com.exiro.object.ObjectType;
 import com.exiro.render.ButtonType;
-import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.DeepBlueLayout;
 import com.exiro.render.interfaceList.Interface;
@@ -14,14 +13,12 @@ import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Elevation;
-import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Building extends ObjectClass {
 
-    protected static final boolean DEBUG = false;
 
     final ObjectType type;
     protected final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
@@ -226,18 +223,6 @@ public abstract class Building extends ObjectClass {
         }
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-        renderBase(g, camX, camY);
-
-        //render only buildingSprite because movingSprite are render separately
-        if (isWorking()) {
-            for (BuildingSprite s : bsprites) {
-                s.Render(g, camX, camY);
-            }
-        }
-
-    }
 
     /**
      * Called every tick by Simulation: a building that lost its workers calls its walkers back.
@@ -256,22 +241,6 @@ public abstract class Building extends ObjectClass {
         return true;
     }
 
-    /**
-     * Draws the building image only, without its sprites.
-     */
-    protected void renderBase(Graphics g, int camX, int camY) {
-        int lvl = getMainCase().getZlvl();
-
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
-        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-
-        if (DEBUG) {
-            g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
-            g.setColor(Color.RED);
-            g.drawRect(camX + (int) p.getX(), camY + (int) p.getY(), getWidth(), getHeight());
-            g.setColor(Color.BLACK);
-        }
-    }
 
     public void stop(){
          if(msprites.size() > 0) {

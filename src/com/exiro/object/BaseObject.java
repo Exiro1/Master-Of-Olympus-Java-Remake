@@ -38,7 +38,12 @@ public abstract class BaseObject implements Cloneable {
 
     public abstract void buttonClickedEvent(ButtonType type, int ID);
 
-    public abstract void Render(Graphics g, int camX, int camY);
+    /**
+     * Draws the object. Buildings don't override this: they are drawn by
+     * {@code render.building.BuildingRenderers}, which keeps drawing code out of the model.
+     */
+    public void Render(Graphics g, int camX, int camY) {
+    }
 
     public abstract void process(double deltatime, int deltaDays);
 

@@ -8,13 +8,11 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
-import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Direction;
 import com.exiro.sprite.Sprite;
-import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -106,33 +104,9 @@ public class StoreHouse extends StoreBuilding {
 
     @Override
     protected boolean stopsWhenIdle() {
-        return false; // its Render never called Building.Render, so it never stopped
+        return false; // never called its walkers back when idle, keep it that way
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-        renderTile(cases.get(6), g, camX, camY);
-        if (isWorking())
-            getBuildingSprites().get(0).Render(g, camX, camY);
-        renderTile(cases.get(7), g, camX, camY);
-        renderTile(cases.get(3), g, camX, camY);
-        renderTile(cases.get(8), g, camX, camY);
-        renderTile(cases.get(4), g, camX, camY);
-        renderTile(cases.get(0), g, camX, camY);
-        renderTile(cases.get(5), g, camX, camY);
-        renderTile(cases.get(1), g, camX, camY);
-        renderTile(cases.get(2), g, camX, camY);
-
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - cases.get(6).getZlvl(), (getyPos() - cases.get(6).getZlvl())), getWidth(), getHeight(), 1);
-        if (DEBUG)
-            g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
-
-    }
-
-    public void renderTile(Case c, Graphics g, int camX, int camY) {
-        com.exiro.utils.Point p2 = IsometricRender.TwoDToIsoTexture(new Point(c.getxPos() - c.getZlvl(), (c.getyPos() - c.getZlvl())), c.getWidth(), c.getHeight(), 1);
-        g.drawImage(c.getImg(), camX + (int) p2.getX(), camY + (int) p2.getY(), null);
-    }
 
     public Resource getRan() {
         Random r = new Random();

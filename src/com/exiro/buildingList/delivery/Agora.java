@@ -137,7 +137,7 @@ public class Agora extends Building {
                 for (int j = 0; j < 6; j++) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos - i);
-                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
+                        if (c != null && !c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos - i));
                         }
                     }
@@ -157,7 +157,7 @@ public class Agora extends Building {
                 for (int j = 0; j < 6; j++) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos - i);
-                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
+                        if (c != null && !c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos - i));
                         }
                     }
@@ -174,7 +174,7 @@ public class Agora extends Building {
                 for (int j = 1; j < 3; j++) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos + i);
-                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
+                        if (c != null && !c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos + i));
                         }
                     }
@@ -193,7 +193,7 @@ public class Agora extends Building {
                 for (int j = 0; j > -2; j--) {
                     if (!(xPos + j < 0 || yPos - i < 0)) {
                         Case c = city.getMap().getCase(xPos + j, yPos + i);
-                        if (!c.isOccupied() && c.getTerrain().isConstructible()) {
+                        if (c != null && !c.isOccupied() && c.getTerrain().isConstructible()) {
                             place.add(city.getMap().getCase(xPos + j, yPos + i));
                         }
                     }
@@ -278,13 +278,9 @@ public class Agora extends Building {
 
     @Override
     protected boolean stopsWhenIdle() {
-        return false; // its Render never called Building.Render, so it never stopped
+        return false; // never called its walkers back when idle, keep it that way
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-
-    }
 
 
     public void distribute() {

@@ -8,14 +8,12 @@ import com.exiro.moveRelated.Path;
 import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
-import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Immigrant;
 import com.exiro.sprite.MovingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.utils.Point;
 import com.exiro.utils.Time;
 
 import java.awt.*;
@@ -227,24 +225,9 @@ public class House extends Building {
 
     @Override
     protected boolean stopsWhenIdle() {
-        return false; // its Render never called Building.Render, so it never stopped
+        return false; // never called its walkers back when idle, keep it that way
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-        int lvl = getMainCase().getZlvl();
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
-        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        if (DEBUG)
-            g.drawString(getPop() + "/" + getPopMax() + " " + (int) getFood() + " " + (int) getWater(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
-
-        //render only buildingSprite because movingSprite are render separately
-        for (BuildingSprite s : bsprites) {
-            if (isActive() && getPop() > 0)
-                s.Render(g, camX, camY);
-        }
-
-    }
 
     @Override
     public void populate(double deltaTime) {

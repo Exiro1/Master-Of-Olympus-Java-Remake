@@ -71,10 +71,6 @@ public class OlivePress extends IndustryConverter {
         getBuildingSprites().get(2).updateImg();
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-        super.Render(g, camX, camY);
-    }
 
     @Override
     protected void addPopulation() {

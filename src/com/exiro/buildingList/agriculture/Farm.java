@@ -9,11 +9,9 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
-import com.exiro.render.IsometricRender;
 import com.exiro.render.interfaceList.BuildingInterface;
 import com.exiro.render.interfaceList.Interface;
 import com.exiro.terrainList.Meadow;
-import com.exiro.utils.Point;
 import com.exiro.utils.Time;
 
 import java.awt.*;
@@ -108,21 +106,6 @@ public class Farm extends ResourceGenerator {
         }
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-        super.Render(g, camX, camY);
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), growthImg.getW(), growthImg.getH(), 1);
-        g.drawImage(growthImg.getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() + 1, (getyPos())), growthImg.getW(), growthImg.getH(), 1);
-        g.drawImage(growthImg.getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() + 2, (getyPos() - 2)), growthImg.getW(), growthImg.getH(), 1);
-        g.drawImage(growthImg.getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() + 2, (getyPos() - 1)), growthImg.getW(), growthImg.getH(), 1);
-        g.drawImage(growthImg.getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() + 2, (getyPos())), growthImg.getW(), growthImg.getH(), 1);
-        g.drawImage(growthImg.getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-
-    }
 
     @Override
     public boolean build(int xPos, int yPos) {
@@ -191,5 +174,9 @@ public class Farm extends ResourceGenerator {
     @Override
     public SoundLoader.SoundCategory getSoundCategory() {
         return SoundLoader.SoundCategory.FARMING;
+    }
+    /** Image of the crop at its current growth stage, drawn on the field cases. */
+    public TileImage getGrowthImg() {
+        return growthImg;
     }
 }

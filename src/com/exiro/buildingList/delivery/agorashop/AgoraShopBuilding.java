@@ -8,10 +8,8 @@ import com.exiro.object.Case;
 import com.exiro.object.City;
 import com.exiro.object.ObjectType;
 import com.exiro.object.Resource;
-import com.exiro.render.IsometricRender;
 import com.exiro.sprite.BuildingSprite;
 import com.exiro.sprite.Sprite;
-import com.exiro.utils.Point;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -88,28 +86,9 @@ public class AgoraShopBuilding extends Building {
 
     @Override
     protected boolean stopsWhenIdle() {
-        return false; // its Render never called Building.Render, so it never stopped
+        return false; // never called its walkers back when idle, keep it that way
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-
-        com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), 2);
-        g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        if (reserve > 0) {
-            bsprites.get(0).Render(g, camX, camY);
-            if (isWorking()) {
-                bsprites.get(1).Render(g, camX, camY);
-            }
-        }
-
-        //g.drawString(getPop() + "/" + getPopMax() + " " + reserve, camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
-        /*
-        if(getPop()>0 && isActive()){
-            bsprites.get(1).Render(g,camX,camY);
-        }
-        */
-    }
 
     public ArrayList<Resource> getResources() {
         return resourcesPossible;

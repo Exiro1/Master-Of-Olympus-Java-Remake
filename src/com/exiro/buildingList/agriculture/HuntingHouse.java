@@ -57,10 +57,6 @@ public class HuntingHouse extends ResourceGenerator {
         }
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-        super.Render(g, camX, camY);
-    }
 
     @Override
     public void process(double deltaTime, int deltaDays) {

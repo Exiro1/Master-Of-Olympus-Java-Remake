@@ -1,9 +1,11 @@
 package com.exiro.render;
 
+import com.exiro.buildingList.Building;
 import com.exiro.constructionList.Construction;
 import com.exiro.object.BaseObject;
 import com.exiro.object.Case;
 import com.exiro.object.ObjectClass;
+import com.exiro.render.building.BuildingRenderers;
 import com.exiro.sprite.Sprite;
 import com.exiro.terrainList.Elevation;
 import com.exiro.terrainList.Terrain;
@@ -91,7 +93,7 @@ public class WorldRenderer {
                 if (!(t instanceof Water) && isGround(t))
                     t.Render(g, camX, camY);
             } else if (c.isMainCase() && isGround(o)) {
-                o.Render(g, camX, camY);
+                draw(o, g, camX, camY);
             }
         }
 
@@ -112,7 +114,7 @@ public class WorldRenderer {
                     if (right <= left)
                         continue;
                     g.clipRect(left, 0, right - left, viewH);
-                    s.obj.Render(g, camX, camY);
+                    draw(s.obj, g, camX, camY);
                     g.setClip(baseClip);
                 }
             }
@@ -142,6 +144,14 @@ public class WorldRenderer {
         for (ArrayList<Sprite> waiting : deferred.values())
             for (Sprite s : waiting)
                 s.Render(g, camX, camY);
+    }
+
+    /** Buildings are drawn by their renderer, everything else still draws itself. */
+    private static void draw(ObjectClass o, Graphics g, int camX, int camY) {
+        if (o instanceof Building)
+            BuildingRenderers.render((Building) o, g, camX, camY);
+        else
+            o.Render(g, camX, camY);
     }
 
     private void buildSlices(ObjectClass o, ArrayList<Case> tiles) {

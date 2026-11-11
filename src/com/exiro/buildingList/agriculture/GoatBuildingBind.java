@@ -37,13 +37,9 @@ public class GoatBuildingBind extends Building {
 
     @Override
     protected boolean stopsWhenIdle() {
-        return false; // its Render never called Building.Render, so it never stopped
+        return false; // never called its walkers back when idle, keep it that way
     }
 
-    @Override
-    public void Render(Graphics g, int camX, int camY) {
-
-    }
 
     @Override
     public void process(double deltatime, int deltaDays) {
