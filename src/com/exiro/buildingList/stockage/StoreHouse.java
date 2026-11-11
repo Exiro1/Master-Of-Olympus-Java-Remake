@@ -106,6 +106,11 @@ public class StoreHouse extends StoreBuilding {
 
 
     @Override
+    protected boolean stopsWhenIdle() {
+        return false; // its Render never called Building.Render, so it never stopped
+    }
+
+    @Override
     public void Render(Graphics g, int camX, int camY) {
         renderTile(cases.get(6), g, camX, camY);
         if (isWorking())
@@ -120,7 +125,8 @@ public class StoreHouse extends StoreBuilding {
         renderTile(cases.get(2), g, camX, camY);
 
         com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - cases.get(6).getZlvl(), (getyPos() - cases.get(6).getZlvl())), getWidth(), getHeight(), 1);
-        g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
+        if (DEBUG)
+            g.drawString(getPop() + "/" + getPopMax(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
 
     }
 

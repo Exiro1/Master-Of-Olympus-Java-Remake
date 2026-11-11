@@ -38,7 +38,8 @@ public class City {
     private BuildingManager buildingManager;
 
 
-    ArrayList<Building> toDestroyB;
+    // initialised here so both constructors get them
+    ArrayList<Building> toDestroyB = new ArrayList<>();
 
     public City(String name, Player owner, CityMap map, ArrayList<Construction> constructions, ArrayList<Building> buildings, int population) {
         this.name = name;
@@ -60,28 +61,21 @@ public class City {
     }
 
     public void addObj(ObjectClass o) {
-        synchronized (obj) {
-            obj.add(o);
-        }
+        obj.add(o);
     }
 
-    ArrayList<ObjectClass> toDestroyO;
+    ArrayList<ObjectClass> toDestroyO = new ArrayList<>();
 
     public void addBuilding(Building o) {
-        synchronized (buildings) {
-            buildings.add(o);
-        }
+        buildings.add(o);
         if(!buildingMap.containsKey(o.getBuildingType()))
             buildingMap.put(o.getBuildingType(),new ArrayList<>());
         buildingMap.get(o.getBuildingType()).add(o);
     }
 
-    ArrayList<ObjectClass> toDestroyC;
+    ArrayList<ObjectClass> toDestroyC = new ArrayList<>();
 
     public City(String name, Player owner) {
-        toDestroyB = new ArrayList<>();
-        toDestroyC = new ArrayList<>();
-        toDestroyO = new ArrayList<>();
         resourceManager = new ResourceManager();
         this.buildingMap = new HashMap<>();
         this.name = name;
@@ -140,28 +134,21 @@ public class City {
     }
 
     public void deleteQueue() {
-        synchronized (buildings) {
-            buildings.removeAll(toDestroyB);
-            toDestroyB.clear();
-        }
-        synchronized (obj) {
-            obj.removeAll(toDestroyO);
-            toDestroyO.clear();
-        }
-        synchronized (constructions) {
-            constructions.removeAll(toDestroyC);
-            toDestroyC.clear();
-        }
+        buildings.removeAll(toDestroyB);
+        toDestroyB.clear();
+        obj.removeAll(toDestroyO);
+        toDestroyO.clear();
+        constructions.removeAll(toDestroyC);
+        toDestroyC.clear();
     }
 
     public void addConstruction(Construction o) {
-        synchronized (buildings) {
-            constructions.add(o);
-        }
+        constructions.add(o);
     }
 
     public ArrayList<Building> getBuildingList(ObjectType buildingType) {
-        return buildingMap.getOrDefault(buildingType, new ArrayList<>());
+        // a live list, so callers that add to it are not silently writing to a throwaway copy
+        return buildingMap.computeIfAbsent(buildingType, k -> new ArrayList<>());
     }
 
 
@@ -252,11 +239,7 @@ public class City {
     }
 
     public CityMap getMap() {
-        if (map == null)
-            return null;
-        synchronized (map) {
-            return map;
-        }
+        return map;
     }
 
     public void setMap(CityMap map) {

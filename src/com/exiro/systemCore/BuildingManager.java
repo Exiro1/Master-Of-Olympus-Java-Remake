@@ -43,64 +43,62 @@ public class BuildingManager {
 
         int popR = pop;
         ArrayList<Building> buildings = city.getBuildings();
-        synchronized (city.getBuildings()) {
-            double high = 0, normal = 0, low = 0;
+        double high = 0, normal = 0, low = 0;
+
+        for (Building b : buildings) {
+            if (!b.isActive())
+                continue;
+            if (priorityMap.get(b.getCategory()) == Priority.LOW)
+                low = low + b.getPopMax();
+            if (priorityMap.get(b.getCategory()) == Priority.HIGH)
+                high = high + b.getPopMax();
+            if (priorityMap.get(b.getCategory()) == Priority.MEDIUM)
+                normal = normal + b.getPopMax();
+        }
+        double rHigh = 0, rNormal = 0, rLow = 0;
+        WorkforceNeeded = (int) (high + normal + low);
+        if (high != 0)
+            rHigh = (pop / high) > 1 ? 1 : pop / high;
+        if (normal != 0)
+            rNormal = ((pop - high) / normal) > 1 ? 1 : (pop - high) / normal;
+        if (low != 0)
+            rLow = ((pop - high - normal) / low) > 1 ? 1 : (pop - high - normal) / low;
+
+        for (Building b : buildings) {
+            if (priorityMap.containsKey(b.getCategory()))
+                b.setPop(0);
+        }
+        while (popR > pop - getWorkforceNeeded() || popR == 0) {
+            int before = popR;
 
             for (Building b : buildings) {
                 if (!b.isActive())
                     continue;
-                if (priorityMap.get(b.getCategory()) == Priority.LOW)
-                    low = low + b.getPopMax();
-                if (priorityMap.get(b.getCategory()) == Priority.HIGH)
-                    high = high + b.getPopMax();
-                if (priorityMap.get(b.getCategory()) == Priority.MEDIUM)
-                    normal = normal + b.getPopMax();
-            }
-            double rHigh = 0, rNormal = 0, rLow = 0;
-            WorkforceNeeded = (int) (high + normal + low);
-            if (high != 0)
-                rHigh = (pop / high) > 1 ? 1 : pop / high;
-            if (normal != 0)
-                rNormal = ((pop - high) / normal) > 1 ? 1 : (pop - high) / normal;
-            if (low != 0)
-                rLow = ((pop - high - normal) / low) > 1 ? 1 : (pop - high - normal) / low;
-
-            for (Building b : buildings) {
-                if (priorityMap.containsKey(b.getCategory()))
-                    b.setPop(0);
-            }
-            while (popR > pop - getWorkforceNeeded() || popR == 0) {
-                int before = popR;
-
-                for (Building b : buildings) {
-                    if (!b.isActive())
-                        continue;
-                    if (popR <= 0)
-                        break;
-
-                    if (priorityMap.get(b.getCategory()) == Priority.HIGH && b.getPopMax() > b.getPop() && Math.round(b.getPopMax() * rHigh) >= b.getPop()) {
-                        popR--;
-                        b.setPop(b.getPop() + 1);
-                    } else if (priorityMap.get(b.getCategory()) == Priority.MEDIUM && b.getPopMax() > b.getPop() && Math.round(b.getPopMax() * rNormal) >= b.getPop()) {
-                        popR--;
-                        b.setPop(b.getPop() + 1);
-                    } else if (priorityMap.get(b.getCategory()) == Priority.LOW && b.getPopMax() > b.getPop() && Math.round(b.getPopMax() * rLow) >= b.getPop()) {
-                        popR--;
-                        b.setPop(b.getPop() + 1);
-                    }
-                }
-
                 if (popR <= 0)
                     break;
-                if (popR == before) // nobody could take a worker this pass: stop instead of looping forever
-                    break;
 
+                if (priorityMap.get(b.getCategory()) == Priority.HIGH && b.getPopMax() > b.getPop() && Math.round(b.getPopMax() * rHigh) >= b.getPop()) {
+                    popR--;
+                    b.setPop(b.getPop() + 1);
+                } else if (priorityMap.get(b.getCategory()) == Priority.MEDIUM && b.getPopMax() > b.getPop() && Math.round(b.getPopMax() * rNormal) >= b.getPop()) {
+                    popR--;
+                    b.setPop(b.getPop() + 1);
+                } else if (priorityMap.get(b.getCategory()) == Priority.LOW && b.getPopMax() > b.getPop() && Math.round(b.getPopMax() * rLow) >= b.getPop()) {
+                    popR--;
+                    b.setPop(b.getPop() + 1);
+                }
             }
-            unemployed = popR;
-            lastActiveNbr = city.getActiveBuilding();
-            lastPop = city.getPopulation();
-            lastPriorityMap = new HashMap<>(priorityMap); // a copy, so later priority changes are detected
+
+            if (popR <= 0)
+                break;
+            if (popR == before) // nobody could take a worker this pass: stop instead of looping forever
+                break;
+
         }
+        unemployed = popR;
+        lastActiveNbr = city.getActiveBuilding();
+        lastPop = city.getPopulation();
+        lastPriorityMap = new HashMap<>(priorityMap); // a copy, so later priority changes are detected
     }
 
     public int getWorkforceNeeded() {

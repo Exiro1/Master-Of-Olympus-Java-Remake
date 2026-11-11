@@ -15,6 +15,7 @@ public abstract class ObjectClass extends BaseObject implements Cloneable {
 
     public ObjectClass(boolean isActive, ObjectType type, int xLenght, int yLenght) {
         super(type, type.getPath(), type.getSize(), type.getBitmapID(), type.getLocalID(), xLenght, yLenght);
+        Active = isActive;
     }
 
     public abstract ArrayList<Case> getAccess();

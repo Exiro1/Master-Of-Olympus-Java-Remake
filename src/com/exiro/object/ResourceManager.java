@@ -28,48 +28,34 @@ public class ResourceManager {
 
 
     public void removeAnimal(Sprite o) {
-        synchronized (animals) {
-            animals.remove(o);
-        }
+        animals.remove(o);
     }
 
     public void addAnimal(Sprite s) {
-        synchronized (animals) {
-            animals.add(s);
-        }
+        animals.add(s);
     }
 
     public void addSheep(Sheep s) {
         addAnimal(s);
-        synchronized (sheeps) {
-            sheeps.add(s);
-        }
+        sheeps.add(s);
     }
 
     public void removeSheep(Sheep s) {
         removeAnimal(s);
-        synchronized (sheeps) {
-            sheeps.remove(s);
-        }
+        sheeps.remove(s);
     }
 
     public void addSmallHolding(SmallHolding s) {
-        synchronized (smallHoldings) {
-            smallHoldings.add(s);
-        }
-        synchronized (smallHoldingTrees) {
-            for (SmallHoldingTree t : smallHoldingTrees) {
-                if (s.distanceTo(t) <= 40) {
-                    s.addTree(t);
-                }
+        smallHoldings.add(s);
+        for (SmallHoldingTree t : smallHoldingTrees) {
+            if (s.distanceTo(t) <= 40) {
+                s.addTree(t);
             }
         }
     }
 
     public void removeSmallHolding(SmallHolding s) {
-        synchronized (smallHoldings) {
-            smallHoldings.remove(s);
-        }
+        smallHoldings.remove(s);
     }
 
     public ArrayList<Sheep> getSheeps() {
@@ -77,9 +63,7 @@ public class ResourceManager {
     }
 
     public void addTree(SmallHoldingTree t) {
-        synchronized (smallHoldingTrees) {
-            smallHoldingTrees.add(t);
-        }
+        smallHoldingTrees.add(t);
         for (SmallHolding sh : smallHoldings) {
             if (sh.distanceTo(t) <= 40) {
                 sh.addTree(t);
@@ -88,9 +72,7 @@ public class ResourceManager {
     }
 
     public void removeTree(SmallHoldingTree t) {
-        synchronized (smallHoldingTrees) {
-            smallHoldingTrees.remove(t);
-        }
+        smallHoldingTrees.remove(t);
         for (SmallHolding sh : smallHoldings) {
             sh.removeTree(t);
         }
@@ -103,16 +85,12 @@ public class ResourceManager {
 
     public void addGoat(Goat s) {
         addAnimal(s);
-        synchronized (goats) {
-            goats.add(s);
-        }
+        goats.add(s);
     }
 
     public void removeGoat(Goat s) {
         removeAnimal(s);
-        synchronized (goats) {
-            goats.remove(s);
-        }
+        goats.remove(s);
     }
 
     public ArrayList<Goat> getGoats() {
@@ -126,9 +104,7 @@ public class ResourceManager {
 
     public void addFish(Fish fish) {
         addAnimal(fish);
-        synchronized (fishes) {
-            fishes.add(fish);
-        }
+        fishes.add(fish);
     }
 
     public ArrayList<Fish> getFishes() {
@@ -137,9 +113,7 @@ public class ResourceManager {
 
     public void removeFish(Fish fish) {
         removeAnimal(fish);
-        synchronized (fishes) {
-            fishes.remove(fish);
-        }
+        fishes.remove(fish);
     }
 
 }

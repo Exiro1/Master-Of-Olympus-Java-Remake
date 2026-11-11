@@ -38,6 +38,11 @@ public class SheepBuildingBind extends Building {
     }
 
     @Override
+    protected boolean stopsWhenIdle() {
+        return false; // its Render never called Building.Render, so it never stopped
+    }
+
+    @Override
     public void Render(Graphics g, int camX, int camY) {
 
     }

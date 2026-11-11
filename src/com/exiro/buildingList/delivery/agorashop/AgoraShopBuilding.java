@@ -88,6 +88,11 @@ public class AgoraShopBuilding extends Building {
 
 
     @Override
+    protected boolean stopsWhenIdle() {
+        return false; // its Render never called Building.Render, so it never stopped
+    }
+
+    @Override
     public void Render(Graphics g, int camX, int camY) {
 
         com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos(), (getyPos())), getWidth(), getHeight(), 2);

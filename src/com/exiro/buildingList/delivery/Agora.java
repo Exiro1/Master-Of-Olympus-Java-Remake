@@ -278,6 +278,11 @@ public class Agora extends Building {
     }
 
     @Override
+    protected boolean stopsWhenIdle() {
+        return false; // its Render never called Building.Render, so it never stopped
+    }
+
+    @Override
     public void Render(Graphics g, int camX, int camY) {
 
     }
@@ -380,7 +385,7 @@ public class Agora extends Building {
                     } else {
                         StoreBuilding st = (StoreBuilding) ch.getDestination();
                         for (Resource r : ch.getNeeded()) {
-                            if (st.getStockAvailable(r) > 0) {
+                            if (st.getStockAvailable(r) > 0 && r.getFoodapprov() > 0) { // 0 for non-food (wood, bronze...)
                                 int retr = st.unStock(r, Math.min(st.getStockAvailable(r), (ch.getAType().getShop().getQuerry() - ch.getResourcesGathered()) / r.getFoodapprov()));
                                 ch.setResourcesGathered(ch.getResourcesGathered() + retr * r.getFoodapprov());
                             }

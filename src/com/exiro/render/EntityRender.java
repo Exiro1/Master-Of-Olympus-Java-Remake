@@ -290,12 +290,9 @@ public class EntityRender {
     public static void EraseAll(Case currCase) {
 
 
-        Case cs = GameManager.currentCity.getMap().getCase(startX, startY);
-        if (cs.getObject() != null) {
-            cs.getObject().delete();
-        }
-        for (int i = Math.min(startX, currCase.getxPos()); i < Math.max(startX, currCase.getxPos()); i += defaultObject.getSize()) {
-            for (int j = Math.min(startY, currCase.getyPos()); j < Math.max(startY, currCase.getyPos()); j += defaultObject.getSize()) {
+        // every tile of the dragged rectangle, both corners included (the start tile is part of it)
+        for (int i = Math.min(startX, currCase.getxPos()); i <= Math.max(startX, currCase.getxPos()); i++) {
+            for (int j = Math.min(startY, currCase.getyPos()); j <= Math.max(startY, currCase.getyPos()); j++) {
                 Case c = GameManager.currentCity.getMap().getCase(i, j);
                 if (c != null && c.getObject() != null) {
                     c.getObject().delete();

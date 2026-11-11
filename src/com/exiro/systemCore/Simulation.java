@@ -152,6 +152,7 @@ public class Simulation {
 
     public void manageSprite(City c, double deltaTime, int deltaDays) {
         for (Building b : c.getBuildings()) {
+            b.stopIfIdle();
             b.processSprite(deltaTime);
         }
         for (Sprite s : c.getResourceManager().getAnimals()) {

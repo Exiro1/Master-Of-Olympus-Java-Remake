@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public abstract class Building extends ObjectClass {
 
-    final boolean DEBUG = false;
+    protected static final boolean DEBUG = false;
 
     final ObjectType type;
     protected final ArrayList<BuildingSprite> bsprites = new ArrayList<>();
@@ -244,14 +244,29 @@ public abstract class Building extends ObjectClass {
         renderBase(g, camX, camY);
 
         //render only buildingSprite because movingSprite are render separately
-        for (BuildingSprite s : bsprites) {
-            if (isWorking()) {
+        if (isWorking()) {
+            for (BuildingSprite s : bsprites) {
                 s.Render(g, camX, camY);
-            }else{
-                stop();
             }
         }
 
+    }
+
+    /**
+     * Called every tick by Simulation: a building that lost its workers calls its walkers back.
+     * This used to happen inside Render, so only on screen, and once per drawn strip.
+     */
+    public void stopIfIdle() {
+        if (stopsWhenIdle() && !bsprites.isEmpty() && !isWorking())
+            stop();
+    }
+
+    /**
+     * Whether {@link #stopIfIdle()} applies. False for buildings whose walkers must keep going
+     * without workers (houses, storehouse, agora...), which never stopped before either.
+     */
+    protected boolean stopsWhenIdle() {
+        return true;
     }
 
     /**
@@ -360,38 +375,25 @@ public abstract class Building extends ObjectClass {
     }
 
     public void removeSprites(Sprite s) {
-        synchronized (sprites) {
-            s.delete();
-            sprites.remove(s);
-        }
-
+        s.delete();
+        sprites.remove(s);
         if (s instanceof MovingSprite)
-            synchronized (msprites) {
-                msprites.remove((MovingSprite) s);
-            }
+            msprites.remove((MovingSprite) s);
         if (s instanceof BuildingSprite)
-            synchronized (bsprites) {
-                bsprites.remove((BuildingSprite) s);
-            }
+            bsprites.remove((BuildingSprite) s);
     }
 
     public void setSprite(int index, Sprite s){
         if (s instanceof MovingSprite){
-            synchronized (sprites) {
-                sprites.remove(msprites.get(index));
-                sprites.add(s);
-            }
-            synchronized (msprites) {
-                msprites.set(index, (MovingSprite) s);
-            }}
+            sprites.remove(msprites.get(index));
+            sprites.add(s);
+            msprites.set(index, (MovingSprite) s);
+        }
         if (s instanceof BuildingSprite){
-            synchronized (sprites) {
-                sprites.remove(bsprites.get(index));
-                sprites.add(s);
-            }
-            synchronized (bsprites) {
-                bsprites.set(index, (BuildingSprite) s);
-            }}
+            sprites.remove(bsprites.get(index));
+            sprites.add(s);
+            bsprites.set(index, (BuildingSprite) s);
+        }
     }
 
     @Override

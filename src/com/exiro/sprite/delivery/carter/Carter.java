@@ -78,6 +78,11 @@ public abstract class Carter extends MovingSprite{
     public void process(double deltaTime, int deltaDays) {
         super.process(deltaTime, deltaDays);
 
+        if (destination != trueOrigin && destination instanceof Building && ((Building) destination).isDeleted()) {
+            destinationLost();
+            return;
+        }
+
         if (hasArrived() && carterState != CarterState.WAITING) {
             Arrived();
         } else if (carterState == CarterState.WAITING) {
@@ -91,6 +96,42 @@ public abstract class Carter extends MovingSprite{
 
     }
 
+
+    /**
+     * The building we were heading to was deleted: deliveries look for another target,
+     * a command (fetching goods) goes home empty. Without this the goods were stocked into
+     * the deleted building and lost.
+     */
+    private void destinationLost() {
+        switch (carterState) {
+            case DELIVERING_STORE:
+            case DELIVERING_CONVERTER:
+                destination = null;
+                carterState = CarterState.WAITING;
+                timeSinceLastSearch = 1; // search right away
+                break;
+            case COMMAND:
+                // the space reserved at home for this command will never be filled
+                if (trueOrigin instanceof StoreBuilding) {
+                    ((StoreBuilding) trueOrigin).unReserved(resource, getCommand());
+                } else if (trueOrigin instanceof IndustryConverter) {
+                    ((IndustryConverter) trueOrigin).addIncomming(-getCommand());
+                }
+                setCommand(0);
+                setAmount(0);
+                setDestination(trueOrigin);
+                carterState = CarterState.RETURNING_EMPTY;
+                if (!trueOrigin.getAccess().isEmpty()) {
+                    setArrived(false);
+                    setRoutePath(c.getPathManager().getPathTo(c.getMap().getCase(getXB(), getYB()), trueOrigin.getAccess().get(0), FreeState.ALL_ROAD.getI()));
+                } else {
+                    carterState = CarterState.DONE;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     private void Arrived(){
         switch (carterState){

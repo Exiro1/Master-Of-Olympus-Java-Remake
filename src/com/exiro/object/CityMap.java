@@ -82,6 +82,7 @@ public class CityMap {
 
     public void addEnvironment(){
         Random r = new Random();
+        Case markedStart = null, markedEnd = null;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
 
@@ -105,12 +106,10 @@ public class CityMap {
                     }
                 }
                 if(CaseInfo.compareEnv(value,CaseInfo.STARTENDCASE)){
-                        if(startCase == null) {
-                            this.startCase = getCase(j, i);
-                            this.startCase = getCase(160, 55);   //TODO faire le systeme de start case / end case
+                        if(markedStart == null) {
+                            markedStart = getCase(j, i);
                         }else{
-                            this.endCase = getCase(j, i);
-                            this.endCase = getCase(140, 68);
+                            markedEnd = getCase(j, i);
                         }
                 }
                 if(CaseInfo.compareEnv(value,CaseInfo.FOREST) && getCase(j,i) != null && getCase(j,i).getTerrain().isConstructible() ){
@@ -136,8 +135,17 @@ public class CityMap {
                 }
             }
         }
+        //TODO faire le systeme de start case / end case
+        // The saved map uses these fixed cases; any other map (other seed or size) may not have
+        // them, so fall back to the cases the generator marked instead of crashing in City.
+        this.startCase = usableOr(getCase(160, 55), markedStart);
+        this.endCase = usableOr(getCase(140, 68), markedEnd);
         createMinerals(149, 105, 4, 4);
 
+    }
+
+    private static Case usableOr(Case preferred, Case fallback) {
+        return preferred != null ? preferred : fallback;
     }
 
 
@@ -384,6 +392,8 @@ public class CityMap {
         for (int i = xs; i < xs + xlen; i++) {
             for (int j = ys; j < ys + ylen; j++) {
                 Case c = getCase(i, j);
+                if (c == null) // outside this map (other size)
+                    continue;
                 Random r = new Random();
                 int nbr = r.nextInt(8);
                 Rock rock = new Rock(i, j, city, 1, Rock.RockType.COPPER, nbr);

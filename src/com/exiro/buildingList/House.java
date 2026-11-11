@@ -227,11 +227,17 @@ public class House extends Building {
     }
 
     @Override
+    protected boolean stopsWhenIdle() {
+        return false; // its Render never called Building.Render, so it never stopped
+    }
+
+    @Override
     public void Render(Graphics g, int camX, int camY) {
         int lvl = getMainCase().getZlvl();
         com.exiro.utils.Point p = IsometricRender.TwoDToIsoTexture(new Point(getxPos() - lvl, getyPos() - lvl), getWidth(), getHeight(), getSize());
         g.drawImage(getImg(), camX + (int) p.getX(), camY + (int) p.getY(), null);
-        g.drawString(getPop() + "/" + getPopMax() + " " + (int) getFood() + " " + (int) getWater(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
+        if (DEBUG)
+            g.drawString(getPop() + "/" + getPopMax() + " " + (int) getFood() + " " + (int) getWater(), camX + (int) p.getX() + 30, camY + (int) p.getY() + 30);
 
         //render only buildingSprite because movingSprite are render separately
         for (BuildingSprite s : bsprites) {
@@ -300,13 +306,11 @@ public class House extends Building {
     public void SpriteManager() {
         ArrayList<Sprite> toDestroy = new ArrayList<>();
 
-        synchronized (msprites) {
-            for (MovingSprite s : msprites) {
-                if (s.hasArrived) {
-                    toDestroy.add(s);
-                    if (s instanceof Immigrant) {
-                        newPopulation((Immigrant) s);
-                    }
+        for (MovingSprite s : msprites) {
+            if (s.hasArrived) {
+                toDestroy.add(s);
+                if (s instanceof Immigrant) {
+                    newPopulation((Immigrant) s);
                 }
             }
         }

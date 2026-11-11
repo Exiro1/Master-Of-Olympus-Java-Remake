@@ -38,20 +38,9 @@ public class TimeManager {
     }
 
     public Time getFutureTime(int year, int month, int day) {
-        int newday = 0, newmonth = 0, newyear = year + this.year;
-        if (day + this.day >= 30) {
-            newday = this.day + day - 30;
-            newmonth++;
-        } else {
-            newday = this.day + day;
-        }
-        if (newmonth + month + this.month >= 12) {
-            newmonth = newmonth + month + this.month - 12;
-            newyear++;
-        } else {
-            newmonth = month + newmonth + this.month;
-        }
-        return new Time(newyear, newmonth, newday);
+        // work in total days (30-day months, 12-month years) so any overflow carries correctly
+        int total = (this.year + year) * 12 * 30 + (this.month + month) * 30 + this.day + day;
+        return new Time(total / (12 * 30), (total / 30) % 12, total % 30);
     }
 
     public int updateTime(double delta) {
